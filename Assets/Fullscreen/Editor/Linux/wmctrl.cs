@@ -25,9 +25,9 @@ namespace FullscreenEditor.Linux {
             if (!FullscreenUtility.IsLinux)
                 throw new PlatformNotSupportedException("wmctrl is only available on Linux based platforms");
 
-            if (FullscreenPreferences.DoNotUseWmctrl.Value) {
-                Logger.Debug("wmctrl being invoked while DoNotUseWmctrl is enabled");
-            }
+            //if (FullscreenPreferences.DoNotUseWmctrl.Value) {
+            //    Logger.Debug("wmctrl being invoked while DoNotUseWmctrl is enabled");
+            //}
 
             var result = Cmd.Run("wmctrl " + format, args);
             Logger.Debug("wmctrl exited with stdio: {0}", result);

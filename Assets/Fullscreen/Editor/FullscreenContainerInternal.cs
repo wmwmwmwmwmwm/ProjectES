@@ -74,7 +74,9 @@ namespace FullscreenEditor {
         /// <param name="containerWindow">The ContainerWindow to freeze the repaints.</param>
         /// <param name="freeze">Wheter to freeze or unfreeze the container.</param>
         protected void SetFreezeContainer(ContainerWindow containerWindow, bool freeze) {
-            containerWindow.InvokeMethod("SetFreezeDisplay", freeze);
+            if (containerWindow.HasMethod("SetFreezeDisplay", new[] { typeof(bool) })) {
+                containerWindow.InvokeMethod("SetFreezeDisplay", freeze);
+            }
         }
 
         /// <summary>Method that will be called just before creating the ContainerWindow for this fullscreen.</summary>

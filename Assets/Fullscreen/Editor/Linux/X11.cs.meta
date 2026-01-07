@@ -1,7 +1,11 @@
 fileFormatVersion: 2
-guid: 838d3286f0973344ab6e99d3951012f7
-AssemblyDefinitionImporter:
+guid: 63b9645c0d2640497822c206f98c8935
+MonoImporter:
   externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
@@ -10,5 +14,5 @@ AssetOrigin:
   productId: 69534
   packageName: Fullscreen Editor
   packageVersion: 2.2.10
-  assetPath: Assets/Fullscreen/FullscreenEditor.asmdef
+  assetPath: Assets/Fullscreen/Editor/Linux/X11.cs
   uploadId: 803434
