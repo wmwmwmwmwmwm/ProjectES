@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 29fe3971b3873054e848f1fbec3ce3c9
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/Pure_Common/Shaders/BK_StandardLayer_SSS.shader
+  uploadId: 751886

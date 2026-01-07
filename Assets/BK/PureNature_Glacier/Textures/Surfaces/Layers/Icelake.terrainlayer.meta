@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: faa86058ac07494985e9db3b7850b192
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/PureNature_Glacier/Textures/Surfaces/Layers/Icelake.terrainlayer
+  uploadId: 751886

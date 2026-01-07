@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a472a4806da7f9147a4a5cd7eee170df, type: 3}
+  m_Name: IdleMixer
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 3117977831332118529
+  references:
+    version: 2
+    RefIds:
+    - rid: 3117977831332118529
+      type: {class: LinearMixerTransition, ns: Animancer, asm: Animancer}
+      data:
+        _FadeDuration: 0
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Speed: 1
+        _Animations:
+        - {fileID: 7400000, guid: adb4e52f2dba8a4488410d7898493e3c, type: 2}
+        - {fileID: 7400000, guid: 75a0caaec4f85e640ad927784eb222bd, type: 2}
+        - {fileID: 7400000, guid: adb4e52f2dba8a4488410d7898493e3c, type: 2}
+        _Speeds:
+        - 2
+        - 1
+        - 2
+        _SynchronizeChildren: 000000
+        _Thresholds:
+        - -30
+        - 0
+        - 30
+        _DefaultParameter: 0
+        _ExtrapolateSpeed: 1

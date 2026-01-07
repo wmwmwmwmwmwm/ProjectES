@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 92bc8c4a5ebd4dfa995619b351766df0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/PureNature_Glacier/Textures/Surfaces/Layers/SnowLarge_3.terrainlayer
+  uploadId: 751886
