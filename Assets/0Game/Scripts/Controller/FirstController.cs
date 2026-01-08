@@ -9,7 +9,6 @@ public class FirstController : MonoBehaviour
 
 	void Start()
 	{
-		loader.LoadManager();
 		StartCoroutine(UI.SceneTransition("Editing"));
 	}
 }

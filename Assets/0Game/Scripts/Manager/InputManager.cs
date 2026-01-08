@@ -11,11 +11,6 @@ public class InputManager : Singleton<InputManager>
 		InputActions.Enable();
 	}
 
-	void Update()
-	{
-		
-	}
-
 	public Vector2 Movement => InputActions.Gameplay.Movement.ReadValue<Vector2>();
 	public Vector2 Look => InputActions.Gameplay.Look.ReadValue<Vector2>();
 	public InputAction Jump => InputActions.Gameplay.Jump;

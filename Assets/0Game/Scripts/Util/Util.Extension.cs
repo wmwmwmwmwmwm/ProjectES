@@ -239,42 +239,4 @@ public static partial class Util
 			Object.DestroyImmediate(comp, true);
 		}
 	}
-
-	//public static UniTask BP(this UniTask uniTask, MonoBehaviour behaviour, CancellationTokenSource source = null)
-	//{
-	//	if (source != null)
-	//	{
-	//		return uniTask.AttachExternalCancellation(source.Token)
-	//			.AttachExternalCancellation(behaviour.destroyCancellationToken)
-	//			.AttachExternalCancellation(Application.exitCancellationToken)
-	//			.SuppressCancellationThrow();
-	//	}
-	//	else
-	//	{
-	//		return uniTask.AttachExternalCancellation(behaviour.destroyCancellationToken)
-	//			.AttachExternalCancellation(Application.exitCancellationToken)
-	//			.SuppressCancellationThrow();
-	//	}
-	//}
-
-	//public static UniTask<(bool, T)> BP<T>(this UniTask<T> uniTask, MonoBehaviour behaviour, CancellationTokenSource source = null)
-	//{
-	//	if (source != null)
-	//	{
-	//		return uniTask.AttachExternalCancellation(source.Token)
-	//			.AttachExternalCancellation(behaviour.destroyCancellationToken)
-	//			.AttachExternalCancellation(Application.exitCancellationToken)
-	//			.SuppressCancellationThrow();
-	//	}
-	//	else
-	//	{
-	//		return uniTask.AttachExternalCancellation(behaviour.destroyCancellationToken)
-	//			.AttachExternalCancellation(Application.exitCancellationToken)
-	//			.SuppressCancellationThrow();
-	//	}
-	//}
-
-	public static bool IsName(this Animator animator, string stateName) => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
-
-	public static bool IsComplete(this Animator animator) => animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.99f;
 }

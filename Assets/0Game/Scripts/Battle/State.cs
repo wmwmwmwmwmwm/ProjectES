@@ -1,19 +1,22 @@
 using System;
 using Battle;
 
-public abstract class State
+namespace Battle
 {
-	protected Character c;
-	protected State PreviousState, NextState;
-
-	public State(Character controller)
+	public abstract class State
 	{
-		c = controller;
-	}
+		protected Character c;
+		protected State PreviousState, NextState;
 
-	public abstract bool CanEnterState { get; }
-	public abstract bool CanExitState { get; }
-	public abstract void AnimationUpdate();
-	public abstract void OnEnterState(float FadeTime);
-	public abstract void OnExitState();
+		public State(Character controller)
+		{
+			c = controller;
+		}
+
+		public abstract bool CanEnterState { get; }
+		public abstract bool CanExitState { get; }
+		public abstract void AnimationUpdate();
+		public abstract void OnEnterState(float FadeTime);
+		public abstract void OnExitState();
+	}
 }

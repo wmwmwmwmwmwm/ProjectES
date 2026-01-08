@@ -121,16 +121,6 @@
         "com.unity.formats.fbx": "5.1.4"
       }
     },
-    "com.unity.feature.gameplay-storytelling": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.cinemachine": "2.10.4",
-        "com.unity.timeline": "1.8.9",
-        "com.unity.visualscripting": "1.9.7"
-      }
-    },
     "com.unity.formats.fbx": {
       "version": "5.1.4",
       "depth": 1,
@@ -288,16 +278,6 @@
       "dependencies": {
         "com.unity.render-pipelines.universal": "7.3.1"
       }
-    },
-    "com.unity.visualscripting": {
-      "version": "1.9.7",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.vrmc.gltf": {
       "version": "https://github.com/vrm-c/UniVRM.git?path=/Packages/UniGLTF#v0.131.0",

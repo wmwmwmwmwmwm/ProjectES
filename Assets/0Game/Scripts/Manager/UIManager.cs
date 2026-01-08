@@ -10,7 +10,6 @@ public class UIManager : Singleton<UIManager>
 
 	protected override void Init()
 	{
-		throw new System.NotImplementedException();
 	}
 
 	public IEnumerator SceneTransition(string SceneName)

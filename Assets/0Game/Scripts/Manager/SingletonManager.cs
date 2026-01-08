@@ -12,12 +12,10 @@ public class SingletonManager : MonoBehaviour
 
 	bool _Init;
 
-#if UNITY_EDITOR
 	void Awake()
 	{
 		LoadManager();
 	}
-#endif
 
 	public void LoadManager()
 	{
