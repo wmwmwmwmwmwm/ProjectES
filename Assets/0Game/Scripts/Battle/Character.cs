@@ -21,12 +21,12 @@ namespace Battle
 		{
 			_Motor.CharacterController = this;
 
-			StartCoroutine(Internal());
-			IEnumerator Internal()
-			{
-				yield return new WaitForSeconds(0.1f);
-				_BlendShapeProxy.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Neutral), 1f);
-			}
+			//StartCoroutine(Internal());
+			//IEnumerator Internal()
+			//{
+			//	yield return new WaitForSeconds(0.1f);
+			//	_BlendShapeProxy.ImmediatelySetValue(BlendShapeKey.CreateFromPreset(BlendShapePreset.Neutral), 1f);
+			//}
 		}
 
 		public void BeforeCharacterUpdate(float deltaTime)

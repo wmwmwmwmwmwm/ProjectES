@@ -6,7 +6,7 @@ namespace Battle
 	public abstract class State
 	{
 		protected Character c;
-		protected State PreviousState, NextState;
+		protected State _PreviousState, _NextState;
 
 		public State(Character controller)
 		{
@@ -16,7 +16,7 @@ namespace Battle
 		public abstract bool CanEnterState { get; }
 		public abstract bool CanExitState { get; }
 		public abstract void AnimationUpdate();
-		public abstract void OnEnterState(float FadeTime);
+		public abstract void OnEnterState(float fadeTime);
 		public abstract void OnExitState();
 	}
 }
