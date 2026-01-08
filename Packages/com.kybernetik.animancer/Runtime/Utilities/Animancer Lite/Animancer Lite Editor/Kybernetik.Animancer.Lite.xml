@@ -128,7 +128,7 @@
         <member name="P:Animancer.ControllerState.IsLooping">
             <summary>The current <see cref="P:UnityEngine.AnimatorStateInfo.loop"/> of layer 0.</summary>
         </member>
-        <member name="M:Animancer.ControllerState.GetEventDispatchInfo(System.Single@,System.Single@,System.Boolean@)">
+        <member name="M:Animancer.ControllerState.GetEventDispatchInfo">
             <inheritdoc/>
         </member>
         <member name="M:Animancer.ControllerState.GatherDefaultStates">
@@ -883,6 +883,10 @@
             <summary>
             Resumes playing the <see cref="T:UnityEngine.Playables.PlayableGraph"/>.
             </summary>
+            <remarks>
+            If you're using the <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/>,
+            you can also unpause it by calling <c>animancerComponent.Animator.playableGraph.Play();</c>.
+            </remarks>
         </member>
         <member name="M:Animancer.AnimancerGraph.PauseGraph">
             <summary>
@@ -890,6 +894,9 @@
             </summary>
             <remarks>
             If you call this method, you are responsible for calling <see cref="M:Animancer.AnimancerGraph.UnpauseGraph"/> to resume playing.
+            <para></para>
+            If you're using the <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/>,
+            you can also pause it by calling <c>animancerComponent.Animator.playableGraph.Stop();</c>.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerGraph.Evaluate">
@@ -899,9 +906,13 @@
         </member>
         <member name="M:Animancer.AnimancerGraph.Evaluate(System.Single)">
             <summary>
-            Advances all currently playing animations by the specified amount of time (in seconds) and evaluates the
-            graph to apply their states to the animated objects.
+            Advances all currently playing animations by the specified amount of time (in seconds)
+            and evaluates the graph to apply their states to the animated objects.
             </summary>
+            <remarks>
+            This method doesn't update the <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/>.
+            If you also want to do that, you can call <see cref="M:UnityEngine.Animator.Update(System.Single)"/> beforehand.
+            </remarks>
         </member>
         <member name="M:Animancer.AnimancerGraph.AppendDescription(System.Text.StringBuilder,System.String)">
             <inheritdoc/>
@@ -947,21 +958,29 @@
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerGraph.CancelPreUpdate(Animancer.IUpdatable)">
-            <summary>Removes the `updatable` from the list of objects that need to be updated before the playables.</summary>
+            <summary>
+            Removes the `updatable` from the list of objects
+            that need to be updated before the playables.
+            </summary>
             <remarks>
             This method is safe to call at any time, even during an update.
             <para></para>
-            The last element is swapped into the place of the one being removed so that the rest of them don't need to
-            be moved down one place to fill the gap. This is more efficient, but means that the update order can change.
+            The last element is swapped into the place of the one being removed
+            so that the rest of them don't need to be moved down one place to fill the gap.
+            This is more efficient, but means that the update order can change.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerGraph.CancelPostUpdate(Animancer.IUpdatable)">
-            <summary>Removes the `updatable` from the list of objects that need to be updated after the playebles.</summary>
+            <summary>
+            Removes the `updatable` from the list of objects
+            that need to be updated after the playebles.
+            </summary>
             <remarks>
             This method is safe to call at any time, even during an update.
             <para></para>
-            The last element is swapped into the place of the one being removed so that the rest of them don't need to
-            be moved down one place to fill the gap. This is more efficient, but means that the update order can change.
+            The last element is swapped into the place of the one being removed
+            so that the rest of them don't need to be moved down one place to fill the gap.
+            This is more efficient, but means that the update order can change.
             </remarks>
         </member>
         <member name="P:Animancer.AnimancerGraph.Current">
@@ -980,7 +999,8 @@
             <remarks>
             After each update, this property will be left at its most recent value.
             <para></para>
-            <see cref="P:Animancer.AnimancerState.Time"/> uses this value to determine whether it has accessed the playable's time
+            <see cref="P:Animancer.AnimancerState.Time"/> uses this value to determine
+            whether it has accessed the playable's time
             since it was last updated in order to cache its value.
             </remarks>
         </member>
@@ -1030,7 +1050,7 @@
         <member name="P:Animancer.AnimancerLayerList.Playable">
             <summary>The <see cref="T:UnityEngine.Playables.Playable"/> which blends the layers.</summary>
         </member>
-        <member name="M:Animancer.AnimancerLayerList.#ctor(Animancer.AnimancerGraph)">
+        <member name="M:Animancer.AnimancerLayerList.#ctor(Animancer.AnimancerGraph,System.Int32)">
             <summary>Creates a new <see cref="T:Animancer.AnimancerLayerList"/>.</summary>
             <remarks>The <see cref="P:Animancer.AnimancerLayerList.Playable"/> must be assigned by the end of the derived constructor.</remarks>
         </member>
@@ -1396,7 +1416,6 @@
             https://kybernetik.com.au/animancer/api/Animancer/AnimancerUtilities
             https://kybernetik.com.au/animancer/api/Animancer/AnimancerUtilities
             https://kybernetik.com.au/animancer/api/Animancer/AnimancerUtilities
-            https://kybernetik.com.au/animancer/api/Animancer/AnimancerUtilities
         </member>
         <member name="F:Animancer.AnimancerUtilities.IsAnimancerPro">
             <summary>This is Animancer Lite.</summary>
@@ -1404,8 +1423,9 @@
         <member name="M:Animancer.AnimancerUtilities.ToStringOrNull(System.Object)">
             <summary>
             If `obj` exists, this method returns <see cref="M:System.Object.ToString"/>.
-            Or if it is <c>null</c>, this method returns <c>"Null"</c>.
-            Or if it is an <see cref="T:UnityEngine.Object"/> that has been destroyed, this method returns <c>"Null (ObjectType)"</c>.
+            Or if it's <c>null</c>, this method returns <c>"Null"</c>.
+            Or if it's an <see cref="T:UnityEngine.Object"/> that has been destroyed,
+            this method returns <c>"Null (ObjectType)"</c>.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.IsValid(Animancer.AnimancerNode)">
@@ -1414,7 +1434,9 @@
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.CreateStateAndApply(Animancer.ITransition,Animancer.AnimancerGraph)">
-            <summary>[Animancer Extension] Calls <see cref="M:Animancer.ITransition.CreateState"/> and <see cref="M:Animancer.ITransition.Apply(Animancer.AnimancerState)"/>.</summary>
+            <summary>[Animancer Extension]
+            Calls <see cref="M:Animancer.ITransition.CreateState"/> and <see cref="M:Animancer.ITransition.Apply(Animancer.AnimancerState)"/>.
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetRootKey(System.Object)">
             <summary>
@@ -1425,14 +1447,14 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetLastKey(Animancer.AnimancerStateDictionary,System.Object)">
             <summary>
-            If a state is registered with the `key`, this method gets it and repeats that check then returns the last
-            state found.
+            If a state is registered with the `key`,
+            this method gets it and repeats that check then returns the last state found.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.Connect``2(UnityEngine.Playables.PlayableGraph,``0,``1,System.Int32,System.Single)">
             <summary>
-            Calls <see cref="M:UnityEngine.Playables.PlayableGraph.Connect``2(``0,System.Int32,``1,System.Int32)"/> using output 0 from the `child` and
-            <see cref="M:UnityEngine.Playables.PlayableExtensions.SetInputWeight``1(``0,System.Int32,System.Single)"/>.
+            Calls <see cref="M:UnityEngine.Playables.PlayableGraph.Connect``2(``0,System.Int32,``1,System.Int32)"/> using output 0
+            from the `child` and <see cref="M:UnityEngine.Playables.PlayableExtensions.SetInputWeight``1(``0,System.Int32,System.Single)"/>.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.ApplyChildWeight(UnityEngine.Playables.Playable,Animancer.AnimancerNode)">
@@ -1452,8 +1474,8 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.HasEvent(Animancer.IAnimationClipCollection,System.String)">
             <summary>
-            Checks if any <see cref="T:UnityEngine.AnimationClip"/> in the `source` has an animation event with the specified
-            `functionName`.
+            Checks if any <see cref="T:UnityEngine.AnimationClip"/> in the `source` has
+            an animation event with the specified `functionName`.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.HasEvent(UnityEngine.AnimationClip,System.String)">
@@ -1461,31 +1483,58 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.CalculateThresholdsFromAverageVelocityXZ(Animancer.MixerState{UnityEngine.Vector2})">
             <summary>[Animancer Extension] [Pro-Only]
-            Calculates all thresholds in the `mixer` using the <see cref="P:Animancer.AnimancerState.AverageVelocity"/> of each
-            state on the X and Z axes.
+            Calculates all thresholds in the `mixer` using the
+            <see cref="P:Animancer.AnimancerState.AverageVelocity"/> of each state on the X and Z axes.
             <para></para>
-            Note that this method requires the <c>Root Transform Position (XZ) -> Bake Into Pose</c> toggle to be
-            disabled in the Import Settings of each <see cref="T:UnityEngine.AnimationClip"/> in the mixer.
+            Note that this method requires the <c>Root Transform Position (XZ) -> Bake Into Pose</c>
+            toggle to be disabled in the Import Settings of each <see cref="T:UnityEngine.AnimationClip"/> in the mixer.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.CreateNativeReference``1">
             <summary>
-            Creates a <see cref="T:Unity.Collections.NativeArray`1"/> containing a single element so that it can be used like a reference
-            in Unity's C# Job system which does not allow regular reference types.
+            Creates a <see cref="T:Unity.Collections.NativeArray`1"/> containing a single element
+            so that it can be used like a reference in Unity's C# Job system
+            which does not allow regular reference types.
             </summary>
-            <remarks>Note that you must call <see cref="M:Unity.Collections.NativeArray`1.Dispose"/> when you're done with the array.</remarks>
+            <remarks>
+            Note that you must call <see cref="M:Unity.Collections.NativeArray`1.Dispose"/>
+            when you're done with the array.
+            </remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.ConvertToTransformStreamHandles(System.Collections.Generic.IList{UnityEngine.Transform},UnityEngine.Animator)">
             <summary>
-            Creates a <see cref="T:Unity.Collections.NativeArray`1"/> of <see cref="T:UnityEngine.Animations.TransformStreamHandle"/>s for each of the `transforms`.
+            Creates a <see cref="T:Unity.Collections.NativeArray`1"/> of <see cref="T:UnityEngine.Animations.TransformStreamHandle"/>s
+            for each of the `transforms`.
             </summary>
-            <remarks>Note that you must call <see cref="M:Unity.Collections.NativeArray`1.Dispose"/> when you're done with the array.</remarks>
+            <remarks>
+            Note that you must call <see cref="M:Unity.Collections.NativeArray`1.Dispose"/>
+            when you're done with the array.
+            </remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetUnsupportedMessage``1(``0)">
             <summary>Returns a string stating that the `value` is unsupported.</summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.CreateUnsupportedArgumentException``1(``0)">
             <summary>Returns an exception stating that the `value` is unsupported.</summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.AsHtmlLink(System.String,System.String)">
+            <summary>[Animancer Extension] Returns the `url` in a HTML <c>&lt;a&gt;</c> tag.</summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.GetDirection(System.String)">
+            <summary>
+            Attempts to interpret the `name` as a direction
+            based on the presence of the characters <c>RLUD</c>
+            corresponding to Right, Left, Up, and Down.
+            </summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.GetDirection(System.String,System.Char,System.Char)">
+            <summary>
+            Returns <c>1</c> if the `name` contains the `positive` value
+            or <c>-1</c> for `negative`. Otherwise returns <c>0</c>.
+            </summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.ContainsCaseInsensitive(System.String,System.Char)">
+            <summary>Does the `text` contain the `character` (ignoring case)?</summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.TryGet``1(System.Collections.Generic.IList{``0},System.Int32,``0@)">
             <summary>
@@ -1521,21 +1570,31 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.SetLength``1(``0[]@,System.Int32)">
             <summary>
-            If the `array` is <c>null</c> or its <see cref="P:System.Array.Length"/> isn't equal to the specified `length`, this
-            method creates a new array with that `length` and returns <c>true</c>. Otherwise, it returns <c>false</c>
-            and the array us unchanged.
+            If the `array` is <c>null</c> or its <see cref="P:System.Array.Length"/>
+            isn't equal to the specified `length`, this method creates a new array
+            with that `length` and returns <c>true</c>.
+            Otherwise, it returns <c>false</c> and the array us unchanged.
             </summary>
             <remarks>
-            Unlike <see cref="M:System.Array.Resize``1(``0[]@,System.Int32)"/>, this method doesn't copy over the contents of the old
-            `array` into the new one.
+            Unlike <see cref="M:System.Array.Resize``1(``0[]@,System.Int32)"/>,
+            this method doesn't copy over the contents of the old `array` into the new one.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.InsertAt``1(``0[]@,System.Int32,``0)">
-            <summary>Resizes the `array` to be at least 1 larger and inserts the `item` at the specified `index`.</summary>
-            <remarks>If the `index` is beyond the end of the array, it will be resized large enough to fit.</remarks>
+            <summary>
+            Resizes the `array` to be at least 1 larger
+            and inserts the `item` at the specified `index`.
+            </summary>
+            <remarks>
+            If the `index` is beyond the end of the array,
+            it will be resized large enough to fit.
+            </remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.RemoveAt``1(``0[]@,System.Int32)">
-            <summary>Removes the item at the specified `index` and resizes the `array` to be 1 smaller.</summary>
+            <summary>
+            Removes the item at the specified `index`
+            and resizes the `array` to be 1 smaller.
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.NullIsEmpty``1(``0[])">
             <summary>Returns the `array`, or <see cref="M:System.Array.Empty``1"/> if it was <c>null</c>.</summary>
@@ -1544,13 +1603,19 @@
             <summary>Returns a string containing the value of each element in `collection`.</summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.DeepToString(System.Collections.IEnumerable,System.Func{System.Object,System.Object})">
-            <summary>Returns a string containing the value of each element in `collection` (each on a new line).</summary>
+            <summary>
+            Returns a string containing the value of each element in the `collection`
+            (each on a new line).
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.DeepToString(System.Collections.IEnumerator,System.String,System.Func{System.Object,System.Object})">
             <summary>Returns a string containing the value of each element in `enumerator`.</summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.DeepToString(System.Collections.IEnumerator,System.Func{System.Object,System.Object})">
-            <summary>Returns a string containing the value of each element in `enumerator` (each on a new line).</summary>
+            <summary>
+            Returns a string containing the value of each element in the `enumerator`
+            (each on a new line).
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.AppendDeepToString(System.Text.StringBuilder,System.Collections.IEnumerator,System.String,System.Func{System.Object,System.Object})">
             <summary>Each element returned by `enumerator` is appended to `text`.</summary>
@@ -1560,7 +1625,10 @@
             <remarks>Returns <c>default</c>(<typeparamref name="TValue"/>) if nothing was registered.</remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.Set``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
-            <summary>Registers the `value` in the `dictionary` using the `key`, replacing any previous value.</summary>
+            <summary>
+            Registers the `value` in the `dictionary` using the `key`,
+            replacing any previous value.
+            </summary>
             <remarks>
             This is identical to setting <c>dictionary[key] = value;</c>
             except the syntax matches <c>dictionary.Add(key, value);</c>.
@@ -1571,8 +1639,8 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.InitializeCleanDictionary``2(System.Collections.Generic.Dictionary{``0,``1}@)">
             <summary>
-            Creates a new dictionary and returns true if it was null or calls <see cref="M:Animancer.AnimancerUtilities.RemoveDestroyedObjects``2(System.Collections.Generic.Dictionary{``0,``1})"/> and
-            returns false if it wasn't.
+            Creates a new dictionary and returns true if it was null or calls
+            <see cref="M:Animancer.AnimancerUtilities.RemoveDestroyedObjects``2(System.Collections.Generic.Dictionary{``0,``1})"/> and returns false if it wasn't.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.CopyParameterValue(UnityEngine.Animator,UnityEngine.Animator,UnityEngine.AnimatorControllerParameter)">
@@ -1587,11 +1655,17 @@
         <member name="M:Animancer.AnimancerUtilities.GetParameterValue(UnityEngine.Animations.AnimatorControllerPlayable,UnityEngine.AnimatorControllerParameter)">
             <summary>Gets the value of the `parameter` in the `playable`.</summary>
         </member>
-        <member name="M:Animancer.AnimancerUtilities.SetParameterValue(UnityEngine.Animator,UnityEngine.AnimatorControllerParameter,System.Object)">
-            <summary>Sets the `value` of the `parameter` in the `animator`.</summary>
+        <member name="M:Animancer.AnimancerUtilities.TrySetParameterValue(UnityEngine.Animator,UnityEngine.AnimatorControllerParameter,System.Object)">
+            <summary>
+            Sets the `value` of the `parameter` in the `animator`
+            and returns true as long as the `value` is the appropriate type.
+            </summary>
         </member>
-        <member name="M:Animancer.AnimancerUtilities.SetParameterValue(UnityEngine.Animations.AnimatorControllerPlayable,UnityEngine.AnimatorControllerParameter,System.Object)">
-            <summary>Sets the `value` of the `parameter` in the `playable`.</summary>
+        <member name="M:Animancer.AnimancerUtilities.TrySetParameterValue(UnityEngine.Animations.AnimatorControllerPlayable,UnityEngine.AnimatorControllerParameter,System.Object)">
+            <summary>
+            Sets the `value` of the `parameter` in the `playable`
+            and returns true as long as the `value` is the appropriate type.
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.Wrap01(System.Single)">
             <summary>Loops the `value` so that <c>0 &lt;= value &lt; 1</c>.</summary>
@@ -1615,7 +1689,10 @@
             <summary>The opposite of <see cref="M:UnityEngine.Mathf.LerpUnclamped(System.Single,System.Single,System.Single)"/>.</summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.IsEqualOrBothNaN(System.Single,System.Single)">
-            <summary>Are the given values equal or both <see cref="F:System.Single.NaN"/> (which wouldn't normally be equal)?</summary>
+            <summary>
+            Are the given values equal or both <see cref="F:System.Single.NaN"/>
+            (which wouldn't normally be equal)?
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.IsFinite(System.Single)">
             <summary>[Animancer Extension] Is the `value` not NaN or Infinity?</summary>
@@ -1648,38 +1725,67 @@
         </member>
         <member name="M:Animancer.AnimancerUtilities.AddAnimancerComponent``1(UnityEngine.Animator)">
             <summary>[Animancer Extension]
-            Adds the specified type of <see cref="T:Animancer.IAnimancerComponent"/>, links it to the `animator`, and returns it.
+            Adds the specified type of <see cref="T:Animancer.IAnimancerComponent"/>,
+            links it to the `animator`, and returns it.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetOrAddAnimancerComponent``1(UnityEngine.Animator)">
             <summary>[Animancer Extension]
-            Returns the <see cref="T:Animancer.IAnimancerComponent"/> on the same <see cref="T:UnityEngine.GameObject"/> as the `animator` if
-            there is one. Otherwise this method adds a new one and returns it.
+            Returns the <see cref="T:Animancer.IAnimancerComponent"/> on the same <see cref="T:UnityEngine.GameObject"/>
+            as the `animator` if there is one. Otherwise this method adds a new one and returns it.
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetComponentInParentOrChildren``1(UnityEngine.GameObject)">
             <summary>
-            Returns the first <typeparamref name="T"/> component on the `gameObject` or its parents or children (in
-            that order).
+            Returns the first <typeparamref name="T"/> component on the `gameObject`
+            or its parents or children (in that order).
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.GetComponentInParentOrChildren``1(UnityEngine.GameObject,``0@)">
             <summary>
-            If the `component` is <c>null</c>, this method tries to find one on the `gameObject` or its parents or
-            children (in that order).
+            If the `component` is <c>null</c>, this method tries to find one on the `gameObject`
+            or its parents or children (in that order).
             </summary>
         </member>
         <member name="M:Animancer.AnimancerUtilities.InitializeSingleton``1(``0@)">
             <summary>Creates a new <see cref="T:UnityEngine.GameObject"/> and `singleton` instance if it was null.</summary>
             <remarks>Calls <see cref="M:UnityEngine.Object.DontDestroyOnLoad(UnityEngine.Object)"/> on the instance.</remarks>
         </member>
+        <member name="M:Animancer.AnimancerUtilities.IsValid(Animancer.ITransition)">
+            <summary>Is the `transition` not null and <see cref="P:Animancer.ITransition.IsValid"/>?</summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.TryGetFadeDuration(Animancer.ITransition)">
+            <summary>
+            Returns the <see cref="P:Animancer.ITransition.FadeDuration"/>
+            or <see cref="F:System.Single.NaN"/> if it's <c>null</c> or throws an exception.
+            </summary>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.TryGetIsLooping(System.Object,System.Boolean@)">
+            <summary>Outputs the <see cref="P:UnityEngine.Motion.isLooping"/> or <see cref="P:Animancer.ITransition.IsLooping"/>.</summary>
+            <remarks>Returns false if the `motionOrTransition` is null or an unsupported type.</remarks>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.TryGetLength(System.Object,System.Single@)">
+            <summary>
+            Outputs the <see cref="P:UnityEngine.AnimationClip.length"/>
+            or <see cref="P:Animancer.ITransition.MaximumLength"/>.
+            </summary>
+            <remarks>Returns false if the `clipOrTransition` is null or an unsupported type.</remarks>
+        </member>
+        <member name="M:Animancer.AnimancerUtilities.TryCalculateDuration(Animancer.ITransition,System.Single@)">
+            <summary>
+            Tries to calculate the amount of time (in seconds)
+            from the <see cref="P:Animancer.ITransition.NormalizedStartTime"/>
+            too the <see cref="P:Animancer.AnimancerEvent.Sequence.NormalizedEndTime"/>,
+            including the <see cref="P:Animancer.ITransition.Speed"/>
+            </summary>
+        </member>
         <member name="M:Animancer.AnimancerUtilities.Assert(System.Boolean,System.Object)">
             <summary>[Assert-Conditional]
             Throws an <see cref="T:UnityEngine.Assertions.AssertionException"/> if the `condition` is false.
             </summary>
             <remarks>
-            This method is similar to <see cref="M:UnityEngine.Debug.Assert(System.Boolean,System.Object)"/>, but it throws an exception instead of
-            just logging the `message`.
+            This method is similar to <see cref="M:UnityEngine.Debug.Assert(System.Boolean,System.Object)"/>,
+            but it throws an exception instead of just logging the `message`.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerUtilities.SetDirty(UnityEngine.Object)">
@@ -1692,8 +1798,9 @@
             <remarks>This method is safe to call during <see cref="T:UnityEngine.MonoBehaviour"/><c>.OnValidate</c>.</remarks>
             <param name="clip">The animation to apply. If <c>null</c>, this method does nothing.</param>
             <param name="component">
-            The animation will be applied to an <see cref="T:UnityEngine.Animator"/> or <see cref="T:UnityEngine.Animation"/> component on the same
-            object as this or on any of its parents or children. If <c>null</c>, this method does nothing.
+            The animation will be applied to an <see cref="T:UnityEngine.Animator"/> or <see cref="T:UnityEngine.Animation"/>
+            component on the same object as this or on any of its parents or children.
+            If <c>null</c>, this method does nothing.
             </param>
             <param name="time">Determines which part of the animation to apply (in seconds).</param>
             <seealso cref="M:Animancer.AnimancerUtilities.EditModePlay(UnityEngine.AnimationClip,UnityEngine.Component)"/>
@@ -1703,8 +1810,9 @@
             <remarks>This method is safe to call during <see cref="T:UnityEngine.MonoBehaviour"/><c>.OnValidate</c>.</remarks>
             <param name="clip">The animation to apply. If <c>null</c>, this method does nothing.</param>
             <param name="component">
-            The animation will be played on an <see cref="T:Animancer.IAnimancerComponent"/> on the same object as this or on any
-            of its parents or children. If <c>null</c>, this method does nothing.
+            The animation will be played on an <see cref="T:Animancer.IAnimancerComponent"/>
+            on the same object as this or on any of its parents or children.
+            If <c>null</c>, this method does nothing.
             </param>
             <seealso cref="M:Animancer.AnimancerUtilities.EditModeSampleAnimation(UnityEngine.AnimationClip,UnityEngine.Component,System.Single)"/>
         </member>
@@ -1874,34 +1982,6 @@
             <summary>Outputs the <see cref="P:UnityEngine.Motion.averageSpeed"/> or <see cref="P:Animancer.IMotion.AverageVelocity"/>.</summary>
             <remarks>Returns false if the `motion` is null or an unsupported type.</remarks>
         </member>
-        <member name="M:Animancer.AnimancerUtilities.IsValid(Animancer.ITransitionDetailed)">
-            <summary>Is the `transition` not null and <see cref="P:Animancer.ITransitionDetailed.IsValid"/>?</summary>
-        </member>
-        <member name="M:Animancer.AnimancerUtilities.IsValid(Animancer.ITransition)">
-            <summary>Returns the <see cref="P:Animancer.ITransitionDetailed.IsValid"/> with support for <see cref="T:Animancer.IWrapper"/>.</summary>
-        </member>
-        <member name="M:Animancer.AnimancerUtilities.TryGetFadeDuration(Animancer.ITransition)">
-            <summary>
-            Returns the <see cref="P:Animancer.ITransition.FadeDuration"/>
-            or <see cref="F:System.Single.NaN"/> if it's <c>null</c> or throws an exception.
-            </summary>
-        </member>
-        <member name="M:Animancer.AnimancerUtilities.TryGetIsLooping(System.Object,System.Boolean@)">
-            <summary>Outputs the <see cref="P:UnityEngine.Motion.isLooping"/> or <see cref="P:Animancer.ITransitionDetailed.IsLooping"/>.</summary>
-            <remarks>Returns false if the `motionOrTransition` is null or an unsupported type.</remarks>
-        </member>
-        <member name="M:Animancer.AnimancerUtilities.TryGetLength(System.Object,System.Single@)">
-            <summary>Outputs the <see cref="P:UnityEngine.AnimationClip.length"/> or <see cref="P:Animancer.ITransitionDetailed.MaximumDuration"/>.</summary>
-            <remarks>Returns false if the `motionOrTransition` is null or an unsupported type.</remarks>
-        </member>
-        <member name="M:Animancer.AnimancerUtilities.TryCalculateDuration(System.Object,System.Single@)">
-            <summary>
-            Tries to calculate the amount of time (in seconds)
-            from the <see cref="P:Animancer.ITransitionDetailed.NormalizedStartTime"/>
-            too the <see cref="P:Animancer.AnimancerEvent.Sequence.NormalizedEndTime"/>,
-            including the <see cref="P:Animancer.ITransitionDetailed.Speed"/>
-            </summary>
-        </member>
         <member name="M:Animancer.AnimancerUtilities.IsInList(Animancer.IUpdatable)">
             <summary>Is the `updatable` currently in a list?</summary>
         </member>
@@ -1913,7 +1993,8 @@
         </member>
         <member name="T:Animancer.AnimancerEvent">
             <summary>
-            A <see cref="F:Animancer.AnimancerEvent.callback"/> delegate paired with a <see cref="F:Animancer.AnimancerEvent.normalizedTime"/> to determine when to invoke it.
+            A <see cref="F:Animancer.AnimancerEvent.callback"/> delegate
+            paired with a <see cref="F:Animancer.AnimancerEvent.normalizedTime"/> which determines when to invoke it.
             </summary>
             <remarks>
             <strong>Documentation:</strong>
@@ -2070,6 +2151,22 @@
         <member name="M:Animancer.AnimancerEvent.GetHashCode">
             <inheritdoc/>
         </member>
+        <member name="T:Animancer.AnimancerEvent.DispatchInfo">
+            <summary>Details about a state which determine how it triggers events.</summary>
+            https://kybernetik.com.au/animancer/api/Animancer/DispatchInfo
+        </member>
+        <member name="F:Animancer.AnimancerEvent.DispatchInfo.Length">
+            <summary><see cref="P:Animancer.AnimancerState.Length"/></summary>
+        </member>
+        <member name="F:Animancer.AnimancerEvent.DispatchInfo.NormalizedTime">
+            <summary><see cref="P:Animancer.AnimancerState.NormalizedTime"/></summary>
+        </member>
+        <member name="F:Animancer.AnimancerEvent.DispatchInfo.IsLooping">
+            <summary><see cref="P:Animancer.AnimancerState.IsLooping"/></summary>
+        </member>
+        <member name="M:Animancer.AnimancerEvent.DispatchInfo.#ctor(System.Single,System.Single,System.Boolean)">
+            <summary>Creates a new <see cref="T:Animancer.AnimancerEvent.DispatchInfo"/>.</summary>
+        </member>
         <member name="T:Animancer.AnimancerEvent.Dispatcher">
             <summary>
             A system which triggers events in an <see cref="T:Animancer.AnimancerEvent.Sequence"/>
@@ -2148,6 +2245,13 @@
             will still trigger it rather than leaving it playing indefinitely.
             </remarks>
         </member>
+        <member name="M:Animancer.AnimancerEvent.Dispatcher.FinishImmediately">
+            <summary>
+            Sets the <see cref="P:Animancer.AnimancerState.NormalizedTime"/>
+            to the <see cref="P:Animancer.AnimancerState.NormalizedEndTime"/>
+            and invokes any remaining <see cref="T:Animancer.AnimancerEvent"/>s.
+            </summary>
+        </member>
         <member name="M:Animancer.AnimancerEvent.Dispatcher.ToString">
             <summary>Returns "<see cref="T:Animancer.AnimancerEvent.Dispatcher"/> (Target State)".</summary>
         </member>
@@ -2193,7 +2297,8 @@
         </member>
         <member name="M:Animancer.AnimancerEvent.Invocation.InvokeBoundCallback">
             <summary>
-            Invokes the callback bound to the <see cref="F:Animancer.AnimancerEvent.Invocation.Name"/> in the <see cref="P:Animancer.AnimancerGraph.Events"/>.
+            Invokes the callback bound to the <see cref="F:Animancer.AnimancerEvent.Invocation.Name"/>
+            in the <see cref="P:Animancer.AnimancerGraph.Events"/>.
             </summary>
             <remarks>
             Logs <see cref="F:Animancer.OptionalWarning.UselessEvent"/> if no callback is bound.
@@ -2388,6 +2493,16 @@
             to its corresponding default value: positive speed ends at 1 and negative speed ends at 0.
             </summary>
         </member>
+        <member name="M:Animancer.AnimancerEvent.Sequence.GetNormalizedStartTime(System.Single,System.Single)">
+            <summary>
+            Returns the `normalizedStartTime` if it isn't <see cref="F:System.Single.NaN"/>,
+            otherwise calls <see cref="M:Animancer.AnimancerEvent.Sequence.GetDefaultNormalizedStartTime(System.Single)"/>.
+            </summary>
+            <remarks>
+            This method has nothing to do with events, so it is only here to be near
+            <see cref="M:Animancer.AnimancerEvent.Sequence.GetDefaultNormalizedEndTime(System.Single)"/>.
+            </remarks>
+        </member>
         <member name="M:Animancer.AnimancerEvent.Sequence.GetDefaultNormalizedStartTime(System.Single)">
             <summary>
             The default <see cref="P:Animancer.AnimancerState.NormalizedTime"/> for an animation to start
@@ -2397,7 +2512,7 @@
             `speed` 0 or <see cref="F:System.Single.NaN"/> will also return 0.
             </summary>
             <remarks>
-            This method has nothing to do with events, so it is only here because of
+            This method has nothing to do with events, so it is only here to be near
             <see cref="M:Animancer.AnimancerEvent.Sequence.GetDefaultNormalizedEndTime(System.Single)"/>.
             </remarks>
         </member>
@@ -2767,14 +2882,17 @@
             <summary>Copies the given array into the <see cref="P:Animancer.AnimancerEvent.Sequence.Names"/>.</summary>
         </member>
         <member name="M:Animancer.AnimancerEvent.Sequence.AddAllEvents(UnityEngine.AnimationClip)">
-            <summary>[Pro-Only] Copies the <see cref="P:UnityEngine.AnimationClip.events"/> into this <see cref="T:Animancer.AnimancerEvent.Sequence"/>.</summary>
+            <summary>[Pro-Only]
+            Copies the <see cref="P:UnityEngine.AnimationClip.events"/> into this <see cref="T:Animancer.AnimancerEvent.Sequence"/>.
+            </summary>
             <remarks>
             The <see cref="F:Animancer.AnimancerEvent.callback"/> of the new events will be empty and can be set by
             <see cref="M:Animancer.AnimancerEvent.Sequence.SetCallback(Animancer.StringReference,System.Action)"/>.
             <para></para>
             If you're going to play the `animation`, consider disabling <see cref="P:UnityEngine.Animator.fireEvents"/>
             so the events copied by this method are not triggered as <see cref="T:UnityEngine.AnimationEvent"/>s.
-            Otherwise they would still trigger in addition to the <see cref="T:Animancer.AnimancerEvent"/>s copied here.
+            Otherwise they would still trigger in addition to the <see cref="T:Animancer.AnimancerEvent"/>s
+            copied here.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerEvent.Sequence.CopyTo(Animancer.AnimancerEvent[],System.Int32)">
@@ -2785,18 +2903,21 @@
         <member name="M:Animancer.AnimancerEvent.Sequence.ContentsAreEqual(Animancer.AnimancerEvent.Sequence)">
             <summary>Are all events in this sequence identical to the ones in the `other` sequence?</summary>
         </member>
-        <member name="M:Animancer.AnimancerEvent.Sequence.AssertNormalizedTimes(Animancer.AnimancerState)">
+        <member name="M:Animancer.AnimancerEvent.Sequence.AssertNormalizedTimesForLooping(Animancer.AnimancerState)">
             <summary>[Assert-Conditional]
             Throws an <see cref="T:System.ArgumentOutOfRangeException"/>
             if any event is outside the range of <c>0 &lt;= normalizedTime &lt; 1</c>.
             </summary>
             <remarks>
+            If you want an event at the very end of a looping animation,
+            you can use <see cref="F:Animancer.AnimancerEvent.AlmostOne"/>.
+            <para></para>
             This excludes the <see cref="P:Animancer.AnimancerEvent.Sequence.EndEvent"/> since it works differently to other events.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerEvent.Sequence.AssertNormalizedTimes(Animancer.AnimancerState,System.Boolean)">
             <summary>[Assert-Conditional]
-            Calls <see cref="M:Animancer.AnimancerEvent.Sequence.AssertNormalizedTimes(Animancer.AnimancerState)"/> if `isLooping` is true.
+            Calls <see cref="M:Animancer.AnimancerEvent.Sequence.AssertNormalizedTimesForLooping(Animancer.AnimancerState)"/> if `isLooping` is true.
             </summary>
         </member>
         <member name="T:Animancer.AnimancerEvent.Sequence.Serializable">
@@ -2837,6 +2958,9 @@
             <summary>[Editor-Only] [Internal]
             The name of the array field which stores the serialized <see cref="P:Animancer.AnimancerEvent.Sequence.Serializable.Names"/>.
             </summary>
+        </member>
+        <member name="F:Animancer.AnimancerEvent.Sequence.Serializable.NestedObjectDrawers">
+            <summary>[Editor-Only] Disable Inspector Gadgets Nested Object Drawers.</summary>
         </member>
         <member name="P:Animancer.AnimancerEvent.Sequence.Serializable.InitializedEvents">
             <summary>Returns the <see cref="P:Animancer.AnimancerEvent.Sequence.Serializable.Events"/> or <c>null</c> if it wasn't yet initialized.</summary>
@@ -3204,7 +3328,11 @@
             AnimancerState state = animancerComponent.Play(animation);
             
             // The first time this is called it will assign a new event sequence
-            // and return true so you can initialize it.
+            // to the _Events and return true so you can initialize it.
+            
+            // After that, it will just re-assign the _Events to the state.
+            // and return false so you don't need to re-initialize the events.
+            
             if (state.Events(ref _Events))
             {
                 _Events.SetCallback(EventName, OnAnimationEvent);
@@ -3227,7 +3355,7 @@
             </remarks>
         </member>
         <member name="P:Animancer.AnimancerState.ShouldRaiseEvents">
-            <summary>[Internal] Should this state check for events to invoke?</summary>
+            <summary>Should this state check for events to invoke?</summary>
         </member>
         <member name="M:Animancer.AnimancerState.UpdateEvents">
             <summary>
@@ -3242,6 +3370,12 @@
         <member name="M:Animancer.AnimancerState.UpdateEventsRecursive(Animancer.AnimancerState,System.Boolean)">
             <summary>
             Checks if any events should be invoked on the `parent` and its children recursively.
+            </summary>
+        </member>
+        <member name="M:Animancer.AnimancerState.FinishImmediately">
+            <summary>
+            Sets the <see cref="P:Animancer.AnimancerState.NormalizedTime"/> to the <see cref="P:Animancer.AnimancerState.NormalizedEndTime"/>
+            and invokes any remaining <see cref="T:Animancer.AnimancerEvent"/>s.
             </summary>
         </member>
         <member name="P:Animancer.AnimancerState.UnsupportedEventsMessage">
@@ -3382,22 +3516,27 @@
         </member>
         <member name="F:Animancer.AnimancerState._ActiveIndex">
             <summary>
-            The index of this state in its parent <see cref="P:Animancer.AnimancerLayer.ActiveStates"/> (or -1 if inactive).
+            The index of this state in its parent <see cref="P:Animancer.AnimancerLayer.ActiveStates"/>
+            (or -1 if inactive).
             </summary>
             <remarks>
-            If this state's direct parent isn't a layer (such as a child of a mixer), this value simply uses 0 to
-            indicate active.
+            If this state's direct parent isn't a layer (such as a child of a mixer),
+            this value simply uses 0 to indicate active.
             </remarks>
         </member>
         <member name="P:Animancer.AnimancerState.IsActive">
             <summary>Is this state currently updating or affecting the animation output?</summary>
             <remarks>
-            This property is true when <see cref="P:Animancer.AnimancerState.IsPlaying"/> or the <see cref="P:Animancer.AnimancerNode.Weight"/> or
-            <see cref="P:Animancer.AnimancerNode.TargetWeight"/> are above 0.
+            This property is true when <see cref="P:Animancer.AnimancerState.IsPlaying"/>
+            or the <see cref="P:Animancer.AnimancerNode.Weight"/>
+            or <see cref="P:Animancer.AnimancerNode.TargetWeight"/> are above 0.
             </remarks>
         </member>
         <member name="P:Animancer.AnimancerState.ShouldBeActive">
-            <summary>[Internal] Should <see cref="P:Animancer.AnimancerState.IsActive"/> be true based on the current details of this state?</summary>
+            <summary>[Internal]
+            Should <see cref="P:Animancer.AnimancerState.IsActive"/> be true
+            based on the current details of this state?
+            </summary>
         </member>
         <member name="M:Animancer.AnimancerState.TryDeactivate">
             <summary>[Internal] If <see cref="P:Animancer.AnimancerState.IsActive"/> this method sets it to false and returns true.</summary>
@@ -3648,11 +3787,9 @@
             See the comments on <see cref="P:Animancer.AnimancerState.Time"/> for more information.
             </remarks>
         </member>
-        <member name="M:Animancer.AnimancerState.GetEventDispatchInfo(System.Single@,System.Single@,System.Boolean@)">
-            <summary>
-            Gets the details used to trigger <see cref="T:Animancer.AnimancerEvent"/>s on this state:
-            <see cref="P:Animancer.AnimancerState.Length"/>, <see cref="P:Animancer.AnimancerState.NormalizedTime"/>, and <see cref="P:Animancer.AnimancerState.IsLooping"/>.
-            </summary>
+        <member name="M:Animancer.AnimancerState.GetEventDispatchInfo">
+            <summary>Gets the details used to trigger <see cref="T:Animancer.AnimancerEvent"/>s on this state.</summary>
+            <remarks>Gathering all these details at once is often faster than getting them individually.</remarks>
         </member>
         <member name="M:Animancer.AnimancerState.Destroy">
             <summary>Destroys the <see cref="T:UnityEngine.Playables.Playable"/> and cleans up this state.</summary>
@@ -3867,8 +4004,14 @@
         <member name="P:Animancer.FadeGroup.TargetWeight">
             <summary>The <see cref="P:Animancer.AnimancerNode.Weight"/> which the <see cref="P:Animancer.FadeGroup.FadeIn"/> is moving towards.</summary>
         </member>
-        <member name="P:Animancer.FadeGroup.FadeSpeed">
+        <member name="P:Animancer.FadeGroup.NormalizedFadeSpeed">
             <summary>The speed at which the <see cref="P:Animancer.FadeGroup.NormalizedTime"/> increases.</summary>
+        </member>
+        <member name="P:Animancer.FadeGroup.FadeSpeed">
+            <summary>The speed at which the <see cref="P:Animancer.AnimancerNode.Weight"/>s change.</summary>
+        </member>
+        <member name="P:Animancer.FadeGroup.FadeDistance">
+            <summary>The distance from the starting weight to the <see cref="P:Animancer.FadeGroup.TargetWeight"/>.</summary>
         </member>
         <member name="P:Animancer.FadeGroup.FadeDuration">
             <summary>The total amount of time this fade will take to complete (in seconds).</summary>
@@ -3940,6 +4083,9 @@
         </member>
         <member name="M:Animancer.FadeGroup.Update">
             <inheritdoc/>
+        </member>
+        <member name="M:Animancer.FadeGroup.Finish">
+            <summary>Immediately finishes this fade.</summary>
         </member>
         <member name="M:Animancer.FadeGroup.ApplyWeights">
             <summary>
@@ -4044,8 +4190,8 @@
             <remarks>
             This value only affects newly created layers.
             <para></para>
-            This value should be set high enough to include all states a layer is likely to have. It's generally not
-            particularly important though since expanding the capacity is fairly fast.
+            This value should be set high enough to include all states a layer is likely to have.
+            It's generally not particularly important though since expanding the capacity is fairly fast.
             </remarks>
         </member>
         <member name="P:Animancer.AnimancerLayer.Capacity">
@@ -4233,18 +4379,24 @@
         </member>
         <member name="M:Animancer.AnimancerLayer.GetOrCreateState(Animancer.AnimancerState)">
             <summary>Returns the `state` if it's a child of this layer. Otherwise makes a clone of it.</summary>
+            <remarks>The clone starts with 0 weight, no fade, and no events.</remarks>
         </member>
         <member name="P:Animancer.AnimancerLayer.WeightlessThreshold">
             <summary>
-            The maximum <see cref="P:Animancer.AnimancerNode.Weight"/> that <see cref="M:Animancer.AnimancerLayer.GetOrCreateWeightlessState(Animancer.AnimancerState)"/>
+            The maximum <see cref="P:Animancer.AnimancerNode.Weight"/>
+            that <see cref="M:Animancer.AnimancerLayer.GetOrCreateWeightlessState(Animancer.AnimancerState)"/>
             will treat as being weightless. Default = 0.1.
             </summary>
-            <remarks>This allows states with very small weights to be reused instead of needing to create new ones.</remarks>
+            <remarks>
+            This allows states with very small weights to be reused
+            instead of needing to create new ones.
+            </remarks>
         </member>
         <member name="P:Animancer.AnimancerLayer.MaxCloneCount">
             <summary>
-            The maximum number of duplicate states that can be created for a single clip when trying to get a
-            weightless state. Exceeding this limit will cause it to just use the state with the lowest weight.
+            The maximum number of duplicate states that can be created for a single state
+            in <see cref="M:Animancer.AnimancerLayer.GetOrCreateWeightlessState(Animancer.AnimancerState)"/>. Exceeding this limit will cause it to
+            just use the state with the lowest weight.
             Default = 3.
             </summary>
         </member>
@@ -4255,17 +4407,25 @@
             The returned <see cref="P:Animancer.AnimancerState.Time"/> is also set to 0.
             </summary>
             <remarks>
-            If this method would exceed the <see cref="P:Animancer.AnimancerLayer.MaxCloneCount"/>, it returns the clone with the lowest weight.
+            If this method would exceed the <see cref="P:Animancer.AnimancerLayer.MaxCloneCount"/>,
+            it returns the clone with the lowest weight.
             <para></para>
             "Low" weight is defined as less than or equal to the <see cref="P:Animancer.AnimancerLayer.WeightlessThreshold"/>.
             <para></para>
-            The <see href="https://kybernetik.com.au/animancer/docs/manual/blending/fading/modes">Fade Modes</see> page
-            explains why clones are created.
+            The <see href="https://kybernetik.com.au/animancer/docs/manual/blending/fading/modes">Fade Modes</see>
+            page explains why clones are created.
             </remarks>
         </member>
         <member name="M:Animancer.AnimancerLayer.DestroyStates">
             <summary>Destroys all states connected to this layer.</summary>
             <remarks>This operation cannot be undone.</remarks>
+        </member>
+        <member name="F:Animancer.AnimancerLayer.SetLayerWeightOnPlay">
+            <summary>
+            If this layer's <see cref="P:Animancer.AnimancerNode.Weight"/> is 0 and an animation is played,
+            should it be automatically set or faded to 1?
+            </summary>
+            <remarks>Default = true.</remarks>
         </member>
         <member name="M:Animancer.AnimancerLayer.OnStartFade">
             <inheritdoc/>
@@ -4276,6 +4436,10 @@
             The animation will continue playing from its current <see cref="P:Animancer.AnimancerState.Time"/>.
             To restart it from the beginning you can use <c>...Play(clip).Time = 0;</c>.
             <para></para>
+            If the layer currently has 0 <see cref="P:Animancer.AnimancerNode.Weight"/>,
+            this method will automatically set it to 1.
+            This can be disabled by setting <see cref="F:Animancer.AnimancerLayer.SetLayerWeightOnPlay"/> to false.
+            <para></para>
             This method is safe to call repeatedly without checking whether the `clip` was already playing.
             </remarks>
         </member>
@@ -4284,6 +4448,10 @@
             <remarks>
             The animation will continue playing from its current <see cref="P:Animancer.AnimancerState.Time"/>.
             To restart it from the beginning you can use <c>...Play(state).Time = 0;</c>.
+            <para></para>
+            If the layer currently has 0 <see cref="P:Animancer.AnimancerNode.Weight"/>,
+            this method will automatically set it to 1.
+            This can be disabled by setting <see cref="F:Animancer.AnimancerLayer.SetLayerWeightOnPlay"/> to false.
             <para></para>
             This method is safe to call repeatedly without checking whether the `state` was already playing.
             </remarks>
@@ -4303,6 +4471,7 @@
             <para></para>
             If the layer currently has 0 <see cref="P:Animancer.AnimancerNode.Weight"/>,
             this method will fade in the layer itself and simply <see cref="M:Animancer.AnimancerState.Play"/> the `state`.
+            This can be disabled by setting <see cref="F:Animancer.AnimancerLayer.SetLayerWeightOnPlay"/> to false.
             <para></para>
             This method is safe to call repeatedly without checking whether the `state` was already playing.
             <para></para>
@@ -4318,8 +4487,9 @@
             If the `state` was already playing and fading in with less time remaining than the `fadeDuration`, this
             method will allow it to complete the existing fade rather than starting a slower one.
             <para></para>
-            If the layer currently has 0 <see cref="P:Animancer.AnimancerNode.Weight"/>, this method will fade in the layer itself
-            and simply <see cref="M:Animancer.AnimancerState.Play"/> the `state`.
+            If the layer currently has 0 <see cref="P:Animancer.AnimancerNode.Weight"/>, this method will
+            fade in the layer itself and simply <see cref="M:Animancer.AnimancerState.Play"/> the `state`.
+            This can be disabled by setting <see cref="F:Animancer.AnimancerLayer.SetLayerWeightOnPlay"/> to false.
             <para></para>
             This method is safe to call repeatedly without checking whether the `state` was already playing.
             <para></para>
@@ -4893,6 +5063,114 @@
             <see cref="P:Animancer.AnimancerNodeBase.ApplyFootIK"/>.
             </summary>
         </member>
+        <member name="T:Animancer.IAnimancerStateJob">
+            <summary>[Pro-Only] A scripted animation for an <see cref="T:Animancer.AnimationJobState`1"/>.</summary>
+            <remarks>
+            <strong>Sample:</strong>
+            <see href="https://kybernetik.com.au/animancer/docs/samples/jobs/job-states">
+            Job States</see>
+            </remarks>
+        </member>
+        <member name="P:Animancer.IAnimancerStateJob.Length">
+            <summary>The total time this job would take to play in seconds at normal speed.</summary>
+        </member>
+        <member name="P:Animancer.IAnimancerStateJob.IsLooping">
+            <summary>Does this job loop back to the start when its time passes its <see cref="P:Animancer.IAnimancerStateJob.Length"/>?</summary>
+        </member>
+        <member name="M:Animancer.IAnimancerStateJob.ProcessRootMotion(UnityEngine.Animations.AnimationStream,System.Double)">
+            <summary>Defines what do to when processing the root motion.</summary>
+            <remarks>
+            This is called by <see cref="M:UnityEngine.Animations.IAnimationJob.ProcessRootMotion(UnityEngine.Animations.AnimationStream)"/>
+            and receives the <see cref="P:Animancer.AnimancerState.TimeD"/>.
+            </remarks>
+        </member>
+        <member name="M:Animancer.IAnimancerStateJob.ProcessAnimation(UnityEngine.Animations.AnimationStream,System.Double)">
+            <summary>Defines what do to when processing the animation.</summary>
+            <remarks>
+            This is called by <see cref="M:UnityEngine.Animations.IAnimationJob.ProcessAnimation(UnityEngine.Animations.AnimationStream)"/>
+            and receives the <see cref="P:Animancer.AnimancerState.TimeD"/>.
+            </remarks>
+        </member>
+        <member name="T:Animancer.AnimationJobState`1">
+            <summary>[Pro-Only] An <see cref="T:Animancer.AnimancerState"/> which plays an <see cref="T:Animancer.IAnimancerStateJob"/>.</summary>
+            <remarks>
+            <strong>Sample:</strong>
+            <see href="https://kybernetik.com.au/animancer/docs/samples/jobs/job-states">
+            Job States</see>
+            </remarks>
+            https://kybernetik.com.au/animancer/api/Animancer/AnimationJobState_1
+            
+        </member>
+        <member name="T:Animancer.AnimationJobState`1.TimedJob">
+            <summary>
+            An <see cref="T:UnityEngine.Animations.IAnimationJob"/> which wraps an <see cref="T:Animancer.IAnimancerStateJob"/>
+            to provide its <see cref="F:Animancer.AnimationJobState`1.TimedJob.Time"/> value.
+            </summary>
+            https://kybernetik.com.au/animancer/api/Animancer/TimedJob
+        </member>
+        <member name="F:Animancer.AnimationJobState`1.TimedJob.Job">
+            <summary>The <see cref="T:Animancer.IAnimancerStateJob"/> data.</summary>
+        </member>
+        <member name="F:Animancer.AnimationJobState`1.TimedJob.Time">
+            <summary>The <see cref="P:Animancer.AnimancerState.TimeD"/> to be passed to the job.</summary>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.TimedJob.Dispose">
+            <summary>Cleans up the unmanaged resources used by this job.</summary>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.TimedJob.ProcessRootMotion(UnityEngine.Animations.AnimationStream)">
+            <summary>Defines what do to when processing the root motion.</summary>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.TimedJob.ProcessAnimation(UnityEngine.Animations.AnimationStream)">
+            <summary>Defines what do to when processing the animation.</summary>
+        </member>
+        <member name="P:Animancer.AnimationJobState`1.Job">
+            <summary>The data of the job to be executed by this state.</summary>
+            <remarks>
+            Setting this value has a minor performance cost. If it needs to be changed frequently,
+            consider using a single-item <c>NativeArray</c> in your job as demonstrated in the
+            <see href="https://kybernetik.com.au/animancer/docs/samples/jobs/hit-impacts#angle">
+            Hit Impacts</see> sample.
+            </remarks>
+        </member>
+        <member name="P:Animancer.AnimationJobState`1.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.AnimationJobState`1.IsLooping">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.AnimationJobState`1.Animancer#IUpdatable#UpdatableIndex">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.#ctor(`0)">
+            <summary>Creates a new <see cref="T:Animancer.AnimationJobState`1"/>.</summary>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.SetGraph(Animancer.AnimancerGraph)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.CreatePlayable(UnityEngine.Playables.Playable@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.OnSetIsPlaying">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.Update">
+            <summary>
+            Called every frame before the job is applied to send the
+            <see cref="P:Animancer.AnimancerState.Time"/> to the <see cref="P:Animancer.AnimationJobState`1.Job"/>.
+            </summary>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.System#IDisposable#Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.Destroy">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.AnimationJobState`1.Clone(Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
         <member name="T:Animancer.ClipState">
             <summary>An <see cref="T:Animancer.AnimancerState"/> which plays an <see cref="T:UnityEngine.AnimationClip"/>.</summary>
             <remarks>
@@ -4918,7 +5196,7 @@
         <member name="P:Animancer.ClipState.IsLooping">
             <summary>The <see cref="P:UnityEngine.Motion.isLooping"/>.</summary>
         </member>
-        <member name="M:Animancer.ClipState.GetEventDispatchInfo(System.Single@,System.Single@,System.Boolean@)">
+        <member name="M:Animancer.ClipState.GetEventDispatchInfo">
             <inheritdoc/>
         </member>
         <member name="P:Animancer.ClipState.AverageVelocity">
@@ -4944,6 +5222,142 @@
             <inheritdoc/>
         </member>
         <member name="M:Animancer.ClipState.Clone(Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Animancer.ParentState">
+            <summary>[Pro-Only]
+            An <see cref="T:Animancer.AnimancerState"/> which contains other states.
+            </summary>
+            https://kybernetik.com.au/animancer/api/Animancer/ParentState
+            
+        </member>
+        <member name="P:Animancer.ParentState.ChildStates">
+            <summary>The children contained within this state.</summary>
+            <remarks>Only states up to the <see cref="P:Animancer.ParentState.ChildCount"/> should be assigned.</remarks>
+        </member>
+        <member name="P:Animancer.ParentState.ChildCount">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.ParentState.ChildCapacity">
+            <summary>The size of the internal array of <see cref="P:Animancer.ParentState.ChildStates"/>.</summary>
+            <remarks>
+            This value starts at 0 then expands to <see cref="P:Animancer.ParentState.ChildCapacity"/>
+            when the first child is added.
+            </remarks>
+        </member>
+        <member name="M:Animancer.ParentState.OnChildCapacityChanged">
+            <summary>Called when the <see cref="P:Animancer.ParentState.ChildCapacity"/> is changed.</summary>
+        </member>
+        <member name="P:Animancer.ParentState.DefaultChildCapacity">
+            <summary><see cref="P:Animancer.ParentState.ChildCapacity"/> starts at 0 then expands to this value when the first child is added.</summary>
+            <remarks>Default 8.</remarks>
+        </member>
+        <member name="M:Animancer.ParentState.EnsureRemainingChildCapacity(System.Int32)">
+            <summary>
+            Ensures that the remaining unused <see cref="P:Animancer.ParentState.ChildCapacity"/>
+            is greater than or equal to the specified `minimumCapacity`.
+            </summary>
+        </member>
+        <member name="M:Animancer.ParentState.GetChild(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.ParentState.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.ParentState.CreatePlayable(UnityEngine.Playables.Playable@)">
+            <summary>Creates and assigns the <see cref="T:UnityEngine.Animations.AnimationMixerPlayable"/> managed by this state.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.OnAddChild(Animancer.AnimancerState)">
+            <summary>Connects the `child` to this mixer at its <see cref="P:Animancer.AnimancerNode.Index"/>.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.OnRemoveChild(Animancer.AnimancerState)">
+            <summary>Disconnects the `child` from this mixer at its <see cref="P:Animancer.AnimancerNode.Index"/>.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Destroy">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.ParentState.CopyFrom(Animancer.AnimancerState,Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.ParentState.CopyFrom(Animancer.ParentState,Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.ParentState.Add(Animancer.AnimancerState)">
+            <summary>Assigns the `state` as a child of this mixer.</summary>
+            <remarks>This is the same as calling <see cref="M:Animancer.AnimancerState.SetParent(Animancer.AnimancerNode)"/>.</remarks>
+        </member>
+        <member name="M:Animancer.ParentState.Add(UnityEngine.AnimationClip)">
+            <summary>Creates and returns a new <see cref="T:Animancer.ClipState"/> to play the `clip` as a child of this mixer.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Add(Animancer.ITransition)">
+            <summary>Calls <see cref="M:Animancer.AnimancerUtilities.CreateStateAndApply(Animancer.ITransition,Animancer.AnimancerGraph)"/> then <see cref="M:Animancer.ParentState.Add(Animancer.AnimancerState)"/>.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Add(System.Object)">
+            <summary>Calls one of the other <see cref="M:Animancer.ParentState.Add(System.Object)"/> overloads as appropriate for the `child`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(System.Collections.Generic.IList{UnityEngine.AnimationClip})">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(UnityEngine.AnimationClip)"/> for each of the `clips`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(UnityEngine.AnimationClip[])">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(UnityEngine.AnimationClip)"/> for each of the `clips`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(System.Collections.Generic.IList{Animancer.ITransition})">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(Animancer.ITransition)"/> for each of the `transitions`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(Animancer.ITransition[])">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(Animancer.ITransition)"/> for each of the `transitions`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(System.Collections.Generic.IList{System.Object})">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(System.Object)"/> for each of the `children`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.AddRange(System.Object[])">
+            <summary>Calls <see cref="M:Animancer.ParentState.Add(System.Object)"/> for each of the `children`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Remove(System.Int32,System.Boolean)">
+            <summary>Removes the child at the specified `index`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Remove(Animancer.AnimancerState,System.Boolean)">
+            <summary>Removes the specified `child`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Set(System.Int32,Animancer.AnimancerState,System.Boolean)">
+            <summary>Replaces the `child` at the specified `index`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Set(System.Int32,UnityEngine.AnimationClip,System.Boolean)">
+            <summary>Replaces the child at the specified `index` with a new <see cref="T:Animancer.ClipState"/>.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Set(System.Int32,Animancer.ITransition,System.Boolean)">
+            <summary>Replaces the child at the specified `index` with a <see cref="M:Animancer.ITransition.CreateState"/>.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.Set(System.Int32,System.Object,System.Boolean)">
+            <summary>Calls one of the other <see cref="M:Animancer.ParentState.Set(System.Int32,System.Object,System.Boolean)"/> overloads as appropriate for the `child`.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.IndexOf(Animancer.AnimancerState)">
+            <summary>Returns the index of the specified `child` state.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.DestroyChildren">
+            <summary>
+            Destroys all <see cref="P:Animancer.ParentState.ChildStates"/> connected to this mixer.
+            This operation cannot be undone.
+            </summary>
+        </member>
+        <member name="M:Animancer.ParentState.UpdateEvents">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.ParentState.ApplyAnimatorIK">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.ParentState.ApplyFootIK">
+            <inheritdoc/>
+        </member>
+        <member name="F:Animancer.ParentState._CachedToString">
+            <summary>[Assert-Only] A string built by <see cref="M:Animancer.ParentState.ToString"/> to describe this mixer.</summary>
+        </member>
+        <member name="M:Animancer.ParentState.ToString">
+            <summary>
+            Returns a string describing the type of this mixer and the name of states connected to it.
+            </summary>
+        </member>
+        <member name="M:Animancer.ParentState.GatherAnimationClips(System.Collections.Generic.ICollection{UnityEngine.AnimationClip})">
             <inheritdoc/>
         </member>
         <member name="T:Animancer.PlayableAssetState">
@@ -4973,7 +5387,7 @@
         <member name="P:Animancer.PlayableAssetState.Speed">
             <inheritdoc/>
         </member>
-        <member name="M:Animancer.PlayableAssetState.GetEventDispatchInfo(System.Single@,System.Single@,System.Boolean@)">
+        <member name="M:Animancer.PlayableAssetState.GetEventDispatchInfo">
             <inheritdoc/>
         </member>
         <member name="M:Animancer.PlayableAssetState.OnSetIsPlaying">
@@ -5004,13 +5418,110 @@
         <member name="M:Animancer.PlayableAssetState.GetBindingDetails(UnityEngine.Playables.PlayableBinding,System.String@,System.Type@,System.Boolean@)">
             <summary>Gathers details about the `binding`.</summary>
         </member>
+        <member name="M:Animancer.PlayableAssetState.SetWeight(System.Single)">
+            <inheritdoc/>
+        </member>
         <member name="M:Animancer.PlayableAssetState.Destroy">
             <inheritdoc/>
+        </member>
+        <member name="M:Animancer.PlayableAssetState.DestroyBoundOutputs(System.Boolean)">
+            <summary>
+            Destroys all of the outputs created for the <see cref="P:Animancer.PlayableAssetState.Bindings"/>
+            and optionally the state playable itself.
+            </summary>
         </member>
         <member name="M:Animancer.PlayableAssetState.Clone(Animancer.CloneContext)">
             <inheritdoc/>
         </member>
         <member name="M:Animancer.PlayableAssetState.AppendDetails(System.Text.StringBuilder,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Animancer.SequenceState">
+            <summary>[Pro-Only]
+            An <see cref="T:Animancer.AnimancerState"/> which plays a sequence of other states.
+            </summary>
+            https://kybernetik.com.au/animancer/api/Animancer/SequenceState
+            
+        </member>
+        <member name="F:Animancer.SequenceState._ActiveChildIndex">
+            <summary>The index of the child state which is active at the current time.</summary>
+        </member>
+        <member name="P:Animancer.SequenceState.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.SequenceState.RawTime">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.MoveTime(System.Double,System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.SequenceState.IsLooping">
+            <summary>Sequences don't loop.</summary>
+            <remarks>
+            If the last state in the sequence is set to loop it will do so,
+            but the rest of the sequence won't replay automatically.
+            </remarks>
+        </member>
+        <member name="M:Animancer.SequenceState.#ctor">
+            <summary>Creates a new <see cref="T:Animancer.SequenceState"/>.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.Set(Animancer.ITransition[])">
+            <summary>Replaces the child states with new ones created from the `transitions`.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.Set(System.Collections.Generic.IList{Animancer.ITransition})">
+            <summary>Replaces the child states with new ones created from the `transitions`.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.OnAddChild(Animancer.AnimancerState)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.GatherChildDetails(Animancer.AnimancerState)">
+            <summary>Gathers the timing details of a newly added `child` state.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.Add(Animancer.ITransition)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.Add(Animancer.AnimancerState,System.Single)">
+            <summary>Adds the `child` to the end of this sequence.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.Add(UnityEngine.AnimationClip,System.Single)">
+            <summary>Adds the `clip` to the end of this sequence.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.OnChildCapacityChanged">
+            <inheritdoc/>
+        </member>
+        <member name="P:Animancer.SequenceState.Animancer#IUpdatable#UpdatableIndex">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.OnSetIsPlaying">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.Destroy">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.Update">
+            <summary>
+            Called every frame while this state is playing to control its children.
+            </summary>
+        </member>
+        <member name="M:Animancer.SequenceState.GetActiveChildIndex(System.Double)">
+            <summary>
+            Calculates the indices of the `first` and `last` child states
+            which should be active at the specified `time`.
+            </summary>
+        </member>
+        <member name="M:Animancer.SequenceState.SetActiveChildIndex(System.Int32)">
+            <summary>Clears the weights of any active chhildren and sets the newly active child.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.GetStartTime(System.Int32)">
+            <summary>Gets the time when the specified child starts relative to the start of this sequence.</summary>
+        </member>
+        <member name="M:Animancer.SequenceState.Clone(Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.CopyFrom(Animancer.ParentState,Animancer.CloneContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.SequenceState.CopyFrom(Animancer.SequenceState,Animancer.CloneContext)">
             <inheritdoc/>
         </member>
         <member name="T:Animancer.UpdatableListPlayable">
@@ -5047,11 +5558,6 @@
             <see cref="P:Animancer.WeightedMaskLayerList.BoneWeights"/> for each individual bone instead of just using an <see cref="T:UnityEngine.AvatarMask"/>
             to include or exclude them entirely.
             </summary>
-            <remarks>
-            This system currently only supports 2 layers (Base + 1). Adding support for more would require additional
-            <see cref="P:Animancer.WeightedMaskLayerList.BoneWeights"/> for each additional layer and modifications to <see cref="T:Animancer.WeightedMaskMixerJob"/>
-            to iterate through each layer instead of just using the first two.
-            </remarks>
             https://kybernetik.com.au/animancer/api/Animancer/WeightedMaskLayerList
         </member>
         <member name="F:Animancer.WeightedMaskLayerList.Bones">
@@ -5060,23 +5566,29 @@
         <member name="F:Animancer.WeightedMaskLayerList._Job">
             <summary>The job data.</summary>
         </member>
+        <member name="P:Animancer.WeightedMaskLayerList.BoneCount">
+            <summary>The number of objects being masked (excluding the root bone).</summary>
+        </member>
         <member name="P:Animancer.WeightedMaskLayerList.BoneWeights">
             <summary>The blend weight of each of the <see cref="F:Animancer.WeightedMaskLayerList.Bones"/>.</summary>
         </member>
         <member name="M:Animancer.WeightedMaskLayerList.IndexOf(UnityEngine.Transform)">
             <summary>Returns the index of the value corresponding to the 'bone' in the <see cref="P:Animancer.WeightedMaskLayerList.BoneWeights"/> array.</summary>
         </member>
-        <member name="M:Animancer.WeightedMaskLayerList.Create(UnityEngine.Animator)">
+        <member name="M:Animancer.WeightedMaskLayerList.Create(UnityEngine.Animator,System.Int32)">
             <summary>Creates a new <see cref="T:Animancer.AnimancerGraph"/> and <see cref="T:Animancer.WeightedMaskLayerList"/>.</summary>
             <remarks>
             This method can't be a constructor because it would need to
             assign itself to the graph before being fully constructed.
             </remarks>
         </member>
-        <member name="M:Animancer.WeightedMaskLayerList.#ctor(Animancer.AnimancerGraph,UnityEngine.Animator)">
+        <member name="M:Animancer.WeightedMaskLayerList.#ctor(Animancer.AnimancerGraph,UnityEngine.Animator,System.Int32)">
             <summary>Creates a new <see cref="T:Animancer.WeightedMaskLayerList"/>.</summary>
         </member>
         <member name="M:Animancer.WeightedMaskLayerList.System#IDisposable#Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:Animancer.WeightedMaskLayerList.Add">
             <inheritdoc/>
         </member>
         <member name="T:Animancer.WeightedMaskLayersInternal">
@@ -5091,16 +5603,19 @@
             The definition of transforms to control and weights to apply to them.
             </summary>
         </member>
+        <member name="P:Animancer.WeightedMaskLayersInternal.LayerCount">
+            <summary>[<see cref="T:UnityEngine.SerializeField"/>] The number of layers (minimum 2).</summary>
+        </member>
         <member name="P:Animancer.WeightedMaskLayersInternal.Layers">
             <summary>The layer list created at runtime and assigned to <see cref="P:Animancer.AnimancerGraph.Layers"/>.</summary>
         </member>
         <member name="P:Animancer.WeightedMaskLayersInternal.Indices">
             <summary>The index of each of the <see cref="P:Animancer.WeightedMaskLayersDefinition.Transforms"/>.</summary>
         </member>
-        <member name="M:Animancer.WeightedMaskLayersInternal.SetWeights(System.Int32)">
-            <summary>Applies the weights of the specified group.</summary>
+        <member name="M:Animancer.WeightedMaskLayersInternal.SetWeights(System.Int32,System.Int32)">
+            <summary>Applies the weights of the specified group to the specified layer.</summary>
         </member>
-        <member name="M:Animancer.WeightedMaskLayersInternal.FadeWeights(System.Int32,System.Single,System.Func{System.Single,System.Single})">
+        <member name="M:Animancer.WeightedMaskLayersInternal.FadeWeights(System.Int32,System.Int32,System.Single,System.Func{System.Single,System.Single})">
             <summary>Fades the weights towards the specified group.</summary>
         </member>
         <member name="T:Animancer.WeightedMaskLayersInternal.Fade">
@@ -5113,7 +5628,7 @@
         <member name="P:Animancer.WeightedMaskLayersInternal.Fade.Duration">
             <summary>The total amount of time this fade will take (in seconds).</summary>
         </member>
-        <member name="M:Animancer.WeightedMaskLayersInternal.Fade.Start(Animancer.WeightedMaskLayersInternal,System.Int32,System.Single,System.Func{System.Single,System.Single})">
+        <member name="M:Animancer.WeightedMaskLayersInternal.Fade.Start(Animancer.WeightedMaskLayersInternal,System.Int32,System.Int32,System.Single,System.Func{System.Single,System.Single})">
             <summary>Initializes this fade and registers it to receive updates.</summary>
         </member>
         <member name="M:Animancer.WeightedMaskLayersInternal.Fade.Update">
@@ -5226,16 +5741,31 @@
         </member>
         <member name="F:Animancer.WeightedMaskMixerJob.boneTransforms">
             <summary>The handles for each bone being mixed.</summary>
-            <remarks>All animated bones must be included, even if their individual weight isn't modified.</remarks>
+            <remarks>
+            All animated bones must be included,
+            even if their individual weight isn't modified.
+            </remarks>
         </member>
         <member name="F:Animancer.WeightedMaskMixerJob.boneWeights">
-            <summary>The blend weight of each bone. This array corresponds to the <see cref="F:Animancer.WeightedMaskMixerJob.boneTransforms"/>.</summary>
+            <summary>The blend weight of each bone.</summary>
+            <remarks>
+            This array corresponds to the <see cref="F:Animancer.WeightedMaskMixerJob.boneTransforms"/>,
+            repeated for each layer after the first and excluding the base layer.
+            For example, if there are 3 layers and 10 bones, then this array will have 20 elements
+            with the first 10 being for Layer 1 and the next 10 being for Layer 2.
+            </remarks>
+        </member>
+        <member name="F:Animancer.WeightedMaskMixerJob.layerCount">
+            <summary>The number of layers being mixed.</summary>
         </member>
         <member name="M:Animancer.WeightedMaskMixerJob.UnityEngine#Animations#IAnimationJob#ProcessRootMotion(UnityEngine.Animations.AnimationStream)">
             <inheritdoc/>
         </member>
         <member name="M:Animancer.WeightedMaskMixerJob.UnityEngine#Animations#IAnimationJob#ProcessAnimation(UnityEngine.Animations.AnimationStream)">
             <inheritdoc/>
+        </member>
+        <member name="M:Animancer.WeightedMaskMixerJob.ProcessAnimation2Layers(UnityEngine.Animations.AnimationStream)">
+            <summary>Blends the layers in an optimized way when there are only 2.</summary>
         </member>
         <member name="T:Animancer.FadeMode">
             <summary>Determines how <see cref="M:Animancer.AnimancerLayer.Play(Animancer.AnimancerState,System.Single,Animancer.FadeMode)"/> works.</summary>
@@ -7237,8 +7767,9 @@
         </member>
         <member name="M:Animancer.Editor.AnimancerEditorUtilities.AddDocumentationLink(UnityEditor.GenericMenu,System.String,System.String)">
             <summary>
-            Adds a menu function to open a web page. If the `linkSuffix` starts with a '/' then it will be relative to
-            the <see cref="F:Animancer.Strings.DocsURLs.Documentation"/>.
+            Adds a menu function to open a web page.
+            If the `linkSuffix` starts with a '/' then it will be
+            relative to the <see cref="F:Animancer.Strings.DocsURLs.Documentation"/>.
             </summary>
         </member>
         <member name="M:Animancer.Editor.AnimancerEditorUtilities.ValidateEditable(UnityEditor.MenuCommand)">
@@ -9011,7 +9542,7 @@
             <summary>Handles Right or Middle Clicking in the `area` to reset the <see cref="P:Animancer.Editor.ToggledSpeedSlider.Speed"/>.</summary>
         </member>
         <member name="T:Animancer.Editor.TransitionDrawer">
-            <summary>[Editor-Only] Draws the Inspector GUI for an <see cref="T:Animancer.ITransitionDetailed"/>.</summary>
+            <summary>[Editor-Only] Draws the Inspector GUI for an <see cref="T:Animancer.ITransition"/>.</summary>
             https://kybernetik.com.au/animancer/api/Animancer.Editor/TransitionDrawer
         </member>
         <member name="T:Animancer.Editor.TransitionDrawer.Mode">
@@ -9022,8 +9553,8 @@
         </member>
         <member name="F:Animancer.Editor.TransitionDrawer.MainPropertyName">
             <summary>
-            If set, the field with this name will be drawn on the header line with the foldout arrow instead of in its
-            regular place.
+            If set, the field with this name will be drawn on the header line
+            with the foldout arrow instead of in its regular place.
             </summary>
         </member>
         <member name="F:Animancer.Editor.TransitionDrawer.MainPropertyPathSuffix">
@@ -9096,8 +9627,8 @@
         <member name="F:Animancer.Editor.TransitionDrawer.DrawerContext.Transition">
             <summary>The actual transition object rerieved from the <see cref="F:Animancer.Editor.TransitionDrawer.DrawerContext.Property"/>.</summary>
         </member>
-        <member name="F:Animancer.Editor.TransitionDrawer.DrawerContext.MaximumDuration">
-            <summary>The cached value of <see cref="P:Animancer.ITransitionDetailed.MaximumDuration"/>.</summary>
+        <member name="F:Animancer.Editor.TransitionDrawer.DrawerContext.MaximumLength">
+            <summary>The cached value of <see cref="P:Animancer.ITransition.MaximumLength"/>.</summary>
         </member>
         <member name="M:Animancer.Editor.TransitionDrawer.DrawerContext.#ctor(UnityEditor.SerializedProperty)">
             <summary>Creates a new <see cref="T:Animancer.Editor.TransitionDrawer.DrawerContext"/>.</summary>
@@ -9557,7 +10088,7 @@
             <summary>Applies the animation at the `currentTime`.</summary>
         </member>
         <member name="T:Animancer.Editor.Previews.AnimationClipPreview">
-            <summary>[Editor-Only] A minimal <see cref="T:Animancer.ITransitionDetailed"/> to preview an <see cref="T:UnityEngine.AnimationClip"/>.</summary>
+            <summary>[Editor-Only] A minimal <see cref="T:Animancer.ITransition"/> to preview an <see cref="T:UnityEngine.AnimationClip"/>.</summary>
             <remarks>
             <strong>Documentation:</strong>
             <see href="https://kybernetik.com.au/animancer/docs/manual/transitions#previews">
@@ -9715,7 +10246,7 @@
             <summary>The <see cref="T:UnityEditor.SerializedProperty"/> currently being previewed.</summary>
         </member>
         <member name="P:Animancer.Editor.Previews.TransitionPreviewWindow.Transition">
-            <summary>The <see cref="T:Animancer.ITransitionDetailed"/> currently being previewed.</summary>
+            <summary>The <see cref="T:Animancer.ITransition"/> currently being previewed.</summary>
         </member>
         <member name="M:Animancer.Editor.Previews.TransitionPreviewWindow.CanBePreviewed(UnityEditor.SerializedProperty)">
             <summary>Indicates whether the `property` is able to be previewed by this system.</summary>
@@ -12648,21 +13179,18 @@
             If you don't intend to blend between them, you can just disable this warning.
             </remarks>
         </member>
-        <member name="F:Animancer.OptionalWarning.NativeControllerHybrid">
+        <member name="F:Animancer.OptionalWarning.NativeControllerState">
             <summary>
-            An <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/> is assigned while also using a
-            <see cref="!:HybridAnimancerComponent"/>.
+            An <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/> is being used at the same time as a
+            <see cref="T:Animancer.ControllerState"/> or <see cref="!:HybridAnimancerComponent"/>.
             </summary>
             
             <remarks>
-            Either assign the <see cref="P:UnityEngine.Animator.runtimeAnimatorController"/> to use it as a Native Animator
-            Controller or assign the <see cref="!:HybridAnimancerComponent.Controller"/> to use it as a Hybrid Animator
-            Controller. The differences are explained on the
-            <see href="https://kybernetik.com.au/animancer/docs/manual/animator-controllers">Animator Controllers</see>
-            page.
-            <para></para>
             It is possible to use both, but it usually only happens when misunderstanding how the system works.
-            If you do want both, just disable this warning.
+            The differences are explained on the
+            <see href="https://kybernetik.com.au/animancer/docs/manual/animator-controllers">
+            Animator Controllers</see> page.
+            If you do want both systems, just disable this warning.
             </remarks>
         </member>
         <member name="F:Animancer.OptionalWarning.EndEventInterrupt">
@@ -12701,12 +13229,16 @@
         </member>
         <member name="F:Animancer.OptionalWarning.UselessEvent">
             <summary>
-            An <see cref="T:Animancer.AnimancerEvent"/> that does nothing was invoked.
-            Most likely it was not configured correctly.
+            An <see cref="T:Animancer.AnimancerEvent"/> called <see cref="F:Animancer.AnimancerEvent.InvokeBoundCallback"/>
+            but there was no callback bound to its name. This may mean the event is useless and therefore
+            should be removed to avoid wasting performance checking and invoking it.
             </summary>
             
             <remarks>
-            Unused events should be removed to avoid wasting performance checking and invoking them.
+            Events in Transitions automatically call <see cref="F:Animancer.AnimancerEvent.InvokeBoundCallback"/>
+            by default so this warning is triggered if you don't bind a callback to the event's name
+            in the <see cref="!:AnimancerComponent.Events"/>
+            or use <see cref="M:Animancer.AnimancerEvent.Sequence.SetCallback(System.Int32,System.Action)"/> on the Transition's events.
             </remarks>
         </member>
         <member name="F:Animancer.OptionalWarning.UnsupportedEvents">
@@ -13665,6 +14197,30 @@
             <summary>Applies the details of this transition to the `state`.</summary>
             <remarks>This method is called by every <see cref="M:Animancer.AnimancerLayer.Play(Animancer.ITransition)"/>.</remarks>
         </member>
+        <member name="P:Animancer.ITransition.IsValid">
+            <summary>Can this transition create a valid <see cref="T:Animancer.AnimancerState"/>?</summary>
+            <remarks>
+            Use <see cref="M:Animancer.AnimancerUtilities.IsValid(Animancer.ITransition)"/> to check for <c>null</c> as well.
+            </remarks>
+        </member>
+        <member name="P:Animancer.ITransition.IsLooping">
+            <summary>What will the value of <see cref="P:Animancer.AnimancerState.IsLooping"/> be for the created state?</summary>
+        </member>
+        <member name="P:Animancer.ITransition.NormalizedStartTime">
+            <summary>The <see cref="P:Animancer.AnimancerState.NormalizedTime"/> to start the animation at.</summary>
+            <remarks><see cref="F:System.Single.NaN"/> allows the animation to continue from its current time.</remarks>
+        </member>
+        <member name="P:Animancer.ITransition.MaximumLength">
+            <summary>The maximum expected value of the <see cref="P:Animancer.AnimancerState.Length"/>.</summary>
+            <remarks>
+            In a <see cref="T:Animancer.ClipState"/> this is equal to the <see cref="P:UnityEngine.AnimationClip.length"/>
+            but the actual length can vary depending on the current parameters in states like 
+            <see cref="T:Animancer.LinearMixerState"/> and <see cref="T:Animancer.ControllerState"/>.
+            </remarks>
+        </member>
+        <member name="P:Animancer.ITransition.Speed">
+            <summary>The <see cref="P:Animancer.AnimancerNodeBase.Speed"/> to play the animation at.</summary>
+        </member>
         <member name="T:Animancer.ITransition`1">
             <summary>An <see cref="T:Animancer.ITransition"/> which creates a specific type of <see cref="T:Animancer.AnimancerState"/>.</summary>
             <remarks>
@@ -13682,36 +14238,6 @@
         </member>
         <member name="M:Animancer.ITransition`1.CreateState">
             <summary>Creates and returns a new <typeparamref name="TState"/>.</summary>
-        </member>
-        <member name="T:Animancer.ITransitionDetailed">
-            <summary>An <see cref="T:Animancer.ITransition"/> with some additional details (mainly for the Unity Editor GUI).</summary>
-            <remarks>
-            <strong>Documentation:</strong>
-            <see href="https://kybernetik.com.au/animancer/docs/manual/transitions">
-            Transitions</see>
-            </remarks>
-            https://kybernetik.com.au/animancer/api/Animancer/ITransitionDetailed
-            
-        </member>
-        <member name="P:Animancer.ITransitionDetailed.IsValid">
-            <summary>Can this transition create a valid <see cref="T:Animancer.AnimancerState"/>?</summary>
-            <remarks>
-            Use <see cref="M:Animancer.AnimancerUtilities.IsValid(Animancer.ITransitionDetailed)"/> to check for <c>null</c> as well.
-            </remarks>
-        </member>
-        <member name="P:Animancer.ITransitionDetailed.IsLooping">
-            <summary>What will the value of <see cref="P:Animancer.AnimancerState.IsLooping"/> be for the created state?</summary>
-        </member>
-        <member name="P:Animancer.ITransitionDetailed.NormalizedStartTime">
-            <summary>The <see cref="P:Animancer.AnimancerState.NormalizedTime"/> to start the animation at.</summary>
-            <remarks><see cref="F:System.Single.NaN"/> allows the animation to continue from its current time.</remarks>
-        </member>
-        <member name="P:Animancer.ITransitionDetailed.MaximumDuration">
-            <summary>The maximum amount of time the animation is expected to take (in seconds).</summary>
-            <remarks>The actual duration can vary in states like <see cref="T:Animancer.ManualMixerState"/>.</remarks>
-        </member>
-        <member name="P:Animancer.ITransitionDetailed.Speed">
-            <summary>The <see cref="P:Animancer.AnimancerNodeBase.Speed"/> to play the animation at.</summary>
         </member>
         <member name="T:Animancer.IUpdatable">
              <summary>[Pro-Only] An object that can be updated during Animancer's animation updates.</summary>
@@ -13999,49 +14525,7 @@
             https://kybernetik.com.au/animancer/api/Animancer/ManualMixerState
             
         </member>
-        <member name="P:Animancer.ManualMixerState.ChildStates">
-            <summary>The states connected to this mixer.</summary>
-            <remarks>Only states up to the <see cref="P:Animancer.ManualMixerState.ChildCount"/> should be assigned.</remarks>
-        </member>
-        <member name="P:Animancer.ManualMixerState.ChildCount">
-            <inheritdoc/>
-        </member>
-        <member name="P:Animancer.ManualMixerState.ChildCapacity">
-            <summary>The size of the internal array of <see cref="P:Animancer.ManualMixerState.ChildStates"/>.</summary>
-            <remarks>This value starts at 0 then expands to <see cref="P:Animancer.ManualMixerState.ChildCapacity"/> when the first child is added.</remarks>
-        </member>
-        <member name="M:Animancer.ManualMixerState.OnChildCapacityChanged">
-            <summary>Called when the <see cref="P:Animancer.ManualMixerState.ChildCapacity"/> is changed.</summary>
-        </member>
-        <member name="P:Animancer.ManualMixerState.DefaultChildCapacity">
-            <summary><see cref="P:Animancer.ManualMixerState.ChildCapacity"/> starts at 0 then expands to this value when the first child is added.</summary>
-            <remarks>Default 8.</remarks>
-        </member>
-        <member name="M:Animancer.ManualMixerState.EnsureRemainingChildCapacity(System.Int32)">
-            <summary>
-            Ensures that the remaining unused <see cref="P:Animancer.ManualMixerState.ChildCapacity"/>
-            is greater than or equal to the specified `minimumCapacity`.
-            </summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.GetChild(System.Int32)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Animancer.ManualMixerState.GetEnumerator">
-            <inheritdoc/>
-        </member>
         <member name="M:Animancer.ManualMixerState.OnSetIsPlaying">
-            <inheritdoc/>
-        </member>
-        <member name="F:Animancer.ManualMixerState._LoopingChildCount">
-            <summary>If greater than 0 then <see cref="P:Animancer.ManualMixerState.IsLooping"/> is true.</summary>
-        </member>
-        <member name="P:Animancer.ManualMixerState.IsLooping">
-            <summary>Are any child states looping?</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddIsLooping(System.Int32)">
-            <summary>Sets <see cref="P:Animancer.ManualMixerState.IsLooping"/> and informs the <see cref="P:Animancer.AnimancerNodeBase.Parent"/>s.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.OnChildIsLoopingChanged(System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="P:Animancer.ManualMixerState.RawTime">
@@ -14054,32 +14538,48 @@
         <member name="M:Animancer.ManualMixerState.MoveTime(System.Double,System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:Animancer.ManualMixerState.GetEventDispatchInfo(System.Single@,System.Single@,System.Boolean@)">
+        <member name="M:Animancer.ManualMixerState.GetEventDispatchInfo">
             <inheritdoc/>
         </member>
-        <member name="M:Animancer.ManualMixerState.GetTimeDetails(System.Single@,System.Single@,System.Single@)">
+        <member name="M:Animancer.ManualMixerState.GetTimeDetails">
             <summary>
             Gets the time details based on the synchronized child states if any are active,
             otherwise recalculates based on all child states.
             </summary>
         </member>
-        <member name="M:Animancer.ManualMixerState.GetTimeDetails(System.Collections.Generic.IList{Animancer.AnimancerState},System.Int32,System.Single@,System.Single@,System.Single@)">
+        <member name="M:Animancer.ManualMixerState.GetTimeDetails(System.Collections.Generic.IList{Animancer.AnimancerState},System.Int32)">
             <summary>Gets the time details based on the `states`.</summary>
         </member>
         <member name="P:Animancer.ManualMixerState.Length">
             <summary>The weighted average <see cref="P:Animancer.AnimancerState.Length"/> of each child state.</summary>
         </member>
+        <member name="T:Animancer.ManualMixerState.TimeDetails">
+            <summary>Details used for managing the timing of a mixer.</summary>
+            https://kybernetik.com.au/animancer/api/Animancer/TimeDetails
+        </member>
+        <member name="F:Animancer.ManualMixerState.TimeDetails.Length">
+            <summary><see cref="P:Animancer.AnimancerState.Length"/></summary>
+        </member>
+        <member name="F:Animancer.ManualMixerState.TimeDetails.NormalizedTime">
+            <summary><see cref="P:Animancer.AnimancerState.NormalizedTime"/></summary>
+        </member>
+        <member name="F:Animancer.ManualMixerState.TimeDetails.TotalWeight">
+            <summary>The total weight of all child states.</summary>
+        </member>
+        <member name="M:Animancer.ManualMixerState.TimeDetails.ToString">
+            <summary>Returns a description of these details.</summary>
+        </member>
         <member name="M:Animancer.ManualMixerState.#ctor">
             <summary>Creates a new <see cref="T:Animancer.ManualMixerState"/>.</summary>
         </member>
-        <member name="M:Animancer.ManualMixerState.CreatePlayable(UnityEngine.Playables.Playable@)">
-            <summary>Creates and assigns the <see cref="T:UnityEngine.Animations.AnimationMixerPlayable"/> managed by this state.</summary>
-        </member>
         <member name="M:Animancer.ManualMixerState.OnAddChild(Animancer.AnimancerState)">
-            <summary>Connects the `state` to this mixer at its <see cref="P:Animancer.AnimancerNode.Index"/>.</summary>
+            <summary>Connects the `child` to this mixer at its <see cref="P:Animancer.AnimancerNode.Index"/>.</summary>
         </member>
         <member name="M:Animancer.ManualMixerState.OnRemoveChild(Animancer.AnimancerState)">
             <summary>Disconnects the `state` from this mixer at its <see cref="P:Animancer.AnimancerNode.Index"/>.</summary>
+        </member>
+        <member name="M:Animancer.ManualMixerState.Set(System.Int32,Animancer.AnimancerState,System.Boolean)">
+            <inheritdoc/>
         </member>
         <member name="M:Animancer.ManualMixerState.Destroy">
             <inheritdoc/>
@@ -14087,68 +14587,20 @@
         <member name="M:Animancer.ManualMixerState.Clone(Animancer.CloneContext)">
             <inheritdoc/>
         </member>
-        <member name="M:Animancer.ManualMixerState.CopyFrom(Animancer.AnimancerState,Animancer.CloneContext)">
-            <inheritdoc/>
-        </member>
         <member name="M:Animancer.ManualMixerState.CopyFrom(Animancer.ManualMixerState,Animancer.CloneContext)">
             <inheritdoc/>
         </member>
-        <member name="M:Animancer.ManualMixerState.Add(Animancer.AnimancerState)">
-            <summary>Assigns the `state` as a child of this mixer.</summary>
-            <remarks>This is the same as calling <see cref="M:Animancer.AnimancerState.SetParent(Animancer.AnimancerNode)"/>.</remarks>
+        <member name="P:Animancer.ManualMixerState.LoopingChildCount">
+            <summary>If greater than 0 then <see cref="P:Animancer.ManualMixerState.IsLooping"/> is true.</summary>
         </member>
-        <member name="M:Animancer.ManualMixerState.Add(UnityEngine.AnimationClip)">
-            <summary>Creates and returns a new <see cref="T:Animancer.ClipState"/> to play the `clip` as a child of this mixer.</summary>
+        <member name="P:Animancer.ManualMixerState.IsLooping">
+            <summary>Are any child states looping?</summary>
         </member>
-        <member name="M:Animancer.ManualMixerState.Add(Animancer.ITransition)">
-            <summary>Calls <see cref="M:Animancer.AnimancerUtilities.CreateStateAndApply(Animancer.ITransition,Animancer.AnimancerGraph)"/> then <see cref="M:Animancer.ManualMixerState.Add(Animancer.AnimancerState)"/>.</summary>
+        <member name="M:Animancer.ManualMixerState.AddIsLooping(System.Int32)">
+            <summary>Sets <see cref="P:Animancer.ManualMixerState.IsLooping"/> and informs the <see cref="P:Animancer.AnimancerNodeBase.Parent"/>s.</summary>
         </member>
-        <member name="M:Animancer.ManualMixerState.Add(System.Object)">
-            <summary>Calls one of the other <see cref="M:Animancer.ManualMixerState.Add(System.Object)"/> overloads as appropriate for the `child`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(System.Collections.Generic.IList{UnityEngine.AnimationClip})">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(UnityEngine.AnimationClip)"/> for each of the `clips`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(UnityEngine.AnimationClip[])">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(UnityEngine.AnimationClip)"/> for each of the `clips`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(System.Collections.Generic.IList{Animancer.ITransition})">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(Animancer.ITransition)"/> for each of the `transitions`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(Animancer.ITransition[])">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(Animancer.ITransition)"/> for each of the `transitions`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(System.Collections.Generic.IList{System.Object})">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(System.Object)"/> for each of the `children`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.AddRange(System.Object[])">
-            <summary>Calls <see cref="M:Animancer.ManualMixerState.Add(System.Object)"/> for each of the `children`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Remove(System.Int32,System.Boolean)">
-            <summary>Removes the child at the specified `index`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Remove(Animancer.AnimancerState,System.Boolean)">
-            <summary>Removes the specified `child`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Set(System.Int32,Animancer.AnimancerState,System.Boolean)">
-            <summary>Replaces the `child` at the specified `index`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Set(System.Int32,UnityEngine.AnimationClip,System.Boolean)">
-            <summary>Replaces the child at the specified `index` with a new <see cref="T:Animancer.ClipState"/>.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Set(System.Int32,Animancer.ITransition,System.Boolean)">
-            <summary>Replaces the child at the specified `index` with a <see cref="M:Animancer.ITransition.CreateState"/>.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.Set(System.Int32,System.Object,System.Boolean)">
-            <summary>Calls one of the other <see cref="M:Animancer.ManualMixerState.Set(System.Int32,System.Object,System.Boolean)"/> overloads as appropriate for the `child`.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.IndexOf(Animancer.AnimancerState)">
-            <summary>Returns the index of the specified `child` state.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.DestroyChildren">
-            <summary>
-            Destroys all <see cref="P:Animancer.ManualMixerState.ChildStates"/> connected to this mixer. This operation cannot be undone.
-            </summary>
+        <member name="M:Animancer.ManualMixerState.OnChildIsLoopingChanged(System.Boolean)">
+            <inheritdoc/>
         </member>
         <member name="M:Animancer.ManualMixerState.CreatePlayable``1(Animancer.AnimancerGraph,``0,System.Boolean)">
             <summary>
@@ -14227,9 +14679,6 @@
         </member>
         <member name="M:Animancer.ManualMixerState.Update">
             <summary>Recalculates the weights of child states and synchronizes their times if necessary.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.UpdateEvents">
-            <inheritdoc/>
         </member>
         <member name="M:Animancer.ManualMixerState.SetGraph(Animancer.AnimancerGraph)">
             <inheritdoc/>
@@ -14313,18 +14762,12 @@
             <see cref="P:Animancer.AnimancerNodeBase.Speed"/>.
             </remarks>
         </member>
-        <member name="P:Animancer.ManualMixerState.ApplyAnimatorIK">
-            <inheritdoc/>
-        </member>
-        <member name="P:Animancer.ManualMixerState.ApplyFootIK">
-            <inheritdoc/>
-        </member>
         <member name="M:Animancer.ManualMixerState.CalculateTotalWeight(Animancer.AnimancerState[],System.Int32)">
             <summary>Calculates the sum of the <see cref="P:Animancer.AnimancerNode.Weight"/> of all `states`.</summary>
         </member>
         <member name="M:Animancer.ManualMixerState.SetChildrenTime(System.Single,System.Boolean)">
             <summary>
-            Sets <see cref="P:Animancer.AnimancerState.Time"/> for all <see cref="P:Animancer.ManualMixerState.ChildStates"/>.
+            Sets <see cref="P:Animancer.AnimancerState.Time"/> for all <see cref="P:Animancer.ParentState.ChildStates"/>.
             </summary>
         </member>
         <member name="M:Animancer.ManualMixerState.DisableRemainingStates(System.Int32)">
@@ -14351,18 +14794,7 @@
             Recalculates the <see cref="P:Animancer.AnimancerState.Duration"/> of all child states so that they add up to 1.
             </summary>
         </member>
-        <member name="F:Animancer.ManualMixerState._CachedToString">
-            <summary>[Assert-Only] A string built by <see cref="M:Animancer.ManualMixerState.ToString"/> to describe this mixer.</summary>
-        </member>
-        <member name="M:Animancer.ManualMixerState.ToString">
-            <summary>
-            Returns a string describing the type of this mixer and the name of states connected to it.
-            </summary>
-        </member>
         <member name="M:Animancer.ManualMixerState.AppendDetails(System.Text.StringBuilder,System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Animancer.ManualMixerState.GatherAnimationClips(System.Collections.Generic.ICollection{UnityEngine.AnimationClip})">
             <inheritdoc/>
         </member>
         <member name="M:Animancer.ManualMixerState.GetParameters(System.Collections.Generic.List{Animancer.StateParameterDetails})">
@@ -14389,7 +14821,7 @@
         <member name="P:Animancer.MixerState`1.HasThresholds">
             <summary>
             Has the array of thresholds been initialized with a size at least equal to the
-            <see cref="P:Animancer.ManualMixerState.ChildCount"/>.
+            <see cref="P:Animancer.ParentState.ChildCount"/>.
             </summary>
         </member>
         <member name="M:Animancer.MixerState`1.GetThreshold(System.Int32)">
@@ -14410,7 +14842,7 @@
             <summary>
             If the <see cref="P:System.Array.Length"/> of the <see cref="F:Animancer.MixerState`1._Thresholds"/> is below the
             <see cref="P:Animancer.AnimancerNodeBase.ChildCount"/>, this method assigns a new array with size equal to the
-            <see cref="P:Animancer.ManualMixerState.ChildCapacity"/> and returns true.
+            <see cref="P:Animancer.ParentState.ChildCapacity"/> and returns true.
             </summary>
         </member>
         <member name="M:Animancer.MixerState`1.OnThresholdsChanged">
@@ -14419,10 +14851,13 @@
             need recalculating but it can be overridden by child classes to perform validation checks or optimisations.
             </summary>
         </member>
+        <member name="M:Animancer.MixerState`1.OnAddChild(Animancer.AnimancerState)">
+            <inheritdoc/>
+        </member>
         <member name="M:Animancer.MixerState`1.CalculateThresholds(System.Func{Animancer.AnimancerState,`0})">
             <summary>
-            Calls `calculate` for each of the <see cref="P:Animancer.ManualMixerState.ChildStates"/> and stores the returned value
-            as the threshold for that state.
+            Calls `calculate` for each of the <see cref="P:Animancer.ParentState.ChildStates"/>
+            and stores the returned value as the threshold for that state.
             </summary>
         </member>
         <member name="M:Animancer.MixerState`1.RecreatePlayable">
@@ -14435,7 +14870,7 @@
             <summary>The value used to calculate the weights of the child states.</summary>
             <remarks>
             Setting this value takes effect immediately (during the next animation update) without any
-            <see href="https://kybernetik.com.au/animancer/docs/manual/blending/mixers#smoothing">Smoothing</see>.
+            <see href="https://kybernetik.com.au/animancer/docs/manual/parameters/#smoothing">Smoothing</see>.
             </remarks>
             <exception cref="T:System.ArgumentOutOfRangeException">The value is NaN or Infinity.</exception>
         </member>
@@ -14460,7 +14895,8 @@
         </member>
         <member name="M:Animancer.MixerState`1.RecalculateWeights">
             <summary>
-            If <see cref="P:Animancer.MixerState`1.WeightsAreDirty"/> this method recalculates the weights of all child states and returns true.
+            If <see cref="P:Animancer.MixerState`1.WeightsAreDirty"/> this method
+            recalculates the weights of all child states and returns true.
             </summary>
         </member>
         <member name="M:Animancer.MixerState`1.ForceRecalculateWeights">
@@ -15305,7 +15741,7 @@
             <summary>The name of the serialized backing field of <see cref="M:Animancer.TransitionAssetBase.GetTransition"/>.</summary>
         </member>
         <member name="M:Animancer.TransitionAssetBase.GetTransition">
-            <summary>Returns the <see cref="T:Animancer.ITransitionDetailed"/> wrapped by this <see cref="T:UnityEngine.ScriptableObject"/>.</summary>
+            <summary>Returns the <see cref="T:Animancer.ITransition"/> wrapped by this <see cref="T:UnityEngine.ScriptableObject"/>.</summary>
         </member>
         <member name="P:Animancer.TransitionAssetBase.Animancer#IWrapper#WrappedObject">
             <inheritdoc/>
@@ -15338,7 +15774,7 @@
         <member name="P:Animancer.TransitionAssetBase.NormalizedStartTime">
             <inheritdoc/>
         </member>
-        <member name="P:Animancer.TransitionAssetBase.MaximumDuration">
+        <member name="P:Animancer.TransitionAssetBase.MaximumLength">
             <inheritdoc/>
         </member>
         <member name="P:Animancer.TransitionAssetBase.Speed">
@@ -15366,14 +15802,23 @@
             <summary>Attribute for static methods which try to create a transition from an object.</summary>
             <remarks>
             The method signature must be:
-            <c>static ITransitionDetailed TryCreateTransition(Object target)</c>
+            <c>static ITransition TryCreateTransition(Object target)</c>
             </remarks>
             https://kybernetik.com.au/animancer/api/Animancer/TryCreateTransitionAttribute
+        </member>
+        <member name="P:Animancer.TryCreateTransitionAttribute.ObjectType">
+            <summary>The base type of object which the attributed method can handle.</summary>
+        </member>
+        <member name="M:Animancer.TryCreateTransitionAttribute.#ctor(System.Type)">
+            <summary>Creates a new <see cref="T:Animancer.TryCreateTransitionAttribute"/>.</summary>
         </member>
         <member name="M:Animancer.TryCreateTransitionAttribute.InitializeMethods">
             <summary>[Editor-Only] Ensures that all methods with this attribute have been gathered.</summary>
         </member>
         <member name="M:Animancer.TryCreateTransitionAttribute.CanCreateAndSave(UnityEngine.Object)">
+            <summary>[Editor-Only] Validates that the `mainAsset` is actually an asset.</summary>
+        </member>
+        <member name="M:Animancer.TryCreateTransitionAttribute.CanCreate(System.Type)">
             <summary>[Editor-Only] Validates that the `mainAsset` is actually an asset.</summary>
         </member>
         <member name="M:Animancer.TryCreateTransitionAttribute.TryCreateTransitionAsset(UnityEngine.Object,System.Boolean)">

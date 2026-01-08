@@ -99,12 +99,6 @@ namespace Animancer
         {
             base.CopyFrom(copyFrom, context);
 
-            if (copyFrom == null)
-            {
-                _Type = default;
-                return;
-            }
-
             _Type = copyFrom._Type;
             _ParameterNameX = copyFrom._ParameterNameX;
             _ParameterNameY = copyFrom._ParameterNameY;

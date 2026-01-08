@@ -17,6 +17,7 @@ namespace Animancer.Editor
     //[CreateAssetMenu(
     //     menuName = Strings.MenuPrefix + "Material Variant Group",
     //     order = Strings.AssetMenuOrder + 5)]
+    [AnimancerHelpUrl(typeof(MaterialVariantGroup))]
     public class MaterialVariantGroup : ScriptableObject
     {
         /************************************************************************************************************************/

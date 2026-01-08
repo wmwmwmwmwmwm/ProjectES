@@ -135,6 +135,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClipThreshold: 0.5
     - _AlphaCutoff: 0.5
     - _BaseWind: 2
     - _BaseWindChannel: 0
@@ -188,6 +189,7 @@ Material:
     - _PrimaryFactor1: 1.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Scale: -1
     - _ScatteringPower: 0
     - _ScatteringScale: 0.15
@@ -234,7 +236,7 @@ Material:
     - _ColorVariation: {r: 0.3187284, g: 0.4056604, b: 0.08674495, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GradientColor: {r: 0.23129755, g: 0.3679245, b: 0.22098608, a: 1}
-    - _MainColor: {r: 0.9528302, g: 0.8838078, b: 0.8239884, a: 1}
+    - _MainColor: {r: 0.3679245, g: 0.30631357, b: 0.25222495, a: 1}
     - _ScatteringColor: {r: 0.56218994, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
     - _Tiling: {r: 4, g: 4, b: 0, a: 0}
@@ -245,4 +247,3 @@ Material:
     - _Vector0: {r: 1, g: 1, b: 0, a: 0}
     - _windOrientation: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1

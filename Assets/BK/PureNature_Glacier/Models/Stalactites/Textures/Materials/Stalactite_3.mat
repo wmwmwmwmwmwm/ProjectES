@@ -130,6 +130,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ScatteringPower: 3
     - _SecondNormalPower: 0
     - _SmoothnessPower: 0
@@ -159,4 +160,3 @@ Material:
     - _SSS: {r: 0, g: 1, b: 0.8832557, a: 0}
     - _ScatteringColor: {r: 0, g: 1, b: 0.8588236, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1

@@ -290,14 +290,6 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "com.unity.universaltoonshader.urp": {
-      "version": "file:D:/유니티 유틸/UnityChanToonShaderVer2_Project-urp-2.5.1",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "com.unity.render-pipelines.universal": "7.3.1"
-      }
-    },
     "com.vrmc.gltf": {
       "version": "https://github.com/vrm-c/UniVRM.git?path=/Packages/UniGLTF#v0.131.0",
       "depth": 0,

@@ -318,10 +318,12 @@ namespace Animancer.Editor
             _NewVersionAvailable = true;
 
             if (log)
-                Debug.Log($"{_LatestVersionName} is now available." +
-                    $"\n• Change Log: {_LatestVersionChangeLogURL}" +
+            {
+                Debug.Log($"<a href=\"{_LatestVersionChangeLogURL}\">{_LatestVersionName}</a> is now available." +
+                    $"\n• Change Log: <a href=\"{_LatestVersionChangeLogURL}\">{_LatestVersionChangeLogURL}</a>" +
                     $"\n• This check can be disabled in the Read Me asset's Inspector.",
                     this);
+            }
 
             Selection.activeObject = this;
 #endif

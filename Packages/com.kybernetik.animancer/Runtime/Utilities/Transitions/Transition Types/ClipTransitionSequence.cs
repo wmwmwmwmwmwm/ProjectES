@@ -10,11 +10,15 @@ using UnityEngine;
 
 namespace Animancer
 {
-    /// <inheritdoc/>
     /// <summary>A group of <see cref="ClipTransition"/>s which play one after the other.</summary>
     /// https://kybernetik.com.au/animancer/api/Animancer/ClipTransitionSequence
     /// 
     [Serializable]
+    [Obsolete("ClipTransitionSequence has been replaced by TransitionSequence" +
+        " which is much more powerful and works properly with Animancer Events." +
+        " This class still works the same as it always has so if you want to" +
+        " keep using it you can simply remove this [Obsolete] attribute." +
+        " This class will be removed in a future version of Animancer.")]
     public class ClipTransitionSequence : ClipTransition,
         ICopyable<ClipTransitionSequence>
     {
@@ -146,13 +150,13 @@ namespace Animancer
         /************************************************************************************************************************/
 
         /// <inheritdoc/>
-        public override float MaximumDuration
+        public override float MaximumLength
         {
             get
             {
-                var value = base.MaximumDuration;
+                var value = base.MaximumLength;
                 for (int i = 0; i < _Others.Length; i++)
-                    value += _Others[i].MaximumDuration;
+                    value += _Others[i].MaximumLength;
                 return value;
             }
         }
@@ -168,14 +172,14 @@ namespace Animancer
                 if (_Others.Length == 0)
                     return speed;
 
-                var duration = base.MaximumDuration;
+                var duration = base.MaximumLength;
                 speed *= duration;
 
                 for (int i = 0; i < _Others.Length; i++)
                 {
                     var other = _Others[i];
                     var otherSpeed = other.AverageAngularSpeed;
-                    var otherDuration = other.MaximumDuration;
+                    var otherDuration = other.MaximumLength;
                     speed += otherSpeed * otherDuration;
                     duration += otherDuration;
                 }
@@ -196,14 +200,14 @@ namespace Animancer
                 if (_Others.Length == 0)
                     return velocity;
 
-                var duration = base.MaximumDuration;
+                var duration = base.MaximumLength;
                 velocity *= duration;
 
                 for (int i = 0; i < _Others.Length; i++)
                 {
                     var other = _Others[i];
                     var otherVelocity = other.AverageVelocity;
-                    var otherDuration = other.MaximumDuration;
+                    var otherDuration = other.MaximumLength;
                     velocity += otherVelocity * otherDuration;
                     duration += otherDuration;
                 }
@@ -236,12 +240,6 @@ namespace Animancer
         public virtual void CopyFrom(ClipTransitionSequence copyFrom, CloneContext context)
         {
             base.CopyFrom(copyFrom, context);
-
-            if (copyFrom == null)
-            {
-                _Others = Array.Empty<ClipTransition>();
-                return;
-            }
 
             AnimancerUtilities.CopyExactArray(copyFrom._Others, ref _Others);
         }

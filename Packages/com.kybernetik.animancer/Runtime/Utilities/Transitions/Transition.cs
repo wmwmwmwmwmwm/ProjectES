@@ -21,7 +21,7 @@ namespace Animancer
     public abstract class Transition<TState> :
         IPolymorphic,
         ITransition<TState>,
-        ITransitionDetailed,
+        ITransition,
         ICopyable<Transition<TState>>,
         ICloneable<Transition<TState>>
         where TState : AnimancerState
@@ -85,7 +85,7 @@ namespace Animancer
         }
 
         /// <inheritdoc/>
-        public abstract float MaximumDuration { get; }
+        public abstract float MaximumLength { get; }
 
         /************************************************************************************************************************/
 
@@ -101,8 +101,11 @@ namespace Animancer
         }
 
         /// <inheritdoc/>
-        public ref AnimancerEvent.Sequence.Serializable SerializedEvents
-            => ref _Events;
+        public AnimancerEvent.Sequence.Serializable SerializedEvents
+        {
+            get => _Events;
+            set => _Events = value;
+        }
 
         /************************************************************************************************************************/
 
@@ -164,7 +167,7 @@ namespace Animancer
         /// <inheritdoc/>
         /// <remarks>Returns <see cref="FadeMode.FixedSpeed"/> unless overridden.</remarks>
         public virtual FadeMode FadeMode
-            => FadeMode.FixedSpeed;
+            => default;
 
         /************************************************************************************************************************/
 
@@ -198,12 +201,16 @@ namespace Animancer
             if (state.MainObject != MainObject)
             {
                 OptionalWarning.MainObjectMismatch.Log(
-                    $"A state.{nameof(MainObject)} doesn't match the transition.{nameof(MainObject)} being applied to it." +
-                    $" transition.{nameof(ReconcileMainObject)} must be called for every state created by the transition" +
+                    $"A state.{nameof(MainObject)} doesn't match the" +
+                    $" transition.{nameof(MainObject)} being applied to it." +
+                    $" transition.{nameof(ReconcileMainObject)} must be called" +
+                    $" for every state created by the transition" +
                     $" after its {nameof(MainObject)} is changed." +
                     $" This includes {nameof(ClipTransition)}.{nameof(ClipTransition.Clip)}," +
+#pragma warning disable CS0618 // Type or member is obsolete.
                     $" {nameof(ControllerTransition)}.{nameof(ControllerTransition.Controller)}, and" +
                     $" {nameof(PlayableAssetTransition)}.{nameof(PlayableAssetTransition.Asset)}" +
+#pragma warning restore CS0618
                     $"\n• State: {state}" +
                     $"\n• State.{nameof(MainObject)}: {state.MainObject}" +
                     $"\n• Transition.{nameof(MainObject)}: {MainObject}" +
@@ -229,7 +236,7 @@ namespace Animancer
         {
             if (!float.IsNaN(normalizedStartTime))
                 state.NormalizedTime = normalizedStartTime;
-            else if (state.Weight == 0)
+            else if (!state.IsActive)
                 state.NormalizedTime = AnimancerEvent.Sequence.GetDefaultNormalizedStartTime(state.Speed);
         }
 
@@ -287,8 +294,11 @@ namespace Animancer
         /// </remarks>
         public AnimancerState ReconcileMainObject(AnimancerState state)
         {
-            var oldMainObject = state.MainObject;
             var newMainObject = MainObject;
+            if (newMainObject == null)
+                return state;
+
+            var oldMainObject = state.MainObject;
             if (oldMainObject == newMainObject)
                 return state;
 
@@ -297,7 +307,7 @@ namespace Animancer
                 Debug.LogError(
                     $"{state} had no {nameof(state.MainObject)} to change from.",
                     state.Graph?.Component as Object);
-            if (oldMainObject == null)
+            if (newMainObject == null)
                 Debug.LogError(
                     $"{this} has no {nameof(MainObject)} to change to.",
                     state.Graph?.Component as Object);
@@ -333,14 +343,6 @@ namespace Animancer
         /// <inheritdoc/>
         public virtual void CopyFrom(Transition<TState> copyFrom, CloneContext context)
         {
-            if (copyFrom == null)
-            {
-                _FadeDuration = AnimancerGraph.DefaultFadeDuration;
-                _Events = default;
-                _Speed = 1;
-                return;
-            }
-
             _FadeDuration = copyFrom._FadeDuration;
             _Speed = copyFrom._Speed;
             _Events = copyFrom._Events.Clone();

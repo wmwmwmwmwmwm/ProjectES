@@ -12,7 +12,6 @@
     "com.unity.test-framework": "1.5.1",
     "com.unity.timeline": "1.8.7",
     "com.unity.ugui": "2.0.0",
-    "com.unity.universaltoonshader.urp": "file:D:/유니티 유틸/UnityChanToonShaderVer2_Project-urp-2.5.1",
     "com.vrmc.gltf": "https://github.com/vrm-c/UniVRM.git?path=/Packages/UniGLTF#v0.131.0",
     "com.vrmc.univrm": "https://github.com/vrm-c/UniVRM.git?path=/Packages/VRM#v0.131.0",
     "com.unity.modules.accessibility": "1.0.0",

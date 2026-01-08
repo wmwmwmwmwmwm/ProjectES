@@ -470,7 +470,8 @@ namespace Animancer
                     OptionalWarning.NativeControllerHumanoid.Log(
                         $"An Animator Controller is assigned to the {nameof(Animator)} component" +
                         $" but the Rig is Humanoid so it can't be blended with Animancer." +
-                        $" See the documentation for more information: {Strings.DocsURLs.AnimatorControllersNative}",
+                        $" See the documentation for more information:" +
+                        $" {Strings.DocsURLs.AnimatorControllersNative.AsHtmlLink()}",
                         this);
             }
         }

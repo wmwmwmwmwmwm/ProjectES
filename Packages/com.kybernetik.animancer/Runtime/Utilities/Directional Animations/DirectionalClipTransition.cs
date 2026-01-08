@@ -84,12 +84,6 @@ namespace Animancer
         {
             base.CopyFrom(copyFrom, context);
 
-            if (copyFrom == null)
-            {
-                _AnimationSet = default;
-                return;
-            }
-
             _AnimationSet = copyFrom._AnimationSet;
         }
 

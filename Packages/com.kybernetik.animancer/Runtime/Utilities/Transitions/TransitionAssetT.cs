@@ -8,9 +8,9 @@ namespace Animancer
 {
     /// <inheritdoc/>
     /// https://kybernetik.com.au/animancer/api/Animancer/TransitionAsset_1
-    [AnimancerHelpUrl(typeof(TransitionAsset<ITransitionDetailed>))]
+    [AnimancerHelpUrl(typeof(TransitionAsset<ITransition>))]
     public class TransitionAsset<TTransition> : TransitionAssetBase
-        where TTransition : ITransitionDetailed
+        where TTransition : ITransition
     {
         /************************************************************************************************************************/
 
@@ -39,7 +39,7 @@ namespace Animancer
         }
 
         /// <summary>Returns the <see cref="ITransition"/> wrapped by this <see cref="ScriptableObject"/>.</summary>
-        public override ITransitionDetailed GetTransition()
+        public override ITransition GetTransition()
         {
             AssertTransition();
             return _Transition;

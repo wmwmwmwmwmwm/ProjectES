@@ -90,7 +90,7 @@ namespace Animancer
         /************************************************************************************************************************/
 
         /// <inheritdoc/>
-        public override float MaximumDuration
+        public override float MaximumLength
         {
             get
             {
@@ -157,13 +157,6 @@ namespace Animancer
         public virtual void CopyFrom(ControllerTransition<TState> copyFrom, CloneContext context)
         {
             base.CopyFrom(copyFrom, context);
-
-            if (copyFrom == null)
-            {
-                _Controller = default;
-                _ActionsOnStop = Array.Empty<ControllerState.ActionOnStop>();
-                return;
-            }
 
             _Controller = copyFrom._Controller;
             _ActionsOnStop = copyFrom._ActionsOnStop;
@@ -237,8 +230,8 @@ namespace Animancer
         /// Returns a new <see cref="ControllerTransition"/>
         /// if the `target` is an <see cref="RuntimeAnimatorController"/>.
         /// </summary>
-        [TryCreateTransition]
-        public static ITransitionDetailed TryCreateTransition(Object target)
+        [TryCreateTransition(typeof(RuntimeAnimatorController))]
+        public static ITransition TryCreateTransition(Object target)
             => target is not RuntimeAnimatorController controller
             ? null
             : new ControllerTransition()

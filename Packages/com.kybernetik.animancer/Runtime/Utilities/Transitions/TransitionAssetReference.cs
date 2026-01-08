@@ -21,7 +21,7 @@ namespace Animancer
         IAnimationClipSource,
         ICopyable<TransitionAssetReference>,
         IPolymorphic,
-        ITransitionDetailed,
+        ITransition,
         IWrapper
     {
         /************************************************************************************************************************/
@@ -89,9 +89,9 @@ namespace Animancer
         }
 
         /// <inheritdoc/>
-        public float MaximumDuration
+        public float MaximumLength
             => _Asset != null
-            ? _Asset.MaximumDuration
+            ? _Asset.MaximumLength
             : 0;
 
         /// <inheritdoc/>
@@ -114,8 +114,11 @@ namespace Animancer
 
         /// <inheritdoc/>
         [Obsolete(TransitionAssetBase.ObsoleteEventsMessage)]
-        public ref AnimancerEvent.Sequence.Serializable SerializedEvents
-            => ref _Asset.SerializedEvents;
+        public AnimancerEvent.Sequence.Serializable SerializedEvents
+        {
+            get => _Asset.SerializedEvents;
+            set => _Asset.SerializedEvents = value;
+        }
 
         /************************************************************************************************************************/
 
@@ -140,12 +143,6 @@ namespace Animancer
         /// <inheritdoc/>
         public void CopyFrom(TransitionAssetReference copyFrom, CloneContext context)
         {
-            if (copyFrom == null)
-            {
-                _Asset = default;
-                return;
-            }
-
             _Asset = copyFrom._Asset;
         }
 

@@ -81,7 +81,7 @@ namespace Animancer
         /************************************************************************************************************************/
 
         /// <inheritdoc/>
-        public override float MaximumDuration
+        public override float MaximumLength
             => _Asset != null
             ? (float)_Asset.duration
             : 0;
@@ -109,8 +109,8 @@ namespace Animancer
         /// <inheritdoc/>
         public override void Apply(AnimancerState state)
         {
-            ApplyNormalizedStartTime(state, _NormalizedStartTime);
             base.Apply(state);
+            ApplyNormalizedStartTime(state, _NormalizedStartTime);
         }
 
         /************************************************************************************************************************/
@@ -134,14 +134,6 @@ namespace Animancer
         {
             base.CopyFrom(copyFrom, context);
 
-            if (copyFrom == null)
-            {
-                _Asset = default;
-                _NormalizedStartTime = float.NaN;
-                _Bindings = default;
-                return;
-            }
-
             _Asset = copyFrom._Asset;
             _NormalizedStartTime = copyFrom._NormalizedStartTime;
             AnimancerUtilities.CopyExactArray(copyFrom._Bindings, ref _Bindings);
@@ -153,8 +145,8 @@ namespace Animancer
         /// Returns a new <see cref="PlayableAssetTransition"/>
         /// if the `target` is an <see cref="PlayableAsset"/>.
         /// </summary>
-        [TryCreateTransition]
-        public static ITransitionDetailed TryCreateTransition(Object target)
+        [TryCreateTransition(typeof(PlayableAsset))]
+        public static ITransition TryCreateTransition(Object target)
             => target is not PlayableAsset asset
             ? null
             : new PlayableAssetTransition()

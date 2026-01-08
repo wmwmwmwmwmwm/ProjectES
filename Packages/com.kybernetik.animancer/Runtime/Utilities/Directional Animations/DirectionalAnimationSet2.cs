@@ -15,7 +15,7 @@ namespace Animancer
     /// 
     [CreateAssetMenu(
         menuName = Strings.MenuPrefix + "Directional Animation Set/2 Directions",
-        order = Strings.AssetMenuOrder + 3)]
+        order = Strings.AssetMenuOrder + 4)]
     [AnimancerHelpUrl(typeof(DirectionalAnimationSet2))]
     public class DirectionalAnimationSet2 : DirectionalSet2<AnimationClip>,
         IAnimationClipSource

@@ -106,14 +106,6 @@ namespace Animancer
 
             PlayController();
             base.OnEnable();
-
-#if UNITY_ASSERTIONS
-            if (Animator != null && Animator.runtimeAnimatorController != null)
-                OptionalWarning.NativeControllerHybrid.Log($"An Animator Controller is assigned to the" +
-                    $" {nameof(Animator)} component while also using a {nameof(HybridAnimancerComponent)}." +
-                    $" Most likely only one of them is being used so the other should be removed." +
-                    $" See the documentation for more information: {Strings.DocsURLs.AnimatorControllers}", this);
-#endif
         }
 
         /************************************************************************************************************************/

@@ -13,7 +13,7 @@ namespace Animancer
     [AnimancerHelpUrl(typeof(StringAsset))]
     [CreateAssetMenu(
         menuName = Strings.MenuPrefix + "String Asset",
-        order = Strings.AssetMenuOrder + 2)]
+        order = Strings.AssetMenuOrder + 3)]
     public class StringAsset : StringAssetInternal
     {
         /************************************************************************************************************************/

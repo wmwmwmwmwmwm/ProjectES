@@ -67,13 +67,6 @@ namespace Animancer
         {
             base.CopyFrom(copyFrom, context);
 
-            if (copyFrom == null)
-            {
-                _DefaultParameter = default;
-                _Thresholds = default;
-                return;
-            }
-
             _DefaultParameter = copyFrom._DefaultParameter;
             AnimancerUtilities.CopyExactArray(copyFrom._Thresholds, ref _Thresholds);
         }

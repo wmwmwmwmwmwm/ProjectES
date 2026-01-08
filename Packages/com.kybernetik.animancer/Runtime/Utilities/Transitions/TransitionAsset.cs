@@ -14,7 +14,7 @@ namespace Animancer
         menuName = Strings.MenuPrefix + "Transition Asset",
         order = Strings.AssetMenuOrder + 1)]
     [AnimancerHelpUrl(typeof(TransitionAsset))]
-    public class TransitionAsset : TransitionAsset<ITransitionDetailed>
+    public class TransitionAsset : TransitionAsset<ITransition>
     {
         /************************************************************************************************************************/
 #if UNITY_EDITOR

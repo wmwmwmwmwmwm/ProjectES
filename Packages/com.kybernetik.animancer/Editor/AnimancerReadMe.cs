@@ -51,8 +51,13 @@ namespace Animancer.Editor
         /// <item>[28] = v8.0.1: 2024-09-08.</item>
         /// <item>[29] = v8.0.2: 2024-11-02.</item>
         /// <item>[30] = v8.1.0: 2025-02-26.</item>
+        /// <item>[31] = v8.1.1: 2025-05-26.</item>
+        /// <item>[32] = v8.2.0: 2025-09-17.</item>
+        /// <item>[33] = v8.2.1: 2025-09-18.</item>
+        /// <item>[34] = v8.2.2: 2025-09-27.</item>
+        /// <item>[35] = v8.2.3: 2025-10-12.</item>
         /// </list></example>
-        public override int ReleaseNumber => 30;
+        public override int ReleaseNumber => 35;
 
         /// <inheritdoc/>
         public override string VersionName => Strings.DocsURLs.VersionName;
@@ -175,8 +180,9 @@ namespace Animancer.Editor
 
             var message = $"{assembly.GetName().Name}.dll was compiled for {actualAssemblyTarget}" +
                 $" but the correct target for this version of Unity would be {ExpectedAssemblyTarget}+." +
-                $"\n\nYou should download the appropriate version using the Package Manager" +
-                $" or from {Strings.DocsURLs.DownloadLite}" +
+                $"\n\nYou should use the Package Manager to Remove this version then" +
+                $" Re-Download and Re-Import the appropriate version." +
+                $" It can also be downloded from {Strings.DocsURLs.DownloadLite}" +
                 $"\n\nOr you could ignore this warning which may prevent some features from working properly." +
                 $" This option will log a message which you can use to find and delete the script showing this warning.";
 

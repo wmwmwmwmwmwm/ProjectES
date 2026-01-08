@@ -172,7 +172,8 @@ namespace Animancer.Editor
                 Debug.Log(
                     $"Data Migration Complete." +
                     $" Modified {modifiedFileCount} files in {timer}." +
-                    $" Please check the modified files and report any issues to {Strings.DocsURLs.DeveloperEmail}");
+                    $" Please check the modified files and report any issues to" +
+                    $" {Strings.DocsURLs.DeveloperEmail}");
 
                 WarnAboutUnSharedChanges();
 
