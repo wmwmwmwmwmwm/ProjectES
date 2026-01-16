@@ -42,6 +42,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Library: {fileID: 11400000}
   _TransitionSortMode: 0
+--- !u!114 &-3344160710798599263
+MonoBehaviour:
+  m_ObjectHideFlags: 17
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 139803103, guid: c8f836b9e2ef7eb41ad944e21ec66ce4, type: 3}
+  m_Name: Editor Data
+  m_EditorClassIdentifier: 
+  _Library: {fileID: 11400000}
+  _TransitionSortMode: 0
 --- !u!114 &-364791089063896547
 MonoBehaviour:
   m_ObjectHideFlags: 0

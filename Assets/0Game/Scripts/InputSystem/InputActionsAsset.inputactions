@@ -2,7 +2,7 @@
     "name": "InputActionsAsset",
     "maps": [
         {
-            "name": "Gameplay",
+            "name": "Battle",
             "id": "82625206-f5a8-40ef-9a75-31930b243a7d",
             "actions": [
                 {
@@ -24,10 +24,46 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "DashForward",
+                    "type": "Button",
+                    "id": "03f2526c-7789-49cb-a3db-c6fcb1f0e6f4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DashBackward",
+                    "type": "Button",
+                    "id": "7b81ebb6-7612-47e5-90cd-6cf7f280e13d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DashLeft",
+                    "type": "Button",
+                    "id": "55c85a56-5a34-4fc8-ba15-7dd7a3607f04",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DashRight",
+                    "type": "Button",
+                    "id": "77f16ff7-f34e-49df-a589-df694860c479",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "MultiTap",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "NormalAttack",
                     "type": "Button",
                     "id": "2e6b07e4-7c76-4280-9981-37e59afe0402",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -36,7 +72,7 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "bf80cade-3908-4c91-8b5d-2b41f96d6ee1",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -45,7 +81,7 @@
                     "name": "Guard",
                     "type": "Button",
                     "id": "0d04215b-cc3f-467e-98c2-7b7c65db2593",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -91,7 +127,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -102,7 +138,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -113,7 +149,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -124,7 +160,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -148,6 +184,50 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "Guard",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7dcc4897-1adf-4390-963d-f6cb9331191e",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "DashForward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "637d0e6b-01d6-4d1c-85f5-11cc59794812",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "DashBackward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f6d63d3-5533-43bb-b44f-424fc6fc52f2",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "DashLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fcd1b321-b3ee-4082-b643-1d118bef625c",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "DashRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
