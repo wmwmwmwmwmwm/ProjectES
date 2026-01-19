@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 36121c42b945b624fb938cb9637f28d0
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 133704
+  packageName: RPG VFX Bundle
+  packageVersion: 
+  assetPath: Assets/ErbGameArt/Sword slash FX/Shaders/Distortion.shader
+  uploadId: 0

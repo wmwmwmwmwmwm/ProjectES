@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6e83749723c7b4949bce6ef084e370a4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 133704
+  packageName: RPG VFX Bundle
+  packageVersion: 5.3.1
+  assetPath: Assets/Hovl Studio/HSFiles/Scripts/HS_EffectSound.cs
+  uploadId: 759582
