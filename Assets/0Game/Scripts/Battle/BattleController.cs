@@ -12,11 +12,13 @@ namespace Battle
 	public class BattleController : MonoBehaviour
 	{
 		public Transform _MainCamera, _BackgroundCamera;
+		public Transform _BgSky, _BgGround, _BgNear;
 
 		void Update()
 		{
-			// 배경 카메라
-			_BackgroundCamera.rotation = _MainCamera.rotation;
+			// 배경 회전
+			_BgNear.rotation = _MainCamera.rotation;
+			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
 		}
 	}
 }

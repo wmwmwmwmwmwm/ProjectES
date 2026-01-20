@@ -33,36 +33,14 @@ namespace Battle
 		float _LastCanJumpTime;
 		float _LastDashTime;
 		Vector3 _DashDir;
+		[HideInInspector] public Vector3 _RootMotionPosDelta;
+		[HideInInspector] public Quaternion _RootMotionRotDelta;
 
 		const float MoveGraceTime = 0.1f;
 
 		void InitMovement()
 		{
 			_Motor.CharacterController = this;
-			PositionConstraint posConstraint = _CameraTarget.GetComponent<PositionConstraint>();
-			posConstraint.AddSource(new ConstraintSource()
-			{
-				sourceTransform = transform,
-				weight = 1f,
-			});
-		}
-
-		void Dash(Direction4 dir)
-		{
-            _MoveRequest = dir switch
-			{
-				Direction4.Up => MoveRequest.DashFwd,
-				Direction4.Down => MoveRequest.DashBwd,
-				Direction4.Left => MoveRequest.DashLeft,
-				_ => MoveRequest.DashRight
-			};
-			_LastRequestTime = Time.time;
-		}
-
-		void Jump(CallbackContext obj)
-		{
-			_MoveRequest = MoveRequest.Jump;
-			_LastRequestTime = Time.time;
 		}
 
 		public void BeforeCharacterUpdate(float deltaTime)
@@ -73,74 +51,85 @@ namespace Battle
 		public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
 		{
 			// Y회전
-			Quaternion destRot = Quaternion.Euler(0f, _CameraTarget.eulerAngles.y, 0f);
-			currentRotation = Quaternion.RotateTowards(currentRotation, destRot, _RotationSpeed * deltaTime);
+			if (_RootMotionRotDelta != Quaternion.identity)
+			{
+				currentRotation *= _RootMotionRotDelta;
+			}
+			else if (_FSM.CurrentState._CanMove)
+			{
+				Quaternion destRot = Quaternion.Euler(0f, _CameraTarget.eulerAngles.y, 0f);
+				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, _RotationSpeed * deltaTime);
+			}
 		}
 
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
-			// XZ축 이동
-			float dashNormalizedTime = (Time.time - _LastDashTime) / _DashTime;
 			Vector3 moveInputVector = _CameraTarget.rotation * Inputs.Movement.Vector2ToXZ();
-			if (_FSM.CurrentState._CanMove)
+			if (!_FSM.CurrentState._CanMove)
 			{
-				if (_Motor.GroundingStatus.IsStableOnGround)
-				{
-					Vector3 targetVelocity = moveInputVector * _MoveSpeed;
-					currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, _MoveGroundAccel * deltaTime);
-					if (currentVelocity.sqrMagnitude > 0.01f)
-					{
-						_FSM.TrySetState(_Move);
-						Vector3 localMoveDirection3 = transform.InverseTransformDirection(currentVelocity);
-						Vector2 localMoveDirection2 = new(localMoveDirection3.x, localMoveDirection3.z);
-						_MoveParameter.TargetValue = localMoveDirection2.normalized;
-					}
-					else
-					{
-						_FSM.TrySetState(_Idle);
-					}
+				moveInputVector = Vector3.zero;
+			}
 
-					// 착지
-					if (!_Motor.LastGroundingStatus.IsStableOnGround)
-					{
-						_FSM.TrySetState(_Land);
-					}
+			// XZ축 이동
+			if (_RootMotionPosDelta != Vector3.zero)
+			{
+				currentVelocity = _RootMotionPosDelta / deltaTime;
+				currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
+			}
+			else if (Time.time - _LastDashTime < _DashTime)
+			{
+				currentVelocity = _DashSpeed * transform.TransformDirection(_DashDir);
+			}
+			else if (_Motor.GroundingStatus.IsStableOnGround)
+			{
+				Vector3 targetVelocity = moveInputVector * _MoveSpeed;
+				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, _MoveGroundAccel * deltaTime);
+				if (currentVelocity.sqrMagnitude > 0.01f)
+				{
+					_FSM.TrySetState(_Move);
+					Vector3 localMoveDirection3 = transform.InverseTransformDirection(currentVelocity);
+					Vector2 localMoveDirection2 = new(localMoveDirection3.x, localMoveDirection3.z);
+					_MoveParameter.TargetValue = localMoveDirection2.normalized;
 				}
 				else
 				{
-					Vector3 addedVelocity = _MoveAirAccel * deltaTime * moveInputVector;
-					Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
+					_FSM.TrySetState(_Idle);
+				}
 
-					// 공중에서 가속
-					if (currentVelocityOnInputsPlane.magnitude < _MoveSpeed)
-					{
-						Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, _MoveSpeed);
-						addedVelocity = newTotal - currentVelocityOnInputsPlane;
-					}
-					else
-					{
-						if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
-						{
-							addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
-						}
-					}
-
-					// 공중에서 오르기 방지
-					if (_Motor.GroundingStatus.FoundAnyGround)
-					{
-						Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
-						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
-					}
-
-					currentVelocity += addedVelocity;
-					_FSM.TrySetState(_Jump);
+				// 착지
+				if (!_Motor.LastGroundingStatus.IsStableOnGround)
+				{
+					_FSM.TrySetState(_Land);
 				}
 			}
-
-			// 대쉬
-			if (dashNormalizedTime < 1f)
+			else
 			{
-				currentVelocity = _DashSpeed * transform.TransformDirection(_DashDir);
+				Vector3 addedVelocity = _MoveAirAccel * deltaTime * moveInputVector;
+				Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
+
+				// 공중에서 가속
+				if (currentVelocityOnInputsPlane.magnitude < _MoveSpeed)
+				{
+					Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, _MoveSpeed);
+					addedVelocity = newTotal - currentVelocityOnInputsPlane;
+				}
+				else
+				{
+					if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
+					{
+						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
+					}
+				}
+
+				// 공중에서 오르기 방지
+				if (_Motor.GroundingStatus.FoundAnyGround)
+				{
+					Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
+					addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
+				}
+
+				currentVelocity += addedVelocity;
+				_FSM.TrySetState(_Jump);
 			}
 
 			// 중력
@@ -184,7 +173,7 @@ namespace Battle
 							MoveRequest.DashLeft => Vector3.left,
 							_ => Vector3.right
 						};
-						DashState state = _MoveRequest switch
+						State state = _MoveRequest switch
 						{
 							MoveRequest.DashFwd => _DashFwd,
 							MoveRequest.DashBwd => _DashBwd,
@@ -209,6 +198,9 @@ namespace Battle
 			{
 				_LastCanJumpTime = Time.time;
 			}
+
+			_RootMotionPosDelta = Vector3.zero;
+			_RootMotionRotDelta = Quaternion.identity;
 		}
 
 		public bool IsColliderValidForCollisions(Collider coll)

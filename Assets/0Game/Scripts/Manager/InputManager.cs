@@ -30,19 +30,19 @@ public class InputManager : Singleton<InputManager>
 		bool leftPressed = InputActions.Battle.DashLeft.WasPressedThisFrame();
 		bool rightPressed = InputActions.Battle.DashRight.WasPressedThisFrame();
 
-		if (InputActions.Battle.DashForward.WasPressedThisFrame())
+		if (forwardPressed)
 		{
 			InvokeDash(Direction4.Up);
 		}
-		else if (InputActions.Battle.DashBackward.WasPressedThisFrame())
+		else if (backwardPressed)
 		{
 			InvokeDash(Direction4.Down);
 		}
-		else if (InputActions.Battle.DashLeft.WasPressedThisFrame())
+		else if (leftPressed)
 		{
 			InvokeDash(Direction4.Left);
 		}
-		else if (InputActions.Battle.DashRight.WasPressedThisFrame())
+		else if (rightPressed)
 		{
 			InvokeDash(Direction4.Right);
 		}
@@ -59,22 +59,22 @@ public class InputManager : Singleton<InputManager>
 			}
 		}
 
-		if (InputActions.Battle.DashForward.WasPressedThisFrame())
+		if (forwardPressed)
 		{
 			_DashPressed = Direction4.Up;
 			_DashPressedTime = Time.time;
 		}
-		else if (InputActions.Battle.DashBackward.WasPressedThisFrame())
+		else if (backwardPressed)
 		{
 			_DashPressed = Direction4.Down;
 			_DashPressedTime = Time.time;
 		}
-		else if (InputActions.Battle.DashLeft.WasPressedThisFrame())
+		else if (leftPressed)
 		{
 			_DashPressed = Direction4.Left;
 			_DashPressedTime = Time.time;
 		}
-		else if (InputActions.Battle.DashRight.WasPressedThisFrame())
+		else if (rightPressed)
 		{
 			_DashPressed = Direction4.Right;
 			_DashPressedTime = Time.time;

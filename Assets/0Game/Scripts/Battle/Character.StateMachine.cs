@@ -5,6 +5,7 @@ using NaughtyAttributes;
 using static SingletonManager;
 using Animancer;
 using Animancer.FSM;
+using System;
 
 namespace Battle
 {
@@ -12,19 +13,25 @@ namespace Battle
 	{
 		[Header("애니메이션")]
 		public AnimancerComponent _Animancer;
-		public StringAsset _MoveX, _MoveY;
 		public TransitionAsset _IdleAsset;
 		public TransitionAsset _MoveAsset;
 		public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
 		public TransitionAsset _JumpAsset, _LandAsset;
+		public List<TransitionAsset> _NormalAttackAssets;
+		public StringAsset _MoveX, _MoveY;
+		public StringAsset _NextAttack;
 
 		[HideInInspector] public StateMachine<State>.WithDefault _FSM;
 		SmoothedVector2Parameter _MoveParameter;
-		IdleState _Idle;
-		MoveState _Move;
-		DashState _DashFwd, _DashBwd, _DashLeft, _DashRight;
-		JumpState _Jump;
-		LandState _Land;
+		State _Idle;
+		State _Move;
+		State _DashFwd, _DashBwd, _DashLeft, _DashRight;
+		State _Jump;
+		State _Land;
+		List<State> _NormalAttacks;
+
+		int _AttackIndex;
+		bool _NextAttackInput;
 
 		void InitFSM()
 		{
@@ -37,6 +44,7 @@ namespace Battle
 				_CanMove = true,
 				_CanDash = true,
 				_CanJump = true,
+				_CanAttack = true,
 			};
 			_Move = new()
 			{
@@ -46,34 +54,35 @@ namespace Battle
 				_CanMove = true,
 				_CanDash = true,
 				_CanJump = true,
+				_CanAttack = true,
 			};
 			_DashFwd = new()
 			{
 				c = this,
 				_Asset = _DashFwdAsset,
-				_CanMove = true,
 				_Duration = _DashTime,
+				_Restart = true,
 			};
 			_DashBwd = new()
 			{
 				c = this,
 				_Asset = _DashBwdAsset,
-				_CanMove = true,
 				_Duration = _DashTime,
+				_Restart = true,
 			};
 			_DashLeft = new()
 			{
 				c = this,
 				_Asset = _DashLeftAsset,
-				_CanMove = true,
 				_Duration = _DashTime,
+				_Restart = true,
 			};
 			_DashRight = new()
 			{
 				c = this,
 				_Asset = _DashRightAsset,
-				_CanMove = true,
 				_Duration = _DashTime,
+				_Restart = true,
 			};
 			_Jump = new()
 			{
@@ -88,8 +97,24 @@ namespace Battle
 				_Asset = _LandAsset,
 				_CanMove = true,
 				_CanDash = true,
-				_CanJump = true,
 			};
+			_NormalAttacks = new();
+			for (int i = 0; i < _NormalAttackAssets.Count; i++)
+			{
+				TransitionAsset asset = _NormalAttackAssets[i];
+				bool isLast = i == _NormalAttackAssets.Count - 1;
+				_NormalAttacks.Add(new()
+				{
+					c = this,
+					_Asset = asset,
+					_CanAttack = !isLast,
+					_Restart = true,
+					_OnEnd = () => _AttackIndex = -1,
+				});
+			}
+
+			// 이벤트
+			_Animancer.Events.TryAdd(_NextAttack, NextAttack);
 
 			_FSM.DefaultState = _Idle;
 		}
@@ -100,60 +125,54 @@ namespace Battle
 		}
 	}
 
-    public abstract class State : IState
-    {
+	public class State : IState
+	{
 		public Character c;
 		public TransitionAsset _Asset;
 		public int _Priority;
 		public float _Duration;
-		public bool _CanMove, _CanDash, _CanJump;
+		public bool _CanMove, _CanDash, _CanJump, _CanAttack;
+		public bool _Restart;
 
-		public virtual bool CanEnterState => true;
+		public Action _OnEnd;
 
-        public virtual bool CanExitState => c._FSM.NextState._Priority >= _Priority;
+		public bool CanEnterState => true;
 
-        public virtual void OnEnterState()
+		public bool CanExitState => c._FSM.NextState._Priority >= _Priority;
+
+		public void OnEnterState()
 		{
-            AnimancerState state = c._Animancer.Play(_Asset);
+			AnimancerState state = c._Animancer.Play(_Asset);
 			if (_Duration == 0f)
 			{
-				state.Events(this).OnEnd ??= c._FSM.ForceSetDefaultState;
+				state.Events(c).OnEnd ??= () =>
+				{
+					c._FSM.ForceSetDefaultState();
+					_OnEnd?.Invoke();
+				};
+			}
+			else
+			{
+				state.Events(c).OnEnd ??= () =>
+				{
+					_OnEnd?.Invoke();
+				};
+			}
+
+			if (_Restart)
+			{
+				state.Time = 0f;
 			}
 		}
 
-		public virtual void OnExitState() { }
+		public void OnExitState() { }
 
-		public virtual void UpdateState()
+		public void UpdateState()
 		{
 			if (_Duration > 0f && c._Animancer.States.Current.Time > _Duration)
 			{
 				c._FSM.ForceSetDefaultState.Invoke();
 			}
 		}
-    }
-
-	public class IdleState : State
-	{
-
-	}
-
-	public class MoveState : State
-	{
-
-	}
-
-	public class DashState : State
-	{
-
-	}
-
-	public class JumpState : State
-	{
-
-	}
-
-	public class LandState : State
-	{
-
 	}
 }
