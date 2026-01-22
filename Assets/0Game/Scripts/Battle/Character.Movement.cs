@@ -163,7 +163,7 @@ namespace Battle
 				case MoveRequest.DashBwd:
 				case MoveRequest.DashLeft:
 				case MoveRequest.DashRight:
-					if (_FSM.CurrentState._CanDash)
+					if (_FSM.CurrentState._CanDash && !IsGuarding())
 					{
 						_LastDashTime = Time.time;
 						_DashDir = _MoveRequest switch

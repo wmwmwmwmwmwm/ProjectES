@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 
 public class GameManager : Singleton<GameManager>
 {
+	public float _TimeScale;
+
 	float _FixedDeltaTime;
 
 	protected override void Init()
@@ -17,6 +19,7 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
+		Time.timeScale = _TimeScale;
 		Time.fixedDeltaTime = Mathf.Min(Time.deltaTime, _FixedDeltaTime);
 	}
 }

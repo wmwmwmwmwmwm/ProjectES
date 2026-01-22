@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f08fdd50e79d0c4bb235a5c2696516d, type: 3}
-  m_Name: CharacterTransitionLibrary
+  m_Name: Character_TransitionLibrary
   m_EditorClassIdentifier: 
   _Definition:
     _Transitions:
@@ -165,6 +165,8 @@ MonoBehaviour:
     - {fileID: 7382285990112058789}
     - {fileID: 5575586573070899872}
     - {fileID: 7029878853625567233}
+    - {fileID: 3254200751114319916}
+    - {fileID: 6080753252199417512}
     _Modifiers: []
     _Aliases: []
     _AliasAllTransitions: 0
@@ -223,6 +225,35 @@ MonoBehaviour:
           _Callbacks: []
           _Names: []
         _Clip: {fileID: 7400006, guid: 175e173df7e054547ba0821f764a7af5, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &3254200751114319916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GuardUp
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188532396654675
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188532396654675
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes:
+          - 3
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 4ade603cb2f195c4f8850d7caf106f01, type: 2}
         _NormalizedStartTime: NaN
 --- !u!114 &4799891562835818413
 MonoBehaviour:
@@ -297,6 +328,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Library: {fileID: 11400000}
   _TransitionSortMode: 0
+--- !u!114 &6080753252199417512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GuardDown
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188532396654687
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188532396654687
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.2
+        _Speed: -1
+        _Events:
+          _NormalizedTimes:
+          - -6
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 4ade603cb2f195c4f8850d7caf106f01, type: 2}
+        _NormalizedStartTime: NaN
 --- !u!114 &7029878853625567233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +378,7 @@ MonoBehaviour:
       type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
       data:
         _FadeDuration: 0.05
-        _Speed: 1
+        _Speed: 3
         _Events:
           _NormalizedTimes: []
           _Callbacks: []

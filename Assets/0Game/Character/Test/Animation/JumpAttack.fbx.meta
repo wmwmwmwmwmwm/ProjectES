@@ -4618,8 +4618,8 @@ ModelImporter:
       name: JumpAttack
       takeName: AssaultRifle_Aim
       internalID: 0
-      firstFrame: 2
-      lastFrame: 75
+      firstFrame: 10
+      lastFrame: 26
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

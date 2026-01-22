@@ -44,7 +44,7 @@ Shader "ERB/Particles/FadeSlash"
 		};
 
 		uniform float _Distortion;
-		uniform sampler2D _GrabTexture;
+		//uniform sampler2D _GrabTexture;
 		uniform sampler2D _MainTex;
 		uniform float4 _MainTex_ST;
 		uniform float _Distortionpower;
@@ -75,8 +75,9 @@ Shader "ERB/Particles/FadeSlash"
 			float NoiseR70 = tex2D( _Noise, panner81 ).r;
 			float temp_output_47_0 = ( _Distortionpower * NoiseR70 );
 			float2 appendResult49 = (float2(U51 , ( temp_output_47_0 * temp_output_47_0 )));
-			float4 screenColor41 = tex2D( _GrabTexture, appendResult49 );
-			float3 clampResult42 = clamp( (screenColor41).rgb , float3( 0,0,0 ) , float3( 1,1,1 ) );
+			//float4 screenColor41 = tex2D( _GrabTexture, appendResult49 );
+			//float3 clampResult42 = clamp( (screenColor41).rgb , float3( 0,0,0 ) , float3( 1,1,1 ) );
+			float3 clampResult42 = float3(0, 0, 0);
 			float temp_output_7_0 = (2.5 + (( _PathSet0ifyouuseinPS + i.uv2_tex3coord2.x ) - 0.0) * (1.0 - 2.5) / (1.0 - 0.0));
 			float clampResult76 = clamp( i.uv2_tex3coord2.y , 0.0 , 1.0 );
 			float temp_output_10_0 = (1.0 + (( _LenghtSet1ifyouuseinPS * clampResult76 ) - 0.0) * (0.0 - 1.0) / (1.0 - 0.0));

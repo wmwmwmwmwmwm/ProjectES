@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8896092058330900410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8980942960796169666}
+  - component: {fileID: 9150884734748941803}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8980942960796169666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8896092058330900410}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9150884734748941803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8896092058330900410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32169a2051b41ec49a68a378e40cde0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _EffectInfos:
+  - _Clip: {fileID: 7400000, guid: 5ef54e9e8ccd801459006b721cab404a, type: 2}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: 0.019847218, y: 1.363, z: 1.02}
+    _Rot: {x: 305.1957, y: 292.13037, z: 145.32936}
+    _Scale: 1.78
+    _IsLocal: 1
+  - _Clip: {fileID: 7400000, guid: 818deedd8c224c9469a93b56fc4e8a63, type: 2}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: -0.058550954, y: 1.198, z: 0.844}
+    _Rot: {x: 43.866936, y: 264.27164, z: 182.63597}
+    _Scale: 1.81
+    _IsLocal: 1
+  - _Clip: {fileID: 7400000, guid: 06c67af9342cd9e4a9e665c4b5943e74, type: 2}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: -0.034883864, y: 1.16, z: 0.38108122}
+    _Rot: {x: 310.62204, y: 289.48087, z: 148.68327}
+    _Scale: 1.38
+    _IsLocal: 1
+  - _Clip: {fileID: 7400000, guid: 01fa12c27ce71ea4382e2c1c8a5a52bd, type: 2}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: -0.0002637636, y: 1.484, z: 0.58586586}
+    _Rot: {x: 3.6573226, y: 293.43317, z: 127.02949}
+    _Scale: 1.22
+    _IsLocal: 1

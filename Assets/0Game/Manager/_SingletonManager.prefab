@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e6f9fca5ff8e74ba38cbc18e0d3292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _InputManagerPrefab: {fileID: 6499333027774439547, guid: 055251c673b9ab743afb57bda29bc20c,
-    type: 3}
   _GameControllerPrefab: {fileID: 9208838008908411988, guid: c4defcbcc7538274fa71b3b66c5444ba,
     type: 3}
+  _InputManagerPrefab: {fileID: 6499333027774439547, guid: 055251c673b9ab743afb57bda29bc20c,
+    type: 3}
   _UIManagerPrefab: {fileID: 8765424828551311098, guid: 4943b99f16debe64ca5365d0c2789ddc,
+    type: 3}
+  _DataManagerPrefab: {fileID: 9150884734748941803, guid: e8f20c613e0b0f64d92026e2007a3a40,
     type: 3}
