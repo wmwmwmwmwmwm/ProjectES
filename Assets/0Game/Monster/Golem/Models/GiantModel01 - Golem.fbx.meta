@@ -1,11 +1,19 @@
 fileFormatVersion: 2
 guid: cfbfb95b5f2b90949be0b5faab2775fb
+AssetOrigin:
+  serializedVersion: 1
+  productId: 278960
+  packageName: Giant Monster Model - Golem
+  packageVersion: 1.0
+  assetPath: Assets/Kevin Iglesias/Characters/Humanoid Giant/Models/GiantModel01
+    - Golem.fbx
+  uploadId: 684561
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -816,11 +824,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 278960
-  packageName: Giant Monster Model - Golem
-  packageVersion: 1.0
-  assetPath: Assets/Kevin Iglesias/Characters/Humanoid Giant/Models/GiantModel01
-    - Golem.fbx
-  uploadId: 684561

@@ -9,8 +9,10 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public partial class Monster : MonoBehaviour, ICharacterController
+	public partial class Monster : MonoBehaviour
 	{
+		public int _HP;
+
 		void Start()
 		{
 		}

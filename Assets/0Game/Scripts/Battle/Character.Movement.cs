@@ -17,7 +17,6 @@ namespace Battle
 		[Header("움직임")]
 		public KinematicCharacterMotor _Motor;
 		public float _Gravity;
-		public float _CameraRotationSpeed;
 		public float _RotationSpeed;
 		public float _MoveSpeed;
 		public float _MoveGroundAccel, _MoveAirAccel;
@@ -25,9 +24,8 @@ namespace Battle
 		public float _DashTime;
 		public float _JumpSpeed;
 
-		enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
+		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
-		Vector2 _LookRotation;
 		MoveRequest _MoveRequest;
 		float _LastRequestTime;
 		float _LastCanJumpTime;
@@ -35,6 +33,7 @@ namespace Battle
 		Vector3 _DashDir;
 		[HideInInspector] public Vector3 _RootMotionPosDelta;
 		[HideInInspector] public Quaternion _RootMotionRotDelta;
+		[HideInInspector] public Quaternion _AimDestRotation;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -57,14 +56,14 @@ namespace Battle
 			}
 			else if (_FSM.CurrentState._CanMove)
 			{
-				Quaternion destRot = Quaternion.Euler(0f, _CameraTarget.eulerAngles.y, 0f);
+				Quaternion destRot = Quaternion.Euler(0f, _AimDestRotation.eulerAngles.y, 0f);
 				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, _RotationSpeed * deltaTime);
 			}
 		}
 
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
-			Vector3 moveInputVector = _CameraTarget.rotation * Inputs.Movement.Vector2ToXZ();
+			Vector3 moveInputVector = _AimDestRotation * Inputs.Movement.Vector2ToXZ();
 			if (!_FSM.CurrentState._CanMove)
 			{
 				moveInputVector = Vector3.zero;

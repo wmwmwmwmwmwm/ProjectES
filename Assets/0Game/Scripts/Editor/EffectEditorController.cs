@@ -30,7 +30,7 @@ public class EffectEditorController : MonoBehaviour
 	GameObject _EffectPrefab;
 	ParticleSystem _Effect;
 
-	bool Active => _SoloAnimation.Clip && _Effect;
+	bool Active => _AnimationClip && _Effect;
 
 	void Start()
 	{
@@ -60,12 +60,19 @@ public class EffectEditorController : MonoBehaviour
 
 	void OpenAnimationButton()
 	{
-		string filePath = EditorUtility.OpenFilePanelWithFilters("애니메이션 선택", "", new string[] { "", "anim" });
+		string filePath = EditorUtility.OpenFilePanelWithFilters("애니메이션 선택", "", new string[] { "", "anim", "", "fbx" });
 		if (!File.Exists(filePath)) return;
 
 		// 애니메이션 설정
 		filePath = Path.GetRelativePath(Application.dataPath, filePath);
-		_AnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"Assets/{filePath}");
+		if (Path.GetExtension(filePath) == "anim")
+		{
+			_AnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"Assets/{filePath}");
+		}
+		else
+		{
+			// todo fbx임포트
+		}
 		_SoloAnimation.Clip = _AnimationClip;
 
 		// 기존 이펙트 초기화

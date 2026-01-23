@@ -54,6 +54,90 @@ MonoBehaviour:
           type: 2}
         _ParameterNameY: {fileID: 11400000, guid: e640cf11c704f9b42950ddb6e2354a35,
           type: 2}
+--- !u!114 &-7421574899298343059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: TakeDamage4
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116254
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116254
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3122b876adb119c4d99ff9681ecf9682, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-7081037375373209758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: TakeDamage3
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116253
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116253
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3b5e23f044bcf524596429815f35e64d, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-2672302275770774861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: TakeDamage1
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116251
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116251
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3c35d82860afedc478213d29d0c4ebe5, type: 3}
+        _NormalizedStartTime: NaN
 --- !u!114 &-1892071472285688390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,6 +251,10 @@ MonoBehaviour:
     - {fileID: 7029878853625567233}
     - {fileID: 3254200751114319916}
     - {fileID: 6080753252199417512}
+    - {fileID: -2672302275770774861}
+    - {fileID: 5812658905395691501}
+    - {fileID: -7081037375373209758}
+    - {fileID: -7421574899298343059}
     _Modifiers: []
     _Aliases: []
     _AliasAllTransitions: 0
@@ -328,6 +416,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Library: {fileID: 11400000}
   _TransitionSortMode: 0
+--- !u!114 &5812658905395691501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: TakeDamage2
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116252
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116252
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: a7f4648a91c539d42a1c405f12b29e95, type: 3}
+        _NormalizedStartTime: NaN
 --- !u!114 &6080753252199417512
 MonoBehaviour:
   m_ObjectHideFlags: 0

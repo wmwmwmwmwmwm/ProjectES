@@ -13,7 +13,6 @@ namespace Battle
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
 		public VRMBlendShapeProxy _BlendShapeProxy;
-		public Transform _CameraTarget;
 
 		void Start()
 		{
@@ -29,36 +28,13 @@ namespace Battle
 			//}
 		}
 
-		void OnEnable()
-		{
-			Inputs.Dash += Dash;
-			Inputs.Jump.performed += Jump;
-			Inputs.NormalAttack.performed += NormalAttack;
-			Inputs.Guard.performed += Guard;
-		}
-
-		void OnDisable()
-		{
-			Inputs.Dash -= Dash;
-			Inputs.Jump.performed -= Jump;
-			Inputs.NormalAttack.performed -= NormalAttack;
-			Inputs.Guard.performed -= Guard;
-		}
-
 		void Update()
 		{
-			// 카메라 회전
-			_LookRotation.x += Inputs.Look.y * _CameraRotationSpeed * -1f * 0.01f;
-			_LookRotation.x = Mathf.Clamp(_LookRotation.x, -85f, 85f);
-			_LookRotation.y += Inputs.Look.x * _CameraRotationSpeed * 0.01f;
-			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
-			_CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
-
 			// 애니메이션
 			UpdateFSM();
 		}
 
-		void Dash(Direction4 dir)
+		public void Dash(Direction4 dir)
 		{
 			_MoveRequest = dir switch
 			{
@@ -70,13 +46,13 @@ namespace Battle
 			_LastRequestTime = Time.time;
 		}
 
-		void Jump(CallbackContext obj)
+		public void Jump(CallbackContext obj)
 		{
 			_MoveRequest = MoveRequest.Jump;
 			_LastRequestTime = Time.time;
 		}
 
-		void NormalAttack(CallbackContext obj)
+		public void NormalAttack(CallbackContext obj)
 		{
 			// 공격 가능 상태가 아님
 			if (!_FSM.CurrentState._CanAttack) return;
@@ -115,7 +91,7 @@ namespace Battle
 			_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
 		}
 
-		void Guard(CallbackContext obj)
+		public void Guard(CallbackContext obj)
 		{
 			if (!_FSM.CurrentState._CanGuard) return;
 
@@ -129,15 +105,24 @@ namespace Battle
 				state.Time = 0f;
 			}
 
-			if (Inputs.Guard.WasReleasedThisFrame() && IsGuarding())
+			if (!Inputs.Guard.IsPressed() && IsGuarding())
 			{
 				AnimancerState state = _UpperBodyLayer.Play(_GuardDownAsset);
-				state.Time = 0f;
 				state.Events(this).OnEnd ??= () =>
 				{
 					_UpperBodyLayer.SetWeight(0f);
 				};
 			}
+		}
+
+		public void GiveDamage()
+		{
+			//5655
+		}
+
+		public void TakeDamage()
+		{
+
 		}
 
 		public void PlayEffect(AnimationClip clip)
@@ -147,7 +132,7 @@ namespace Battle
 			{
 				if (!Data._EffectInfoDict.TryGetValue(clip, out EffectInfo info)) yield break;
 
-                GameObject effect = Instantiate(info._EffectPrefab);
+				GameObject effect = Instantiate(info._EffectPrefab);
 				Data.SetupEffect(effect, info, transform);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
