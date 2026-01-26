@@ -1,12 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
-using static SingletonManager;
 using Animancer;
 using Animancer.FSM;
-using System;
-using System.Linq;
 
 namespace Battle
 {
@@ -51,6 +47,18 @@ namespace Battle
 			_UpperBodyLayer = _Animancer.Layers[1];
 			_UpperBodyLayer.Mask = _UpperBodyMask;
 			_MoveParameter = new(_Animancer, _MoveX, _MoveY, 0.15f);
+
+			//// TransitionAsset
+			//_IdleAsset = Instantiate(_IdleAsset);
+			//_MoveAsset = Instantiate(_MoveAsset);
+			//_DashFwdAsset = Instantiate(_DashFwdAsset);
+			//_DashBwdAsset = Instantiate(_DashBwdAsset);
+			//_DashLeftAsset = Instantiate(_DashLeftAsset);
+			//_DashRightAsset = Instantiate(_DashRightAsset);
+			//_LandAsset = Instantiate(_LandAsset);
+			//_JumpAttackAsset = Instantiate(_JumpAttackAsset);
+			//_GuardUpAsset = Instantiate(_GuardUpAsset);
+			//_GuardDownAsset = Instantiate(_GuardDownAsset);
 
 			// BaseLayer
 			_Idle = new()
@@ -134,6 +142,7 @@ namespace Battle
 					_Asset = asset,
 					_CanAttack = !isLast,
 					_CanGuard = true,
+					_AttackCollider = _MeleeAttackCollider,
 					_OnEnd = () => _AttackIndex = -1,
 				});
 			}
@@ -141,6 +150,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAttackAsset,
+				_AttackCollider = _MeleeAttackCollider,
 				_CanGuard = true,
 			};
 

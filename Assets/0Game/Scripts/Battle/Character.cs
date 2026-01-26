@@ -2,6 +2,7 @@
 using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VRM;
 using static DataManager;
@@ -13,9 +14,20 @@ namespace Battle
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
 		public VRMBlendShapeProxy _BlendShapeProxy;
+		public AttackCollider _MeleeAttackCollider;
+
+		CapsuleCollider _Collider;
+		Collider[] _MeleeAttackResults;
+		RaycastHit[] _MeleeAttackRaycastResults;
+
+		Vector3 Center => transform.position + _Collider.center;
 
 		void Start()
 		{
+			_MeleeAttackResults = new Collider[100];
+			_MeleeAttackRaycastResults = new RaycastHit[10];
+			_Collider = GetComponent<CapsuleCollider>();
+
 			InitMovement();
 			InitFSM();
 			_AttackIndex = -1;
@@ -32,6 +44,11 @@ namespace Battle
 		{
 			// 애니메이션
 			UpdateFSM();
+		}
+
+		public void Move(CallbackContext obj)
+		{
+			_MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
 		}
 
 		public void Dash(Direction4 dir)
@@ -68,6 +85,7 @@ namespace Battle
 				{
 					_AttackIndex = 0;
 					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
+					GiveDamage();
 				}
 				// 2~타 공격
 				else
@@ -79,6 +97,7 @@ namespace Battle
 			else
 			{
 				_FSM.TrySetState(_JumpAttack);
+				GiveDamage();
 			}
 		}
 
@@ -89,6 +108,7 @@ namespace Battle
 			_NextAttackInput = false;
 			_AttackIndex++;
 			_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
+			GiveDamage();
 		}
 
 		public void Guard(CallbackContext obj)
@@ -117,12 +137,68 @@ namespace Battle
 
 		public void GiveDamage()
 		{
-			//5655
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				State state = _FSM.CurrentState;
+				AttackCollider attack = Instantiate(_MeleeAttackCollider);
+				attack.transform.SetPositionAndRotation(transform.position, transform.rotation);
+				yield return new WaitForSeconds(0.1f);
+				if (state != _FSM.CurrentState)
+				{
+					Destroy(attack.gameObject);
+					yield break;
+				}
+				yield return new WaitForSeconds(attack._HitDelay - 0.1f);
+
+				// 히트 판정
+				int count = Physics.OverlapBoxNonAlloc(
+					center: attack.transform.position + attack._Collider.center,
+					halfExtents: attack._Collider.size,
+					results: _MeleeAttackResults,
+					orientation: attack.transform.rotation,
+					mask: Layer.EnemyLayer);
+				for (int i = 0; i < count; i++)
+				{
+					Collider result = _MeleeAttackResults[i];
+					Character c = result.GetComponent<Character>();
+					c.TakeDamage(attack, Center);
+				}
+			}
 		}
 
-		public void TakeDamage()
+		public void TakeDamage(AttackCollider attack, Vector3 attackerPos)
 		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				Vector3 direction = Center - attackerPos;
+				direction.Normalize();
+                int count = Physics.RaycastNonAlloc(
+					origin: Center,
+					direction: direction,
+					results: _MeleeAttackRaycastResults,
+					maxDistance: 100f,
+					layerMask: Layer.EnemyLayer);
+				RaycastHit hit = default;
+				for (int i = 0; i < count; i++)
+				{
+                    RaycastHit iter = _MeleeAttackRaycastResults[i];
+					if (_Collider == iter.collider)
+					{
+						hit = iter;
+						break;
+					}
+				}
+				//12321312121231232313231231212312
 
+
+
+
+				GameObject hitEffect = Instantiate(attack._HitEffectPrefab, hit.point, Quaternion.identity);
+				yield return new WaitForSeconds(3f);
+				Destroy(hitEffect);
+			}
 		}
 
 		public void PlayEffect(AnimationClip clip)

@@ -124,7 +124,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""id"": ""7b81ebb6-7612-47e5-90cd-6cf7f280e13d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -133,7 +133,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""id"": ""55c85a56-5a34-4fc8-ba15-7dd7a3607f04"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -142,7 +142,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""id"": ""77f16ff7-f34e-49df-a589-df694860c479"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {

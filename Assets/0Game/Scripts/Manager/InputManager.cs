@@ -10,8 +10,8 @@ public class InputManager : Singleton<InputManager>
 	Direction4? _DashPressed;
 	float _DashPressedTime;
 
-	public Vector2 Movement => InputActions.Battle.Movement.ReadValue<Vector2>();
-	public Vector2 Look => InputActions.Battle.Look.ReadValue<Vector2>();
+	public InputAction Movement => InputActions.Battle.Movement;
+	public InputAction Look => InputActions.Battle.Look;
 	public event Action<Direction4> Dash;
 	public InputAction Jump => InputActions.Battle.Jump;
 	public InputAction NormalAttack => InputActions.Battle.NormalAttack;

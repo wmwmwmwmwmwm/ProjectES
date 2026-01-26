@@ -16,7 +16,6 @@ namespace Battle
 	{
 		[Header("움직임")]
 		public KinematicCharacterMotor _Motor;
-		public float _Gravity;
 		public float _RotationSpeed;
 		public float _MoveSpeed;
 		public float _MoveGroundAccel, _MoveAirAccel;
@@ -26,6 +25,7 @@ namespace Battle
 
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
+		Vector3 _MoveInput;
 		MoveRequest _MoveRequest;
 		float _LastRequestTime;
 		float _LastCanJumpTime;
@@ -63,7 +63,7 @@ namespace Battle
 
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
-			Vector3 moveInputVector = _AimDestRotation * Inputs.Movement.Vector2ToXZ();
+			Vector3 moveInputVector = _AimDestRotation * _MoveInput;
 			if (!_FSM.CurrentState._CanMove)
 			{
 				moveInputVector = Vector3.zero;
@@ -134,7 +134,7 @@ namespace Battle
 			// 중력
 			if (!_Motor.GroundingStatus.IsStableOnGround)
 			{
-				currentVelocity += _Gravity * deltaTime * Vector3.down;
+				currentVelocity += Physics.gravity * deltaTime;
 			}
 
 			switch (_MoveRequest)

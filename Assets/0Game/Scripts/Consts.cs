@@ -1,4 +1,6 @@
-﻿public static class SceneName
+﻿using UnityEngine;
+
+public static class SceneName
 {
 	public const string Title = "Bg_Title";
 	public const string Lobby = "FPS Title";
@@ -18,12 +20,12 @@
 //	public const string UI = "UI";
 //}
 
-//public static class Layer
-//{
-//	public const string Lobby_Enemy = "Lobby_Enemy";
-//	public const string Lobby_Place = "Lobby_Place";
-//	public const string Main_Collider = "Main_Collider";
-//}
+public static class Layer
+{
+	public const string Enemy = "Enemy";
+
+	public static LayerMask EnemyLayer => 1 << LayerMask.NameToLayer(Enemy);
+}
 
 //public static class SortingLayer
 //{

@@ -186,13 +186,13 @@ public static partial class Util
 
 	public static float ClampInnerAngle(float angle)
 	{
-		if (angle < -180)
+		if (angle < -180f)
 		{
-			angle += 360;
+			angle += 360f;
 		}
-		if (angle > 180)
+		if (angle > 180f)
 		{
-			angle -= 360;
+			angle -= 360f;
 		}
 		return angle;
 	}

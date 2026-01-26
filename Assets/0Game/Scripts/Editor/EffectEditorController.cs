@@ -65,7 +65,7 @@ public class EffectEditorController : MonoBehaviour
 
 		// 애니메이션 설정
 		filePath = Path.GetRelativePath(Application.dataPath, filePath);
-		if (Path.GetExtension(filePath) == "anim")
+		if (Path.GetExtension(filePath) == ".anim")
 		{
 			_AnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"Assets/{filePath}");
 		}
@@ -137,7 +137,7 @@ public class EffectEditorController : MonoBehaviour
 		AssetDatabase.SaveAssets();
 
 		string text = removed > 0 ? "덮어쓰기 저장" : "새로 저장";
-		Debug.Log($"[{text}] Clip : {info._Clip}   Position : {info._Pos}   Rotation : {info._Rot}   Rotation : {info._Scale}");
+		Debug.Log($"[{text}] 애니메이션 : {info._Clip}   Position : {info._Pos}   Rotation : {info._Rot}   Rotation : {info._Scale}");
 	}
 
 	void IsLocalToggle(bool on)
@@ -151,8 +151,8 @@ public class EffectEditorController : MonoBehaviour
 		_OpenEffectButton.gameObject.SetActive(_AnimationClip);
 		_SaveButton.gameObject.SetActive(Active);
 		_IsLocalToggle.gameObject.SetActive(Active);
-		string clipName = _AnimationClip ? _AnimationClip.name : "None";
-		string effectName = _EffectPrefab ? _EffectPrefab.name : "None";
-		_LogText.text = $"Animation : {clipName}\nEffect : {effectName}";
+		string clipName = _AnimationClip ? _AnimationClip.name : "-";
+		string effectName = _EffectPrefab ? _EffectPrefab.name : "-";
+		_LogText.text = $"애니메이션 : {clipName}\n이펙트 : {effectName}";
 	}
 }

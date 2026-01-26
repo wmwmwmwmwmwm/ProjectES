@@ -15,6 +15,7 @@ namespace Battle
 		public bool _Repeat;
 		public float _Duration;
 		public bool _CanMove, _CanDash, _CanJump, _CanAttack, _CanGuard;
+		public AttackCollider _AttackCollider;
 
 		public Action _OnEnd;
 
