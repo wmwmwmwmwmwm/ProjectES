@@ -8,7 +8,7 @@ namespace Battle
 	public class AttackCollider : MonoBehaviour
 	{
 		public BoxCollider _Collider;
-		public GameObject _HitEffectPrefab;
-		public float _HitDelay;
+
+		[HideInInspector] public State _StateInfo;
 	}
 }

@@ -34,6 +34,7 @@ namespace Battle
 		[HideInInspector] public Vector3 _RootMotionPosDelta;
 		[HideInInspector] public Quaternion _RootMotionRotDelta;
 		[HideInInspector] public Quaternion _AimDestRotation;
+		bool _DeaccelFlag;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -67,6 +68,13 @@ namespace Battle
 			if (!_FSM.CurrentState._CanMove)
 			{
 				moveInputVector = Vector3.zero;
+			}
+
+			// 감속
+			if (_DeaccelFlag)
+			{
+				_DeaccelFlag = false;
+				currentVelocity *= 0.1f;
 			}
 
 			// XZ축 이동

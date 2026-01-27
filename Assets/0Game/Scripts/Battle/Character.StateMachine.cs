@@ -17,6 +17,7 @@ namespace Battle
 		public TransitionAsset _MoveAsset;
 		public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
 		public TransitionAsset _JumpAsset, _LandAsset;
+		public List<TransitionAsset> _DamageAssets;
 		public List<TransitionAsset> _NormalAttackAssets;
 		public TransitionAsset _JumpAttackAsset;
 
@@ -35,10 +36,11 @@ namespace Battle
 		State _DashFwd, _DashBwd, _DashLeft, _DashRight;
 		State _Jump;
 		State _Land;
+		State _Damage;
 		List<State> _NormalAttacks;
 		State _JumpAttack;
 
-		int _AttackIndex;
+		[HideInInspector] public int _AttackIndex;
 		bool _NextAttackInput;
 
 		void InitFSM()
@@ -47,18 +49,6 @@ namespace Battle
 			_UpperBodyLayer = _Animancer.Layers[1];
 			_UpperBodyLayer.Mask = _UpperBodyMask;
 			_MoveParameter = new(_Animancer, _MoveX, _MoveY, 0.15f);
-
-			//// TransitionAsset
-			//_IdleAsset = Instantiate(_IdleAsset);
-			//_MoveAsset = Instantiate(_MoveAsset);
-			//_DashFwdAsset = Instantiate(_DashFwdAsset);
-			//_DashBwdAsset = Instantiate(_DashBwdAsset);
-			//_DashLeftAsset = Instantiate(_DashLeftAsset);
-			//_DashRightAsset = Instantiate(_DashRightAsset);
-			//_LandAsset = Instantiate(_LandAsset);
-			//_JumpAttackAsset = Instantiate(_JumpAttackAsset);
-			//_GuardUpAsset = Instantiate(_GuardUpAsset);
-			//_GuardDownAsset = Instantiate(_GuardDownAsset);
 
 			// BaseLayer
 			_Idle = new()
@@ -131,26 +121,30 @@ namespace Battle
 				_CanGuard = true,
 				_Repeat = true,
 			};
+			_Damage = new()
+			{
+				c = this,
+				_RandomAssets = _DamageAssets,
+				_Priority = 1,
+				_Repeat = true,
+			};
 			_NormalAttacks = new();
 			for (int i = 0; i < _NormalAttackAssets.Count; i++)
 			{
 				TransitionAsset asset = _NormalAttackAssets[i];
 				bool isLast = i == _NormalAttackAssets.Count - 1;
-				_NormalAttacks.Add(new()
+				_NormalAttacks.Add(new State()
 				{
 					c = this,
 					_Asset = asset,
-					_CanAttack = !isLast,
 					_CanGuard = true,
-					_AttackCollider = _MeleeAttackCollider,
-					_OnEnd = () => _AttackIndex = -1,
+					_CanAttack = !isLast,
 				});
 			}
-			_JumpAttack = new()
+			_JumpAttack = new State()
 			{
 				c = this,
 				_Asset = _JumpAttackAsset,
-				_AttackCollider = _MeleeAttackCollider,
 				_CanGuard = true,
 			};
 

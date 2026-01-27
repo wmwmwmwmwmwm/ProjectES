@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class DataManager : Singleton<DataManager>
 {
@@ -16,18 +15,19 @@ public class DataManager : Singleton<DataManager>
 		public Vector3 _Pos;
 		public Vector3 _Rot;
 		public float _Scale;
+		public float _Delay;
 		public bool _IsLocal;
+
+		// 공격
+		public GameObject _HitEffectPrefab;
+		public float _HitDelay;
+		public float _DamageDuration;
 	}
 	public List<EffectInfo> _EffectInfos;
 
 	public Dictionary<AnimationClip, EffectInfo> _EffectInfoDict;
 
-	protected override void Init() 
-	{
-		CreateDictionary();
-	}
-
-	public void CreateDictionary()
+	protected override void Init()
 	{
 		_EffectInfoDict = new();
 		foreach (EffectInfo info in _EffectInfos)
@@ -36,7 +36,14 @@ public class DataManager : Singleton<DataManager>
 		}
 	}
 
-	public void SetupEffect(GameObject instance, EffectInfo info, Transform parent)
+	public EffectInfo GetEffectInfo(AnimationClip clip)
+	{
+		if (!clip) return null;
+		_EffectInfoDict.TryGetValue(clip, out EffectInfo info);
+		return info;
+	}
+
+	public void SetupEffectPosition(GameObject instance, EffectInfo info, Transform parent)
 	{
 		instance.transform.SetParent(parent);
 		instance.transform.SetLocalPositionAndRotation(info._Pos, Quaternion.Euler(info._Rot));

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -239,4 +238,6 @@ public static partial class Util
 			Object.DestroyImmediate(comp, true);
 		}
 	}
+
+    public static Vector3 GetCenter(this BoxCollider c) => c.transform.position + c.transform.TransformVector(c.center);
 }

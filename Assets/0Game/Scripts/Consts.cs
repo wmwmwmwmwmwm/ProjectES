@@ -23,8 +23,13 @@ public static class SceneName
 public static class Layer
 {
 	public const string Enemy = "Enemy";
+	public const string Player = "Player";
 
-	public static LayerMask EnemyLayer => 1 << LayerMask.NameToLayer(Enemy);
+	public static LayerMask EnemyLayer => LayerMask.NameToLayer(Enemy);
+	public static LayerMask PlayerLayer => LayerMask.NameToLayer(Player);
+
+	public static LayerMask EnemyLayerMask => 1 << LayerMask.NameToLayer(Enemy);
+	public static LayerMask PlayerLayerMask => 1 << LayerMask.NameToLayer(Player);
 }
 
 //public static class SortingLayer

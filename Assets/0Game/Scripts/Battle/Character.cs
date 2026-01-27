@@ -4,8 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using VRM;
 using static DataManager;
+using static PlasticGui.WorkspaceWindow.Merge.MergeInProgress;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -15,12 +17,13 @@ namespace Battle
 	{
 		public VRMBlendShapeProxy _BlendShapeProxy;
 		public AttackCollider _MeleeAttackCollider;
+		public GameObject _GuardEffectPrefab;
 
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
 		RaycastHit[] _MeleeAttackRaycastResults;
 
-		Vector3 Center => transform.position + _Collider.center;
+		public Vector3 Center => transform.position + _Collider.center;
 
 		void Start()
 		{
@@ -116,8 +119,6 @@ namespace Battle
 			if (!_FSM.CurrentState._CanGuard) return;
 
 			Play_Canceling(_Idle);
-			_AttackIndex = -1;
-
 			if (Inputs.Guard.WasPressedThisFrame())
 			{
 				_UpperBodyLayer.SetWeight(1f);
@@ -140,80 +141,109 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				State state = _FSM.CurrentState;
 				AttackCollider attack = Instantiate(_MeleeAttackCollider);
+				attack._StateInfo = _FSM.CurrentState;
 				attack.transform.SetPositionAndRotation(transform.position, transform.rotation);
-				yield return new WaitForSeconds(0.1f);
-				if (state != _FSM.CurrentState)
+				Vector3 attackPos = Center;
+				if (attack._StateInfo._EffectInfo != null)
 				{
-					Destroy(attack.gameObject);
-					yield break;
+					yield return new WaitForSeconds(attack._StateInfo._EffectInfo._Delay);
 				}
-				yield return new WaitForSeconds(attack._HitDelay - 0.1f);
 
 				// 히트 판정
 				int count = Physics.OverlapBoxNonAlloc(
-					center: attack.transform.position + attack._Collider.center,
-					halfExtents: attack._Collider.size,
+					center: attack._Collider.GetCenter(),
+					halfExtents: attack._Collider.size / 2f,
 					results: _MeleeAttackResults,
 					orientation: attack.transform.rotation,
-					mask: Layer.EnemyLayer);
+					mask: GetOppositeLayerMask());
 				for (int i = 0; i < count; i++)
 				{
 					Collider result = _MeleeAttackResults[i];
 					Character c = result.GetComponent<Character>();
-					c.TakeDamage(attack, Center);
+					c.TakeDamage(this, attack);
 				}
+				Destroy(attack.gameObject);
 			}
 		}
 
-		public void TakeDamage(AttackCollider attack, Vector3 attackerPos)
+		public void TakeDamage(Character attacker, AttackCollider attack)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
-			{
-				Vector3 direction = Center - attackerPos;
-				direction.Normalize();
+            {
+                Vector3 attackDir = Center - attacker.Center;
+                attackDir.Normalize();
                 int count = Physics.RaycastNonAlloc(
-					origin: Center,
-					direction: direction,
-					results: _MeleeAttackRaycastResults,
-					maxDistance: 100f,
-					layerMask: Layer.EnemyLayer);
-				RaycastHit hit = default;
-				for (int i = 0; i < count; i++)
-				{
+                    origin: attacker.Center,
+                    direction: attackDir,
+                    results: _MeleeAttackRaycastResults,
+                    maxDistance: 100f,
+                    layerMask: GetLayerMask());
+                RaycastHit hit = default;
+                for (int i = 0; i < count; i++)
+                {
                     RaycastHit iter = _MeleeAttackRaycastResults[i];
-					if (_Collider == iter.collider)
-					{
-						hit = iter;
-						break;
-					}
+                    if (_Collider == iter.collider)
+                    {
+                        hit = iter;
+                        break;
+                    }
+                }
+
+                EffectInfo info = attack._StateInfo._EffectInfo;
+                if (info == null) yield break;
+				float delay = info._HitDelay - info._Delay;
+				yield return new WaitForSeconds(delay);
+
+				// 역경직
+
+				// 가드 판정
+				bool guard = IsGuardingEffective();
+				print(Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z)));
+                float angle = Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z));
+				guard &= angle < 90f;
+				if (guard)
+				{
+					_DeaccelFlag = true;
+					GameObject hitEffect = Instantiate(_GuardEffectPrefab, hit.point, Quaternion.identity);
+					yield return new WaitForSeconds(3f);
+					Destroy(hitEffect);
 				}
-				//12321312121231232313231231212312
+				else
+				{
+					_Damage._Duration = info._DamageDuration;
+					_FSM.TrySetState(_Damage);
+					GameObject hitEffect = Instantiate(info._HitEffectPrefab, hit.point, Quaternion.identity);
+					yield return new WaitForSeconds(3f);
+					Destroy(hitEffect);
+				}
+            }
+        }
 
-
-
-
-				GameObject hitEffect = Instantiate(attack._HitEffectPrefab, hit.point, Quaternion.identity);
-				yield return new WaitForSeconds(3f);
-				Destroy(hitEffect);
-			}
-		}
-
-		public void PlayEffect(AnimationClip clip)
+		public void PlayEffect(EffectInfo info)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				if (!Data._EffectInfoDict.TryGetValue(clip, out EffectInfo info)) yield break;
-
 				GameObject effect = Instantiate(info._EffectPrefab);
-				Data.SetupEffect(effect, info, transform);
+				Data.SetupEffectPosition(effect, info, transform);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
 				Destroy(effect);
 			}
+		}
+
+		public LayerMask GetLayerMask()
+		{
+			if (gameObject.layer == Layer.PlayerLayer) return Layer.PlayerLayerMask;
+			else return Layer.EnemyLayerMask;
+		}
+
+		public LayerMask GetOppositeLayerMask()
+		{
+			if (gameObject.layer == Layer.PlayerLayer) return Layer.EnemyLayerMask;
+			else return Layer.PlayerLayerMask;
 		}
 
 		bool IsGuarding() => _UpperBodyLayer.Weight > 0f;
