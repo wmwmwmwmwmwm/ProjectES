@@ -11,8 +11,6 @@ namespace Battle
 {
 	public partial class Monster : MonoBehaviour
 	{
-		public int _HP;
-
 		Character c;
 
 		void Start()

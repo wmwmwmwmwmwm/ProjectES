@@ -4,10 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 using VRM;
 using static DataManager;
-using static PlasticGui.WorkspaceWindow.Merge.MergeInProgress;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -22,6 +20,13 @@ namespace Battle
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
 		RaycastHit[] _MeleeAttackRaycastResults;
+		[HideInInspector] public int _AttackIndex;
+		bool _NextAttackInput;
+		[HideInInspector] public bool _NextAttackAvailable;
+		float _AttackMovePercent;
+		float _GuardDownTime;
+		float _HitStunTime;
+		bool _IsRunning;
 
 		public Vector3 Center => transform.position + _Collider.center;
 
@@ -47,6 +52,16 @@ namespace Battle
 		{
 			// 애니메이션
 			UpdateFSM();
+
+			// 경직
+			if (Time.time - _HitStunTime < 0.03f)
+			{
+				_BaseLayer.Speed = 0f;
+			}
+			else
+			{
+				_BaseLayer.Speed = 1f;
+			}
 		}
 
 		public void Move(CallbackContext obj)
@@ -104,20 +119,11 @@ namespace Battle
 			}
 		}
 
-		void NextAttack()
-		{
-			if (!_NextAttackInput) return;
-
-			_NextAttackInput = false;
-			_AttackIndex++;
-			_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
-			GiveDamage();
-		}
-
 		public void Guard(CallbackContext obj)
 		{
 			if (!_FSM.CurrentState._CanGuard) return;
 
+			// 가드 시작
 			Play_Canceling(_Idle);
 			if (Inputs.Guard.WasPressedThisFrame())
 			{
@@ -126,14 +132,18 @@ namespace Battle
 				state.Time = 0f;
 			}
 
+			// 가드 해제
 			if (!Inputs.Guard.IsPressed() && IsGuarding())
 			{
 				AnimancerState state = _UpperBodyLayer.Play(_GuardDownAsset);
-				state.Events(this).OnEnd ??= () =>
-				{
-					_UpperBodyLayer.SetWeight(0f);
-				};
+				state.Events(this).OnEnd ??= GuardCancel;
+				_GuardDownTime = Time.time;
 			}
+		}
+
+		void GuardCancel()
+		{
+			_UpperBodyLayer.SetWeight(0f);
 		}
 
 		public void GiveDamage()
@@ -157,11 +167,23 @@ namespace Battle
 					results: _MeleeAttackResults,
 					orientation: attack.transform.rotation,
 					mask: GetOppositeLayerMask());
+				List<Collider> results = new(count);
 				for (int i = 0; i < count; i++)
 				{
-					Collider result = _MeleeAttackResults[i];
+					results.Add(_MeleeAttackResults[i]);
+				}
+				results.Sort((a, b) =>
+				{
+					float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
+					float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
+					float v = (aDistance - bDistance) * 100f;
+					return (int)v;
+				});
+				foreach (Collider result in results)
+				{
 					Character c = result.GetComponent<Character>();
 					c.TakeDamage(this, attack);
+					yield return new WaitForSeconds(0.01f);
 				}
 				Destroy(attack.gameObject);
 			}
@@ -171,55 +193,68 @@ namespace Battle
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
-            {
-                Vector3 attackDir = Center - attacker.Center;
-                attackDir.Normalize();
-                int count = Physics.RaycastNonAlloc(
-                    origin: attacker.Center,
-                    direction: attackDir,
-                    results: _MeleeAttackRaycastResults,
-                    maxDistance: 100f,
-                    layerMask: GetLayerMask());
-                RaycastHit hit = default;
-                for (int i = 0; i < count; i++)
-                {
-                    RaycastHit iter = _MeleeAttackRaycastResults[i];
-                    if (_Collider == iter.collider)
-                    {
-                        hit = iter;
-                        break;
-                    }
-                }
+			{
+				Vector3 attackDir = Center - attacker.Center;
+				attackDir.Normalize();
+				int count = Physics.RaycastNonAlloc(
+					origin: attacker.Center,
+					direction: attackDir,
+					results: _MeleeAttackRaycastResults,
+					maxDistance: 100f,
+					layerMask: GetLayerMask());
+				RaycastHit hit = default;
+				for (int i = 0; i < count; i++)
+				{
+					RaycastHit iter = _MeleeAttackRaycastResults[i];
+					if (_Collider == iter.collider)
+					{
+						hit = iter;
+						break;
+					}
+				}
 
-                EffectInfo info = attack._StateInfo._EffectInfo;
-                if (info == null) yield break;
+				EffectInfo info = attack._StateInfo._EffectInfo;
+				if (info == null) yield break;
 				float delay = info._HitDelay - info._Delay;
 				yield return new WaitForSeconds(delay);
 
-				// 역경직
+				_HitStunTime = Time.time;
+				attacker._HitStunTime = Time.time;
 
 				// 가드 판정
 				bool guard = IsGuardingEffective();
-				print(Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z)));
-                float angle = Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z));
+				float angle = Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z));
 				guard &= angle < 90f;
 				if (guard)
 				{
-					_DeaccelFlag = true;
-					GameObject hitEffect = Instantiate(_GuardEffectPrefab, hit.point, Quaternion.identity);
-					yield return new WaitForSeconds(3f);
-					Destroy(hitEffect);
+					_DeaccelTime = Time.time;
+					PlayEffect123123(_GuardEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
 				}
 				else
 				{
-					_Damage._Duration = info._DamageDuration;
-					_FSM.TrySetState(_Damage);
-					GameObject hitEffect = Instantiate(info._HitEffectPrefab, hit.point, Quaternion.identity);
-					yield return new WaitForSeconds(3f);
-					Destroy(hitEffect);
+					if (info._ForceForward == 0f)
+					{
+						_Damage._Duration = info._DamageDuration;
+						_FSM.TrySetState(_Damage);
+					}
+					else
+					{
+						Vector3 impulse = new(0f, info._ForceUp, info._ForceForward);
+						_Impulse = attacker.transform.TransformDirection(impulse);
+						print(_Impulse);
+						_FSM.TrySetState(_GetDown);
+					}
+					PlayEffect123123(info._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
 				}
-            }
-        }
+
+				// 쓰러짐
+				if (_HP <= 0)
+				{
+					_FSM.TrySetState(_Die);
+					_Collider.enabled = false;
+				}
+			}
+		}
 
 		public void PlayEffect(EffectInfo info)
 		{
@@ -231,6 +266,17 @@ namespace Battle
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
 				Destroy(effect);
+			}
+		}
+
+		public void PlayEffect123123(GameObject prefab, Vector3 pos, Quaternion rot)
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				GameObject hitEffect = Instantiate(prefab, pos, rot);
+				yield return new WaitForSeconds(3f);
+				Destroy(hitEffect);
 			}
 		}
 
@@ -246,7 +292,26 @@ namespace Battle
 			else return Layer.PlayerLayerMask;
 		}
 
-		bool IsGuarding() => _UpperBodyLayer.Weight > 0f;
-		bool IsGuardingEffective() => _UpperBodyLayer.Weight > 0.9f;
+        bool IsDashing()
+        {
+            return Time.time - _LastDashTime < _DashDuration;
+        }
+
+        bool IsGuarding()
+		{
+			return _UpperBodyLayer.Weight > 0f;
+		}
+
+		bool IsGuardingEffective()
+		{
+			bool guard = _UpperBodyLayer.Weight > 0f;
+			AnimancerState guardDownState = _UpperBodyLayer.GetOrCreateState(_GuardDownAsset.Transition);
+			guard &= _UpperBodyLayer.CurrentState != guardDownState;
+
+			// 가드 해제 그레이스 타임
+			guard |= Time.time - _GuardDownTime < 0.1f;
+
+			return guard;
+		}
 	}
 }

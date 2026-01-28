@@ -15,9 +15,12 @@ namespace Battle
 		// BaseLayer
 		public TransitionAsset _IdleAsset;
 		public TransitionAsset _MoveAsset;
+		public TransitionAsset _RunAsset;
 		public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
 		public TransitionAsset _JumpAsset, _LandAsset;
 		public List<TransitionAsset> _DamageAssets;
+		public TransitionAsset _GetDownAsset, _GetUpAsset;
+		public TransitionAsset _DieAsset;
 		public List<TransitionAsset> _NormalAttackAssets;
 		public TransitionAsset _JumpAttackAsset;
 
@@ -33,15 +36,15 @@ namespace Battle
 
 		State _Idle;
 		State _Move;
+		State _Run;
 		State _DashFwd, _DashBwd, _DashLeft, _DashRight;
 		State _Jump;
 		State _Land;
 		State _Damage;
+		State _GetDown, _GetUp;
+		State _Die;
 		List<State> _NormalAttacks;
 		State _JumpAttack;
-
-		[HideInInspector] public int _AttackIndex;
-		bool _NextAttackInput;
 
 		void InitFSM()
 		{
@@ -61,7 +64,6 @@ namespace Battle
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
-				_Repeat = true,
 			};
 			_Move = new()
 			{
@@ -73,31 +75,45 @@ namespace Battle
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
-				_Repeat = true,
+			};
+			_Run = new()
+			{
+				c = this,
+				_Asset = _RunAsset,
+				_Priority = -1,
+				_CanMove = true,
+				_CanJump = true,
+				_CanAttack = true,
+				_CanGuard = true,
 			};
 			_DashFwd = new()
 			{
 				c = this,
 				_Asset = _DashFwdAsset,
-				_Duration = _DashTime,
+				_Restart = true,
+				_Duration = _DashDuration,
+				_OnEnd = () => _IsRunning = true,
 			};
 			_DashBwd = new()
 			{
 				c = this,
 				_Asset = _DashBwdAsset,
-				_Duration = _DashTime,
+				_Restart = true,
+				_Duration = _DashDuration,
 			};
 			_DashLeft = new()
 			{
 				c = this,
 				_Asset = _DashLeftAsset,
-				_Duration = _DashTime,
+				_Restart = true,
+				_Duration = _DashDuration,
 			};
 			_DashRight = new()
 			{
 				c = this,
 				_Asset = _DashRightAsset,
-				_Duration = _DashTime,
+				_Restart = true,
+				_Duration = _DashDuration,
 			};
 			_Jump = new()
 			{
@@ -108,7 +124,6 @@ namespace Battle
 				_CanDash = true,
 				_CanAttack = true,
 				_CanGuard = true,
-				_Repeat = true,
 			};
 			_Land = new()
 			{
@@ -119,50 +134,119 @@ namespace Battle
 				_CanDash = true,
 				_CanAttack = true,
 				_CanGuard = true,
-				_Repeat = true,
 			};
 			_Damage = new()
 			{
 				c = this,
 				_RandomAssets = _DamageAssets,
 				_Priority = 1,
-				_Repeat = true,
+			};
+			_GetDown = new()
+			{
+				c = this,
+				_Asset = _GetDownAsset,
+				_Priority = 2,
+				_Duration = float.MaxValue,
+			};
+			_GetUp = new()
+			{
+				c = this,
+				_Asset = _GetUpAsset,
+				_Priority = 2,
+			};
+			_Die = new()
+			{
+				c = this,
+				_Asset = _DieAsset,
+				_Priority = 3,
+				_Duration = float.MaxValue,
 			};
 			_NormalAttacks = new();
 			for (int i = 0; i < _NormalAttackAssets.Count; i++)
 			{
 				TransitionAsset asset = _NormalAttackAssets[i];
 				bool isLast = i == _NormalAttackAssets.Count - 1;
-				_NormalAttacks.Add(new State()
+				_NormalAttacks.Add(new()
 				{
 					c = this,
 					_Asset = asset,
+					_Restart = true,
 					_CanGuard = true,
 					_CanAttack = !isLast,
 				});
 			}
-			_JumpAttack = new State()
+			_JumpAttack = new()
 			{
 				c = this,
 				_Asset = _JumpAttackAsset,
+				_Restart = true,
 				_CanGuard = true,
 			};
 
 			// 이벤트
-			_Animancer.Events.TryAdd(_NextAttack, NextAttack);
+			_Animancer.Events.TryAdd(_NextAttack, () => _NextAttackAvailable = true);
 
 			_FSM.DefaultState = _Idle;
 		}
 
 		void UpdateFSM()
 		{
-			_FSM.CurrentState.UpdateState();
-		}
+            State state = _FSM.CurrentState;
+			state.UpdateState();
+
+			// 다음 공격
+			if (_NextAttackAvailable && _NextAttackInput)
+			{
+				_NextAttackInput = false;
+				_AttackIndex++;
+				_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
+				GiveDamage();
+            }
+
+			// 공격 시 살짝 이동 가능
+			if (state.IsAttack)
+			{
+				_AttackMovePercent = (_BaseLayer.CurrentState.NormalizedTime - 0.5f) * 2f;
+				_AttackMovePercent = Mathf.Max(0f, _AttackMovePercent);
+			}
+			else
+			{
+				_AttackMovePercent = 0f;
+			}
+
+			// 가드 취소
+			if (!state._CanGuard)
+			{
+				GuardCancel();
+			}
+
+			// 달리기 멈추기
+			if (_IsRunning)
+            {
+                float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
+
+				bool active = degree > 30f && degree < 150f;
+				active &= state._CanMove || state == _DashFwd;
+				active &= !IsGuarding();
+				_IsRunning = active;
+			}
+
+			// 일어나기
+			if (state == _GetDown)
+			{
+				bool getUp = _BaseLayer.CurrentState.NormalizedTime >= 1f;
+				getUp &= _Motor.GroundingStatus.IsStableOnGround;
+				if (getUp)
+				{
+					_FSM.TrySetState(_GetUp);
+				}
+			}
+        }
 
 		void Play_Canceling(State state)
 		{
+			_BaseLayer.Play(state._Asset, 0f);
 			_FSM.ForceSetState(state);
-			_BaseLayer.Play(state._Asset, 0.03f);
 		}
 	}
 }

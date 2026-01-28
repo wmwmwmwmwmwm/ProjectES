@@ -2,12 +2,14 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static DataManager;
 using static SingletonManager;
+using Object = UnityEngine.Object;
 
 public class EffectEditorController : MonoBehaviour
 {
@@ -56,7 +58,6 @@ public class EffectEditorController : MonoBehaviour
 		_DelaySlider.onValueChanged.AddListener(DelaySlider);
 
 		// 왼쪽 아래
-		_IsAttackToggle.onValueChanged.AddListener(IsAttackToggle);
 		_OpenHitEffectButton.onClick.AddListener(OpenHitEffectButton);
 		_HitDelaySlider.onValueChanged.AddListener(HitDelaySlider);
 
@@ -92,18 +93,18 @@ public class EffectEditorController : MonoBehaviour
 
 	void OpenAnimationButton()
 	{
-		string filePath = EditorUtility.OpenFilePanelWithFilters("애니메이션 선택", "", new string[] { "", "anim", "", "fbx" });
+		string filePath = EditorUtility.OpenFilePanelWithFilters("애니메이션 선택", "", new string[] { "", "anim,fbx" });
 		if (!File.Exists(filePath)) return;
 
 		// 애니메이션 설정
-		filePath = Path.GetRelativePath(Application.dataPath, filePath);
 		if (Path.GetExtension(filePath) == ".anim")
 		{
-			_AnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"Assets/{filePath}");
+			_AnimationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(Util.ToAssetPath(filePath));
 		}
 		else
 		{
-			// todo fbx임포트
+            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(Util.ToAssetPath(filePath));
+			_AnimationClip = assets.First(x => x is AnimationClip) as AnimationClip;
 		}
 		_SoloAnimation.Clip = _AnimationClip;
 
@@ -131,7 +132,6 @@ public class EffectEditorController : MonoBehaviour
 			bool isAttack = info._HitEffectPrefab;
 			_HitDelaySlider.value = info._HitDelay;
 			_IsAttackToggle.SetIsOnWithoutNotify(isAttack);
-			IsAttackToggle(isAttack);
 			if (isAttack)
 			{
 				_HitEffectPrefab = info._HitEffectPrefab;
@@ -202,13 +202,6 @@ public class EffectEditorController : MonoBehaviour
 		_DelaySlider.GetComponentInChildren<TMP_Text>().text = v.ToString("0.00");
 	}
 
-	void IsAttackToggle(bool on)
-	{
-		_OpenHitEffectButton.gameObject.SetActive(on);
-		_BottomLeftLogText.gameObject.SetActive(on);
-		_HitDelaySlider.transform.parent.gameObject.SetActive(on);
-	}
-
 	void OpenHitEffectButton()
 	{
 		string filePath = EditorUtility.OpenFilePanelWithFilters("이펙트 프리팹 선택", "", new string[] { "", "prefab" });
@@ -252,5 +245,8 @@ public class EffectEditorController : MonoBehaviour
 		_BottomLeft.SetActive(Active);
 		string hitName = _HitEffectPrefab ? _HitEffectPrefab.name : "-";
 		_BottomLeftLogText.text = $"타격 이펙트 : {hitName}";
+		_OpenHitEffectButton.gameObject.SetActive(_IsAttackToggle.isOn);
+		_BottomLeftLogText.gameObject.SetActive(_IsAttackToggle.isOn);
+		_HitDelaySlider.transform.parent.gameObject.SetActive(_IsAttackToggle.isOn);
 	}
 }

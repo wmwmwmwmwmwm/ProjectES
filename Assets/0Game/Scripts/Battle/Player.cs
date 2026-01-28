@@ -67,7 +67,7 @@ namespace Battle
 
 		void Look(CallbackContext obj)
 		{
-			_LookInput = obj.ReadValue<Vector2>().Vector2ToXZ();
+			_LookInput = obj.ReadValue<Vector2>();
 		}
 	}
 }

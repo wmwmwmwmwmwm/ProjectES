@@ -1,14 +1,8 @@
-﻿using Animancer;
-using Animancer.FSM;
-using KinematicCharacterController;
-using NaughtyAttributes;
+﻿using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.InputSystem.Interactions;
 using static SingletonManager;
-using static UnityEngine.InputSystem.InputAction;
 
 namespace Battle
 {
@@ -18,9 +12,9 @@ namespace Battle
 		public KinematicCharacterMotor _Motor;
 		public float _RotationSpeed;
 		public float _MoveSpeed;
-		public float _MoveGroundAccel, _MoveAirAccel;
+		public float _MoveAccel;
 		public float _DashSpeed;
-		public float _DashTime;
+		public float _DashDuration;
 		public float _JumpSpeed;
 
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
@@ -34,7 +28,8 @@ namespace Battle
 		[HideInInspector] public Vector3 _RootMotionPosDelta;
 		[HideInInspector] public Quaternion _RootMotionRotDelta;
 		[HideInInspector] public Quaternion _AimDestRotation;
-		bool _DeaccelFlag;
+		float _DeaccelTime;
+		Vector3 _Impulse;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -45,7 +40,35 @@ namespace Battle
 
 		public void BeforeCharacterUpdate(float deltaTime)
 		{
-			// This is called before the motor does anything
+			switch (_MoveRequest)
+			{
+				// 대쉬
+				case MoveRequest.DashFwd:
+				case MoveRequest.DashBwd:
+				case MoveRequest.DashLeft:
+				case MoveRequest.DashRight:
+					if (_FSM.CurrentState._CanDash && !IsGuarding())
+					{
+						_LastDashTime = Time.time;
+						_DashDir = _MoveRequest switch
+						{
+							MoveRequest.DashFwd => Vector3.forward,
+							MoveRequest.DashBwd => Vector3.back,
+							MoveRequest.DashLeft => Vector3.left,
+							_ => Vector3.right
+						};
+						State state = _MoveRequest switch
+						{
+							MoveRequest.DashFwd => _DashFwd,
+							MoveRequest.DashBwd => _DashBwd,
+							MoveRequest.DashLeft => _DashLeft,
+							_ => _DashRight
+						};
+						_FSM.TrySetState(state);
+						_MoveRequest = MoveRequest.None;
+					}
+					break;
+			}
 		}
 
 		public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
@@ -65,35 +88,50 @@ namespace Battle
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
 			Vector3 moveInputVector = _AimDestRotation * _MoveInput;
-			if (!_FSM.CurrentState._CanMove)
-			{
-				moveInputVector = Vector3.zero;
-			}
+			float moveSpeed = _MoveSpeed;
+
+			// 이동 불가
+			moveSpeed = !_FSM.CurrentState._CanMove ? 0f : moveSpeed;
+
+			// 달리기
+			moveSpeed *= _FSM.CurrentState == _Run ? 1.5f : 1f;
 
 			// 감속
-			if (_DeaccelFlag)
+			float moveAccel = _MoveAccel;
+			float deaccelTime = Time.time - _DeaccelTime;
+			float duration = 0.6f;
+			if (deaccelTime < duration)
 			{
-				_DeaccelFlag = false;
-				currentVelocity *= 0.1f;
+				float t = Mathf.InverseLerp(0f, duration, deaccelTime);
+				moveAccel = _MoveAccel * t;
+				if (_Motor.GroundingStatus.IsStableOnGround)
+				{
+					currentVelocity *= t;
+				}
 			}
 
 			// XZ축 이동
 			if (_RootMotionPosDelta != Vector3.zero)
 			{
 				currentVelocity = _RootMotionPosDelta / deltaTime;
+
+				// 공격 시 살짝 이동
+				currentVelocity += _MoveSpeed * _AttackMovePercent * moveInputVector;
+
 				currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
 			}
-			else if (Time.time - _LastDashTime < _DashTime)
+			else if (IsDashing())
 			{
 				currentVelocity = _DashSpeed * transform.TransformDirection(_DashDir);
 			}
 			else if (_Motor.GroundingStatus.IsStableOnGround)
 			{
-				Vector3 targetVelocity = moveInputVector * _MoveSpeed;
-				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, _MoveGroundAccel * deltaTime);
+				Vector3 targetVelocity = moveInputVector * moveSpeed;
+				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, moveAccel * deltaTime);
 				if (currentVelocity.sqrMagnitude > 0.01f)
 				{
-					_FSM.TrySetState(_Move);
+					State moveState = _IsRunning ? _Run : _Move;
+					_FSM.TrySetState(moveState);
 					Vector3 localMoveDirection3 = transform.InverseTransformDirection(currentVelocity);
 					Vector2 localMoveDirection2 = new(localMoveDirection3.x, localMoveDirection3.z);
 					_MoveParameter.TargetValue = localMoveDirection2.normalized;
@@ -111,13 +149,14 @@ namespace Battle
 			}
 			else
 			{
-				Vector3 addedVelocity = _MoveAirAccel * deltaTime * moveInputVector;
+				float airAccel = moveAccel * 0.33f;
+				Vector3 addedVelocity = airAccel * deltaTime * moveInputVector;
 				Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
 
 				// 공중에서 가속
-				if (currentVelocityOnInputsPlane.magnitude < _MoveSpeed)
+				if (currentVelocityOnInputsPlane.magnitude < moveSpeed)
 				{
-					Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, _MoveSpeed);
+					Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, moveSpeed);
 					addedVelocity = newTotal - currentVelocityOnInputsPlane;
 				}
 				else
@@ -164,33 +203,18 @@ namespace Battle
 						_MoveRequest = MoveRequest.None;
 					}
 					break;
+			}
 
-				// 대쉬
-				case MoveRequest.DashFwd:
-				case MoveRequest.DashBwd:
-				case MoveRequest.DashLeft:
-				case MoveRequest.DashRight:
-					if (_FSM.CurrentState._CanDash && !IsGuarding())
-					{
-						_LastDashTime = Time.time;
-						_DashDir = _MoveRequest switch
-						{
-							MoveRequest.DashFwd => Vector3.forward,
-							MoveRequest.DashBwd => Vector3.back,
-							MoveRequest.DashLeft => Vector3.left,
-							_ => Vector3.right
-						};
-						State state = _MoveRequest switch
-						{
-							MoveRequest.DashFwd => _DashFwd,
-							MoveRequest.DashBwd => _DashBwd,
-							MoveRequest.DashLeft => _DashLeft,
-							_ => _DashRight
-						};
-						_FSM.TrySetState(state);
-						_MoveRequest = MoveRequest.None;
-					}
-					break;
+			// 외부 힘
+			if (_Impulse.sqrMagnitude > 0f)
+			{
+				_Motor.ForceUnground(3f);
+				currentVelocity += _Impulse;
+				_Impulse = Vector3.zero;
+			}
+			if (gameObject.name == "Monster_1")
+			{
+				print(_Motor.GroundingStatus.IsStableOnGround);
 			}
 		}
 

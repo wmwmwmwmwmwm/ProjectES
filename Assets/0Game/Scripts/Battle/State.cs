@@ -15,7 +15,7 @@ namespace Battle
 		public TransitionAsset _Asset;
 		public List<TransitionAsset> _RandomAssets;
 		public int _Priority;
-		public bool _Repeat;
+		public bool _Restart;
 		public float _Duration;
 		public bool _CanMove, _CanDash, _CanJump, _CanAttack, _CanGuard;
 		public EffectInfo _EffectInfo;
@@ -48,6 +48,9 @@ namespace Battle
 				c._AttackIndex = -1;
 			}
 
+			// NextAttackAvailable : 다음 공격 가능 조건 초기화
+			c._NextAttackAvailable = false;
+
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
 			if (_Duration == 0f)
 			{
@@ -57,16 +60,9 @@ namespace Battle
 					_OnEnd?.Invoke();
 				};
 			}
-			else
-			{
-				state.Events(c).OnEnd ??= () =>
-				{
-					_OnEnd?.Invoke();
-				};
-			}
 
-			// Repeat : 같은 State로 다시 들어올 때 애니메이션을 재시작하지 않음
-			if (!_Repeat)
+			// Restart : 같은 State로 다시 들어올 때 애니메이션을 재시작
+			if (_Restart)
 			{
 				state.Time = 0f;
 			}
@@ -86,6 +82,7 @@ namespace Battle
 			if (_Duration > 0f && c._Animancer.States.Current.Time > _Duration)
 			{
 				c._FSM.ForceSetDefaultState.Invoke();
+				_OnEnd?.Invoke();
 			}
 		}
 	}

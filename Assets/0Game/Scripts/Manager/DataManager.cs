@@ -22,6 +22,7 @@ public class DataManager : Singleton<DataManager>
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
 		public float _DamageDuration;
+		public float _ForceForward, _ForceUp;
 	}
 	public List<EffectInfo> _EffectInfos;
 

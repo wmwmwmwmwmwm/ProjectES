@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
-  m_Name: TakeDamage4
+  m_Name: Damage4
   m_EditorClassIdentifier: 
   _Transition:
     rid: 1328188561235116254
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
-  m_Name: TakeDamage3
+  m_Name: Damage3
   m_EditorClassIdentifier: 
   _Transition:
     rid: 1328188561235116253
@@ -110,6 +110,34 @@ MonoBehaviour:
           _Names: []
         _Clip: {fileID: 7400000, guid: 3b5e23f044bcf524596429815f35e64d, type: 3}
         _NormalizedStartTime: NaN
+--- !u!114 &-4978170568794986257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GetDown
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223762
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223762
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 7ff1964123f697a45ab0c1a1114532a9, type: 3}
+        _NormalizedStartTime: NaN
 --- !u!114 &-2672302275770774861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,7 +148,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
-  m_Name: TakeDamage1
+  m_Name: Damage1
   m_EditorClassIdentifier: 
   _Transition:
     rid: 1328188561235116251
@@ -238,8 +266,10 @@ MonoBehaviour:
     _Transitions:
     - {fileID: 7425039641060706603}
     - {fileID: -8655182195538229920}
+    - {fileID: 1756271398158739556}
     - {fileID: -79381918844599894}
     - {fileID: -1892071472285688390}
+    - {fileID: 5798627385561996276}
     - {fileID: -883548994864846020}
     - {fileID: 8570086668565267019}
     - {fileID: 1949053682780250623}
@@ -255,9 +285,55 @@ MonoBehaviour:
     - {fileID: 5812658905395691501}
     - {fileID: -7081037375373209758}
     - {fileID: -7421574899298343059}
+    - {fileID: -4978170568794986257}
+    - {fileID: 3815873642644383339}
     _Modifiers: []
     _Aliases: []
     _AliasAllTransitions: 0
+--- !u!114 &1756271398158739556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Run
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223506
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223506
+      type: {class: MixerTransition2D, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Animations:
+        - {fileID: 7400000, guid: 3332743ea3ba44644bdfe4103ca62985, type: 3}
+        - {fileID: 7400000, guid: 2817addb44b8c6e4eb8bdf65967793f8, type: 3}
+        - {fileID: 7400000, guid: c1bb35002815bad49a98b676c52c9b5c, type: 3}
+        - {fileID: 7400000, guid: 2c96f7d00cc6c5f44bd4dd1f5e1e24f3, type: 3}
+        _Speeds: []
+        _SynchronizeChildren: 
+        _Thresholds:
+        - {x: 0, y: 0}
+        - {x: 0, y: 1}
+        - {x: 0.70710677, y: 0.70710677}
+        - {x: -0.7071068, y: 0.7071068}
+        _DefaultParameter: {x: 0, y: 0}
+        _Type: 1
+        _ParameterNameX: {fileID: 11400000, guid: 47e8eb78ff7936f4091a3077c10a73de,
+          type: 2}
+        _ParameterNameY: {fileID: 11400000, guid: e640cf11c704f9b42950ddb6e2354a35,
+          type: 2}
 --- !u!114 &1949053682780250623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +419,34 @@ MonoBehaviour:
           _Names: []
         _Clip: {fileID: 7400000, guid: 4ade603cb2f195c4f8850d7caf106f01, type: 2}
         _NormalizedStartTime: NaN
+--- !u!114 &3815873642644383339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GetUp
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223763
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223763
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 386a55716c2f91c4fb861d97e77bff7a, type: 3}
+        _NormalizedStartTime: NaN
 --- !u!114 &4799891562835818413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,6 +520,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Library: {fileID: 11400000}
   _TransitionSortMode: 0
+--- !u!114 &5798627385561996276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Die
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223545
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223545
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 61042900091ab0f4ca5fc20a44c95e34, type: 3}
+        _NormalizedStartTime: NaN
 --- !u!114 &5812658905395691501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +558,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
-  m_Name: TakeDamage2
+  m_Name: Damage2
   m_EditorClassIdentifier: 
   _Transition:
     rid: 1328188561235116252
@@ -494,7 +626,7 @@ MonoBehaviour:
       type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
       data:
         _FadeDuration: 0.05
-        _Speed: 3
+        _Speed: 2
         _Events:
           _NormalizedTimes: []
           _Callbacks: []
