@@ -45,12 +45,12 @@ namespace Battle
 		void Update()
 		{
             // 카메라 위치
-            float y = Mathf.MoveTowards(_CameraThirdPerson.ShoulderOffset.y, _Character._Motor.GroundingStatus.FoundAnyGround ? 0f : -0.5f, 5f * Time.deltaTime);
+            float y = Mathf.MoveTowards(_CameraThirdPerson.ShoulderOffset.y, _Character._Motor.GroundingStatus.FoundAnyGround ? 1.5f : 1.5f-0.5f, 5f * Time.deltaTime);
 			_CameraThirdPerson.ShoulderOffset.y = y;
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;
-			_LookRotation.x = Mathf.Clamp(_LookRotation.x, -80f, 80f);
+			_LookRotation.x = Mathf.Clamp(_LookRotation.x, -80f, 60f);
 			_LookRotation.y += _LookInput.x * _CameraRotationSpeed * 0.01f;
 			if (_LookRotation.y - transform.eulerAngles.y > 180f)
 			{

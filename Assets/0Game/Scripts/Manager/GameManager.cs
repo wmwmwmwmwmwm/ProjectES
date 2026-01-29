@@ -29,6 +29,12 @@ public class GameManager : Singleton<GameManager>
 		Time.fixedDeltaTime = Mathf.Min(Time.deltaTime, _FixedDeltaTime);
 	}
 
+	public void LockCursor(bool _lock)
+	{
+		Cursor.lockState = _lock ? CursorLockMode.Locked : CursorLockMode.None;
+		Cursor.visible = !_lock;
+	}
+
 	public void DrawDebugLine(Vector3 from, Vector3 to, float width = 1f)
 	{
 		StartCoroutine(Internal());

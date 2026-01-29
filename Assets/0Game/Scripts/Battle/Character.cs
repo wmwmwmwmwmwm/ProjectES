@@ -28,6 +28,8 @@ namespace Battle
 		float _HitStunTime;
 		bool _IsRunning;
 
+		const float TimeDefault = -10000f;
+
 		public Vector3 Center => transform.position + _Collider.center;
 
 		void Start()
@@ -35,6 +37,14 @@ namespace Battle
 			_MeleeAttackResults = new Collider[100];
 			_MeleeAttackRaycastResults = new RaycastHit[10];
 			_Collider = GetComponent<CapsuleCollider>();
+
+			_GuardDownTime = TimeDefault;
+			_HitStunTime = TimeDefault;
+			_LastRequestTime = TimeDefault;
+			_LastCanJumpTime = TimeDefault;
+			_LastDashTime = TimeDefault;
+			_DeaccelTime = TimeDefault;
+			_ImpulseTime = TimeDefault;
 
 			InitMovement();
 			InitFSM();
@@ -95,8 +105,15 @@ namespace Battle
 			// 가드 중
 			if (IsGuarding()) return;
 
+			// 대쉬 공격
+			if (IsDashing())
+			{
+				DashCancel();
+				_FSM.TrySetState(_DashAttack);
+				GiveDamage();
+			}
 			// 일반 공격
-			if (_Motor.GroundingStatus.IsStableOnGround)
+			else if (_Motor.GroundingStatus.IsStableOnGround)
 			{
 				// 1타 공격
 				if (_AttackIndex < 0 || _AttackIndex == _NormalAttacks.Count - 1)
@@ -146,6 +163,11 @@ namespace Battle
 			_UpperBodyLayer.SetWeight(0f);
 		}
 
+		void DashCancel()
+		{
+			_LastDashTime = TimeDefault;
+		}
+
 		public void GiveDamage()
 		{
 			StartCoroutine(Internal());
@@ -167,24 +189,42 @@ namespace Battle
 					results: _MeleeAttackResults,
 					orientation: attack.transform.rotation,
 					mask: GetOppositeLayerMask());
-				List<Collider> results = new(count);
-				for (int i = 0; i < count; i++)
+
+				// 공격 적중
+				if (count > 0)
 				{
-					results.Add(_MeleeAttackResults[i]);
+					List<Collider> results = _MeleeAttackResults.ArrayToList(count);
+					results.Sort((a, b) =>
+					{
+						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
+						float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
+						float v = (aDistance - bDistance) * 100f;
+						return (int)v;
+					});
+					foreach (Collider result in results)
+					{
+						Character c = result.GetComponent<Character>();
+						c.TakeDamage(this, attack);
+						yield return new WaitForSeconds(0.01f);
+					}
 				}
-				results.Sort((a, b) =>
+				// 벽에 이펙트
+				else
 				{
-					float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
-					float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
-					float v = (aDistance - bDistance) * 100f;
-					return (int)v;
-				});
-				foreach (Collider result in results)
-				{
-					Character c = result.GetComponent<Character>();
-					c.TakeDamage(this, attack);
-					yield return new WaitForSeconds(0.01f);
+					int count2 = Physics.RaycastNonAlloc(
+						origin: Center,
+						direction: transform.forward,
+						results: _MeleeAttackRaycastResults,
+						maxDistance: attack._Collider.size.z,
+						layerMask: Layer.TerrainLayerMask);
+					if (count2 > 0)
+					{
+						List<RaycastHit> results = _MeleeAttackRaycastResults.ArrayToList(count2);
+						RaycastHit nearest = results.MinBy(x => x.distance);
+						PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
+					}
 				}
+
 				Destroy(attack.gameObject);
 			}
 		}
@@ -241,7 +281,7 @@ namespace Battle
 					{
 						Vector3 impulse = new(0f, info._ForceUp, info._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(impulse);
-						print(_Impulse);
+						_ImpulseTime = Time.time;
 						_FSM.TrySetState(_GetDown);
 					}
 					PlayEffect123123(info._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
@@ -292,12 +332,12 @@ namespace Battle
 			else return Layer.PlayerLayerMask;
 		}
 
-        bool IsDashing()
-        {
-            return Time.time - _LastDashTime < _DashDuration;
-        }
+		bool IsDashing()
+		{
+			return Time.time - _LastDashTime < _DashDuration;
+		}
 
-        bool IsGuarding()
+		bool IsGuarding()
 		{
 			return _UpperBodyLayer.Weight > 0f;
 		}

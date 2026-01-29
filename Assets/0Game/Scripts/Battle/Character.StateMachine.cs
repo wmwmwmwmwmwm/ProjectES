@@ -23,6 +23,7 @@ namespace Battle
 		public TransitionAsset _DieAsset;
 		public List<TransitionAsset> _NormalAttackAssets;
 		public TransitionAsset _JumpAttackAsset;
+		public TransitionAsset _DashAttackAsset;
 
 		// UpperBodyLayer
 		public TransitionAsset _GuardUpAsset, _GuardDownAsset;
@@ -45,6 +46,7 @@ namespace Battle
 		State _Die;
 		List<State> _NormalAttacks;
 		State _JumpAttack;
+		State _DashAttack;
 
 		void InitFSM()
 		{
@@ -92,6 +94,7 @@ namespace Battle
 				_Asset = _DashFwdAsset,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_CanAttack = true,
 				_OnEnd = () => _IsRunning = true,
 			};
 			_DashBwd = new()
@@ -100,6 +103,7 @@ namespace Battle
 				_Asset = _DashBwdAsset,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_CanAttack = true,
 			};
 			_DashLeft = new()
 			{
@@ -107,6 +111,7 @@ namespace Battle
 				_Asset = _DashLeftAsset,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_CanAttack = true,
 			};
 			_DashRight = new()
 			{
@@ -114,6 +119,7 @@ namespace Battle
 				_Asset = _DashRightAsset,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_CanAttack = true,
 			};
 			_Jump = new()
 			{
@@ -179,6 +185,13 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAttackAsset,
+				_Restart = true,
+				_CanGuard = true,
+			};
+			_DashAttack = new()
+			{
+				c = this,
+				_Asset = _DashAttackAsset,
 				_Restart = true,
 				_CanGuard = true,
 			};

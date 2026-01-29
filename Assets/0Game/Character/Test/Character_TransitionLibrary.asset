@@ -131,7 +131,7 @@ MonoBehaviour:
       type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
       data:
         _FadeDuration: 0.25
-        _Speed: 1
+        _Speed: 3
         _Events:
           _NormalizedTimes: []
           _Callbacks: []
@@ -287,6 +287,7 @@ MonoBehaviour:
     - {fileID: -7421574899298343059}
     - {fileID: -4978170568794986257}
     - {fileID: 3815873642644383339}
+    - {fileID: 4434167056054037265}
     _Modifiers: []
     _Aliases: []
     _AliasAllTransitions: 0
@@ -440,12 +441,40 @@ MonoBehaviour:
       type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
       data:
         _FadeDuration: 0.25
-        _Speed: 1
+        _Speed: 3
         _Events:
           _NormalizedTimes: []
           _Callbacks: []
           _Names: []
         _Clip: {fileID: 7400000, guid: 386a55716c2f91c4fb861d97e77bff7a, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &4434167056054037265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: DashAttack
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877159105298777
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877159105298777
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 5
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
         _NormalizedStartTime: NaN
 --- !u!114 &4799891562835818413
 MonoBehaviour:

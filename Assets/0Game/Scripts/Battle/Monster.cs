@@ -21,8 +21,8 @@ namespace Battle
 			{
 				while (true)
 				{
-					c.NormalAttack(default);
 					yield return new WaitForSeconds(1f);
+					c.NormalAttack(default);
 				}
 			}
 		}

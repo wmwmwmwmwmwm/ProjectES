@@ -239,5 +239,15 @@ public static partial class Util
 		}
 	}
 
-    public static Vector3 GetCenter(this BoxCollider c) => c.transform.position + c.transform.TransformVector(c.center);
+	public static List<T> ArrayToList<T>(this T[] array, int count)
+	{
+		List<T> list = new(count);
+		for (int i = 0; i < count; i++)
+		{
+			list.Add(array[i]);
+		}
+		return list;
+	}
+
+	public static Vector3 GetCenter(this BoxCollider c) => c.transform.position + c.transform.TransformVector(c.center);
 }

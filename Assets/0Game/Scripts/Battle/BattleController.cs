@@ -14,6 +14,11 @@ namespace Battle
 		public Transform _MainCamera, _BackgroundCamera;
 		public Transform _BgSky, _BgGround, _BgNear;
 
+		void Start()
+		{
+			Game.LockCursor(true);
+		}
+
 		void Update()
 		{
 			// 배경 회전

@@ -47,9 +47,9 @@ public static partial class Util
     {
         float radian = degree * Mathf.Deg2Rad;
         return new(Mathf.Cos(radian), Mathf.Sin(radian));
-    }
+	}
 
-    public static int MultiplyToInt(float a, float b) => (int)(a * b);
+	public static int MultiplyToInt(float a, float b) => (int)(a * b);
 
 	public static float DivideWithFloat(int a, int b) => b == 0 ? 0f : (float)a / b;
 

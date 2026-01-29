@@ -30,6 +30,7 @@ namespace Battle
 		[HideInInspector] public Quaternion _AimDestRotation;
 		float _DeaccelTime;
 		Vector3 _Impulse;
+		float _ImpulseTime;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -96,7 +97,7 @@ namespace Battle
 			// 달리기
 			moveSpeed *= _FSM.CurrentState == _Run ? 1.5f : 1f;
 
-			// 감속
+			// 가드 시 감속
 			float moveAccel = _MoveAccel;
 			float deaccelTime = Time.time - _DeaccelTime;
 			float duration = 0.6f;
@@ -106,12 +107,22 @@ namespace Battle
 				moveAccel = _MoveAccel * t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
-					currentVelocity *= t;
+					currentVelocity.x *= t;
+					currentVelocity.z *= t;
 				}
 			}
 
-			// XZ축 이동
-			if (_RootMotionPosDelta != Vector3.zero)
+			// 누운 상태 감속
+			bool deaccel = _FSM.CurrentState == _GetDown || _FSM.CurrentState == _GetUp || _FSM.CurrentState == _Die;
+			deaccel &= _Motor.GroundingStatus.FoundAnyGround;
+			if (deaccel)
+			{
+				currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0f, 10f * deltaTime);
+				currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0f, 10f * deltaTime);
+			}
+
+			// 루트 모션 이동
+			if (_RootMotionPosDelta != Vector3.zero && !_Motor.MustUnground())
 			{
 				currentVelocity = _RootMotionPosDelta / deltaTime;
 
@@ -120,10 +131,12 @@ namespace Battle
 
 				currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
 			}
+			// 대쉬
 			else if (IsDashing())
 			{
 				currentVelocity = _DashSpeed * transform.TransformDirection(_DashDir);
 			}
+			// 지상 이동
 			else if (_Motor.GroundingStatus.IsStableOnGround)
 			{
 				Vector3 targetVelocity = moveInputVector * moveSpeed;
@@ -147,6 +160,7 @@ namespace Battle
 					_FSM.TrySetState(_Land);
 				}
 			}
+			// 공중 이동
 			else
 			{
 				float airAccel = moveAccel * 0.33f;
@@ -206,15 +220,17 @@ namespace Battle
 			}
 
 			// 외부 힘
-			if (_Impulse.sqrMagnitude > 0f)
+			if (Time.time - _ImpulseTime < 0.6f)
 			{
-				_Motor.ForceUnground(3f);
-				currentVelocity += _Impulse;
-				_Impulse = Vector3.zero;
-			}
-			if (gameObject.name == "Monster_1")
-			{
-				print(_Motor.GroundingStatus.IsStableOnGround);
+				_Motor.ForceUnground();
+				currentVelocity.x = Mathf.Abs(_Impulse.x) > Mathf.Abs(currentVelocity.x) ? _Impulse.x : currentVelocity.x;
+				currentVelocity.z = Mathf.Abs(_Impulse.z) > Mathf.Abs(currentVelocity.z) ? _Impulse.z : currentVelocity.z;
+
+				if (_Impulse.y > 0f)
+				{
+					currentVelocity.y = _Impulse.y;
+					_Impulse.y = 0f;
+				}
 			}
 		}
 
