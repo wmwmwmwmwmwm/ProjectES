@@ -65,6 +65,7 @@ namespace Battle
 							MoveRequest.DashLeft => _DashLeft,
 							_ => _DashRight
 						};
+						_Impulse.y = 3f;
 						_FSM.TrySetState(state);
 						_MoveRequest = MoveRequest.None;
 					}
@@ -79,7 +80,7 @@ namespace Battle
 			{
 				currentRotation *= _RootMotionRotDelta;
 			}
-			else if (_FSM.CurrentState._CanMove)
+			else if (!_FSM.CurrentState._LimitRotate)
 			{
 				Quaternion destRot = Quaternion.Euler(0f, _AimDestRotation.eulerAngles.y, 0f);
 				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, _RotationSpeed * deltaTime);
@@ -89,22 +90,16 @@ namespace Battle
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
 			Vector3 moveInputVector = _AimDestRotation * _MoveInput;
-			float moveSpeed = _MoveSpeed;
-
-			// 이동 불가
-			moveSpeed = !_FSM.CurrentState._CanMove ? 0f : moveSpeed;
-
-			// 달리기
-			moveSpeed *= _FSM.CurrentState == _Run ? 1.5f : 1f;
+			float moveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
+			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
 			// 가드 시 감속
-			float moveAccel = _MoveAccel;
 			float deaccelTime = Time.time - _DeaccelTime;
 			float duration = 0.6f;
 			if (deaccelTime < duration)
 			{
 				float t = Mathf.InverseLerp(0f, duration, deaccelTime);
-				moveAccel = _MoveAccel * t;
+				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
 					currentVelocity.x *= t;
@@ -127,14 +122,16 @@ namespace Battle
 				currentVelocity = _RootMotionPosDelta / deltaTime;
 
 				// 공격 시 살짝 이동
-				currentVelocity += _MoveSpeed * _AttackMovePercent * moveInputVector;
+				currentVelocity += moveSpeed * _AttackMovePercent * moveInputVector;
 
 				currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
 			}
 			// 대쉬
 			else if (IsDashing())
 			{
-				currentVelocity = _DashSpeed * transform.TransformDirection(_DashDir);
+				float t = (Time.time - _LastDashTime) / _DashDuration;
+				float dashSpeed = Mathf.Lerp(_DashSpeed * 1.5f, _DashSpeed * 0.5f, t);
+				currentVelocity = dashSpeed * transform.TransformDirection(_DashDir);
 			}
 			// 지상 이동
 			else if (_Motor.GroundingStatus.IsStableOnGround)
@@ -188,6 +185,7 @@ namespace Battle
 					addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
 				}
 
+				print(addedVelocity);
 				currentVelocity += addedVelocity;
 				_FSM.TrySetState(_Jump);
 			}
@@ -200,8 +198,8 @@ namespace Battle
 
 			switch (_MoveRequest)
 			{
-				// 점프
 				case MoveRequest.Jump:
+					// 점프
 					bool canJump = _Motor.GroundingStatus.FoundAnyGround || Time.time - _LastCanJumpTime <= MoveGraceTime;
 					canJump &= _FSM.CurrentState._CanJump;
 					if (canJump)
@@ -219,18 +217,18 @@ namespace Battle
 					break;
 			}
 
-			// 외부 힘
+			// 날려짐
 			if (Time.time - _ImpulseTime < 0.6f)
 			{
 				_Motor.ForceUnground();
 				currentVelocity.x = Mathf.Abs(_Impulse.x) > Mathf.Abs(currentVelocity.x) ? _Impulse.x : currentVelocity.x;
 				currentVelocity.z = Mathf.Abs(_Impulse.z) > Mathf.Abs(currentVelocity.z) ? _Impulse.z : currentVelocity.z;
-
-				if (_Impulse.y > 0f)
-				{
-					currentVelocity.y = _Impulse.y;
-					_Impulse.y = 0f;
-				}
+			}
+			if (_Impulse.y > 0f)
+			{
+				_Motor.ForceUnground();
+				currentVelocity.y = _Impulse.y;
+				_Impulse.y = 0f;
 			}
 		}
 

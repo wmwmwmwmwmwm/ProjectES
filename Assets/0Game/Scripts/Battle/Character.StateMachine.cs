@@ -61,7 +61,7 @@ namespace Battle
 				c = this,
 				_Asset = _IdleAsset,
 				_Priority = -1,
-				_CanMove = true,
+				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -72,7 +72,7 @@ namespace Battle
 				c = this,
 				_Asset = _MoveAsset,
 				_Priority = -1,
-				_CanMove = true,
+				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -83,7 +83,7 @@ namespace Battle
 				c = this,
 				_Asset = _RunAsset,
 				_Priority = -1,
-				_CanMove = true,
+				_MoveSpeed = 1.6f,
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
@@ -92,8 +92,11 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashFwdAsset,
+				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanAttack = true,
 				_OnEnd = () => _IsRunning = true,
 			};
@@ -101,24 +104,33 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashBwdAsset,
+				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanAttack = true,
 			};
 			_DashLeft = new()
 			{
 				c = this,
 				_Asset = _DashLeftAsset,
+				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanAttack = true,
 			};
 			_DashRight = new()
 			{
 				c = this,
 				_Asset = _DashRightAsset,
+				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_Duration = _DashDuration,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanAttack = true,
 			};
 			_Jump = new()
@@ -126,7 +138,7 @@ namespace Battle
 				c = this,
 				_Asset = _JumpAsset,
 				_Priority = -1,
-				_CanMove = true,
+				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanAttack = true,
 				_CanGuard = true,
@@ -136,9 +148,10 @@ namespace Battle
 				c = this,
 				_Asset = _LandAsset,
 				_Priority = -1,
-				_CanMove = true,
+				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanAttack = true,
+				_CanJump = true,
 				_CanGuard = true,
 			};
 			_Damage = new()
@@ -146,6 +159,7 @@ namespace Battle
 				c = this,
 				_RandomAssets = _DamageAssets,
 				_Priority = 1,
+				_MoveSpeed = 0.6f,
 			};
 			_GetDown = new()
 			{
@@ -176,7 +190,9 @@ namespace Battle
 				{
 					c = this,
 					_Asset = asset,
+					_MoveSpeed = 0.3f,
 					_Restart = true,
+					_LimitRotate = true,
 					_CanGuard = true,
 					_CanAttack = !isLast,
 				});
@@ -185,14 +201,19 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAttackAsset,
+				_MoveSpeed = 1f,
 				_Restart = true,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanGuard = true,
 			};
 			_DashAttack = new()
 			{
 				c = this,
 				_Asset = _DashAttackAsset,
+				_MoveSpeed = 0.3f,
 				_Restart = true,
+				_LimitRotate = true,
 				_CanGuard = true,
 			};
 
@@ -239,7 +260,8 @@ namespace Battle
                 float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 
 				bool active = degree > 30f && degree < 150f;
-				active &= state._CanMove || state == _DashFwd;
+				active &= state._MoveSpeed > 0f || state == _DashFwd;
+				active &= !state.IsAttack;
 				active &= !IsGuarding();
 				_IsRunning = active;
 			}

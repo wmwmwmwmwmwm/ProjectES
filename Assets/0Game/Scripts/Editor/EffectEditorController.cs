@@ -60,6 +60,7 @@ public class EffectEditorController : MonoBehaviour
 		// 왼쪽 아래
 		_OpenHitEffectButton.onClick.AddListener(OpenHitEffectButton);
 		_HitDelaySlider.onValueChanged.AddListener(HitDelaySlider);
+		_IsAttackToggle.onValueChanged.AddListener(IsAttackToggle);
 
 		RefreshUI();
 	}
@@ -188,7 +189,10 @@ public class EffectEditorController : MonoBehaviour
 		AssetDatabase.SaveAssets();
 
 		string text = removed > 0 ? "덮어쓰기 저장" : "새로 저장";
-		Debug.Log($"[{text}] 애니메이션 : {info._Clip.name}   이펙트 : {info._EffectPrefab.name}   타격 이펙트 : {info._HitEffectPrefab.name}");
+		string str1 = $"애니메이션 : {info._Clip.name}";
+		string str2 = info._EffectPrefab ? $"애니메이션 : {info._Clip.name}" : "";
+		string str3 = info._HitEffectPrefab ? $"타격 이펙트 : {info._HitEffectPrefab.name}" : "";
+		Debug.Log($"[{text}] {str1}   {str2}   {str3}");
 	}
 
 	void IsLocalToggle(bool on)
@@ -227,6 +231,11 @@ public class EffectEditorController : MonoBehaviour
 	void HitDelaySlider(float v)
 	{
 		_HitDelaySlider.GetComponentInChildren<TMP_Text>().text = v.ToString("0.00");
+	}
+
+	void IsAttackToggle(bool on)
+	{
+		RefreshUI();
 	}
 
 	void RefreshUI()

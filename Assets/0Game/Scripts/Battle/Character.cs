@@ -106,9 +106,8 @@ namespace Battle
 			if (IsGuarding()) return;
 
 			// 대쉬 공격
-			if (IsDashing())
+			if (IsDashing() || _IsRunning)
 			{
-				DashCancel();
 				_FSM.TrySetState(_DashAttack);
 				GiveDamage();
 			}
@@ -161,11 +160,6 @@ namespace Battle
 		void GuardCancel()
 		{
 			_UpperBodyLayer.SetWeight(0f);
-		}
-
-		void DashCancel()
-		{
-			_LastDashTime = TimeDefault;
 		}
 
 		public void GiveDamage()

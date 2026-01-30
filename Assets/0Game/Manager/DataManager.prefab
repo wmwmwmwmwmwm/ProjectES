@@ -57,8 +57,8 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.21575393
     _DamageDuration: 0.3
-    _ForceForward: 10
-    _ForceUp: 10
+    _ForceForward: 0
+    _ForceUp: 0
   - _Clip: {fileID: 7400000, guid: 06c67af9342cd9e4a9e665c4b5943e74, type: 2}
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
@@ -71,8 +71,8 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.21554162
     _DamageDuration: 0.3
-    _ForceForward: 10
-    _ForceUp: 10
+    _ForceForward: 0
+    _ForceUp: 0
   - _Clip: {fileID: 7400000, guid: 5ef54e9e8ccd801459006b721cab404a, type: 2}
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
@@ -85,8 +85,8 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.29537195
     _DamageDuration: 0.3
-    _ForceForward: 10
-    _ForceUp: 10
+    _ForceForward: 0
+    _ForceUp: 0
   - _Clip: {fileID: 7400000, guid: 818deedd8c224c9469a93b56fc4e8a63, type: 2}
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
@@ -112,6 +112,20 @@ MonoBehaviour:
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
     _HitDelay: 0.33194745
+    _DamageDuration: 0.3
+    _ForceForward: 10
+    _ForceUp: 10
+  - _Clip: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: 0, y: 1.64, z: 0.779}
+    _Rot: {x: 318.96072, y: 271.88208, z: 175.27888}
+    _Scale: 1.2
+    _Delay: 0.19816811
+    _IsLocal: 1
+    _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+      type: 3}
+    _HitDelay: 0.38562074
     _DamageDuration: 0.3
     _ForceForward: 10
     _ForceUp: 10

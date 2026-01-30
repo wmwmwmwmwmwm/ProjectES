@@ -15,9 +15,11 @@ namespace Battle
 		public TransitionAsset _Asset;
 		public List<TransitionAsset> _RandomAssets;
 		public int _Priority;
+		public float _MoveSpeed;
 		public bool _Restart;
 		public float _Duration;
-		public bool _CanMove, _CanDash, _CanJump, _CanAttack, _CanGuard;
+		public bool _LimitRotate;
+		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
 		public EffectInfo _EffectInfo;
 
 		public Action _OnEnd;
