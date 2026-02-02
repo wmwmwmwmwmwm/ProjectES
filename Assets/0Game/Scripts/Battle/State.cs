@@ -43,6 +43,7 @@ namespace Battle
 			{
 				state = c._BaseLayer.Play(_Asset);
 			}
+			_EffectInfo ??= Data.GetEffectInfo(state.Clip);
 
 			// IsAttack : 공격이 아니면 N번째 공격 상태 초기화
 			if (!IsAttack)
@@ -50,8 +51,9 @@ namespace Battle
 				c._AttackIndex = -1;
 			}
 
-			// NextAttackAvailable : 다음 공격 가능 조건 초기화
+			// 다음 공격 가능 조건 초기화
 			c._NextAttackAvailable = false;
+			c._NextAttackInput = false;
 
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
 			if (_Duration == 0f)
@@ -70,7 +72,6 @@ namespace Battle
 			}
 
 			// 이펙트
-			_EffectInfo = Data.GetEffectInfo(state.Clip);
 			if (_EffectInfo != null)
 			{
 				c.PlayEffect(_EffectInfo);

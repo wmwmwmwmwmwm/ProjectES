@@ -11,6 +11,7 @@ namespace Battle
 		[Header("애니메이션")]
 		public AnimancerComponent _Animancer;
 		public AvatarMask _UpperBodyMask;
+		public AnimationCurve _AttackMoveCurve;
 
 		// BaseLayer
 		public TransitionAsset _IdleAsset;
@@ -83,7 +84,7 @@ namespace Battle
 				c = this,
 				_Asset = _RunAsset,
 				_Priority = -1,
-				_MoveSpeed = 1.6f,
+				_MoveSpeed = 2f,
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
@@ -92,7 +93,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashFwdAsset,
-				_MoveSpeed = 0.3f,
+				_MoveSpeed = 2f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -104,7 +105,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashBwdAsset,
-				_MoveSpeed = 0.3f,
+				_MoveSpeed = 2f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -115,7 +116,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashLeftAsset,
-				_MoveSpeed = 0.3f,
+				_MoveSpeed = 2f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -126,7 +127,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashRightAsset,
-				_MoveSpeed = 0.3f,
+				_MoveSpeed = 2f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -240,8 +241,7 @@ namespace Battle
 			// 공격 시 살짝 이동 가능
 			if (state.IsAttack)
 			{
-				_AttackMovePercent = (_BaseLayer.CurrentState.NormalizedTime - 0.5f) * 2f;
-				_AttackMovePercent = Mathf.Max(0f, _AttackMovePercent);
+				_AttackMovePercent = _AttackMoveCurve.Evaluate(_BaseLayer.CurrentState.NormalizedTime);
 			}
 			else
 			{

@@ -1,8 +1,8 @@
 ﻿using Animancer;
 using KinematicCharacterController;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using VRM;
 using static DataManager;
@@ -19,10 +19,10 @@ namespace Battle
 
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
-		RaycastHit[] _MeleeAttackRaycastResults;
+		RaycastHit[] _RaycastResults;
 		[HideInInspector] public int _AttackIndex;
-		bool _NextAttackInput;
 		[HideInInspector] public bool _NextAttackAvailable;
+		[HideInInspector] public bool _NextAttackInput;
 		float _AttackMovePercent;
 		float _GuardDownTime;
 		float _HitStunTime;
@@ -35,7 +35,7 @@ namespace Battle
 		void Start()
 		{
 			_MeleeAttackResults = new Collider[100];
-			_MeleeAttackRaycastResults = new RaycastHit[10];
+			_RaycastResults = new RaycastHit[10];
 			_Collider = GetComponent<CapsuleCollider>();
 
 			_GuardDownTime = TimeDefault;
@@ -44,7 +44,6 @@ namespace Battle
 			_LastCanJumpTime = TimeDefault;
 			_LastDashTime = TimeDefault;
 			_DeaccelTime = TimeDefault;
-			_ImpulseTime = TimeDefault;
 
 			InitMovement();
 			InitFSM();
@@ -112,7 +111,7 @@ namespace Battle
 				GiveDamage();
 			}
 			// 일반 공격
-			else if (_Motor.GroundingStatus.IsStableOnGround)
+			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
 			{
 				// 1타 공격
 				if (_AttackIndex < 0 || _AttackIndex == _NormalAttacks.Count - 1)
@@ -208,12 +207,12 @@ namespace Battle
 					int count2 = Physics.RaycastNonAlloc(
 						origin: Center,
 						direction: transform.forward,
-						results: _MeleeAttackRaycastResults,
+						results: _RaycastResults,
 						maxDistance: attack._Collider.size.z,
 						layerMask: Layer.TerrainLayerMask);
 					if (count2 > 0)
 					{
-						List<RaycastHit> results = _MeleeAttackRaycastResults.ArrayToList(count2);
+						List<RaycastHit> results = _RaycastResults.ArrayToList(count2);
 						RaycastHit nearest = results.MinBy(x => x.distance);
 						PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
 					}
@@ -233,13 +232,13 @@ namespace Battle
 				int count = Physics.RaycastNonAlloc(
 					origin: attacker.Center,
 					direction: attackDir,
-					results: _MeleeAttackRaycastResults,
+					results: _RaycastResults,
 					maxDistance: 100f,
 					layerMask: GetLayerMask());
 				RaycastHit hit = default;
 				for (int i = 0; i < count; i++)
 				{
-					RaycastHit iter = _MeleeAttackRaycastResults[i];
+					RaycastHit iter = _RaycastResults[i];
 					if (_Collider == iter.collider)
 					{
 						hit = iter;
@@ -266,16 +265,15 @@ namespace Battle
 				}
 				else
 				{
-					if (info._ForceForward == 0f)
+					if (info._ForceForward == 0f && info._ForceUp == 0f)
 					{
 						_Damage._Duration = info._DamageDuration;
 						_FSM.TrySetState(_Damage);
 					}
 					else
 					{
-						Vector3 impulse = new(0f, info._ForceUp, info._ForceForward);
-						_Impulse = attacker.transform.TransformDirection(impulse);
-						_ImpulseTime = Time.time;
+						_Impulse = new(0f, info._ForceUp, info._ForceForward);
+						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FSM.TrySetState(_GetDown);
 					}
 					PlayEffect123123(info._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));

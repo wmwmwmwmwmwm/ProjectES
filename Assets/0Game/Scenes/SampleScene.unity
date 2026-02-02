@@ -1058,6 +1058,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 51340014}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -1071,6 +1072,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 1280597475}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -7492,6 +7505,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 343932202}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -7505,6 +7519,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1145257158}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -8940,7 +8966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  Damping: {x: 0.1, y: 0.3, z: 0.3}
   ShoulderOffset: {x: 0, y: 1.5, z: 0}
   VerticalArmLength: 0.5
   CameraSide: 1
@@ -9102,6 +9128,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 401194707}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -9115,6 +9142,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 862267452}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13088,6 +13127,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 567691371}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -13101,6 +13141,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 9137032839012517350}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13405,6 +13457,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 572737834}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -13418,6 +13471,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 540120808}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -14672,6 +14737,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 621334920}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -14685,6 +14751,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 2036394726}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -18857,6 +18935,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 796175804}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -18870,6 +18949,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 1229471424}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -21767,6 +21858,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 879975748}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -21780,6 +21872,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 2045138702}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -23946,6 +24050,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 963761352}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -23959,6 +24064,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 224828268}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24520,6 +24637,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 980194767}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -24533,6 +24651,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1429921356}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -25596,6 +25726,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1034916642}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -25609,6 +25740,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 1218957021}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26183,6 +26326,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1051672766}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -26196,6 +26340,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 280982121}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -29018,7 +29174,7 @@ MonoBehaviour:
   MinRequiredStepDepth: 0.1
   LedgeAndDenivelationHandling: 1
   MaxStableDistanceFromLedge: 0.5
-  MaxVelocityForLedgeSnap: 0
+  MaxVelocityForLedgeSnap: 10
   MaxStableDenivelationAngle: 180
   InteractiveRigidbodyHandling: 1
   RigidbodyInteractionType: 0
@@ -29072,6 +29228,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1171284223}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -29085,6 +29242,63 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1257286292}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.7512743
+      outSlope: -2.7512743
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.038942993
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -36735,6 +36949,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1532144273}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -36748,6 +36963,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 172903099}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -38584,6 +38811,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1593155923}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -38597,6 +38825,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1083149817}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -41809,6 +42049,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1737106837}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -41822,6 +42063,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 882964655}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -43542,6 +43795,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 1814071277}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -43555,6 +43809,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1337821152}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -47950,6 +48216,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 2030867348}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -47963,6 +48230,18 @@ MonoBehaviour:
   _HP: 11
   _Animancer: {fileID: 1952510723}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -50228,6 +50507,7 @@ MonoBehaviour:
     type: 3}
   _AttackIndex: 0
   _NextAttackAvailable: 0
+  _NextAttackInput: 0
   _Motor: {fileID: 2115295336}
   _RotationSpeed: 500
   _MoveSpeed: 10
@@ -50241,6 +50521,18 @@ MonoBehaviour:
   _HP: 0
   _Animancer: {fileID: 1863695650}
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
+  _DashSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _AttackMoveCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _IdleAsset: {fileID: 7425039641060706603, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _MoveAsset: {fileID: -8655182195538229920, guid: 13db70fcbf3cffe44bde67632d540860,

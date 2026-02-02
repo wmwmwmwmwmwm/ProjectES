@@ -130,7 +130,7 @@ MonoBehaviour:
     - rid: 9092877133038223762
       type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
       data:
-        _FadeDuration: 0.25
+        _FadeDuration: 0
         _Speed: 3
         _Events:
           _NormalizedTimes: []
