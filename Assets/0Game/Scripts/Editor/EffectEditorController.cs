@@ -65,7 +65,7 @@ public class EffectEditorController : MonoBehaviour
 		RefreshUI();
 	}
 
-    void Update()
+	void Update()
 	{
 		if (!Active) return;
 
@@ -104,7 +104,7 @@ public class EffectEditorController : MonoBehaviour
 		}
 		else
 		{
-            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(Util.ToAssetPath(filePath));
+			Object[] assets = AssetDatabase.LoadAllAssetsAtPath(Util.ToAssetPath(filePath));
 			_AnimationClip = assets.First(x => x is AnimationClip) as AnimationClip;
 		}
 		_SoloAnimation.Clip = _AnimationClip;
@@ -122,23 +122,25 @@ public class EffectEditorController : MonoBehaviour
 		}
 
 		// 이펙트 로드
-		EffectInfo info = Data._EffectInfos.Find(x => x._Clip == _AnimationClip);
-		if (info != null)
+		Effect effectData = Data._Effects.Find(x => x._Clip == _AnimationClip);
+		if (effectData != null)
 		{
-			_EffectPrefab = info._EffectPrefab;
-			_Effect = Instantiate(info._EffectPrefab).GetComponent<ParticleSystem>();
-			Data.SetupEffectPosition(_Effect.gameObject, info, _Character.transform);
-			_IsLocalToggle.SetIsOnWithoutNotify(info._IsLocal);
-			_DelaySlider.value = info._Delay;
-			bool isAttack = info._HitEffectPrefab;
-			_HitDelaySlider.value = info._HitDelay;
-			_IsAttackToggle.SetIsOnWithoutNotify(isAttack);
-			if (isAttack)
-			{
-				_HitEffectPrefab = info._HitEffectPrefab;
-				_HitEffect = Instantiate(info._HitEffectPrefab).GetComponent<ParticleSystem>();
-				_HitEffect.transform.SetLocalPositionAndRotation(new(0f, 1.5f, 2f), Quaternion.identity);
-			}
+			_EffectPrefab = effectData._EffectPrefab;
+			_Effect = Instantiate(effectData._EffectPrefab).GetComponent<ParticleSystem>();
+			Data.SetupEffectPosition(_Effect.gameObject, effectData, _Character.transform);
+			_IsLocalToggle.SetIsOnWithoutNotify(effectData._IsLocal);
+			_DelaySlider.value = effectData._Delay;
+		}
+
+		// 타격 이펙트 로드
+		Attack attackData = Data._Attacks.Find(x => x._Clip == _AnimationClip);
+		_IsAttackToggle.SetIsOnWithoutNotify(attackData != null);
+		if (attackData != null)
+		{
+			_HitDelaySlider.value = attackData._HitDelay;
+			_HitEffectPrefab = attackData._HitEffectPrefab;
+			_HitEffect = Instantiate(attackData._HitEffectPrefab).GetComponent<ParticleSystem>();
+			_HitEffect.transform.SetLocalPositionAndRotation(new(0f, 1.5f, 2f), Quaternion.identity);
 		}
 
 		RefreshUI();
@@ -170,7 +172,7 @@ public class EffectEditorController : MonoBehaviour
 
 	void SaveButton()
 	{
-		EffectInfo info = new()
+		Effect effectData = new()
 		{
 			_Clip = _AnimationClip,
 			_EffectPrefab = _EffectPrefab,
@@ -179,19 +181,31 @@ public class EffectEditorController : MonoBehaviour
 			_Scale = _Effect.transform.localScale.x,
 			_Delay = _DelaySlider.value,
 			_IsLocal = _IsLocalToggle.isOn,
-			_HitEffectPrefab = _IsAttackToggle.isOn ? _HitEffectPrefab : null,
-			_HitDelay = _HitDelaySlider.value,
-			_DamageDuration = 0.3f,
 		};
-		int removed = _DataManagerPrefab._EffectInfos.RemoveAll(x => x._Clip == _AnimationClip);
-		_DataManagerPrefab._EffectInfos.Add(info);
+		bool removed = _DataManagerPrefab._Effects.RemoveAll(x => x._Clip == _AnimationClip) > 0;
+		_DataManagerPrefab._Effects.Add(effectData);
+
+		string str3 = "";
+		if (_IsAttackToggle.isOn)
+		{
+			Attack attackData = new()
+			{
+				_Clip = _AnimationClip,
+				_HitEffectPrefab = _HitEffectPrefab,
+				_HitDelay = _HitDelaySlider.value,
+				_DamageDuration = 0.3f,
+			};
+			removed |= _DataManagerPrefab._Effects.RemoveAll(x => x._Clip == _AnimationClip) > 0;
+			_DataManagerPrefab._Attacks.Add(attackData);
+			str3 = $"타격 이펙트 : {attackData._HitEffectPrefab.name}";
+		}
+
 		EditorUtility.SetDirty(_DataManagerPrefab);
 		AssetDatabase.SaveAssets();
 
-		string text = removed > 0 ? "덮어쓰기 저장" : "새로 저장";
-		string str1 = $"애니메이션 : {info._Clip.name}";
-		string str2 = info._EffectPrefab ? $"애니메이션 : {info._Clip.name}" : "";
-		string str3 = info._HitEffectPrefab ? $"타격 이펙트 : {info._HitEffectPrefab.name}" : "";
+		string text = removed ? "덮어쓰기 저장" : "새로 저장";
+		string str1 = $"애니메이션 : {effectData._Clip.name}";
+		string str2 = effectData._EffectPrefab ? $"애니메이션 : {effectData._Clip.name}" : "";
 		Debug.Log($"[{text}] {str1}   {str2}   {str3}");
 	}
 

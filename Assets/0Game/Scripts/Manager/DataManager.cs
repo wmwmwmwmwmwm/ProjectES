@@ -7,9 +7,8 @@ using UnityEngine;
 public class DataManager : Singleton<DataManager>
 {
 	[Serializable]
-	public class EffectInfo
+	public class Effect
 	{
-		public string _Name;
 		public AnimationClip _Clip;
 		public GameObject _EffectPrefab;
 		//public AssetReferenceT<GameObject> _Prefab;
@@ -18,62 +17,52 @@ public class DataManager : Singleton<DataManager>
 		public float _Scale;
 		public float _Delay;
 		public bool _IsLocal;
-
-		// 공격
-		public GameObject _HitEffectPrefab;
-		public float _HitDelay;
-		public float _DamageDuration;
-		public float _ForceForward, _ForceUp;
 	}
-	public List<EffectInfo> _EffectInfos;
-	public List<EffectInfo> _Effects;
+	public List<Effect> _Effects;
 
-    private void OnValidate()
-    {
-		_Effects = _EffectInfos;
-		Util.SetDirty(gameObject);
-    }
-
-    [Serializable]
-	public class AttackInfo
+	[Serializable]
+	public class Attack
 	{
-		public string _Name;
 		public AnimationClip _Clip;
-		public GameObject _EffectPrefab;
-		//public AssetReferenceT<GameObject> _Prefab;
-		public Vector3 _Pos;
-		public Vector3 _Rot;
-		public float _Scale;
-		public float _Delay;
-		public bool _IsLocal;
-
-		// 공격
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
 		public float _DamageDuration;
 		public float _ForceForward, _ForceUp;
 	}
-	public List<AttackInfo> _AttackInfos;
+	public List<Attack> _Attacks;
 
-	public Dictionary<string, EffectInfo> _EffectInfoDict;
-	public Dictionary<string, AttackInfo> _AttackInfoDict;
+	public Dictionary<AnimationClip, Effect> _EffectDict;
+	public Dictionary<AnimationClip, Attack> _AttackDict;
 
 	protected override void Init()
 	{
-		_EffectInfoDict = new();
-		foreach (EffectInfo info in _EffectInfos)
+		_EffectDict = new();
+		foreach (Effect data in _Effects)
 		{
-			_EffectInfoDict.Add(info._Name, info);
+			_EffectDict.Add(data._Clip, data);
+		}
+		_AttackDict = new();
+		foreach (Attack data in _Attacks)
+		{
+			_AttackDict.Add(data._Clip, data);
 		}
 	}
 
-	public EffectInfo GetEffectInfo(string name)
+	public Effect GetEffectData(AnimationClip clip)
 	{
-		_EffectInfoDict.TryGetValue(name, out EffectInfo info);
-		return info;
+		if (!clip) return null;
+		_EffectDict.TryGetValue(clip, out Effect data);
+		return data;
 	}
 
-	public void SetupEffectPosition(GameObject instance, EffectInfo info, Transform parent)
+	public Attack GetAttackData(AnimationClip clip)
+	{
+		if (!clip) return null;
+		_AttackDict.TryGetValue(clip, out Attack data);
+		return data;
+	}
+
+	public void SetupEffectPosition(GameObject instance, Effect info, Transform parent)
 	{
 		instance.transform.SetParent(parent);
 		instance.transform.SetLocalPositionAndRotation(info._Pos, Quaternion.Euler(info._Rot));

@@ -220,9 +220,9 @@ namespace Battle
 				}
 
 				// 공격 판정 딜레이
-				if (attack._StateInfo._EffectInfo != null)
+				if (attack._StateInfo._EffectData != null)
 				{
-					yield return new WaitForSeconds(attack._StateInfo._EffectInfo._Delay);
+					yield return new WaitForSeconds(attack._StateInfo._EffectData._Delay);
 				}
 
 				// 히트 판정
@@ -295,9 +295,11 @@ namespace Battle
 					}
 				}
 
-				EffectInfo info = attack._StateInfo._EffectInfo;
-				if (info == null) yield break;
-				float delay = info._HitDelay - info._Delay;
+				Effect effectData = attack._StateInfo._EffectData;
+				if (effectData == null) yield break;
+				Attack attackData = attack._StateInfo._AttackData;
+				if (attackData == null) yield break;
+				float delay = attackData._HitDelay - effectData._Delay;
 				yield return new WaitForSeconds(delay);
 
 				_HitStunTime = Time.time;
@@ -314,19 +316,19 @@ namespace Battle
 				}
 				else
 				{
-					if (info._ForceForward == 0f && info._ForceUp == 0f)
+					if (attackData._ForceForward == 0f && attackData._ForceUp == 0f)
 					{
 						_Damage._Asset = _DamageAssets.PickOne();
-						_Damage._Duration = info._DamageDuration;
+						_Damage._Duration = attackData._DamageDuration;
 						_FSM.TrySetState(_Damage);
 					}
 					else
 					{
-						_Impulse = new(0f, info._ForceUp, info._ForceForward);
+						_Impulse = new(0f, attackData._ForceUp, attackData._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FSM.TrySetState(_GetDown);
 					}
-					PlayEffect123123(info._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(attackData._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
 				}
 
 				// 쓰러짐
@@ -338,7 +340,7 @@ namespace Battle
 			}
 		}
 
-		public void PlayEffect(EffectInfo info)
+		public void PlayEffect(Effect info)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()

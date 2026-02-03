@@ -20,11 +20,14 @@ namespace Battle
 		public bool _LimitRotate;
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
 		public string _EffectName;
-		public EffectInfo _EffectInfo;
+		public string _AttackName;
 
 		public Action _OnEnd;
 
-		public bool IsAttack => _EffectInfo?._HitEffectPrefab;
+		public Effect _EffectData;
+		public Attack _AttackData;
+
+		public bool IsAttack => _AttackData != null;
 
 		public bool CanEnterState => true;
 
@@ -33,9 +36,10 @@ namespace Battle
 		public void OnEnterState()
 		{
 			AnimancerState state = c._BaseLayer.Play(_Asset);
-			_EffectInfo ??= Data.GetEffectInfo(_EffectName);
+			_EffectData ??= Data.GetEffectData(state.Clip);
+			_AttackData ??= Data.GetAttackData(state.Clip);
 
-			// IsAttack : 공격이 아니면 N번째 공격 상태 초기화
+			// 공격이 아니면 N번째 공격 상태 초기화
 			if (!IsAttack)
 			{
 				c._AttackIndex = -1;
@@ -62,9 +66,9 @@ namespace Battle
 			}
 
 			// 이펙트
-			if (_EffectInfo != null)
+			if (_EffectData != null)
 			{
-				c.PlayEffect(_EffectInfo);
+				c.PlayEffect(_EffectData);
 			}
 		}
 
