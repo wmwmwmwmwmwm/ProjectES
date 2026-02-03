@@ -13,13 +13,13 @@ namespace Battle
 	{
 		public Character c;
 		public TransitionAsset _Asset;
-		public List<TransitionAsset> _RandomAssets;
 		public int _Priority;
 		public float _MoveSpeed;
 		public bool _Restart;
 		public float _Duration;
 		public bool _LimitRotate;
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
+		public string _EffectName;
 		public EffectInfo _EffectInfo;
 
 		public Action _OnEnd;
@@ -32,18 +32,8 @@ namespace Battle
 
 		public void OnEnterState()
 		{
-			AnimancerState state;
-
-			// RandomAssets : 설정되어 있다면 무작위 재생
-			if (_RandomAssets != null)
-			{ 
-				state = c._BaseLayer.Play(_RandomAssets.PickOne());
-			}
-			else
-			{
-				state = c._BaseLayer.Play(_Asset);
-			}
-			_EffectInfo ??= Data.GetEffectInfo(state.Clip);
+			AnimancerState state = c._BaseLayer.Play(_Asset);
+			_EffectInfo ??= Data.GetEffectInfo(_EffectName);
 
 			// IsAttack : 공격이 아니면 N번째 공격 상태 초기화
 			if (!IsAttack)
@@ -88,5 +78,7 @@ namespace Battle
 				_OnEnd?.Invoke();
 			}
 		}
-	}
+
+        public override string ToString() => _Asset.ToString();
+    }
 }

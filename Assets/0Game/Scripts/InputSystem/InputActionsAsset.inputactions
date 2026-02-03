@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DashForward",
+                    "name": "Forward",
                     "type": "Button",
                     "id": "03f2526c-7789-49cb-a3db-c6fcb1f0e6f4",
                     "expectedControlType": "",
@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DashBackward",
+                    "name": "Backward",
                     "type": "Button",
                     "id": "7b81ebb6-7612-47e5-90cd-6cf7f280e13d",
                     "expectedControlType": "",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DashLeft",
+                    "name": "Left",
                     "type": "Button",
                     "id": "55c85a56-5a34-4fc8-ba15-7dd7a3607f04",
                     "expectedControlType": "",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DashRight",
+                    "name": "Right",
                     "type": "Button",
                     "id": "77f16ff7-f34e-49df-a589-df694860c479",
                     "expectedControlType": "",
@@ -63,6 +63,15 @@
                     "name": "NormalAttack",
                     "type": "Button",
                     "id": "2e6b07e4-7c76-4280-9981-37e59afe0402",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpecialAttack",
+                    "type": "Button",
+                    "id": "500a8445-ca8a-448c-b709-22777a486227",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -107,6 +116,17 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "NormalAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0cff90d-ee2f-47bc-bced-4bfaad1f8cda",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "SpecialAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -194,7 +214,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "DashForward",
+                    "action": "Forward",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -205,7 +225,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "DashBackward",
+                    "action": "Backward",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -216,7 +236,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "DashLeft",
+                    "action": "Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -227,7 +247,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "DashRight",
+                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

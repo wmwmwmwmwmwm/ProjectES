@@ -9,6 +9,7 @@ public class DataManager : Singleton<DataManager>
 	[Serializable]
 	public class EffectInfo
 	{
+		public string _Name;
 		public AnimationClip _Clip;
 		public GameObject _EffectPrefab;
 		//public AssetReferenceT<GameObject> _Prefab;
@@ -25,22 +26,50 @@ public class DataManager : Singleton<DataManager>
 		public float _ForceForward, _ForceUp;
 	}
 	public List<EffectInfo> _EffectInfos;
+	public List<EffectInfo> _Effects;
 
-	public Dictionary<AnimationClip, EffectInfo> _EffectInfoDict;
+    private void OnValidate()
+    {
+		_Effects = _EffectInfos;
+		Util.SetDirty(gameObject);
+    }
+
+    [Serializable]
+	public class AttackInfo
+	{
+		public string _Name;
+		public AnimationClip _Clip;
+		public GameObject _EffectPrefab;
+		//public AssetReferenceT<GameObject> _Prefab;
+		public Vector3 _Pos;
+		public Vector3 _Rot;
+		public float _Scale;
+		public float _Delay;
+		public bool _IsLocal;
+
+		// 공격
+		public GameObject _HitEffectPrefab;
+		public float _HitDelay;
+		public float _DamageDuration;
+		public float _ForceForward, _ForceUp;
+	}
+	public List<AttackInfo> _AttackInfos;
+
+	public Dictionary<string, EffectInfo> _EffectInfoDict;
+	public Dictionary<string, AttackInfo> _AttackInfoDict;
 
 	protected override void Init()
 	{
 		_EffectInfoDict = new();
 		foreach (EffectInfo info in _EffectInfos)
 		{
-			_EffectInfoDict.Add(info._Clip, info);
+			_EffectInfoDict.Add(info._Name, info);
 		}
 	}
 
-	public EffectInfo GetEffectInfo(AnimationClip clip)
+	public EffectInfo GetEffectInfo(string name)
 	{
-		if (!clip) return null;
-		_EffectInfoDict.TryGetValue(clip, out EffectInfo info);
+		_EffectInfoDict.TryGetValue(name, out EffectInfo info);
 		return info;
 	}
 

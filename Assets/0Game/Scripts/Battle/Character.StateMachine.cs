@@ -39,8 +39,9 @@ namespace Battle
 		State _Idle;
 		State _Move;
 		State _Run;
-		State _DashFwd, _DashBwd, _DashLeft, _DashRight;
+		State _Dash;
 		State _Jump;
+		State _Fall;
 		State _Land;
 		State _Damage;
 		State _GetDown, _GetUp;
@@ -89,44 +90,9 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
-			_DashFwd = new()
+			_Dash = new()
 			{
 				c = this,
-				_Asset = _DashFwdAsset,
-				_MoveSpeed = 2f,
-				_Restart = true,
-				_Duration = _DashDuration,
-				_LimitRotate = true,
-				_CanJump = true,
-				_CanAttack = true,
-				_OnEnd = () => _IsRunning = true,
-			};
-			_DashBwd = new()
-			{
-				c = this,
-				_Asset = _DashBwdAsset,
-				_MoveSpeed = 2f,
-				_Restart = true,
-				_Duration = _DashDuration,
-				_LimitRotate = true,
-				_CanJump = true,
-				_CanAttack = true,
-			};
-			_DashLeft = new()
-			{
-				c = this,
-				_Asset = _DashLeftAsset,
-				_MoveSpeed = 2f,
-				_Restart = true,
-				_Duration = _DashDuration,
-				_LimitRotate = true,
-				_CanJump = true,
-				_CanAttack = true,
-			};
-			_DashRight = new()
-			{
-				c = this,
-				_Asset = _DashRightAsset,
 				_MoveSpeed = 2f,
 				_Restart = true,
 				_Duration = _DashDuration,
@@ -137,10 +103,21 @@ namespace Battle
 			_Jump = new()
 			{
 				c = this,
+				_MoveSpeed = 1f,
+				_Restart = true,
+				_CanDash = true,
+				_CanJump = true,
+				_CanAttack = true,
+				_CanGuard = true,
+			};
+			_Fall = new()
+			{
+				c = this,
 				_Asset = _JumpAsset,
 				_Priority = -1,
 				_MoveSpeed = 1f,
 				_CanDash = true,
+				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
 			};
@@ -151,14 +128,13 @@ namespace Battle
 				_Priority = -1,
 				_MoveSpeed = 1f,
 				_CanDash = true,
-				_CanAttack = true,
 				_CanJump = true,
+				_CanAttack = true,
 				_CanGuard = true,
 			};
 			_Damage = new()
 			{
 				c = this,
-				_RandomAssets = _DamageAssets,
 				_Priority = 1,
 				_MoveSpeed = 0.6f,
 			};
@@ -260,7 +236,7 @@ namespace Battle
                 float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 
 				bool active = degree > 30f && degree < 150f;
-				active &= state._MoveSpeed > 0f || state == _DashFwd;
+				active &= state._MoveSpeed > 0f || state == _Dash;
 				active &= !state.IsAttack;
 				active &= !IsGuarding();
 				_IsRunning = active;

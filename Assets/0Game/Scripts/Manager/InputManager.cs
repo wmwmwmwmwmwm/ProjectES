@@ -10,11 +10,16 @@ public class InputManager : Singleton<InputManager>
 	Direction4? _DashPressed;
 	float _DashPressedTime;
 
+	public InputAction Forward => InputActions.Battle.Forward;
+	public InputAction Backward => InputActions.Battle.Backward;
+	public InputAction Left => InputActions.Battle.Left;
+	public InputAction Right => InputActions.Battle.Right;
 	public InputAction Movement => InputActions.Battle.Movement;
 	public InputAction Look => InputActions.Battle.Look;
 	public event Action<Direction4> Dash;
 	public InputAction Jump => InputActions.Battle.Jump;
 	public InputAction NormalAttack => InputActions.Battle.NormalAttack;
+	public InputAction SpecialAttack => InputActions.Battle.SpecialAttack;
 	public InputAction Guard => InputActions.Battle.Guard;
 
 	protected override void Init()
@@ -25,10 +30,10 @@ public class InputManager : Singleton<InputManager>
 
 	void Update()
 	{
-		bool forwardPressed = InputActions.Battle.DashForward.WasPressedThisFrame();
-		bool backwardPressed = InputActions.Battle.DashBackward.WasPressedThisFrame();
-		bool leftPressed = InputActions.Battle.DashLeft.WasPressedThisFrame();
-		bool rightPressed = InputActions.Battle.DashRight.WasPressedThisFrame();
+		bool forwardPressed = Forward.WasPressedThisFrame();
+		bool backwardPressed = Backward.WasPressedThisFrame();
+		bool leftPressed = Left.WasPressedThisFrame();
+		bool rightPressed = Right.WasPressedThisFrame();
 
 		if (forwardPressed)
 		{

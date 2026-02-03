@@ -69,5 +69,10 @@ public static partial class Util
         string path2 = Path.GetRelativePath(Application.dataPath, path);
 		return $"Assets/{path2}";
 	}
+
+	public static void SetDirty(Object obj)
+	{
+		UnityEditor.EditorUtility.SetDirty(obj);
+	}
 #endif
 }

@@ -29,8 +29,10 @@ namespace Battle
 		bool _IsRunning;
 
 		const float TimeDefault = -10000f;
+		const float WallJumpAngleThreshold = 40f;
 
 		public Vector3 Center => transform.position + _Collider.center;
+		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
 
 		void Start()
 		{
@@ -134,6 +136,44 @@ namespace Battle
 			}
 		}
 
+		public void SpecialAttack(CallbackContext obj)
+		{
+			// 공격 가능 상태가 아님
+			if (!_FSM.CurrentState._CanAttack) return;
+
+			// 가드 중
+			if (IsGuarding()) return;
+
+			// 대쉬 공격
+			if (IsDashing() || _IsRunning)
+			{
+				_FSM.TrySetState(_DashAttack);
+				GiveDamage();
+			}
+			// 일반 공격
+			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
+			{
+				// 1타 공격
+				if (_AttackIndex < 0 || _AttackIndex == _NormalAttacks.Count - 1)
+				{
+					_AttackIndex = 0;
+					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
+					GiveDamage();
+				}
+				// 2~타 공격
+				else
+				{
+					_NextAttackInput = true;
+				}
+			}
+			// 점프 공격
+			else
+			{
+				_FSM.TrySetState(_JumpAttack);
+				GiveDamage();
+			}
+		}
+
 		public void Guard(CallbackContext obj)
 		{
 			if (!_FSM.CurrentState._CanGuard) return;
@@ -156,11 +196,6 @@ namespace Battle
 			}
 		}
 
-		void GuardCancel()
-		{
-			_UpperBodyLayer.SetWeight(0f);
-		}
-
 		public void GiveDamage()
 		{
 			StartCoroutine(Internal());
@@ -169,14 +204,29 @@ namespace Battle
 				AttackCollider attack = Instantiate(_MeleeAttackCollider);
 				attack._StateInfo = _FSM.CurrentState;
 				attack.transform.SetPositionAndRotation(transform.position, transform.rotation);
-				Vector3 attackPos = Center;
+
+				// 공중 공격으로 점프
+				RaycastHit[] raycastResults = new RaycastHit[10];
+				int raycastCount = Raycast();
+				List<RaycastHit> hits = raycastResults.ArrayToList(raycastCount);
+				RaycastHit nearest = hits.MinBy(x => x.distance);
+				if (raycastCount > 0)
+				{
+					float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
+					if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
+					{
+						_AttackJumpTrigger = true;
+					}
+				}
+
+				// 공격 판정 딜레이
 				if (attack._StateInfo._EffectInfo != null)
 				{
 					yield return new WaitForSeconds(attack._StateInfo._EffectInfo._Delay);
 				}
 
 				// 히트 판정
-				int count = Physics.OverlapBoxNonAlloc(
+				int overlapCount = Physics.OverlapBoxNonAlloc(
 					center: attack._Collider.GetCenter(),
 					halfExtents: attack._Collider.size / 2f,
 					results: _MeleeAttackResults,
@@ -184,41 +234,40 @@ namespace Battle
 					mask: GetOppositeLayerMask());
 
 				// 공격 적중
-				if (count > 0)
+				if (overlapCount > 0)
 				{
-					List<Collider> results = _MeleeAttackResults.ArrayToList(count);
-					results.Sort((a, b) =>
+					List<Collider> overlaps = _MeleeAttackResults.ArrayToList(overlapCount);
+					overlaps.Sort((a, b) =>
 					{
 						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
 						float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
 						float v = (aDistance - bDistance) * 100f;
 						return (int)v;
 					});
-					foreach (Collider result in results)
+					foreach (Collider col in overlaps)
 					{
-						Character c = result.GetComponent<Character>();
+						Character c = col.GetComponent<Character>();
 						c.TakeDamage(this, attack);
 						yield return new WaitForSeconds(0.01f);
 					}
 				}
-				// 벽에 이펙트
-				else
+				// 벽에 적중
+				else if(raycastCount > 0)
 				{
-					int count2 = Physics.RaycastNonAlloc(
-						origin: Center,
-						direction: transform.forward,
-						results: _RaycastResults,
-						maxDistance: attack._Collider.size.z,
-						layerMask: Layer.TerrainLayerMask);
-					if (count2 > 0)
-					{
-						List<RaycastHit> results = _RaycastResults.ArrayToList(count2);
-						RaycastHit nearest = results.MinBy(x => x.distance);
-						PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
-					}
+					PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
 				}
 
 				Destroy(attack.gameObject);
+
+				int Raycast()
+				{
+					return Physics.RaycastNonAlloc(
+						origin: Center,
+						direction: _Motor.CharacterForward,
+						results: raycastResults,
+						maxDistance: attack._Collider.size.z,
+						layerMask: Layer.TerrainLayerMask);
+				}
 			}
 		}
 
@@ -267,6 +316,7 @@ namespace Battle
 				{
 					if (info._ForceForward == 0f && info._ForceUp == 0f)
 					{
+						_Damage._Asset = _DamageAssets.PickOne();
 						_Damage._Duration = info._DamageDuration;
 						_FSM.TrySetState(_Damage);
 					}
@@ -329,9 +379,19 @@ namespace Battle
 			return Time.time - _LastDashTime < _DashDuration;
 		}
 
+		void DashCancel()
+		{
+			_LastDashTime = TimeDefault;
+		}
+
 		bool IsGuarding()
 		{
 			return _UpperBodyLayer.Weight > 0f;
+		}
+
+		void GuardCancel()
+		{
+			_UpperBodyLayer.SetWeight(0f);
 		}
 
 		bool IsGuardingEffective()

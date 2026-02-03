@@ -51,14 +51,14 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	public void DrawDebugBox(Vector3 position, Quaternion rotation, Vector3 size)
+	public void DrawDebugBox(Vector3 position, Quaternion rotation, float size = 1f)
 	{
 		StartCoroutine(Internal());
 		IEnumerator Internal()
 		{
 			GameObject box = Instantiate(_DebugBox);
 			box.transform.SetPositionAndRotation(position, rotation);
-			box.transform.localScale = size;
+			box.transform.localScale = size * Vector3.one;
 			box.SetActive(true);
 			yield return new WaitForSeconds(5f);
 			Destroy(box);

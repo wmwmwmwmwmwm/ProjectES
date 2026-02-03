@@ -110,7 +110,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DashForward"",
+                    ""name"": ""Forward"",
                     ""type"": ""Button"",
                     ""id"": ""03f2526c-7789-49cb-a3db-c6fcb1f0e6f4"",
                     ""expectedControlType"": """",
@@ -119,7 +119,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DashBackward"",
+                    ""name"": ""Backward"",
                     ""type"": ""Button"",
                     ""id"": ""7b81ebb6-7612-47e5-90cd-6cf7f280e13d"",
                     ""expectedControlType"": """",
@@ -128,7 +128,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DashLeft"",
+                    ""name"": ""Left"",
                     ""type"": ""Button"",
                     ""id"": ""55c85a56-5a34-4fc8-ba15-7dd7a3607f04"",
                     ""expectedControlType"": """",
@@ -137,7 +137,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DashRight"",
+                    ""name"": ""Right"",
                     ""type"": ""Button"",
                     ""id"": ""77f16ff7-f34e-49df-a589-df694860c479"",
                     ""expectedControlType"": """",
@@ -149,6 +149,15 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""name"": ""NormalAttack"",
                     ""type"": ""Button"",
                     ""id"": ""2e6b07e4-7c76-4280-9981-37e59afe0402"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpecialAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""500a8445-ca8a-448c-b709-22777a486227"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -193,6 +202,17 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""NormalAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0cff90d-ee2f-47bc-bced-4bfaad1f8cda"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SpecialAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -280,7 +300,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""DashForward"",
+                    ""action"": ""Forward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -291,7 +311,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""DashBackward"",
+                    ""action"": ""Backward"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -302,7 +322,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""DashLeft"",
+                    ""action"": ""Left"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -313,7 +333,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""DashRight"",
+                    ""action"": ""Right"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -881,11 +901,12 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         m_Battle = asset.FindActionMap("Battle", throwIfNotFound: true);
         m_Battle_Movement = m_Battle.FindAction("Movement", throwIfNotFound: true);
         m_Battle_Look = m_Battle.FindAction("Look", throwIfNotFound: true);
-        m_Battle_DashForward = m_Battle.FindAction("DashForward", throwIfNotFound: true);
-        m_Battle_DashBackward = m_Battle.FindAction("DashBackward", throwIfNotFound: true);
-        m_Battle_DashLeft = m_Battle.FindAction("DashLeft", throwIfNotFound: true);
-        m_Battle_DashRight = m_Battle.FindAction("DashRight", throwIfNotFound: true);
+        m_Battle_Forward = m_Battle.FindAction("Forward", throwIfNotFound: true);
+        m_Battle_Backward = m_Battle.FindAction("Backward", throwIfNotFound: true);
+        m_Battle_Left = m_Battle.FindAction("Left", throwIfNotFound: true);
+        m_Battle_Right = m_Battle.FindAction("Right", throwIfNotFound: true);
         m_Battle_NormalAttack = m_Battle.FindAction("NormalAttack", throwIfNotFound: true);
+        m_Battle_SpecialAttack = m_Battle.FindAction("SpecialAttack", throwIfNotFound: true);
         m_Battle_Jump = m_Battle.FindAction("Jump", throwIfNotFound: true);
         m_Battle_Guard = m_Battle.FindAction("Guard", throwIfNotFound: true);
         // UI
@@ -983,11 +1004,12 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
     private List<IBattleActions> m_BattleActionsCallbackInterfaces = new List<IBattleActions>();
     private readonly InputAction m_Battle_Movement;
     private readonly InputAction m_Battle_Look;
-    private readonly InputAction m_Battle_DashForward;
-    private readonly InputAction m_Battle_DashBackward;
-    private readonly InputAction m_Battle_DashLeft;
-    private readonly InputAction m_Battle_DashRight;
+    private readonly InputAction m_Battle_Forward;
+    private readonly InputAction m_Battle_Backward;
+    private readonly InputAction m_Battle_Left;
+    private readonly InputAction m_Battle_Right;
     private readonly InputAction m_Battle_NormalAttack;
+    private readonly InputAction m_Battle_SpecialAttack;
     private readonly InputAction m_Battle_Jump;
     private readonly InputAction m_Battle_Guard;
     /// <summary>
@@ -1010,25 +1032,29 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Battle_Look;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/DashForward".
+        /// Provides access to the underlying input action "Battle/Forward".
         /// </summary>
-        public InputAction @DashForward => m_Wrapper.m_Battle_DashForward;
+        public InputAction @Forward => m_Wrapper.m_Battle_Forward;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/DashBackward".
+        /// Provides access to the underlying input action "Battle/Backward".
         /// </summary>
-        public InputAction @DashBackward => m_Wrapper.m_Battle_DashBackward;
+        public InputAction @Backward => m_Wrapper.m_Battle_Backward;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/DashLeft".
+        /// Provides access to the underlying input action "Battle/Left".
         /// </summary>
-        public InputAction @DashLeft => m_Wrapper.m_Battle_DashLeft;
+        public InputAction @Left => m_Wrapper.m_Battle_Left;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/DashRight".
+        /// Provides access to the underlying input action "Battle/Right".
         /// </summary>
-        public InputAction @DashRight => m_Wrapper.m_Battle_DashRight;
+        public InputAction @Right => m_Wrapper.m_Battle_Right;
         /// <summary>
         /// Provides access to the underlying input action "Battle/NormalAttack".
         /// </summary>
         public InputAction @NormalAttack => m_Wrapper.m_Battle_NormalAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/SpecialAttack".
+        /// </summary>
+        public InputAction @SpecialAttack => m_Wrapper.m_Battle_SpecialAttack;
         /// <summary>
         /// Provides access to the underlying input action "Battle/Jump".
         /// </summary>
@@ -1069,21 +1095,24 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @DashForward.started += instance.OnDashForward;
-            @DashForward.performed += instance.OnDashForward;
-            @DashForward.canceled += instance.OnDashForward;
-            @DashBackward.started += instance.OnDashBackward;
-            @DashBackward.performed += instance.OnDashBackward;
-            @DashBackward.canceled += instance.OnDashBackward;
-            @DashLeft.started += instance.OnDashLeft;
-            @DashLeft.performed += instance.OnDashLeft;
-            @DashLeft.canceled += instance.OnDashLeft;
-            @DashRight.started += instance.OnDashRight;
-            @DashRight.performed += instance.OnDashRight;
-            @DashRight.canceled += instance.OnDashRight;
+            @Forward.started += instance.OnForward;
+            @Forward.performed += instance.OnForward;
+            @Forward.canceled += instance.OnForward;
+            @Backward.started += instance.OnBackward;
+            @Backward.performed += instance.OnBackward;
+            @Backward.canceled += instance.OnBackward;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
             @NormalAttack.started += instance.OnNormalAttack;
             @NormalAttack.performed += instance.OnNormalAttack;
             @NormalAttack.canceled += instance.OnNormalAttack;
+            @SpecialAttack.started += instance.OnSpecialAttack;
+            @SpecialAttack.performed += instance.OnSpecialAttack;
+            @SpecialAttack.canceled += instance.OnSpecialAttack;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
@@ -1107,21 +1136,24 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @DashForward.started -= instance.OnDashForward;
-            @DashForward.performed -= instance.OnDashForward;
-            @DashForward.canceled -= instance.OnDashForward;
-            @DashBackward.started -= instance.OnDashBackward;
-            @DashBackward.performed -= instance.OnDashBackward;
-            @DashBackward.canceled -= instance.OnDashBackward;
-            @DashLeft.started -= instance.OnDashLeft;
-            @DashLeft.performed -= instance.OnDashLeft;
-            @DashLeft.canceled -= instance.OnDashLeft;
-            @DashRight.started -= instance.OnDashRight;
-            @DashRight.performed -= instance.OnDashRight;
-            @DashRight.canceled -= instance.OnDashRight;
+            @Forward.started -= instance.OnForward;
+            @Forward.performed -= instance.OnForward;
+            @Forward.canceled -= instance.OnForward;
+            @Backward.started -= instance.OnBackward;
+            @Backward.performed -= instance.OnBackward;
+            @Backward.canceled -= instance.OnBackward;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
             @NormalAttack.started -= instance.OnNormalAttack;
             @NormalAttack.performed -= instance.OnNormalAttack;
             @NormalAttack.canceled -= instance.OnNormalAttack;
+            @SpecialAttack.started -= instance.OnSpecialAttack;
+            @SpecialAttack.performed -= instance.OnSpecialAttack;
+            @SpecialAttack.canceled -= instance.OnSpecialAttack;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
@@ -1417,33 +1449,33 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "DashForward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Forward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDashForward(InputAction.CallbackContext context);
+        void OnForward(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "DashBackward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Backward" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDashBackward(InputAction.CallbackContext context);
+        void OnBackward(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "DashLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDashLeft(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "DashRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDashRight(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "NormalAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -1451,6 +1483,13 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNormalAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SpecialAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpecialAttack(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

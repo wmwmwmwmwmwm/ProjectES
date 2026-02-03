@@ -1,4 +1,5 @@
-﻿using KinematicCharacterController;
+﻿using Animancer;
+using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Battle
 		[HideInInspector] public Quaternion _AimDestRotation;
 		float _DeaccelTime;
 		Vector3 _Impulse;
+		bool _AttackJumpTrigger;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -51,20 +53,26 @@ namespace Battle
 						_LastDashTime = Time.time;
 						_DashDir = _MoveRequest switch
 						{
-							MoveRequest.DashFwd => Vector3.forward,
-							MoveRequest.DashBwd => Vector3.back,
-							MoveRequest.DashLeft => Vector3.left,
-							_ => Vector3.right
+							MoveRequest.DashFwd => _Motor.CharacterForward,
+							MoveRequest.DashBwd => -_Motor.CharacterForward,
+							MoveRequest.DashLeft => -_Motor.CharacterRight,
+							_ => _Motor.CharacterRight
 						};
-						State state = _MoveRequest switch
+						_Dash._Asset = _MoveRequest switch
 						{
-							MoveRequest.DashFwd => _DashFwd,
-							MoveRequest.DashBwd => _DashBwd,
-							MoveRequest.DashLeft => _DashLeft,
-							_ => _DashRight
+							MoveRequest.DashFwd => _DashFwdAsset,
+							MoveRequest.DashBwd => _DashBwdAsset,
+							MoveRequest.DashLeft => _DashLeftAsset,
+							_ => _DashRightAsset
 						};
-						_Impulse = _MoveSpeed * state._MoveSpeed * transform.TransformDirection(_DashDir);
-						_FSM.TrySetState(state);
+						_FSM.TrySetState(_Dash);
+						_Impulse = _MoveSpeed * _Dash._MoveSpeed * _DashDir;
+
+						// 달리기
+						if (_MoveRequest == MoveRequest.DashFwd)
+						{
+							_IsRunning = true;
+						}
 						_MoveRequest = MoveRequest.None;
 					}
 					break;
@@ -88,6 +96,8 @@ namespace Battle
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
 			Vector3 moveInputVector = _AimDestRotation * _MoveInput;
+			moveInputVector.y = 0f;
+			moveInputVector.Normalize();
 			float moveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
 			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
@@ -157,9 +167,7 @@ namespace Battle
 			// 공중 이동
 			else
 			{
-				float airAccel = moveAccel * 0.33f;
-				moveInputVector.y = 0f;
-				moveInputVector.Normalize();
+				float airAccel = moveAccel * 0.2f;
 				Vector3 addedVelocity = airAccel * deltaTime * moveInputVector;
 				addedVelocity = Vector3.ProjectOnPlane(addedVelocity, _Motor.CharacterUp);
 				Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
@@ -186,7 +194,7 @@ namespace Battle
 				}
 
 				currentVelocity += addedVelocity;
-				_FSM.TrySetState(_Jump);
+				_FSM.TrySetState(_Fall);
 			}
 
 			// 중력
@@ -195,26 +203,29 @@ namespace Battle
 				currentVelocity += Physics.gravity * deltaTime;
 			}
 
+			// 점프 판정
+			bool jump = false;
+			bool wallJump = false;
+			TransitionAsset asset = default;
+			Vector3 dir = default;
+			float speed = _JumpSpeed;
 			switch (_MoveRequest)
 			{
-				// 점프
 				case MoveRequest.Jump:
 					if (!_FSM.CurrentState._CanJump) break;
 
 					// 지상
-					bool jump = false;
-					Vector3 jumpDirection = default;
-					if (_Motor.GroundingStatus.FoundAnyGround || Time.time - _LastCanJumpTime <= MoveGraceTime)
+					bool groundJump = _Motor.GroundingStatus.IsStableOnGround;
+					groundJump |= Time.time - _LastCanJumpTime <= MoveGraceTime;
+					groundJump &= Vector3.Angle(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal) < _Motor.MaxStableSlopeAngle;
+					if (groundJump)
 					{
 						jump = true;
-						jumpDirection = _Motor.CharacterUp;
-						if (_Motor.GroundingStatus.FoundAnyGround && !_Motor.GroundingStatus.IsStableOnGround)
-						{
-							jumpDirection = _Motor.GroundingStatus.GroundNormal;
-						}
+						dir = _Motor.CharacterUp;
+						asset = _JumpAsset;
 					}
 					// 벽
-					else
+					else 
 					{
 						List<Vector3> directions = new()
 						{
@@ -223,8 +234,27 @@ namespace Battle
 							_Motor.CharacterRight,
 							-_Motor.CharacterRight,
 						};
-						foreach (Vector3 direction in directions)
+						for (int i = 0; i < directions.Count; i++)
 						{
+							// 벽 방향키 판정
+							Direction4 dir4 = i switch
+							{
+								0 => Direction4.Up,
+								1 => Direction4.Down,
+								2 => Direction4.Left,
+								_ => Direction4.Right
+							};
+							bool pressed = dir4 switch
+							{
+								Direction4.Up => Inputs.Backward.IsPressed(),
+								Direction4.Down => Inputs.Forward.IsPressed(),
+								Direction4.Left => Inputs.Right.IsPressed(),
+								_ => Inputs.Left.IsPressed()
+							};
+							if (!pressed) continue;
+
+							// 벽이 있는지 Sweep
+							Vector3 direction = directions[i];
 							int count = _Motor.CharacterCollisionsSweep(
 								position: Center,
 								rotation: transform.rotation,
@@ -234,23 +264,58 @@ namespace Battle
 								hits: _RaycastResults);
 							if (count == 0) continue;
 
-                            Vector3 jumpDir = -direction;
+							// 각도 판정
+							Vector3 jumpDir = -direction;
 							float angle = Vector3.Angle(jumpDir, hit.normal);
-							if (angle < 40f)
-                            {
+							if (angle < WallJumpAngleThreshold)
+							{
 								jump = true;
-								jumpDirection = jumpDir;
+								wallJump = true;
+								dir = Vector3.RotateTowards(jumpDir, _Motor.CharacterUp, 60f * Mathf.Deg2Rad, 0f);
+								speed *= 1.5f;
+								asset = dir4 switch
+								{
+									Direction4.Up => _DashFwdAsset,
+									Direction4.Down => _DashBwdAsset,
+									Direction4.Left => _DashLeftAsset,
+									_ => _DashRightAsset
+								};
+								PlayEffect123123(_GuardEffectPrefab, Bottom, Quaternion.identity);
 								break;
-                            }
-                        }
-					}
-					if (jump)
-					{
-						currentVelocity += (jumpDirection * _JumpSpeed) - Vector3.Project(currentVelocity, _Motor.CharacterUp);
-						_Motor.ForceUnground();
-						_MoveRequest = MoveRequest.None;
+							}
+						}
 					}
 					break;
+			}
+
+			// 공중 공격으로 점프
+			if (_AttackJumpTrigger)
+			{
+				_AttackJumpTrigger = false;
+				jump = true;
+				wallJump = true;
+				dir = Vector3.RotateTowards(-_Motor.CharacterForward, _Motor.CharacterUp, 60f * Mathf.Deg2Rad, 0f);
+				speed *= 1.5f;
+			}
+
+			// 점프 수행
+			Vector3 jumpVelocity = dir * speed;
+			if (jump)
+			{
+				_Motor.ForceUnground();
+				currentVelocity += jumpVelocity - Vector3.Project(currentVelocity, _Motor.CharacterUp);
+				if (asset)
+				{
+					_Jump._Asset = asset;
+					_FSM.TryResetState(_Jump);
+				}
+				DashCancel();
+				_MoveRequest = MoveRequest.None;
+			}
+			if (wallJump)
+			{
+				currentVelocity.x = jumpVelocity.x;
+				currentVelocity.z = jumpVelocity.z;
 			}
 
 			// 날려짐

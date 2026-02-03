@@ -29,6 +29,7 @@ namespace Battle
 			Inputs.Dash += _Character.Dash;
 			Inputs.Jump.performed += _Character.Jump;
 			Inputs.NormalAttack.performed += _Character.NormalAttack;
+			Inputs.SpecialAttack.performed += _Character.SpecialAttack;
 			Inputs.Guard.performed += _Character.Guard;
 		}
 
@@ -39,6 +40,7 @@ namespace Battle
 			Inputs.Dash -= _Character.Dash;
 			Inputs.Jump.performed -= _Character.Jump;
 			Inputs.NormalAttack.performed -= _Character.NormalAttack;
+			Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
 			Inputs.Guard.performed -= _Character.Guard;
 		}
 
