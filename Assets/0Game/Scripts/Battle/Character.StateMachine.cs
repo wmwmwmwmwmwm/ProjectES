@@ -25,6 +25,7 @@ namespace Battle
 		public List<TransitionAsset> _NormalAttackAssets;
 		public TransitionAsset _JumpAttackAsset;
 		public TransitionAsset _DashAttackAsset;
+		public TransitionAsset _SpecialAttackAsset;
 
 		// UpperBodyLayer
 		public TransitionAsset _GuardUpAsset, _GuardDownAsset;
@@ -49,6 +50,7 @@ namespace Battle
 		List<State> _NormalAttacks;
 		State _JumpAttack;
 		State _DashAttack;
+		State _SpecialAttack;
 
 		void InitFSM()
 		{
@@ -62,7 +64,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _IdleAsset,
-				_Priority = -1,
+				_Priority = -2,
 				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
@@ -73,7 +75,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _MoveAsset,
-				_Priority = -1,
+				_Priority = -2,
 				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
@@ -84,8 +86,8 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _RunAsset,
-				_Priority = -1,
-				_MoveSpeed = 2f,
+				_Priority = -2,
+				_MoveSpeed = 2.5f,
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
@@ -93,7 +95,7 @@ namespace Battle
 			_Dash = new()
 			{
 				c = this,
-				_MoveSpeed = 2f,
+				_MoveSpeed = 2.5f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -114,7 +116,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAsset,
-				_Priority = -1,
+				_Priority = -2,
 				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
@@ -188,6 +190,15 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashAttackAsset,
+				_MoveSpeed = 0.3f,
+				_Restart = true,
+				_LimitRotate = true,
+				_CanGuard = true,
+			};
+			_SpecialAttack = new()
+			{
+				c = this,
+				_Asset = _SpecialAttackAsset,
 				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_LimitRotate = true,

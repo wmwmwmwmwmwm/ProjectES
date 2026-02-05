@@ -15,6 +15,7 @@ namespace Battle
 	{
 		public VRMBlendShapeProxy _BlendShapeProxy;
 		public AttackCollider _MeleeAttackCollider;
+		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
 
 		CapsuleCollider _Collider;
@@ -29,7 +30,7 @@ namespace Battle
 		bool _IsRunning;
 
 		const float TimeDefault = -10000f;
-		const float WallJumpAngleThreshold = 40f;
+		const float WallJumpAngleThreshold = 60f;
 
 		public Vector3 Center => transform.position + _Collider.center;
 		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
@@ -107,7 +108,7 @@ namespace Battle
 			if (IsGuarding()) return;
 
 			// 대쉬 공격
-			if (IsDashing() || _IsRunning)
+			if (IsDashing())
 			{
 				_FSM.TrySetState(_DashAttack);
 				GiveDamage();
@@ -144,34 +145,11 @@ namespace Battle
 			// 가드 중
 			if (IsGuarding()) return;
 
-			// 대쉬 공격
-			if (IsDashing() || _IsRunning)
-			{
-				_FSM.TrySetState(_DashAttack);
-				GiveDamage();
-			}
-			// 일반 공격
-			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
-			{
-				// 1타 공격
-				if (_AttackIndex < 0 || _AttackIndex == _NormalAttacks.Count - 1)
-				{
-					_AttackIndex = 0;
-					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
-					GiveDamage();
-				}
-				// 2~타 공격
-				else
-				{
-					_NextAttackInput = true;
-				}
-			}
-			// 점프 공격
-			else
-			{
-				_FSM.TrySetState(_JumpAttack);
-				GiveDamage();
-			}
+			//Play_Canceling();//
+
+			// 특수 공격
+			_FSM.TrySetState(_SpecialAttack);
+			GiveDamage();
 		}
 
 		public void Guard(CallbackContext obj)
@@ -252,7 +230,7 @@ namespace Battle
 					}
 				}
 				// 벽에 적중
-				else if(raycastCount > 0)
+				else if (raycastCount > 0) 
 				{
 					PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
 				}
@@ -329,6 +307,7 @@ namespace Battle
 						_FSM.TrySetState(_GetDown);
 					}
 					PlayEffect123123(attackData._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(_HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
 				}
 
 				// 쓰러짐
@@ -345,6 +324,7 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
+				yield return new WaitForSeconds(info._Delay);
 				GameObject effect = Instantiate(info._EffectPrefab);
 				Data.SetupEffectPosition(effect, info, transform);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;

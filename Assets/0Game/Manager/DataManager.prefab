@@ -93,6 +93,14 @@ MonoBehaviour:
     _Scale: 1.2
     _Delay: 0.19816811
     _IsLocal: 1
+  - _Clip: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: 0, y: 1, z: 0.78}
+    _Rot: {x: -104, y: 87, z: 3}
+    _Scale: 1.2
+    _Delay: 0.44
+    _IsLocal: 1
   _Attacks:
   - _Clip: {fileID: 7400000, guid: 01fa12c27ce71ea4382e2c1c8a5a52bd, type: 2}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
@@ -101,6 +109,7 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 0
     _ForceUp: 0
+    _Type: 0
   - _Clip: {fileID: 7400000, guid: 06c67af9342cd9e4a9e665c4b5943e74, type: 2}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
@@ -108,6 +117,7 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 0
     _ForceUp: 0
+    _Type: 0
   - _Clip: {fileID: 7400000, guid: 5ef54e9e8ccd801459006b721cab404a, type: 2}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
@@ -115,6 +125,7 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 0
     _ForceUp: 0
+    _Type: 0
   - _Clip: {fileID: 7400000, guid: 818deedd8c224c9469a93b56fc4e8a63, type: 2}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
@@ -122,6 +133,7 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 10
     _ForceUp: 10
+    _Type: 0
   - _Clip: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
@@ -129,6 +141,7 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 10
     _ForceUp: 10
+    _Type: 0
   - _Clip: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
@@ -136,3 +149,12 @@ MonoBehaviour:
     _DamageDuration: 0.3
     _ForceForward: 10
     _ForceUp: 10
+    _Type: 0
+  - _Clip: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
+    _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+      type: 3}
+    _HitDelay: 0.5
+    _DamageDuration: 0.3
+    _ForceForward: 0
+    _ForceUp: 0
+    _Type: 1

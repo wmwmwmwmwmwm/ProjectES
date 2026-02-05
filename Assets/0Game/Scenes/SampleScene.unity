@@ -1054,6 +1054,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 965603493}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -1114,6 +1116,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -7613,6 +7616,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1818881220}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -7673,6 +7678,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -9229,6 +9235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1586127161}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -9289,6 +9297,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13325,6 +13334,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 802888449}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -13385,6 +13396,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13648,6 +13660,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1494404023}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -13708,6 +13722,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -14921,6 +14936,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 396009732}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -14981,6 +14998,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -19112,6 +19130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1342985477}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -19172,6 +19192,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -22147,6 +22168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1453226983}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -22207,6 +22230,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24332,6 +24356,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1167599959}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -24392,6 +24418,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24912,6 +24939,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 347398204}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -24972,6 +25001,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -25994,6 +26024,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 891769739}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -26054,6 +26086,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26587,6 +26620,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1819041589}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -26647,6 +26682,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -29482,6 +29518,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1771170137}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -29489,7 +29527,7 @@ MonoBehaviour:
   _NextAttackInput: 0
   _Motor: {fileID: 1171284223}
   _RotationSpeed: 500
-  _MoveSpeed: 10
+  _MoveSpeed: 8
   _MoveAccel: 100
   _DashDuration: 0.4
   _JumpSpeed: 10
@@ -29569,6 +29607,8 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
+  _SpecialAttackAsset: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
@@ -37178,6 +37218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1848593394}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -37238,6 +37280,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -39033,6 +39076,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 304241687}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -39093,6 +39138,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -42269,6 +42315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1555213098}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -42329,6 +42377,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -44008,6 +44057,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 803557758}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -44068,6 +44119,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -48660,6 +48712,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 313586510}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -48720,6 +48774,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -50944,6 +50999,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BlendShapeProxy: {fileID: 0}
   _MeleeAttackCollider: {fileID: 1242135010}
+  _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
+    type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
   _AttackIndex: 0
@@ -51004,6 +51061,7 @@ MonoBehaviour:
   _JumpAttackAsset: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _DashAttackAsset: {fileID: 0}
+  _SpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,

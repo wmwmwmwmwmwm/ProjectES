@@ -195,7 +195,7 @@ public class EffectEditorController : MonoBehaviour
 				_HitDelay = _HitDelaySlider.value,
 				_DamageDuration = 0.3f,
 			};
-			removed |= _DataManagerPrefab._Effects.RemoveAll(x => x._Clip == _AnimationClip) > 0;
+			removed |= _DataManagerPrefab._Attacks.RemoveAll(x => x._Clip == _AnimationClip) > 0;
 			_DataManagerPrefab._Attacks.Add(attackData);
 			str3 = $"타격 이펙트 : {attackData._HitEffectPrefab.name}";
 		}
@@ -205,7 +205,7 @@ public class EffectEditorController : MonoBehaviour
 
 		string text = removed ? "덮어쓰기 저장" : "새로 저장";
 		string str1 = $"애니메이션 : {effectData._Clip.name}";
-		string str2 = effectData._EffectPrefab ? $"애니메이션 : {effectData._Clip.name}" : "";
+		string str2 = effectData._EffectPrefab ? $"이펙트 : {effectData._EffectPrefab.name}" : "";
 		Debug.Log($"[{text}] {str1}   {str2}   {str3}");
 	}
 

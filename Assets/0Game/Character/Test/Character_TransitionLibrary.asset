@@ -54,6 +54,34 @@ MonoBehaviour:
           type: 2}
         _ParameterNameY: {fileID: 11400000, guid: e640cf11c704f9b42950ddb6e2354a35,
           type: 2}
+--- !u!114 &-8535901853629699081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: SpecialAttack
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 7506709051062616149
+  references:
+    version: 2
+    RefIds:
+    - rid: 7506709051062616149
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.05
+        _Speed: 3
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
+        _NormalizedStartTime: NaN
 --- !u!114 &-7421574899298343059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +316,7 @@ MonoBehaviour:
     - {fileID: -4978170568794986257}
     - {fileID: 3815873642644383339}
     - {fileID: 4434167056054037265}
+    - {fileID: -8535901853629699081}
     _Modifiers: []
     _Aliases: []
     _AliasAllTransitions: 0

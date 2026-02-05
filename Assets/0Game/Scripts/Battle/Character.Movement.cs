@@ -125,7 +125,7 @@ namespace Battle
 			}
 
 			// 루트 모션 이동
-			if (_RootMotionPosDelta != Vector3.zero && !_Motor.MustUnground())
+			if (_RootMotionPosDelta != Vector3.zero && _Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
 			{
 				currentVelocity = _RootMotionPosDelta / deltaTime;
 
@@ -208,7 +208,6 @@ namespace Battle
 			bool wallJump = false;
 			TransitionAsset asset = default;
 			Vector3 dir = default;
-			float speed = _JumpSpeed;
 			switch (_MoveRequest)
 			{
 				case MoveRequest.Jump:
@@ -271,8 +270,7 @@ namespace Battle
 							{
 								jump = true;
 								wallJump = true;
-								dir = Vector3.RotateTowards(jumpDir, _Motor.CharacterUp, 60f * Mathf.Deg2Rad, 0f);
-								speed *= 1.5f;
+								dir = Vector3.RotateTowards(jumpDir, _Motor.CharacterUp, 45f * Mathf.Deg2Rad, 0f);
 								asset = dir4 switch
 								{
 									Direction4.Up => _DashFwdAsset,
@@ -294,16 +292,26 @@ namespace Battle
 				_AttackJumpTrigger = false;
 				jump = true;
 				wallJump = true;
-				dir = Vector3.RotateTowards(-_Motor.CharacterForward, _Motor.CharacterUp, 60f * Mathf.Deg2Rad, 0f);
-				speed *= 1.5f;
+				dir = Vector3.RotateTowards(-_Motor.CharacterForward, _Motor.CharacterUp, 45f * Mathf.Deg2Rad, 0f);
 			}
 
 			// 점프 수행
-			Vector3 jumpVelocity = dir * speed;
+			Vector3 jumpVelocity = dir * _JumpSpeed;
 			if (jump)
 			{
 				_Motor.ForceUnground();
-				currentVelocity += jumpVelocity - Vector3.Project(currentVelocity, _Motor.CharacterUp);
+				if (!wallJump)
+				{
+					currentVelocity += jumpVelocity - Vector3.Project(currentVelocity, _Motor.CharacterUp);
+				}
+				else
+				{
+					Vector3 v = jumpVelocity * 1.5f;
+					currentVelocity.x = v.x;
+					currentVelocity.z = v.z;
+					currentVelocity.y = Mathf.Max(v.y, currentVelocity.y);
+					currentVelocity.y += _JumpSpeed * 0.5f;
+				}
 				if (asset)
 				{
 					_Jump._Asset = asset;
@@ -311,11 +319,6 @@ namespace Battle
 				}
 				DashCancel();
 				_MoveRequest = MoveRequest.None;
-			}
-			if (wallJump)
-			{
-				currentVelocity.x = jumpVelocity.x;
-				currentVelocity.z = jumpVelocity.z;
 			}
 
 			// 날려짐
