@@ -1058,6 +1058,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -1117,6 +1119,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -7620,6 +7623,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -7679,6 +7684,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -9239,6 +9245,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -9298,6 +9306,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13338,6 +13347,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -13397,6 +13408,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13664,6 +13676,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -13723,6 +13737,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -14940,6 +14955,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -14999,6 +15016,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -19134,6 +19152,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -19193,6 +19213,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -22172,6 +22193,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -22231,6 +22254,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24360,6 +24384,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -24419,6 +24445,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24943,6 +24970,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -25002,6 +25031,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26028,6 +26058,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -26087,6 +26119,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26624,6 +26657,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -26683,6 +26718,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -29522,6 +29558,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 1257286290}
+  _WhiteMaterial: {fileID: 2100000, guid: ea2e2f8c68b8fd841b670bd08640b555, type: 2}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -29609,6 +29647,8 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _SpecialAttackAsset: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
+  _JumpSpecialAttackAsset: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
@@ -37222,6 +37262,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -37281,6 +37323,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -39080,6 +39123,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -39139,6 +39184,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -42319,6 +42365,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -42378,6 +42426,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -44061,6 +44110,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -44120,6 +44171,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -48716,6 +48768,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -48775,6 +48829,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -51003,6 +51058,8 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _CancelModel: {fileID: 0}
+  _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
@@ -51062,6 +51119,7 @@ MonoBehaviour:
     type: 2}
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
+  _JumpSpecialAttackAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,

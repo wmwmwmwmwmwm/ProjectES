@@ -17,6 +17,8 @@ namespace Battle
 		public AttackCollider _MeleeAttackCollider;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
+		public GameObject _CancelModel;
+		public Material _WhiteMaterial;
 
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
@@ -107,17 +109,17 @@ namespace Battle
 			// 가드 중
 			if (IsGuarding()) return;
 
-			// 대쉬 공격
+			// 대쉬 
 			if (IsDashing())
 			{
 				_FSM.TrySetState(_DashAttack);
 				GiveDamage();
 			}
-			// 일반 공격
+			// 지상
 			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
 			{
 				// 1타 공격
-				if (_AttackIndex < 0 || _AttackIndex == _NormalAttacks.Count - 1)
+				if (_AttackIndex < 0)
 				{
 					_AttackIndex = 0;
 					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
@@ -129,7 +131,7 @@ namespace Battle
 					_NextAttackInput = true;
 				}
 			}
-			// 점프 공격
+			// 공중
 			else
 			{
 				_FSM.TrySetState(_JumpAttack);
@@ -145,11 +147,25 @@ namespace Battle
 			// 가드 중
 			if (IsGuarding()) return;
 
-			//Play_Canceling();//
-
-			// 특수 공격
-			_FSM.TrySetState(_SpecialAttack);
-			GiveDamage();
+			// 지상
+			if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
+			{
+				if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._Type == AttackType.Normal)
+				{
+					Play_Canceling(_SpecialAttack);
+				}
+				else
+				{
+					_FSM.TrySetState(_SpecialAttack);
+				}
+				GiveDamage();
+			}
+			// 공중
+			else
+			{
+				_FSM.TrySetState(_JumpSpecialAttack);
+				GiveDamage();
+			}
 		}
 
 		public void Guard(CallbackContext obj)
@@ -157,9 +173,12 @@ namespace Battle
 			if (!_FSM.CurrentState._CanGuard) return;
 
 			// 가드 시작
-			Play_Canceling(_Idle);
-			if (Inputs.Guard.WasPressedThisFrame())
+			if (Inputs.Guard.WasPressedThisFrame() && !IsGuarding())
 			{
+				if (_FSM.CurrentState.IsAttack)
+				{
+					Play_Canceling(_Idle);
+				}
 				_UpperBodyLayer.SetWeight(1f);
 				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
 				state.Time = 0f;
@@ -180,6 +199,7 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				AttackCollider attack = Instantiate(_MeleeAttackCollider);
+				attack._Owner = this;
 				attack._StateInfo = _FSM.CurrentState;
 				attack.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
@@ -193,7 +213,7 @@ namespace Battle
 					float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
 					if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
 					{
-						_AttackJumpTrigger = true;
+						_AttackJumpDirection = -_Motor.CharacterForward;
 					}
 				}
 
@@ -316,6 +336,18 @@ namespace Battle
 					_FSM.TrySetState(_Die);
 					_Collider.enabled = false;
 				}
+
+				// 특수 공격으로 점프
+				bool wallJump = attackData._Type == AttackType.Special;
+				wallJump &= !attacker._Motor.GroundingStatus.IsStableOnGround;
+				wallJump &= !attack._AlreadyWallJump;
+				if (wallJump)
+				{
+					attack._AlreadyWallJump = true;
+                    Vector3 jumpDir = attacker.Center - Center;
+					jumpDir.y = 0f;
+					attacker._AttackJumpDirection = jumpDir.normalized;
+				}
 			}
 		}
 
@@ -330,17 +362,6 @@ namespace Battle
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
 				Destroy(effect);
-			}
-		}
-
-		public void PlayEffect123123(GameObject prefab, Vector3 pos, Quaternion rot)
-		{
-			StartCoroutine(Internal());
-			IEnumerator Internal()
-			{
-				GameObject hitEffect = Instantiate(prefab, pos, rot);
-				yield return new WaitForSeconds(3f);
-				Destroy(hitEffect);
 			}
 		}
 
@@ -386,6 +407,17 @@ namespace Battle
 			guard |= Time.time - _GuardDownTime < 0.1f;
 
 			return guard;
+		}
+
+		public void PlayEffect123123(GameObject prefab, Vector3 pos, Quaternion rot)
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				GameObject hitEffect = Instantiate(prefab, pos, rot);
+				yield return new WaitForSeconds(3f);
+				Destroy(hitEffect);
+			}
 		}
 	}
 }

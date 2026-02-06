@@ -30,7 +30,7 @@ namespace Battle
 		[HideInInspector] public Quaternion _AimDestRotation;
 		float _DeaccelTime;
 		Vector3 _Impulse;
-		bool _AttackJumpTrigger;
+		Vector3? _AttackJumpDirection;
 
 		const float MoveGraceTime = 0.1f;
 
@@ -120,8 +120,8 @@ namespace Battle
 			deaccel &= _Motor.GroundingStatus.FoundAnyGround;
 			if (deaccel)
 			{
-				currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0f, 10f * deltaTime);
-				currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0f, 10f * deltaTime);
+				currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0f, 50f * deltaTime);
+				currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0f, 50f * deltaTime);
 			}
 
 			// 루트 모션 이동
@@ -287,12 +287,12 @@ namespace Battle
 			}
 
 			// 공중 공격으로 점프
-			if (_AttackJumpTrigger)
+			if (_AttackJumpDirection != null)
 			{
-				_AttackJumpTrigger = false;
 				jump = true;
 				wallJump = true;
-				dir = Vector3.RotateTowards(-_Motor.CharacterForward, _Motor.CharacterUp, 45f * Mathf.Deg2Rad, 0f);
+				dir = Vector3.RotateTowards(_AttackJumpDirection.Value, _Motor.CharacterUp, 45f * Mathf.Deg2Rad, 0f);
+				_AttackJumpDirection = null;
 			}
 
 			// 점프 수행
@@ -324,7 +324,10 @@ namespace Battle
 			// 날려짐
 			if (_Impulse != Vector3.zero)
 			{
-				_Motor.ForceUnground();
+				if (_Impulse.y != 0f)
+				{
+					_Motor.ForceUnground();
+				}
 				currentVelocity = _Impulse;
 				_Impulse = Vector3.zero;
 			}

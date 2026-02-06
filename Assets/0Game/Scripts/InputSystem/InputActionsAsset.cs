@@ -146,6 +146,24 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf80cade-3908-4c91-8b5d-2b41f96d6ee1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Guard"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""0d04215b-cc3f-467e-98c2-7b7c65db2593"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""NormalAttack"",
                     ""type"": ""Button"",
                     ""id"": ""2e6b07e4-7c76-4280-9981-37e59afe0402"",
@@ -164,19 +182,28 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""Skill1"",
                     ""type"": ""Button"",
-                    ""id"": ""bf80cade-3908-4c91-8b5d-2b41f96d6ee1"",
+                    ""id"": ""9e7bde43-6b39-4ce2-bf4a-66f66df97e95"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Guard"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""0d04215b-cc3f-467e-98c2-7b7c65db2593"",
-                    ""expectedControlType"": ""Button"",
+                    ""name"": ""Skill2"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba50f425-42a1-4106-ad67-3c8fa7027588"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ultimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""0b7e810b-bade-4316-b2cf-d0cfeeccdd8b"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -213,6 +240,39 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""SpecialAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""49b6d537-9558-41d3-98b9-0ba7b9c0cd3d"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Skill1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b3729f5-e45a-4997-8ba5-a3b7a09e1eb1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Skill2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f305431b-8b22-43ec-8bef-47212cb26e4e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -905,10 +965,13 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         m_Battle_Backward = m_Battle.FindAction("Backward", throwIfNotFound: true);
         m_Battle_Left = m_Battle.FindAction("Left", throwIfNotFound: true);
         m_Battle_Right = m_Battle.FindAction("Right", throwIfNotFound: true);
-        m_Battle_NormalAttack = m_Battle.FindAction("NormalAttack", throwIfNotFound: true);
-        m_Battle_SpecialAttack = m_Battle.FindAction("SpecialAttack", throwIfNotFound: true);
         m_Battle_Jump = m_Battle.FindAction("Jump", throwIfNotFound: true);
         m_Battle_Guard = m_Battle.FindAction("Guard", throwIfNotFound: true);
+        m_Battle_NormalAttack = m_Battle.FindAction("NormalAttack", throwIfNotFound: true);
+        m_Battle_SpecialAttack = m_Battle.FindAction("SpecialAttack", throwIfNotFound: true);
+        m_Battle_Skill1 = m_Battle.FindAction("Skill1", throwIfNotFound: true);
+        m_Battle_Skill2 = m_Battle.FindAction("Skill2", throwIfNotFound: true);
+        m_Battle_Ultimate = m_Battle.FindAction("Ultimate", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1008,10 +1071,13 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
     private readonly InputAction m_Battle_Backward;
     private readonly InputAction m_Battle_Left;
     private readonly InputAction m_Battle_Right;
-    private readonly InputAction m_Battle_NormalAttack;
-    private readonly InputAction m_Battle_SpecialAttack;
     private readonly InputAction m_Battle_Jump;
     private readonly InputAction m_Battle_Guard;
+    private readonly InputAction m_Battle_NormalAttack;
+    private readonly InputAction m_Battle_SpecialAttack;
+    private readonly InputAction m_Battle_Skill1;
+    private readonly InputAction m_Battle_Skill2;
+    private readonly InputAction m_Battle_Ultimate;
     /// <summary>
     /// Provides access to input actions defined in input action map "Battle".
     /// </summary>
@@ -1048,6 +1114,14 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Right => m_Wrapper.m_Battle_Right;
         /// <summary>
+        /// Provides access to the underlying input action "Battle/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_Battle_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/Guard".
+        /// </summary>
+        public InputAction @Guard => m_Wrapper.m_Battle_Guard;
+        /// <summary>
         /// Provides access to the underlying input action "Battle/NormalAttack".
         /// </summary>
         public InputAction @NormalAttack => m_Wrapper.m_Battle_NormalAttack;
@@ -1056,13 +1130,17 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @SpecialAttack => m_Wrapper.m_Battle_SpecialAttack;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/Jump".
+        /// Provides access to the underlying input action "Battle/Skill1".
         /// </summary>
-        public InputAction @Jump => m_Wrapper.m_Battle_Jump;
+        public InputAction @Skill1 => m_Wrapper.m_Battle_Skill1;
         /// <summary>
-        /// Provides access to the underlying input action "Battle/Guard".
+        /// Provides access to the underlying input action "Battle/Skill2".
         /// </summary>
-        public InputAction @Guard => m_Wrapper.m_Battle_Guard;
+        public InputAction @Skill2 => m_Wrapper.m_Battle_Skill2;
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/Ultimate".
+        /// </summary>
+        public InputAction @Ultimate => m_Wrapper.m_Battle_Ultimate;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1107,18 +1185,27 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
-            @NormalAttack.started += instance.OnNormalAttack;
-            @NormalAttack.performed += instance.OnNormalAttack;
-            @NormalAttack.canceled += instance.OnNormalAttack;
-            @SpecialAttack.started += instance.OnSpecialAttack;
-            @SpecialAttack.performed += instance.OnSpecialAttack;
-            @SpecialAttack.canceled += instance.OnSpecialAttack;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
             @Guard.started += instance.OnGuard;
             @Guard.performed += instance.OnGuard;
             @Guard.canceled += instance.OnGuard;
+            @NormalAttack.started += instance.OnNormalAttack;
+            @NormalAttack.performed += instance.OnNormalAttack;
+            @NormalAttack.canceled += instance.OnNormalAttack;
+            @SpecialAttack.started += instance.OnSpecialAttack;
+            @SpecialAttack.performed += instance.OnSpecialAttack;
+            @SpecialAttack.canceled += instance.OnSpecialAttack;
+            @Skill1.started += instance.OnSkill1;
+            @Skill1.performed += instance.OnSkill1;
+            @Skill1.canceled += instance.OnSkill1;
+            @Skill2.started += instance.OnSkill2;
+            @Skill2.performed += instance.OnSkill2;
+            @Skill2.canceled += instance.OnSkill2;
+            @Ultimate.started += instance.OnUltimate;
+            @Ultimate.performed += instance.OnUltimate;
+            @Ultimate.canceled += instance.OnUltimate;
         }
 
         /// <summary>
@@ -1148,18 +1235,27 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
-            @NormalAttack.started -= instance.OnNormalAttack;
-            @NormalAttack.performed -= instance.OnNormalAttack;
-            @NormalAttack.canceled -= instance.OnNormalAttack;
-            @SpecialAttack.started -= instance.OnSpecialAttack;
-            @SpecialAttack.performed -= instance.OnSpecialAttack;
-            @SpecialAttack.canceled -= instance.OnSpecialAttack;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
             @Guard.started -= instance.OnGuard;
             @Guard.performed -= instance.OnGuard;
             @Guard.canceled -= instance.OnGuard;
+            @NormalAttack.started -= instance.OnNormalAttack;
+            @NormalAttack.performed -= instance.OnNormalAttack;
+            @NormalAttack.canceled -= instance.OnNormalAttack;
+            @SpecialAttack.started -= instance.OnSpecialAttack;
+            @SpecialAttack.performed -= instance.OnSpecialAttack;
+            @SpecialAttack.canceled -= instance.OnSpecialAttack;
+            @Skill1.started -= instance.OnSkill1;
+            @Skill1.performed -= instance.OnSkill1;
+            @Skill1.canceled -= instance.OnSkill1;
+            @Skill2.started -= instance.OnSkill2;
+            @Skill2.performed -= instance.OnSkill2;
+            @Skill2.canceled -= instance.OnSkill2;
+            @Ultimate.started -= instance.OnUltimate;
+            @Ultimate.performed -= instance.OnUltimate;
+            @Ultimate.canceled -= instance.OnUltimate;
         }
 
         /// <summary>
@@ -1477,6 +1573,20 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRight(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Guard" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnGuard(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "NormalAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -1491,19 +1601,26 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpecialAttack(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Skill1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnJump(InputAction.CallbackContext context);
+        void OnSkill1(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Guard" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Skill2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnGuard(InputAction.CallbackContext context);
+        void OnSkill2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Ultimate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUltimate(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

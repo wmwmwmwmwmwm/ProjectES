@@ -28,6 +28,7 @@ public class DataManager : Singleton<DataManager>
 		public float _HitDelay;
 		public float _DamageDuration;
 		public float _ForceForward, _ForceUp;
+		public float _Cooltime;
 		public AttackType _Type;
 	}
 	public List<Attack> _Attacks;

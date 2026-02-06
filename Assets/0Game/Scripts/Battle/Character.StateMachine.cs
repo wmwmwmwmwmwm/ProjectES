@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Animancer;
 using Animancer.FSM;
+using System.Linq;
+using DG.Tweening;
 
 namespace Battle
 {
@@ -26,6 +28,7 @@ namespace Battle
 		public TransitionAsset _JumpAttackAsset;
 		public TransitionAsset _DashAttackAsset;
 		public TransitionAsset _SpecialAttackAsset;
+		public TransitionAsset _JumpSpecialAttackAsset;
 
 		// UpperBodyLayer
 		public TransitionAsset _GuardUpAsset, _GuardDownAsset;
@@ -51,6 +54,7 @@ namespace Battle
 		State _JumpAttack;
 		State _DashAttack;
 		State _SpecialAttack;
+		State _JumpSpecialAttack;
 
 		void InitFSM()
 		{
@@ -66,6 +70,7 @@ namespace Battle
 				_Asset = _IdleAsset,
 				_Priority = -2,
 				_MoveSpeed = 1f,
+				_Duration = -1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -77,6 +82,7 @@ namespace Battle
 				_Asset = _MoveAsset,
 				_Priority = -2,
 				_MoveSpeed = 1f,
+				_Duration = -1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -88,6 +94,7 @@ namespace Battle
 				_Asset = _RunAsset,
 				_Priority = -2,
 				_MoveSpeed = 2.5f,
+				_Duration = -1f,
 				_CanJump = true,
 				_CanAttack = true,
 				_CanGuard = true,
@@ -118,6 +125,7 @@ namespace Battle
 				_Asset = _JumpAsset,
 				_Priority = -2,
 				_MoveSpeed = 1f,
+				_Duration = -1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -173,7 +181,7 @@ namespace Battle
 					_Restart = true,
 					_LimitRotate = true,
 					_CanGuard = true,
-					_CanAttack = !isLast,
+					_CanAttack = true,
 				});
 			}
 			_JumpAttack = new()
@@ -202,6 +210,16 @@ namespace Battle
 				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_LimitRotate = true,
+				_CanGuard = true,
+			};
+			_JumpSpecialAttack = new()
+			{
+				c = this,
+				_Asset = _JumpSpecialAttackAsset,
+				_MoveSpeed = 1f,
+				_Restart = true,
+				_LimitRotate = true,
+				_CanJump = true,
 				_CanGuard = true,
 			};
 
@@ -269,6 +287,33 @@ namespace Battle
 		{
 			_BaseLayer.Play(state._Asset, 0f);
 			_FSM.ForceSetState(state);
+
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				// 잔상 생성
+				float duration = 1f;
+				GameObject model = Instantiate(_CancelModel, transform.position, transform.rotation);
+                Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
+                Material whiteMaterial = new(_WhiteMaterial);
+				foreach (Renderer renderer in renderers)
+				{
+                    Material[] mats = renderer.materials;
+                    for (int i = 0; i < mats.Length; i++)
+					{
+						mats[i] = whiteMaterial;
+					}
+					renderer.materials = mats;
+				}
+				whiteMaterial.DOFade(0f, duration);
+				SoloAnimation animation = model.AddComponent<SoloAnimation>();
+				animation.Clip = _Animancer.States.Current.Clip;
+				animation.NormalizedTime = _Animancer.States.Current.NormalizedTime;
+				animation.Speed = 0f;
+				animation.Play();
+				yield return new WaitForSeconds(duration);
+				Destroy(model);
+			}
 		}
 	}
 }

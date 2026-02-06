@@ -58,6 +58,14 @@ namespace Battle
 					_OnEnd?.Invoke();
 				};
 			}
+			// Duration < 0f : 루프
+			else if (_Duration < 0f)
+			{
+				state.Events(c).OnEnd ??= () =>
+				{
+					_OnEnd?.Invoke();
+				};
+			}
 
 			// Restart : 같은 State로 다시 들어올 때 애니메이션을 재시작
 			if (_Restart)

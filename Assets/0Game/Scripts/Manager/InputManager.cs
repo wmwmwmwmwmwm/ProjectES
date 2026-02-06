@@ -18,9 +18,12 @@ public class InputManager : Singleton<InputManager>
 	public InputAction Look => InputActions.Battle.Look;
 	public event Action<Direction4> Dash;
 	public InputAction Jump => InputActions.Battle.Jump;
+	public InputAction Guard => InputActions.Battle.Guard;
 	public InputAction NormalAttack => InputActions.Battle.NormalAttack;
 	public InputAction SpecialAttack => InputActions.Battle.SpecialAttack;
-	public InputAction Guard => InputActions.Battle.Guard;
+	public InputAction Skill1 => InputActions.Battle.Skill1;
+	public InputAction Skill2 => InputActions.Battle.Skill2;
+	public InputAction Ultimate => InputActions.Battle.Ultimate;
 
 	protected override void Init()
 	{

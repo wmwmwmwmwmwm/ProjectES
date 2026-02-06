@@ -9,6 +9,8 @@ namespace Battle
 	{
 		public BoxCollider _Collider;
 
+		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;
+		[HideInInspector] public bool _AlreadyWallJump;
 	}
 }

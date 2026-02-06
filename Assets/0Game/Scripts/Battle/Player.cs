@@ -28,9 +28,12 @@ namespace Battle
 			Inputs.Look.performed += Look;
 			Inputs.Dash += _Character.Dash;
 			Inputs.Jump.performed += _Character.Jump;
+			Inputs.Guard.performed += _Character.Guard;
 			Inputs.NormalAttack.performed += _Character.NormalAttack;
 			Inputs.SpecialAttack.performed += _Character.SpecialAttack;
-			Inputs.Guard.performed += _Character.Guard;
+			Inputs.Skill1.performed += _Character.SpecialAttack;
+			Inputs.Skill2.performed += _Character.SpecialAttack;
+			Inputs.Ultimate.performed += _Character.SpecialAttack;
 		}
 
 		void OnDisable()
@@ -39,9 +42,12 @@ namespace Battle
 			Inputs.Look.performed -= Look;
 			Inputs.Dash -= _Character.Dash;
 			Inputs.Jump.performed -= _Character.Jump;
+			Inputs.Guard.performed -= _Character.Guard;
 			Inputs.NormalAttack.performed -= _Character.NormalAttack;
 			Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
-			Inputs.Guard.performed -= _Character.Guard;
+			Inputs.Skill1.performed -= _Character.SpecialAttack;
+			Inputs.Skill2.performed -= _Character.SpecialAttack;
+			Inputs.Ultimate.performed -= _Character.SpecialAttack;
 		}
 
 		void Update()

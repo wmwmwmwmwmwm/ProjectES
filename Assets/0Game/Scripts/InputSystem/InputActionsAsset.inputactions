@@ -60,6 +60,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "bf80cade-3908-4c91-8b5d-2b41f96d6ee1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Guard",
+                    "type": "PassThrough",
+                    "id": "0d04215b-cc3f-467e-98c2-7b7c65db2593",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "NormalAttack",
                     "type": "Button",
                     "id": "2e6b07e4-7c76-4280-9981-37e59afe0402",
@@ -78,19 +96,28 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "Skill1",
                     "type": "Button",
-                    "id": "bf80cade-3908-4c91-8b5d-2b41f96d6ee1",
+                    "id": "9e7bde43-6b39-4ce2-bf4a-66f66df97e95",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Guard",
-                    "type": "PassThrough",
-                    "id": "0d04215b-cc3f-467e-98c2-7b7c65db2593",
-                    "expectedControlType": "Button",
+                    "name": "Skill2",
+                    "type": "Button",
+                    "id": "ba50f425-42a1-4106-ad67-3c8fa7027588",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Ultimate",
+                    "type": "Button",
+                    "id": "0b7e810b-bade-4316-b2cf-d0cfeeccdd8b",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -127,6 +154,39 @@
                     "processors": "",
                     "groups": "Keyboard",
                     "action": "SpecialAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49b6d537-9558-41d3-98b9-0ba7b9c0cd3d",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Skill1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b3729f5-e45a-4997-8ba5-a3b7a09e1eb1",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Skill2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f305431b-8b22-43ec-8bef-47212cb26e4e",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Ultimate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
