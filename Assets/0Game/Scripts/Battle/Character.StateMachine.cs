@@ -113,6 +113,7 @@ namespace Battle
 			{
 				c = this,
 				_MoveSpeed = 1f,
+				_Priority = -2,
 				_Restart = true,
 				_CanDash = true,
 				_CanJump = true,
