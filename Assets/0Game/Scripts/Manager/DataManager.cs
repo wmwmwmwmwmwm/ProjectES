@@ -26,7 +26,7 @@ public class DataManager : Singleton<DataManager>
 		public AnimationClip _Clip;
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
-		public float _DamageDuration;
+		public float _DamageDuration, _AttackerHitStunDuration;
 		public float _ForceForward, _ForceUp;
 		public float _Cooltime;
 		public AttackType _Type;

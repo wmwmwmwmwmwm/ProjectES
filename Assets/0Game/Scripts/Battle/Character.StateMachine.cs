@@ -29,6 +29,9 @@ namespace Battle
 		public TransitionAsset _DashAttackAsset;
 		public TransitionAsset _SpecialAttackAsset;
 		public TransitionAsset _JumpSpecialAttackAsset;
+		public TransitionAsset _Skill1Asset;
+		public TransitionAsset _Skill2Asset;
+		public TransitionAsset _UltimateAsset;
 
 		// UpperBodyLayer
 		public TransitionAsset _GuardUpAsset, _GuardDownAsset;
@@ -55,6 +58,9 @@ namespace Battle
 		State _DashAttack;
 		State _SpecialAttack;
 		State _JumpSpecialAttack;
+		State _Skill1;
+		State _Skill2;
+		State _Ultimate;
 
 		void InitFSM()
 		{
@@ -108,6 +114,7 @@ namespace Battle
 				_LimitRotate = true,
 				_CanJump = true,
 				_CanAttack = true,
+				_CancelRootMotion = true,
 			};
 			_Jump = new()
 			{
@@ -199,7 +206,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashAttackAsset,
-				_MoveSpeed = 0.3f,
+				_MoveSpeed = 1f,
 				_Restart = true,
 				_LimitRotate = true,
 				_CanGuard = true,
@@ -212,6 +219,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanGuard = true,
+				_CanAttack = true,
 			};
 			_JumpSpecialAttack = new()
 			{
@@ -223,6 +231,32 @@ namespace Battle
 				_CanJump = true,
 				_CanGuard = true,
 			};
+			_Skill1 = new()
+			{
+				c = this,
+				_Asset = _Skill1Asset,
+				_MoveSpeed = 0.3f,
+				_Restart = true,
+				_LimitRotate = true,
+				_CanAttack = true,
+			};
+			_Skill2 = new()
+			{
+				c = this,
+				_Asset = _Skill2Asset,
+				_MoveSpeed = 0.3f,
+				_Restart = true,
+				_LimitRotate = true,
+				_CanAttack = true,
+			};
+			_Ultimate = new()
+			{
+				c = this,
+				_Asset = _UltimateAsset,
+				_MoveSpeed = 0f,
+				_Restart = true,
+				_LimitRotate = true,
+			};
 
 			// 이벤트
 			_Animancer.Events.TryAdd(_NextAttack, () => _NextAttackAvailable = true);
@@ -232,7 +266,7 @@ namespace Battle
 
 		void UpdateFSM()
 		{
-            State state = _FSM.CurrentState;
+			State state = _FSM.CurrentState;
 			state.UpdateState();
 
 			// 다음 공격
@@ -242,7 +276,7 @@ namespace Battle
 				_AttackIndex++;
 				_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
 				GiveDamage();
-            }
+			}
 
 			// 공격 시 살짝 이동 가능
 			if (state.IsAttack)
@@ -262,8 +296,8 @@ namespace Battle
 
 			// 달리기 멈추기
 			if (_IsRunning)
-            {
-                float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
+			{
+				float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 
 				bool active = degree > 30f && degree < 150f;
 				active &= state._MoveSpeed > 0f || state == _Dash;
@@ -282,25 +316,26 @@ namespace Battle
 					_FSM.TrySetState(_GetUp);
 				}
 			}
-        }
+		}
 
-		void Play_Canceling(State state)
+		void Play_Canceling(State state, bool shadow)
 		{
 			_BaseLayer.Play(state._Asset, 0f);
 			_FSM.ForceSetState(state);
-
+			if (!shadow) return;
 			StartCoroutine(Internal());
+
 			IEnumerator Internal()
 			{
 				// 잔상 생성
 				float duration = 1f;
 				GameObject model = Instantiate(_CancelModel, transform.position, transform.rotation);
-                Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
-                Material whiteMaterial = new(_WhiteMaterial);
+				Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
+				Material whiteMaterial = new(_WhiteMaterial);
 				foreach (Renderer renderer in renderers)
 				{
-                    Material[] mats = renderer.materials;
-                    for (int i = 0; i < mats.Length; i++)
+					Material[] mats = renderer.materials;
+					for (int i = 0; i < mats.Length; i++)
 					{
 						mats[i] = whiteMaterial;
 					}

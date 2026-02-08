@@ -19,6 +19,7 @@ namespace Battle
 		public float _Duration;
 		public bool _LimitRotate;
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
+		public bool _CancelRootMotion;
 		public string _EffectName;
 		public string _AttackName;
 
@@ -76,7 +77,7 @@ namespace Battle
 			// 이펙트
 			if (_EffectData != null)
 			{
-				c.PlayEffect(_EffectData);
+				c.PlayEffect(_EffectData, c);
 			}
 		}
 

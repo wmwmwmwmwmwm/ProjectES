@@ -28,10 +28,12 @@ namespace Battle
 		[HideInInspector] public bool _NextAttackInput;
 		float _AttackMovePercent;
 		float _GuardDownTime;
-		float _HitStunTime;
+		float _HitStunTimer;
+		Vector3 _HitStunPrevVelocity;
 		bool _IsRunning;
 
 		const float TimeDefault = -10000f;
+		const float MoveGraceDuration = 0.1f;
 		const float WallJumpAngleThreshold = 60f;
 
 		public Vector3 Center => transform.position + _Collider.center;
@@ -44,11 +46,10 @@ namespace Battle
 			_Collider = GetComponent<CapsuleCollider>();
 
 			_GuardDownTime = TimeDefault;
-			_HitStunTime = TimeDefault;
 			_LastRequestTime = TimeDefault;
 			_LastCanJumpTime = TimeDefault;
 			_LastDashTime = TimeDefault;
-			_DeaccelTime = TimeDefault;
+			_FadeInDeaccelTime = TimeDefault;
 
 			InitMovement();
 			InitFSM();
@@ -68,14 +69,7 @@ namespace Battle
 			UpdateFSM();
 
 			// 경직
-			if (Time.time - _HitStunTime < 0.03f)
-			{
-				_BaseLayer.Speed = 0f;
-			}
-			else
-			{
-				_BaseLayer.Speed = 1f;
-			}
+			_BaseLayer.Speed = IsHitStun() ? 0f : 1f;
 		}
 
 		public void Move(CallbackContext obj)
@@ -103,15 +97,14 @@ namespace Battle
 
 		public void NormalAttack(CallbackContext obj)
 		{
-			// 공격 가능 상태가 아님
-			if (!_FSM.CurrentState._CanAttack) return;
-
-			// 가드 중
-			if (IsGuarding()) return;
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			if (!canAttack) return;
 
 			// 대쉬 
 			if (IsDashing())
 			{
+				_FadeOutDeaccelTime = Time.time;
 				_FSM.TrySetState(_DashAttack);
 				GiveDamage();
 			}
@@ -141,18 +134,20 @@ namespace Battle
 
 		public void SpecialAttack(CallbackContext obj)
 		{
-			// 공격 가능 상태가 아님
-			if (!_FSM.CurrentState._CanAttack) return;
-
-			// 가드 중
-			if (IsGuarding()) return;
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			if (!canAttack) return;
 
 			// 지상
 			if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
 			{
-				if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._Type == AttackType.Normal)
+				if (_FSM.CurrentState.IsAttack)
 				{
-					Play_Canceling(_SpecialAttack);
+					if (_FSM.CurrentState._AttackData._Type < AttackType.Special)
+					{
+						Play_Canceling(_SpecialAttack, true);
+					}
+					else return;
 				}
 				else
 				{
@@ -168,6 +163,69 @@ namespace Battle
 			}
 		}
 
+		public void Skill1(CallbackContext obj)
+		{
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			if (!canAttack) return;
+
+			if (_FSM.CurrentState.IsAttack)
+			{
+				if (_FSM.CurrentState._AttackData._Type < AttackType.Skill)
+				{
+					Play_Canceling(_Skill1, true);
+				}
+				else return;
+			}
+			else
+			{
+				_FSM.TrySetState(_Skill1);
+			}
+			GiveDamage();
+		}
+
+		public void Skill2(CallbackContext obj)
+		{
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			if (!canAttack) return;
+
+			if (_FSM.CurrentState.IsAttack)
+			{
+				if (_FSM.CurrentState._AttackData._Type < AttackType.Skill)
+				{
+					Play_Canceling(_Skill2, true);
+				}
+				else return;
+			}
+			else
+			{
+				_FSM.TrySetState(_Skill2);
+			}
+			GiveDamage();
+		}
+
+		public void Ultimate(CallbackContext obj)
+		{
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			if (!canAttack) return;
+
+			if (_FSM.CurrentState.IsAttack)
+			{
+				if (_FSM.CurrentState._AttackData._Type < AttackType.Ultimate)
+				{
+					Play_Canceling(_Ultimate, true);
+				}
+				else return;
+			}
+			else
+			{
+				_FSM.TrySetState(_Ultimate);
+			}
+			GiveDamage();
+		}
+
 		public void Guard(CallbackContext obj)
 		{
 			if (!_FSM.CurrentState._CanGuard) return;
@@ -177,7 +235,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
-					Play_Canceling(_Idle);
+					Play_Canceling(_Idle, false);
 				}
 				_UpperBodyLayer.SetWeight(1f);
 				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
@@ -198,17 +256,16 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				AttackCollider attack = Instantiate(_MeleeAttackCollider);
+				AttackCollider attack = Instantiate(_MeleeAttackCollider, transform);
 				attack._Owner = this;
 				attack._StateInfo = _FSM.CurrentState;
-				attack.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
 				// 공중 공격으로 점프
 				RaycastHit[] raycastResults = new RaycastHit[10];
 				int raycastCount = Raycast();
 				List<RaycastHit> hits = raycastResults.ArrayToList(raycastCount);
 				RaycastHit nearest = hits.MinBy(x => x.distance);
-				if (raycastCount > 0)
+				if (raycastCount > 0 && attack._StateInfo._AttackData._Type == AttackType.Normal)
 				{
 					float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
 					if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
@@ -246,13 +303,13 @@ namespace Battle
 					{
 						Character c = col.GetComponent<Character>();
 						c.TakeDamage(this, attack);
-						yield return new WaitForSeconds(0.01f);
+						//yield return new WaitForSeconds(0.03f);
 					}
 				}
 				// 벽에 적중
 				else if (raycastCount > 0) 
 				{
-					PlayEffect123123(_GuardEffectPrefab, nearest.point, Quaternion.identity);
+					PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
 				}
 
 				Destroy(attack.gameObject);
@@ -300,8 +357,8 @@ namespace Battle
 				float delay = attackData._HitDelay - effectData._Delay;
 				yield return new WaitForSeconds(delay);
 
-				_HitStunTime = Time.time;
-				attacker._HitStunTime = Time.time;
+				AddHitStunTimer(attackData._AttackerHitStunDuration);
+				attacker.AddHitStunTimer(attackData._AttackerHitStunDuration);
 
 				// 가드 판정
 				bool guard = IsGuardingEffective();
@@ -309,8 +366,8 @@ namespace Battle
 				guard &= angle < 90f;
 				if (guard)
 				{
-					_DeaccelTime = Time.time;
-					PlayEffect123123(_GuardEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
+					_FadeInDeaccelTime = Time.time;
+					PlayEffect123123(_GuardEffectPrefab, this, hit.point, Quaternion.LookRotation(attackDir));
 				}
 				else
 				{
@@ -326,8 +383,8 @@ namespace Battle
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FSM.TrySetState(_GetDown);
 					}
-					PlayEffect123123(attackData._HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
-					PlayEffect123123(_HitEffectPrefab, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(attackData._HitEffectPrefab, attacker, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(_HitEffectPrefab, this, hit.point, Quaternion.LookRotation(attackDir));
 				}
 
 				// 쓰러짐
@@ -344,20 +401,23 @@ namespace Battle
 				if (wallJump)
 				{
 					attack._AlreadyWallJump = true;
-                    Vector3 jumpDir = attacker.Center - Center;
+					Vector3 jumpDir = attacker.Center - Center;
 					jumpDir.y = 0f;
 					attacker._AttackJumpDirection = jumpDir.normalized;
 				}
 			}
 		}
 
-		public void PlayEffect(Effect info)
+		public void PlayEffect(Effect info, Character owner)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				yield return new WaitForSeconds(info._Delay);
 				GameObject effect = Instantiate(info._EffectPrefab);
+				BattleEffect e = effect.AddComponent<BattleEffect>();
+				e._Owner = owner;
+				e.Init();
 				Data.SetupEffectPosition(effect, info, transform);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
@@ -409,12 +469,29 @@ namespace Battle
 			return guard;
 		}
 
-		public void PlayEffect123123(GameObject prefab, Vector3 pos, Quaternion rot)
+		public bool IsHitStun()
+		{
+			return _HitStunTimer > 0f;
+		}
+
+		public void AddHitStunTimer(float t)
+		{
+			if (_HitStunTimer < 0f)
+			{
+				_HitStunPrevVelocity = _Motor.Velocity;
+			}
+			_HitStunTimer += t;
+		}
+
+		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				GameObject hitEffect = Instantiate(prefab, pos, rot);
+				BattleEffect e = hitEffect.AddComponent<BattleEffect>();
+				e._Owner = owner;
+				e.Init();
 				yield return new WaitForSeconds(3f);
 				Destroy(hitEffect);
 			}

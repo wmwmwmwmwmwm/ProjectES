@@ -31,9 +31,9 @@ namespace Battle
 			Inputs.Guard.performed += _Character.Guard;
 			Inputs.NormalAttack.performed += _Character.NormalAttack;
 			Inputs.SpecialAttack.performed += _Character.SpecialAttack;
-			Inputs.Skill1.performed += _Character.SpecialAttack;
-			Inputs.Skill2.performed += _Character.SpecialAttack;
-			Inputs.Ultimate.performed += _Character.SpecialAttack;
+			Inputs.Skill1.performed += _Character.Skill1;
+			Inputs.Skill2.performed += _Character.Skill2;
+			Inputs.Ultimate.performed += _Character.Ultimate;
 		}
 
 		void OnDisable()
@@ -45,9 +45,9 @@ namespace Battle
 			Inputs.Guard.performed -= _Character.Guard;
 			Inputs.NormalAttack.performed -= _Character.NormalAttack;
 			Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
-			Inputs.Skill1.performed -= _Character.SpecialAttack;
-			Inputs.Skill2.performed -= _Character.SpecialAttack;
-			Inputs.Ultimate.performed -= _Character.SpecialAttack;
+			Inputs.Skill1.performed -= _Character.Skill1;
+			Inputs.Skill2.performed -= _Character.Skill2;
+			Inputs.Ultimate.performed -= _Character.Ultimate;
 		}
 
 		void Update()

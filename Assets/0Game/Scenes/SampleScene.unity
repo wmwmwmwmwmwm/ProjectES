@@ -1120,6 +1120,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -7753,6 +7756,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -9078,6 +9084,7 @@ GameObject:
   - component: {fileID: 400184580}
   - component: {fileID: 400184582}
   - component: {fileID: 400184584}
+  - component: {fileID: 400184585}
   m_Layer: 0
   m_Name: CharacterVirtualCamera
   m_TagString: Untagged
@@ -9182,6 +9189,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: 0
+--- !u!114 &400184585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400184571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 1
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &400382788
 GameObject:
   m_ObjectHideFlags: 0
@@ -9379,6 +9410,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13481,6 +13515,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -13810,6 +13847,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -15089,6 +15129,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -19286,6 +19329,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -22331,6 +22377,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -24524,6 +24573,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -25112,6 +25164,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26200,6 +26255,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -26799,6 +26857,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -29731,6 +29792,12 @@ MonoBehaviour:
   _SpecialAttackAsset: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _JumpSpecialAttackAsset: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
+  _Skill1Asset: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
+  _Skill2Asset: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
+  _UltimateAsset: {fileID: 8147410675851831714, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
@@ -37414,6 +37481,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -39279,6 +39349,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -42522,6 +42595,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -44269,6 +44345,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -49041,6 +49120,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -51331,6 +51413,9 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _Skill1Asset: {fileID: 0}
+  _Skill2Asset: {fileID: 0}
+  _UltimateAsset: {fileID: 0}
   _GuardUpAsset: {fileID: 3254200751114319916, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _GuardDownAsset: {fileID: 6080753252199417512, guid: 13db70fcbf3cffe44bde67632d540860,

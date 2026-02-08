@@ -28,11 +28,9 @@ namespace Battle
 		[HideInInspector] public Vector3 _RootMotionPosDelta;
 		[HideInInspector] public Quaternion _RootMotionRotDelta;
 		[HideInInspector] public Quaternion _AimDestRotation;
-		float _DeaccelTime;
+		float _FadeInDeaccelTime, _FadeOutDeaccelTime;
 		Vector3 _Impulse;
 		Vector3? _AttackJumpDirection;
-
-		const float MoveGraceTime = 0.1f;
 
 		void InitMovement()
 		{
@@ -95,6 +93,18 @@ namespace Battle
 
 		public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
 		{
+			// 경직
+			if (IsHitStun())
+			{
+				currentVelocity = Vector3.zero;
+				_HitStunTimer -= deltaTime;
+				if (_HitStunTimer <= 0f) 
+				{
+					currentVelocity = _HitStunPrevVelocity;
+				}
+				return;
+			}
+
 			Vector3 moveInputVector = _AimDestRotation * _MoveInput;
 			moveInputVector.y = 0f;
 			moveInputVector.Normalize();
@@ -102,16 +112,27 @@ namespace Battle
 			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
 			// 가드 시 감속
-			float deaccelTime = Time.time - _DeaccelTime;
+			float deaccelTime = Time.time - _FadeInDeaccelTime;
 			float duration = 0.6f;
 			if (deaccelTime < duration)
 			{
 				float t = Mathf.InverseLerp(0f, duration, deaccelTime);
-				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
 					currentVelocity.x *= t;
 					currentVelocity.z *= t;
+				}
+			}
+
+			// 대쉬 공격 시 감속
+			float deaccelTime2 = Time.time - _FadeOutDeaccelTime;
+			if (deaccelTime2 < duration)
+			{
+				float t = Mathf.InverseLerp(0f, duration, deaccelTime2);
+				if (_Motor.GroundingStatus.IsStableOnGround)
+				{
+					currentVelocity.x *= 1f - t;
+					currentVelocity.z *= 1f - t;
 				}
 			}
 
@@ -125,7 +146,11 @@ namespace Battle
 			}
 
 			// 루트 모션 이동
-			if (_RootMotionPosDelta != Vector3.zero && _Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
+			bool rootMotion = _RootMotionPosDelta != Vector3.zero;
+			rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
+			rootMotion &= !_Motor.MustUnground();
+			rootMotion &= !_FSM.CurrentState._CancelRootMotion;
+			if (rootMotion)
 			{
 				currentVelocity = _RootMotionPosDelta / deltaTime;
 
@@ -215,7 +240,7 @@ namespace Battle
 
 					// 지상
 					bool groundJump = _Motor.GroundingStatus.IsStableOnGround;
-					groundJump |= Time.time - _LastCanJumpTime <= MoveGraceTime;
+					groundJump |= Time.time - _LastCanJumpTime <= MoveGraceDuration;
 					groundJump &= Vector3.Angle(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal) < _Motor.MaxStableSlopeAngle;
 					if (groundJump)
 					{
@@ -258,7 +283,7 @@ namespace Battle
 								position: Center,
 								rotation: transform.rotation,
 								direction: direction,
-								distance: 0.5f,
+								distance: 1f,
 								closestHit: out RaycastHit hit,
 								hits: _RaycastResults);
 							if (count == 0) continue;
@@ -278,7 +303,7 @@ namespace Battle
 									Direction4.Left => _DashLeftAsset,
 									_ => _DashRightAsset
 								};
-								PlayEffect123123(_GuardEffectPrefab, Bottom, Quaternion.identity);
+								PlayEffect123123(_GuardEffectPrefab, this, Bottom, Quaternion.identity);
 								break;
 							}
 						}
@@ -335,7 +360,7 @@ namespace Battle
 
 		public void AfterCharacterUpdate(float deltaTime)
 		{
-			if (_MoveRequest != MoveRequest.None && Time.time - _LastRequestTime > MoveGraceTime)
+			if (_MoveRequest != MoveRequest.None && Time.time - _LastRequestTime > MoveGraceDuration)
 			{
 				_MoveRequest = MoveRequest.None;
 			}
