@@ -28,7 +28,7 @@ namespace Battle
 		[HideInInspector] public Vector3 _RootMotionPosDelta;
 		[HideInInspector] public Quaternion _RootMotionRotDelta;
 		[HideInInspector] public Quaternion _AimDestRotation;
-		float _FadeInDeaccelTime, _FadeOutDeaccelTime;
+		float _FadeInDeaccelTimer, _FadeOutDeaccelTimer;
 		Vector3 _Impulse;
 		Vector3? _AttackJumpDirection;
 
@@ -64,6 +64,7 @@ namespace Battle
 							_ => _DashRightAsset
 						};
 						_FSM.TrySetState(_Dash);
+						_FadeOutDeaccelTimer = 0f;
 						_Impulse = _MoveSpeed * _Dash._MoveSpeed * _DashDir;
 
 						// 달리기
@@ -111,29 +112,30 @@ namespace Battle
 			float moveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
 			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
-			// 가드 시 감속
-			float deaccelTime = Time.time - _FadeInDeaccelTime;
-			float duration = 0.6f;
-			if (deaccelTime < duration)
+			// 피격 시 감속
+			if (_FadeInDeaccelTimer > 0f)
 			{
-				float t = Mathf.InverseLerp(0f, duration, deaccelTime);
+				float t = _FadeInDeaccelTimer;
+				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
 					currentVelocity.x *= t;
 					currentVelocity.z *= t;
 				}
+				_FadeInDeaccelTimer -= deltaTime;
 			}
 
 			// 대쉬 공격 시 감속
-			float deaccelTime2 = Time.time - _FadeOutDeaccelTime;
-			if (deaccelTime2 < duration)
+			if (_FadeOutDeaccelTimer > 0f)
 			{
-				float t = Mathf.InverseLerp(0f, duration, deaccelTime2);
+				float t = _FadeOutDeaccelTimer;
+				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
 					currentVelocity.x *= 1f - t;
 					currentVelocity.z *= 1f - t;
 				}
+				_FadeOutDeaccelTimer -= deltaTime;
 			}
 
 			// 누운 상태 감속
@@ -149,7 +151,7 @@ namespace Battle
 			bool rootMotion = _RootMotionPosDelta != Vector3.zero;
 			rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
 			rootMotion &= !_Motor.MustUnground();
-			rootMotion &= !_FSM.CurrentState._CancelRootMotion;
+			rootMotion &= _FSM.CurrentState._UseRootMotion;
 			if (rootMotion)
 			{
 				currentVelocity = _RootMotionPosDelta / deltaTime;
@@ -356,7 +358,9 @@ namespace Battle
 				currentVelocity = _Impulse;
 				_Impulse = Vector3.zero;
 			}
+			vvv = currentVelocity;
 		}
+		Vector3 vvv;
 
 		public void AfterCharacterUpdate(float deltaTime)
 		{

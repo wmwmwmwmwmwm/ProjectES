@@ -30,7 +30,7 @@ namespace Battle
 		{
 			// 경직
 			ParticleSystem.MainModule main = _Particle.main;
-			main.simulationSpeed = _Owner.IsHitStun() ? _Speed * 0.3f : _Speed;
+			main.simulationSpeed = _Owner.IsHitStun() ? _Speed * 0f : _Speed;
 		}
 	}
 }

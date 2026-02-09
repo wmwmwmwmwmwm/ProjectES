@@ -306,7 +306,7 @@ MonoBehaviour:
           - 0.7
           _Callbacks: []
           _Names: []
-        _Clip: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
+        _Clip: {fileID: 7400000, guid: bbdd94bf33b17af4fa66f4dc9a483d47, type: 2}
         _NormalizedStartTime: NaN
 --- !u!114 &-79381918844599894
 MonoBehaviour:
@@ -376,6 +376,7 @@ MonoBehaviour:
     - {fileID: 4434167056054037265}
     - {fileID: -8535901853629699081}
     - {fileID: -801447163386857772}
+    - {fileID: 4608948836294961464}
     - {fileID: -8344083487149880939}
     - {fileID: 4652592177226673511}
     - {fileID: 8147410675851831714}
@@ -566,6 +567,34 @@ MonoBehaviour:
           _Callbacks: []
           _Names: []
         _Clip: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &4608948836294961464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GuardAttack
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 7506709136579231875
+  references:
+    version: 2
+    RefIds:
+    - rid: 7506709136579231875
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.05
+        _Speed: 3
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 1913a2d1f3719ff4f8c0cfc6f976018c, type: 3}
         _NormalizedStartTime: NaN
 --- !u!114 &4652592177226673511
 MonoBehaviour:

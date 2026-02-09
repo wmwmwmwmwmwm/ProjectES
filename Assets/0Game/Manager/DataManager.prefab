@@ -133,13 +133,21 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
+  - _Clip: {fileID: 7400000, guid: 1913a2d1f3719ff4f8c0cfc6f976018c, type: 3}
+    _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
+      type: 3}
+    _Pos: {x: 0, y: 1, z: 0.78}
+    _Rot: {x: -104, y: 87, z: 3}
+    _Scale: 1.2
+    _Delay: 0.44
+    _IsLocal: 1
   _Attacks:
   - _Clip: {fileID: 7400000, guid: 01fa12c27ce71ea4382e2c1c8a5a52bd, type: 2}
     _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
       type: 3}
     _HitDelay: 0.215
-    _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.1
+    _DamageDuration: 0.15
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 0
     _ForceUp: 0
     _Cooltime: 0
@@ -149,7 +157,7 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.215
     _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.1
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 0
     _ForceUp: 0
     _Cooltime: 0
@@ -159,7 +167,7 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.3
     _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.1
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 0
     _ForceUp: 0
     _Cooltime: 0
@@ -169,7 +177,7 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.3
     _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.3
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 10
     _ForceUp: 10
     _Cooltime: 0
@@ -179,7 +187,7 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.33
     _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.1
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 10
     _ForceUp: 10
     _Cooltime: 0
@@ -189,9 +197,9 @@ MonoBehaviour:
       type: 3}
     _HitDelay: 0.38
     _DamageDuration: 0.3
-    _AttackerHitStunDuration: 0.1
+    _AttackerHitStunDuration: 0.03
     _ForceForward: 10
-    _ForceUp: 10
+    _ForceUp: 10.27
     _Cooltime: 0
     _Type: 0
   - _Clip: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
@@ -244,3 +252,13 @@ MonoBehaviour:
     _ForceUp: 10
     _Cooltime: 1
     _Type: 3
+  - _Clip: {fileID: 7400000, guid: 1913a2d1f3719ff4f8c0cfc6f976018c, type: 3}
+    _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+      type: 3}
+    _HitDelay: 0.5
+    _DamageDuration: 0.48
+    _AttackerHitStunDuration: 0.03
+    _ForceForward: 30
+    _ForceUp: 0
+    _Cooltime: 0
+    _Type: 0

@@ -17,8 +17,10 @@ namespace Battle
 		public AttackCollider _MeleeAttackCollider;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
+		public ParticleSystem _JustGuardEffect;
 		public GameObject _CancelModel;
 		public Material _WhiteMaterial;
+		public Transform _ModelParent;
 
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
@@ -27,12 +29,15 @@ namespace Battle
 		[HideInInspector] public bool _NextAttackAvailable;
 		[HideInInspector] public bool _NextAttackInput;
 		float _AttackMovePercent;
-		float _GuardDownTime;
+		float _GuardUpTime, _GuardDownTime;
 		float _HitStunTimer;
 		Vector3 _HitStunPrevVelocity;
 		bool _IsRunning;
+		Coroutine _JustGuardCoroutine;
+		bool _JustGuardCancelTrigger;
 
 		const float TimeDefault = -10000f;
+		const float AttackPreDelay = 0.1f;
 		const float MoveGraceDuration = 0.1f;
 		const float WallJumpAngleThreshold = 60f;
 
@@ -45,15 +50,16 @@ namespace Battle
 			_RaycastResults = new RaycastHit[10];
 			_Collider = GetComponent<CapsuleCollider>();
 
+			_GuardUpTime = TimeDefault;
 			_GuardDownTime = TimeDefault;
 			_LastRequestTime = TimeDefault;
 			_LastCanJumpTime = TimeDefault;
 			_LastDashTime = TimeDefault;
-			_FadeInDeaccelTime = TimeDefault;
 
 			InitMovement();
 			InitFSM();
 			_AttackIndex = -1;
+			_JustGuardEffect.gameObject.SetActive(false);
 
 			//StartCoroutine(Internal());
 			//IEnumerator Internal()
@@ -101,10 +107,18 @@ namespace Battle
 			canAttack &= !IsGuarding();
 			if (!canAttack) return;
 
-			// 대쉬 
-			if (IsDashing())
+			// 저스트 가드
+			if (IsJustGuard())
 			{
-				_FadeOutDeaccelTime = Time.time;
+				_FSM.TrySetState(_GuardAttack);
+				GiveDamage();
+				_JustGuardCancelTrigger = true;
+			}
+			// 대쉬 
+			else if (IsDashing())
+			{
+				_FadeOutDeaccelTimer = _DashDuration;
+				DashCancel();
 				_FSM.TrySetState(_DashAttack);
 				GiveDamage();
 			}
@@ -240,6 +254,7 @@ namespace Battle
 				_UpperBodyLayer.SetWeight(1f);
 				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
 				state.Time = 0f;
+				_GuardUpTime = Time.time;
 			}
 
 			// 가드 해제
@@ -260,6 +275,14 @@ namespace Battle
 				attack._Owner = this;
 				attack._StateInfo = _FSM.CurrentState;
 
+				// 공격 최소 딜레이
+				yield return new WaitForSeconds(AttackPreDelay);
+				if (_FSM.CurrentState != attack._StateInfo)
+				{
+					Destroy(attack.gameObject);
+					yield break;
+				}
+
 				// 공중 공격으로 점프
 				RaycastHit[] raycastResults = new RaycastHit[10];
 				int raycastCount = Raycast();
@@ -275,10 +298,7 @@ namespace Battle
 				}
 
 				// 공격 판정 딜레이
-				if (attack._StateInfo._EffectData != null)
-				{
-					yield return new WaitForSeconds(attack._StateInfo._EffectData._Delay);
-				}
+				yield return new WaitForSeconds(attack._StateInfo._EffectData._Delay - AttackPreDelay);
 
 				// 히트 판정
 				int overlapCount = Physics.OverlapBoxNonAlloc(
@@ -303,7 +323,7 @@ namespace Battle
 					{
 						Character c = col.GetComponent<Character>();
 						c.TakeDamage(this, attack);
-						//yield return new WaitForSeconds(0.03f);
+						yield return new WaitForSeconds(attack._StateInfo._AttackData._AttackerHitStunDuration);
 					}
 				}
 				// 벽에 적중
@@ -350,13 +370,15 @@ namespace Battle
 					}
 				}
 
+				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
 				if (effectData == null) yield break;
 				Attack attackData = attack._StateInfo._AttackData;
 				if (attackData == null) yield break;
-				float delay = attackData._HitDelay - effectData._Delay;
+				float delay = attackData._HitDelay - effectData._Delay - AttackPreDelay;
 				yield return new WaitForSeconds(delay);
 
+				// 경직
 				AddHitStunTimer(attackData._AttackerHitStunDuration);
 				attacker.AddHitStunTimer(attackData._AttackerHitStunDuration);
 
@@ -366,7 +388,16 @@ namespace Battle
 				guard &= angle < 90f;
 				if (guard)
 				{
-					_FadeInDeaccelTime = Time.time;
+					// 저스트 가드
+					if (Time.time - _GuardUpTime < 0.3f && Inputs.Guard.IsPressed()) 
+					{
+						JustGuard();
+					}
+					// 일반 가드
+					else
+					{
+						_FadeInDeaccelTimer = 0.6f;
+					}
 					PlayEffect123123(_GuardEffectPrefab, this, hit.point, Quaternion.LookRotation(attackDir));
 				}
 				else
@@ -375,6 +406,7 @@ namespace Battle
 					{
 						_Damage._Asset = _DamageAssets.PickOne();
 						_Damage._Duration = attackData._DamageDuration;
+						_FadeInDeaccelTimer = attackData._DamageDuration;
 						_FSM.TrySetState(_Damage);
 					}
 					else
@@ -395,8 +427,7 @@ namespace Battle
 				}
 
 				// 특수 공격으로 점프
-				bool wallJump = attackData._Type == AttackType.Special;
-				wallJump &= !attacker._Motor.GroundingStatus.IsStableOnGround;
+				bool wallJump = attack._StateInfo == attacker._JumpSpecialAttack;
 				wallJump &= !attack._AlreadyWallJump;
 				if (wallJump)
 				{
@@ -481,6 +512,33 @@ namespace Battle
 				_HitStunPrevVelocity = _Motor.Velocity;
 			}
 			_HitStunTimer += t;
+		}
+
+		void JustGuard()
+		{
+			if (_JustGuardCoroutine != null)
+			{
+				StopCoroutine(_JustGuardCoroutine);
+				_JustGuardCoroutine = null;
+			}
+			_JustGuardCoroutine = StartCoroutine(Internal());
+
+			IEnumerator Internal()
+			{
+				_JustGuardEffect.gameObject.SetActive(true);
+				_JustGuardEffect.Play(true);
+				float start = Time.time;
+				_JustGuardCancelTrigger = false;
+				yield return new WaitUntil(() => Time.time - start > 1.2f || _JustGuardCancelTrigger);
+				_JustGuardCancelTrigger = false;
+				_JustGuardEffect.gameObject.SetActive(false);
+				_JustGuardCoroutine = null;
+			}
+		}
+
+		bool IsJustGuard()
+		{
+			return _JustGuardCoroutine != null;
 		}
 
 		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)

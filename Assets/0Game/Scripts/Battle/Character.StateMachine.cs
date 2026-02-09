@@ -29,6 +29,7 @@ namespace Battle
 		public TransitionAsset _DashAttackAsset;
 		public TransitionAsset _SpecialAttackAsset;
 		public TransitionAsset _JumpSpecialAttackAsset;
+		public TransitionAsset _GuardAttackAsset;
 		public TransitionAsset _Skill1Asset;
 		public TransitionAsset _Skill2Asset;
 		public TransitionAsset _UltimateAsset;
@@ -58,6 +59,7 @@ namespace Battle
 		State _DashAttack;
 		State _SpecialAttack;
 		State _JumpSpecialAttack;
+		State _GuardAttack;
 		State _Skill1;
 		State _Skill2;
 		State _Ultimate;
@@ -114,7 +116,6 @@ namespace Battle
 				_LimitRotate = true,
 				_CanJump = true,
 				_CanAttack = true,
-				_CancelRootMotion = true,
 			};
 			_Jump = new()
 			{
@@ -190,6 +191,7 @@ namespace Battle
 					_LimitRotate = true,
 					_CanGuard = true,
 					_CanAttack = true,
+					_UseRootMotion = true,
 				});
 			}
 			_JumpAttack = new()
@@ -220,6 +222,7 @@ namespace Battle
 				_LimitRotate = true,
 				_CanGuard = true,
 				_CanAttack = true,
+				_UseRootMotion = true,
 			};
 			_JumpSpecialAttack = new()
 			{
@@ -231,6 +234,15 @@ namespace Battle
 				_CanJump = true,
 				_CanGuard = true,
 			};
+			_GuardAttack = new()
+			{
+				c = this,
+				_Asset = _GuardAttackAsset,
+				_MoveSpeed = 0.3f,
+				_Restart = true,
+				_LimitRotate = true,
+				_UseRootMotion = true,
+			};
 			_Skill1 = new()
 			{
 				c = this,
@@ -239,6 +251,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
+				_UseRootMotion = true,
 			};
 			_Skill2 = new()
 			{
@@ -248,6 +261,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
+				_UseRootMotion = true,
 			};
 			_Ultimate = new()
 			{
@@ -256,6 +270,7 @@ namespace Battle
 				_MoveSpeed = 0f,
 				_Restart = true,
 				_LimitRotate = true,
+				_UseRootMotion = true,
 			};
 
 			// 이벤트

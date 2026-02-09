@@ -19,7 +19,7 @@ namespace Battle
 		public float _Duration;
 		public bool _LimitRotate;
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
-		public bool _CancelRootMotion;
+		public bool _UseRootMotion;
 		public string _EffectName;
 		public string _AttackName;
 

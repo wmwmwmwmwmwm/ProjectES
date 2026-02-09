@@ -1058,6 +1058,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -1120,6 +1121,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -1137,7 +1139,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51340013}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -7694,6 +7696,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -7756,6 +7759,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -7773,7 +7777,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343932201}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -9348,6 +9352,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -9410,6 +9415,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -9427,7 +9433,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401194706}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -13453,6 +13459,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -13515,6 +13522,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -13532,7 +13540,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 567691367}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -13785,6 +13793,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -13847,6 +13856,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -13864,7 +13874,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572737833}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -15067,6 +15077,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -15129,6 +15140,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -15146,7 +15158,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 621334919}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -19267,6 +19279,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -19329,6 +19342,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -19346,7 +19360,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796175803}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -22315,6 +22329,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -22377,6 +22392,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -22394,7 +22410,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879975747}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -24511,6 +24527,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -24573,6 +24590,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -24590,7 +24608,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963761351}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -25102,6 +25120,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -25164,6 +25183,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -25181,7 +25201,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980194766}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -26193,6 +26213,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -26255,6 +26276,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -26272,7 +26294,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034916641}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -26795,6 +26817,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -26857,6 +26880,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -26874,7 +26898,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1051672765}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -29701,6 +29725,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 1257286290}
   _WhiteMaterial: {fileID: 2100000, guid: ea2e2f8c68b8fd841b670bd08640b555, type: 2}
   _AttackIndex: 0
@@ -29793,6 +29818,8 @@ MonoBehaviour:
     type: 2}
   _JumpSpecialAttackAsset: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
+  _GuardAttackAsset: {fileID: 4608948836294961464, guid: 13db70fcbf3cffe44bde67632d540860,
+    type: 2}
   _Skill1Asset: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860,
     type: 2}
   _Skill2Asset: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -29819,8 +29846,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1245429862}
   - {fileID: 1257286289}
   - {fileID: 2073875020}
+  - {fileID: 3023598180973830563}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1171284227
@@ -31167,6 +31196,37 @@ Transform:
   m_Children:
   - {fileID: 2016876276}
   m_Father: {fileID: 731967623}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1245429861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245429862}
+  m_Layer: 9
+  m_Name: ModelParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1245429862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245429861}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1171284226}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1246119718
 GameObject:
@@ -37419,6 +37479,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -37481,6 +37542,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -37498,7 +37560,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532144272}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -39287,6 +39349,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -39349,6 +39412,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -39366,7 +39430,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1593155922}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -42533,6 +42597,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -42595,6 +42660,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -42612,7 +42678,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1737106836}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -44283,6 +44349,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -44345,6 +44412,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -44362,7 +44430,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1814071276}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -49058,6 +49126,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -49120,6 +49189,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -49137,7 +49207,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030867347}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -51351,6 +51421,7 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
+  _JustGuardEffect: {fileID: 3023598180973830562}
   _CancelModel: {fileID: 0}
   _WhiteMaterial: {fileID: 0}
   _AttackIndex: 0
@@ -51413,6 +51484,7 @@ MonoBehaviour:
   _DashAttackAsset: {fileID: 0}
   _SpecialAttackAsset: {fileID: 0}
   _JumpSpecialAttackAsset: {fileID: 0}
+  _GuardAttackAsset: {fileID: 0}
   _Skill1Asset: {fileID: 0}
   _Skill2Asset: {fileID: 0}
   _UltimateAsset: {fileID: 0}
@@ -51430,7 +51502,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115295335}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468aca06b919eea42b5de8e09438ad5f, type: 3}
   m_Name: 
@@ -52599,6 +52671,86 @@ Transform:
   - {fileID: 1903018934188986649}
   m_Father: {fileID: 2756700189706981152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3023598180973830561
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1171284226}
+    m_Modifications:
+    - target: {fileID: 2605316480486226868, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_Name
+      value: JustGuard
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f42c40ab13474f34f855f3086c0df0af, type: 3}
+--- !u!198 &3023598180973830562 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2801501505124197854, guid: f42c40ab13474f34f855f3086c0df0af,
+    type: 3}
+  m_PrefabInstance: {fileID: 3023598180973830561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3023598180973830563 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2608294652711728644, guid: f42c40ab13474f34f855f3086c0df0af,
+    type: 3}
+  m_PrefabInstance: {fileID: 3023598180973830561}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3072633267513655800
 Transform:
   m_ObjectHideFlags: 0
