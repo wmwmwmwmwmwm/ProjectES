@@ -1,4 +1,5 @@
 ﻿using Animancer;
+using DG.Tweening;
 using KinematicCharacterController;
 using System;
 using System.Collections;
@@ -20,7 +21,7 @@ namespace Battle
 		public ParticleSystem _JustGuardEffect;
 		public GameObject _CancelModel;
 		public Material _WhiteMaterial;
-		public Transform _ModelParent;
+		public Transform _CooltimeJitter;
 
 		CapsuleCollider _Collider;
 		Collider[] _MeleeAttackResults;
@@ -35,6 +36,7 @@ namespace Battle
 		bool _IsRunning;
 		Coroutine _JustGuardCoroutine;
 		bool _JustGuardCancelTrigger;
+		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 
 		const float TimeDefault = -10000f;
 		const float AttackPreDelay = 0.1f;
@@ -55,6 +57,9 @@ namespace Battle
 			_LastRequestTime = TimeDefault;
 			_LastCanJumpTime = TimeDefault;
 			_LastDashTime = TimeDefault;
+			_LastSkill1Time = TimeDefault;
+			_LastSkill2Time = TimeDefault;
+			_LastUltimateTime = TimeDefault;
 
 			InitMovement();
 			InitFSM();
@@ -105,6 +110,7 @@ namespace Battle
 		{
 			bool canAttack = _FSM.CurrentState._CanAttack;
 			canAttack &= !IsGuarding();
+			canAttack &= !(_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._Type > AttackType.Normal);
 			if (!canAttack) return;
 
 			// 저스트 가드
@@ -183,6 +189,13 @@ namespace Battle
 			canAttack &= !IsGuarding();
 			if (!canAttack) return;
 
+			// 쿨타임
+			if (Time.time - _LastSkill1Time < _Skill1._AttackData._Cooltime)
+			{
+				CooltimeJitter();
+				return;
+			}
+
 			if (_FSM.CurrentState.IsAttack)
 			{
 				if (_FSM.CurrentState._AttackData._Type < AttackType.Skill)
@@ -196,6 +209,7 @@ namespace Battle
 				_FSM.TrySetState(_Skill1);
 			}
 			GiveDamage();
+			_LastSkill1Time = Time.time;
 		}
 
 		public void Skill2(CallbackContext obj)
@@ -203,6 +217,13 @@ namespace Battle
 			bool canAttack = _FSM.CurrentState._CanAttack;
 			canAttack &= !IsGuarding();
 			if (!canAttack) return;
+
+			// 쿨타임
+			if (Time.time - _LastSkill2Time < _Skill2._AttackData._Cooltime)
+			{
+				CooltimeJitter();
+				return;
+			}
 
 			if (_FSM.CurrentState.IsAttack)
 			{
@@ -217,6 +238,7 @@ namespace Battle
 				_FSM.TrySetState(_Skill2);
 			}
 			GiveDamage();
+			_LastSkill2Time = Time.time;
 		}
 
 		public void Ultimate(CallbackContext obj)
@@ -224,6 +246,13 @@ namespace Battle
 			bool canAttack = _FSM.CurrentState._CanAttack;
 			canAttack &= !IsGuarding();
 			if (!canAttack) return;
+
+			// 쿨타임
+			if (Time.time - _LastUltimateTime < _Ultimate._AttackData._Cooltime)
+			{
+				CooltimeJitter();
+				return;
+			}
 
 			if (_FSM.CurrentState.IsAttack)
 			{
@@ -238,6 +267,7 @@ namespace Battle
 				_FSM.TrySetState(_Ultimate);
 			}
 			GiveDamage();
+			_LastUltimateTime = Time.time;
 		}
 
 		public void Guard(CallbackContext obj)
@@ -402,14 +432,25 @@ namespace Battle
 				}
 				else
 				{
+					// 일반 경직
 					if (attackData._ForceForward == 0f && attackData._ForceUp == 0f)
 					{
-						_Damage._Asset = _DamageAssets.PickOne();
 						_Damage._Duration = attackData._DamageDuration;
 						_FadeInDeaccelTimer = attackData._DamageDuration;
+						_Damage._Asset = _DamageAssets.PickOne();
 						_FSM.TrySetState(_Damage);
 					}
-					else
+					// 밀어내기
+					else if (attackData._ForceForward > 0f && attackData._ForceUp == 0f)
+					{
+						_Impulse = new(0f, 0f, attackData._ForceForward);
+						_Impulse = attacker.transform.TransformDirection(_Impulse);
+						_FadeOutDeaccelTimer = attackData._DamageDuration;
+						_Damage._Asset = _DamageAssets.PickOne();
+						_FSM.TrySetState(_Damage);
+					}
+					// 날리기
+					else 
 					{
 						_Impulse = new(0f, attackData._ForceUp, attackData._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
@@ -466,6 +507,16 @@ namespace Battle
 		{
 			if (gameObject.layer == Layer.PlayerLayer) return Layer.EnemyLayerMask;
 			else return Layer.PlayerLayerMask;
+		}
+
+		bool IsMovable()
+		{
+			bool movable = true;
+			movable &= _FSM.CurrentState != _Damage;
+			movable &= _FSM.CurrentState != _GetDown;
+			movable &= _FSM.CurrentState != _GetUp;
+			movable &= _FSM.CurrentState != _Die;
+			return movable;
 		}
 
 		bool IsDashing()
@@ -539,6 +590,12 @@ namespace Battle
 		bool IsJustGuard()
 		{
 			return _JustGuardCoroutine != null;
+		}
+
+		void CooltimeJitter()
+		{
+			_CooltimeJitter.DOShakePosition(0.3f, strength: 0.06f, vibrato: 100, fadeOut: false).SetEase(Ease.Flash)
+				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
 		}
 
 		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)

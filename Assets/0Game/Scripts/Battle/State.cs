@@ -23,6 +23,7 @@ namespace Battle
 		public string _EffectName;
 		public string _AttackName;
 
+		public AnimancerState _State;
 		public Action _OnEnd;
 
 		public Effect _EffectData;
@@ -34,11 +35,41 @@ namespace Battle
 
 		public bool CanExitState => c._FSM.NextState._Priority >= _Priority;
 
+		public void Init()
+		{
+			if (_Asset == null) return;
+
+			_State = c._BaseLayer.Play(_Asset);
+			_EffectData = Data.GetEffectData(_State.Clip);
+			_AttackData = Data.GetAttackData(_State.Clip);
+
+			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
+			if (_Duration == 0f)
+			{
+				_State.Events(c).OnEnd = () =>
+				{
+					c._FSM.ForceSetDefaultState();
+					_OnEnd?.Invoke();
+				};
+			}
+			// Duration < 0f : 루프
+			else if (_Duration < 0f)
+			{
+				_State.Events(c).OnEnd = () =>
+				{
+					_OnEnd?.Invoke();
+				};
+			}
+		}
+
 		public void OnEnterState()
 		{
-			AnimancerState state = c._BaseLayer.Play(_Asset);
-			_EffectData ??= Data.GetEffectData(state.Clip);
-			_AttackData ??= Data.GetAttackData(state.Clip);
+			if (_State == null)
+			{
+				Init();
+			}
+
+			c._BaseLayer.Play(_Asset);
 
 			// 공격이 아니면 N번째 공격 상태 초기화
 			if (!IsAttack)
@@ -50,28 +81,10 @@ namespace Battle
 			c._NextAttackAvailable = false;
 			c._NextAttackInput = false;
 
-			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
-			if (_Duration == 0f)
-			{
-				state.Events(c).OnEnd ??= () =>
-				{
-					c._FSM.ForceSetDefaultState();
-					_OnEnd?.Invoke();
-				};
-			}
-			// Duration < 0f : 루프
-			else if (_Duration < 0f)
-			{
-				state.Events(c).OnEnd ??= () =>
-				{
-					_OnEnd?.Invoke();
-				};
-			}
-
 			// Restart : 같은 State로 다시 들어올 때 애니메이션을 재시작
 			if (_Restart)
 			{
-				state.Time = 0f;
+				_State.Time = 0f;
 			}
 
 			// 이펙트
@@ -92,6 +105,6 @@ namespace Battle
 			}
 		}
 
-        public override string ToString() => _Asset.ToString();
-    }
+		public override string ToString() => _Asset.ToString();
+	}
 }

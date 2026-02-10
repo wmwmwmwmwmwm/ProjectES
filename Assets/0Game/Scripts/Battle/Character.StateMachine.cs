@@ -60,9 +60,9 @@ namespace Battle
 		State _SpecialAttack;
 		State _JumpSpecialAttack;
 		State _GuardAttack;
-		State _Skill1;
-		State _Skill2;
-		State _Ultimate;
+		[HideInInspector] public State _Skill1;
+		[HideInInspector] public State _Skill2;
+		[HideInInspector] public State _Ultimate;
 
 		void InitFSM()
 		{
@@ -84,6 +84,7 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Idle.Init();
 			_Move = new()
 			{
 				c = this,
@@ -96,6 +97,7 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Move.Init();
 			_Run = new()
 			{
 				c = this,
@@ -107,6 +109,7 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Run.Init();
 			_Dash = new()
 			{
 				c = this,
@@ -117,6 +120,7 @@ namespace Battle
 				_CanJump = true,
 				_CanAttack = true,
 			};
+			_Dash.Init();
 			_Jump = new()
 			{
 				c = this,
@@ -128,6 +132,7 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Jump.Init();
 			_Fall = new()
 			{
 				c = this,
@@ -140,6 +145,7 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Fall.Init();
 			_Land = new()
 			{
 				c = this,
@@ -151,12 +157,14 @@ namespace Battle
 				_CanAttack = true,
 				_CanGuard = true,
 			};
+			_Land.Init();
 			_Damage = new()
 			{
 				c = this,
 				_Priority = 1,
 				_MoveSpeed = 0.6f,
 			};
+			_Damage.Init();
 			_GetDown = new()
 			{
 				c = this,
@@ -164,12 +172,14 @@ namespace Battle
 				_Priority = 2,
 				_Duration = float.MaxValue,
 			};
+			_GetDown.Init();
 			_GetUp = new()
 			{
 				c = this,
 				_Asset = _GetUpAsset,
 				_Priority = 2,
 			};
+			_GetUp.Init();
 			_Die = new()
 			{
 				c = this,
@@ -177,12 +187,13 @@ namespace Battle
 				_Priority = 3,
 				_Duration = float.MaxValue,
 			};
+			_Die.Init();
 			_NormalAttacks = new();
 			for (int i = 0; i < _NormalAttackAssets.Count; i++)
 			{
 				TransitionAsset asset = _NormalAttackAssets[i];
 				bool isLast = i == _NormalAttackAssets.Count - 1;
-				_NormalAttacks.Add(new()
+				State newState = new()
 				{
 					c = this,
 					_Asset = asset,
@@ -192,7 +203,9 @@ namespace Battle
 					_CanGuard = true,
 					_CanAttack = true,
 					_UseRootMotion = true,
-				});
+				};
+				newState.Init();
+				_NormalAttacks.Add(newState);
 			}
 			_JumpAttack = new()
 			{
@@ -204,6 +217,7 @@ namespace Battle
 				_CanJump = true,
 				_CanGuard = true,
 			};
+			_JumpAttack.Init();
 			_DashAttack = new()
 			{
 				c = this,
@@ -213,6 +227,7 @@ namespace Battle
 				_LimitRotate = true,
 				_CanGuard = true,
 			};
+			_DashAttack.Init();
 			_SpecialAttack = new()
 			{
 				c = this,
@@ -224,6 +239,7 @@ namespace Battle
 				_CanAttack = true,
 				_UseRootMotion = true,
 			};
+			_SpecialAttack.Init();
 			_JumpSpecialAttack = new()
 			{
 				c = this,
@@ -234,6 +250,7 @@ namespace Battle
 				_CanJump = true,
 				_CanGuard = true,
 			};
+			_JumpSpecialAttack.Init();
 			_GuardAttack = new()
 			{
 				c = this,
@@ -243,6 +260,7 @@ namespace Battle
 				_LimitRotate = true,
 				_UseRootMotion = true,
 			};
+			_GuardAttack.Init();
 			_Skill1 = new()
 			{
 				c = this,
@@ -253,6 +271,7 @@ namespace Battle
 				_CanAttack = true,
 				_UseRootMotion = true,
 			};
+			_Skill1.Init();
 			_Skill2 = new()
 			{
 				c = this,
@@ -263,6 +282,7 @@ namespace Battle
 				_CanAttack = true,
 				_UseRootMotion = true,
 			};
+			_Skill2.Init();
 			_Ultimate = new()
 			{
 				c = this,
@@ -272,6 +292,7 @@ namespace Battle
 				_LimitRotate = true,
 				_UseRootMotion = true,
 			};
+			_Ultimate.Init();
 
 			// 이벤트
 			_Animancer.Events.TryAdd(_NextAttack, () => _NextAttackAvailable = true);

@@ -85,10 +85,12 @@ namespace Battle
 			{
 				currentRotation *= _RootMotionRotDelta;
 			}
-			else if (!_FSM.CurrentState._LimitRotate)
+			else 
 			{
 				Quaternion destRot = Quaternion.Euler(0f, _AimDestRotation.eulerAngles.y, 0f);
-				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, _RotationSpeed * deltaTime);
+				float delta = _RotationSpeed * deltaTime;
+				delta *= _FSM.CurrentState._LimitRotate ? _AttackMovePercent : 1f;
+				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, delta);
 			}
 		}
 
@@ -99,7 +101,7 @@ namespace Battle
 			{
 				currentVelocity = Vector3.zero;
 				_HitStunTimer -= deltaTime;
-				if (_HitStunTimer <= 0f) 
+				if (_HitStunTimer <= 0f)
 				{
 					currentVelocity = _HitStunPrevVelocity;
 				}
@@ -112,28 +114,32 @@ namespace Battle
 			float moveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
 			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
-			// 피격 시 감속
+			// 페이드 인 감속
 			if (_FadeInDeaccelTimer > 0f)
 			{
 				float t = _FadeInDeaccelTimer;
 				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
-					currentVelocity.x *= t;
-					currentVelocity.z *= t;
+					Vector2 xz = new(currentVelocity.x, currentVelocity.z);
+					xz = Vector2.ClampMagnitude(xz, moveSpeed * t);
+					currentVelocity.x = xz.x;
+					currentVelocity.z = xz.y;
 				}
 				_FadeInDeaccelTimer -= deltaTime;
 			}
 
-			// 대쉬 공격 시 감속
+			// 페이드 아웃 감속
 			if (_FadeOutDeaccelTimer > 0f)
 			{
 				float t = _FadeOutDeaccelTimer;
 				moveAccel *= t;
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
-					currentVelocity.x *= 1f - t;
-					currentVelocity.z *= 1f - t;
+					Vector2 xz = new(currentVelocity.x, currentVelocity.z);
+					xz = Vector2.MoveTowards(xz, Vector2.zero, xz.magnitude / _FadeOutDeaccelTimer * deltaTime);
+					currentVelocity.x = xz.x;
+					currentVelocity.z = xz.y;
 				}
 				_FadeOutDeaccelTimer -= deltaTime;
 			}
@@ -147,82 +153,8 @@ namespace Battle
 				currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0f, 50f * deltaTime);
 			}
 
-			// 루트 모션 이동
-			bool rootMotion = _RootMotionPosDelta != Vector3.zero;
-			rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
-			rootMotion &= !_Motor.MustUnground();
-			rootMotion &= _FSM.CurrentState._UseRootMotion;
-			if (rootMotion)
-			{
-				currentVelocity = _RootMotionPosDelta / deltaTime;
-
-				// 전후 이동으로 강도 조정
-				currentVelocity *= _MoveInput.z + 1f;
-
-				// 공격 시 살짝 이동
-				currentVelocity += moveSpeed * _AttackMovePercent * moveInputVector;
-
-				currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
-			}
-			// 대쉬
-			else if (IsDashing()) { }
-			// 지상 이동
-			else if (_Motor.GroundingStatus.IsStableOnGround)
-			{
-				Vector3 targetVelocity = moveInputVector * moveSpeed;
-				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, moveAccel * deltaTime);
-
-				if (currentVelocity.sqrMagnitude > 0.01f)
-				{
-					State moveState = _IsRunning ? _Run : _Move;
-					_FSM.TrySetState(moveState);
-					Vector3 localMoveDirection3 = transform.InverseTransformDirection(currentVelocity);
-					Vector2 localMoveDirection2 = new(localMoveDirection3.x, localMoveDirection3.z);
-					_MoveParameter.TargetValue = localMoveDirection2.normalized;
-				}
-				else
-				{
-					_FSM.TrySetState(_Idle);
-				}
-
-				// 착지
-				if (!_Motor.LastGroundingStatus.IsStableOnGround)
-				{
-					_FSM.TrySetState(_Land);
-				}
-			}
-			// 공중 이동
-			else
-			{
-				float airAccel = moveAccel * 0.2f;
-				Vector3 addedVelocity = airAccel * deltaTime * moveInputVector;
-				addedVelocity = Vector3.ProjectOnPlane(addedVelocity, _Motor.CharacterUp);
-				Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
-
-				// 공중에서 가속
-				if (currentVelocityOnInputsPlane.magnitude < moveSpeed)
-				{
-					Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, moveSpeed);
-					addedVelocity = newTotal - currentVelocityOnInputsPlane;
-				}
-				else
-				{
-					if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
-					{
-						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
-					}
-				}
-
-				// 공중에서 오르기 방지
-				if (_Motor.GroundingStatus.FoundAnyGround)
-				{
-					Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
-					addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
-				}
-
-				currentVelocity += addedVelocity;
-				_FSM.TrySetState(_Fall);
-			}
+			// MoveInput 관련
+			InputMoveProcess(ref currentVelocity);
 
 			// 중력
 			if (!_Motor.GroundingStatus.IsStableOnGround)
@@ -358,9 +290,92 @@ namespace Battle
 				currentVelocity = _Impulse;
 				_Impulse = Vector3.zero;
 			}
-			vvv = currentVelocity;
+
+			void InputMoveProcess(ref Vector3 currentVelocity)
+			{
+				if (!IsMovable()) return;
+
+				// 루트 모션 이동
+				bool rootMotion = _RootMotionPosDelta != Vector3.zero;
+				rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
+				rootMotion &= !_Motor.MustUnground();
+				rootMotion &= _FSM.CurrentState._UseRootMotion;
+				if (rootMotion)
+				{
+					currentVelocity = _RootMotionPosDelta / deltaTime;
+
+					// 전후 이동으로 강도 조정
+					currentVelocity *= _MoveInput.z + 1f;
+
+					// 공격 시 살짝 이동
+					currentVelocity += moveSpeed * _AttackMovePercent * moveInputVector;
+
+					currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
+					return;
+				}
+
+				// 대쉬
+				if (IsDashing()) return;
+
+				// 지상 이동
+				if (_Motor.GroundingStatus.IsStableOnGround)
+				{
+					Vector3 targetVelocity = moveInputVector * moveSpeed;
+					currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, moveAccel * deltaTime);
+
+					if (currentVelocity.sqrMagnitude > 0.01f)
+					{
+						State moveState = _IsRunning ? _Run : _Move;
+						_FSM.TrySetState(moveState);
+						Vector3 localMoveDirection3 = transform.InverseTransformDirection(currentVelocity);
+						Vector2 localMoveDirection2 = new(localMoveDirection3.x, localMoveDirection3.z);
+						_MoveParameter.TargetValue = localMoveDirection2.normalized;
+					}
+					else
+					{
+						_FSM.TrySetState(_Idle);
+					}
+
+					// 착지
+					if (!_Motor.LastGroundingStatus.IsStableOnGround)
+					{
+						_FSM.TrySetState(_Land);
+					}
+				}
+				// 공중 이동
+				else
+				{
+					float airAccel = moveAccel * 0.2f;
+					Vector3 addedVelocity = airAccel * deltaTime * moveInputVector;
+					addedVelocity = Vector3.ProjectOnPlane(addedVelocity, _Motor.CharacterUp);
+					Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, _Motor.CharacterUp);
+
+					// 공중에서 가속
+					if (currentVelocityOnInputsPlane.magnitude < moveSpeed)
+					{
+						Vector3 newTotal = Vector3.ClampMagnitude(currentVelocityOnInputsPlane + addedVelocity, moveSpeed);
+						addedVelocity = newTotal - currentVelocityOnInputsPlane;
+					}
+					else
+					{
+						if (Vector3.Dot(currentVelocityOnInputsPlane, addedVelocity) > 0f)
+						{
+							addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
+						}
+					}
+
+					// 공중에서 오르기 방지
+					if (_Motor.GroundingStatus.FoundAnyGround)
+					{
+						Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
+						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
+					}
+
+					currentVelocity += addedVelocity;
+					_FSM.TrySetState(_Fall);
+				}
+			}
 		}
-		Vector3 vvv;
 
 		public void AfterCharacterUpdate(float deltaTime)
 		{
