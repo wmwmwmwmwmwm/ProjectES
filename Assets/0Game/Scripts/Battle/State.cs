@@ -81,16 +81,13 @@ namespace Battle
 			c._NextAttackAvailable = false;
 			c._NextAttackInput = false;
 
+			// 벽 점프 초기화
+			c._AlreadyWallJump = false;
+
 			// Restart : 같은 State로 다시 들어올 때 애니메이션을 재시작
 			if (_Restart)
 			{
 				_State.Time = 0f;
-			}
-
-			// 이펙트
-			if (_EffectData != null)
-			{
-				c.PlayEffect(_EffectData, c);
 			}
 		}
 

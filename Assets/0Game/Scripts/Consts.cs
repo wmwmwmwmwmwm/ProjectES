@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 
+public static class Const
+{
+	public const float TimeDefault = -10000f;
+}
+
 public static class SceneName
 {
 	public const string Title = "Bg_Title";

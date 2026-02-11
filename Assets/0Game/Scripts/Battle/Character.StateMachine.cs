@@ -5,7 +5,6 @@ using Animancer;
 using Animancer.FSM;
 using System.Linq;
 using DG.Tweening;
-using Animancer.TransitionLibraries;
 
 namespace Battle
 {
@@ -216,6 +215,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanJump = true,
+				_CanAttack = true,
 				_CanGuard = true,
 			};
 			_JumpAttack.Init();
@@ -226,6 +226,7 @@ namespace Battle
 				_MoveSpeed = 1f,
 				_Restart = true,
 				_LimitRotate = true,
+				_CanAttack = true,
 				_CanGuard = true,
 			};
 			_DashAttack.Init();
@@ -335,7 +336,6 @@ namespace Battle
 			if (_IsRunning)
 			{
 				float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
-
 				bool active = degree > 30f && degree < 150f;
 				active &= state._MoveSpeed > 0f || state == _Dash;
 				active &= !state.IsAttack;

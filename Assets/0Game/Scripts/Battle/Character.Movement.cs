@@ -19,7 +19,7 @@ namespace Battle
 
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
-		Vector3 _MoveInput;
+		[HideInInspector] public Vector3 _MoveInput;
 		MoveRequest _MoveRequest;
 		float _LastRequestTime;
 		float _LastCanJumpTime;

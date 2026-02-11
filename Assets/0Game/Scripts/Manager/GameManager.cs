@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class GameManager : Singleton<GameManager>
 {
+	public int _FrameRate;
 	public float _TimeScale;
 
 	[Header("디버그")]
@@ -25,6 +26,7 @@ public class GameManager : Singleton<GameManager>
 
 	void Update()
 	{
+		Application.targetFrameRate = _FrameRate;
 		Time.timeScale = _TimeScale;
 		Time.fixedDeltaTime = Mathf.Min(Time.deltaTime, _FixedDeltaTime);
 	}

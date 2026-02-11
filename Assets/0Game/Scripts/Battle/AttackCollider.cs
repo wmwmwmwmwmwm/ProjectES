@@ -11,6 +11,5 @@ namespace Battle
 
 		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;
-		[HideInInspector] public bool _AlreadyWallJump;
 	}
 }

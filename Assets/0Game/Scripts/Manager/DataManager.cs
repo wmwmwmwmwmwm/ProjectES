@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using Battle;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,16 +25,19 @@ public class DataManager : Singleton<DataManager>
 	public class Attack
 	{
 		public AnimationClip _Clip;
+		public AttackCollider _AttackColliderPrefab;
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
 		public float _DamageDuration, _AttackerHitStunDuration;
 		public float _ForceForward, _ForceUp;
 		public float _Cooltime;
-		public AttackType _Type;
+		public AttackSkillType _SkillType;
+		public AttackRangeType _RangeType;
+		public AttackAreaType _AreaType;
 	}
 	public List<Attack> _Attacks;
 
-	public Dictionary<AnimationClip, Effect> _EffectDict;
+    public Dictionary<AnimationClip, Effect> _EffectDict;
 	public Dictionary<AnimationClip, Attack> _AttackDict;
 
 	protected override void Init()

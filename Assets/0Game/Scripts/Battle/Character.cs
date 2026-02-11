@@ -15,7 +15,6 @@ namespace Battle
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
 		public VRMBlendShapeProxy _BlendShapeProxy;
-		public AttackCollider _MeleeAttackCollider;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
 		public ParticleSystem _JustGuardEffect;
@@ -37,8 +36,10 @@ namespace Battle
 		Coroutine _JustGuardCoroutine;
 		bool _JustGuardCancelTrigger;
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
+		[HideInInspector] public bool _AlreadyWallJump;
 
-		const float TimeDefault = -10000f;
+		public event Action OnTakeDamage;
+
 		const float AttackPreDelay = 0.1f;
 		const float MoveGraceDuration = 0.1f;
 		const float WallJumpAngleThreshold = 60f;
@@ -52,14 +53,14 @@ namespace Battle
 			_RaycastResults = new RaycastHit[10];
 			_Collider = GetComponent<CapsuleCollider>();
 
-			_GuardUpTime = TimeDefault;
-			_GuardDownTime = TimeDefault;
-			_LastRequestTime = TimeDefault;
-			_LastCanJumpTime = TimeDefault;
-			_LastDashTime = TimeDefault;
-			_LastSkill1Time = TimeDefault;
-			_LastSkill2Time = TimeDefault;
-			_LastUltimateTime = TimeDefault;
+			_GuardUpTime = Const.TimeDefault;
+			_GuardDownTime = Const.TimeDefault;
+			_LastRequestTime = Const.TimeDefault;
+			_LastCanJumpTime = Const.TimeDefault;
+			_LastDashTime = Const.TimeDefault;
+			_LastSkill1Time = Const.TimeDefault;
+			_LastSkill2Time = Const.TimeDefault;
+			_LastUltimateTime = Const.TimeDefault;
 
 			InitMovement();
 			InitFSM();
@@ -81,11 +82,6 @@ namespace Battle
 
 			// 경직
 			_BaseLayer.Speed = IsHitStun() ? 0f : 1f;
-		}
-
-		public void Move(CallbackContext obj)
-		{
-			_MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
 		}
 
 		public void Dash(Direction4 dir)
@@ -110,7 +106,7 @@ namespace Battle
 		{
 			bool canAttack = _FSM.CurrentState._CanAttack;
 			canAttack &= !IsGuarding();
-			canAttack &= !(_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._Type > AttackType.Normal);
+			canAttack &= !(_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._SkillType > AttackSkillType.Normal);
 			if (!canAttack) return;
 
 			// 저스트 가드
@@ -163,7 +159,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
-					if (_FSM.CurrentState._AttackData._Type < AttackType.Special)
+					if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Special)
 					{
 						Play_Canceling(_SpecialAttack, true);
 					}
@@ -198,7 +194,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._Type < AttackType.Skill)
+				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill1, true);
 				}
@@ -227,7 +223,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._Type < AttackType.Skill)
+				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill2, true);
 				}
@@ -256,7 +252,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._Type < AttackType.Ultimate)
+				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Ultimate)
 				{
 					Play_Canceling(_Ultimate, true);
 				}
@@ -296,14 +292,17 @@ namespace Battle
 			}
 		}
 
-		public void GiveDamage()
+		void GiveDamage()
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				AttackCollider attack = Instantiate(_MeleeAttackCollider, transform);
+				State state = _FSM.CurrentState;
+				AttackCollider attack = Instantiate(state._AttackData._AttackColliderPrefab, transform);
 				attack._Owner = this;
-				attack._StateInfo = _FSM.CurrentState;
+				attack._StateInfo = state;
+				Effect effectData = state._EffectData;
+				Attack attackData = state._AttackData;
 
 				// 공격 최소 딜레이
 				yield return new WaitForSeconds(AttackPreDelay);
@@ -315,10 +314,15 @@ namespace Battle
 
 				// 공중 공격으로 점프
 				RaycastHit[] raycastResults = new RaycastHit[10];
-				int raycastCount = Raycast();
+				int raycastCount = Physics.RaycastNonAlloc(
+						origin: Center,
+						direction: _Motor.CharacterForward,
+						results: raycastResults,
+						maxDistance: attack._Collider.size.z,
+						layerMask: Layer.TerrainLayerMask);
 				List<RaycastHit> hits = raycastResults.ArrayToList(raycastCount);
 				RaycastHit nearest = hits.MinBy(x => x.distance);
-				if (raycastCount > 0 && attack._StateInfo._AttackData._Type == AttackType.Normal)
+				if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
 				{
 					float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
 					if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
@@ -328,7 +332,10 @@ namespace Battle
 				}
 
 				// 공격 판정 딜레이
-				yield return new WaitForSeconds(attack._StateInfo._EffectData._Delay - AttackPreDelay);
+				yield return new WaitForSeconds(effectData._Delay - AttackPreDelay);
+
+				// 이펙트
+				PlayEffect(effectData);
 
 				// 히트 판정
 				int overlapCount = Physics.OverlapBoxNonAlloc(
@@ -353,7 +360,7 @@ namespace Battle
 					{
 						Character c = col.GetComponent<Character>();
 						c.TakeDamage(this, attack);
-						yield return new WaitForSeconds(attack._StateInfo._AttackData._AttackerHitStunDuration);
+						yield return new WaitForSeconds(attackData._AttackerHitStunDuration);
 					}
 				}
 				// 벽에 적중
@@ -363,16 +370,55 @@ namespace Battle
 				}
 
 				Destroy(attack.gameObject);
+			}
+		}
 
-				int Raycast()
+		void GiveDamage2()
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				State state = _FSM.CurrentState;
+				AttackCollider attack = Instantiate(state._AttackData._AttackColliderPrefab, transform);
+				attack._Owner = this;
+				attack._StateInfo = state;
+				Effect effectData = state._EffectData;
+				Attack attackData = state._AttackData;
+
+				// 딜레이
+				yield return new WaitForSeconds(effectData._Delay);
+
+				// 이펙트
+				PlayEffect(effectData);
+
+				// 히트 판정
+				int overlapCount = Physics.OverlapBoxNonAlloc(
+					center: attack._Collider.GetCenter(),
+					halfExtents: attack._Collider.size / 2f,
+					results: _MeleeAttackResults,
+					orientation: attack.transform.rotation,
+					mask: GetOppositeLayerMask());
+
+				// 공격 적중
+				if (overlapCount > 0)
 				{
-					return Physics.RaycastNonAlloc(
-						origin: Center,
-						direction: _Motor.CharacterForward,
-						results: raycastResults,
-						maxDistance: attack._Collider.size.z,
-						layerMask: Layer.TerrainLayerMask);
+					List<Collider> overlaps = _MeleeAttackResults.ArrayToList(overlapCount);
+					overlaps.Sort((a, b) =>
+					{
+						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
+						float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
+						float v = (aDistance - bDistance) * 100f;
+						return (int)v;
+					});
+					foreach (Collider col in overlaps)
+					{
+						Character c = col.GetComponent<Character>();
+						c.TakeDamage(this, attack);
+						yield return new WaitForSeconds(attackData._AttackerHitStunDuration);
+					}
 				}
+
+				Destroy(attack.gameObject);
 			}
 		}
 
@@ -381,6 +427,8 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
+				OnTakeDamage?.Invoke();
+
 				Vector3 attackDir = Center - attacker.Center;
 				attackDir.Normalize();
 				int count = Physics.RaycastNonAlloc(
@@ -402,9 +450,7 @@ namespace Battle
 
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
-				if (effectData == null) yield break;
 				Attack attackData = attack._StateInfo._AttackData;
-				if (attackData == null) yield break;
 				float delay = attackData._HitDelay - effectData._Delay - AttackPreDelay;
 				yield return new WaitForSeconds(delay);
 
@@ -469,10 +515,10 @@ namespace Battle
 
 				// 특수 공격으로 점프
 				bool wallJump = attack._StateInfo == attacker._JumpSpecialAttack;
-				wallJump &= !attack._AlreadyWallJump;
+				wallJump &= !_AlreadyWallJump;
 				if (wallJump)
 				{
-					attack._AlreadyWallJump = true;
+					_AlreadyWallJump = true;
 					Vector3 jumpDir = attacker.Center - Center;
 					jumpDir.y = 0f;
 					attacker._AttackJumpDirection = jumpDir.normalized;
@@ -480,15 +526,14 @@ namespace Battle
 			}
 		}
 
-		public void PlayEffect(Effect info, Character owner)
+		void PlayEffect(Effect info)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				yield return new WaitForSeconds(info._Delay);
 				GameObject effect = Instantiate(info._EffectPrefab);
 				BattleEffect e = effect.AddComponent<BattleEffect>();
-				e._Owner = owner;
+				e._Owner = this;
 				e.Init();
 				Data.SetupEffectPosition(effect, info, transform);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
@@ -526,7 +571,7 @@ namespace Battle
 
 		void DashCancel()
 		{
-			_LastDashTime = TimeDefault;
+			_LastDashTime = Const.TimeDefault;
 		}
 
 		bool IsGuarding()

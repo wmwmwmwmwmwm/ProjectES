@@ -24,7 +24,7 @@ namespace Battle
 
 		void OnEnable()
 		{
-			Inputs.Movement.performed += _Character.Move;
+			Inputs.Movement.performed += Move;
 			Inputs.Look.performed += Look;
 			Inputs.Dash += _Character.Dash;
 			Inputs.Jump.performed += _Character.Jump;
@@ -38,7 +38,7 @@ namespace Battle
 
 		void OnDisable()
 		{
-			Inputs.Movement.performed -= _Character.Move;
+			Inputs.Movement.performed -= Move;
 			Inputs.Look.performed -= Look;
 			Inputs.Dash -= _Character.Dash;
 			Inputs.Jump.performed -= _Character.Jump;
@@ -52,8 +52,8 @@ namespace Battle
 
 		void Update()
 		{
-            // 카메라 위치
-            float y = Mathf.MoveTowards(_CameraThirdPerson.ShoulderOffset.y, _Character._Motor.GroundingStatus.FoundAnyGround ? 1.5f : 1.5f-0.5f, 5f * Time.deltaTime);
+			// 카메라 위치
+			float y = Mathf.MoveTowards(_CameraThirdPerson.ShoulderOffset.y, _Character._Motor.GroundingStatus.FoundAnyGround ? 1.5f : 1f, 5f * Time.deltaTime);
 			_CameraThirdPerson.ShoulderOffset.y = y;
 
 			// 카메라 회전
@@ -71,6 +71,11 @@ namespace Battle
 			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
 			_CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
 			_Character._AimDestRotation = _CameraTarget.rotation;
+		}
+
+		void Move(CallbackContext obj)
+		{
+			_Character._MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
 		}
 
 		void Look(CallbackContext obj)
