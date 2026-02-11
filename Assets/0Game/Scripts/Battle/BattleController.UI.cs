@@ -5,7 +5,7 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public partial class BattleController : MonoBehaviour
+	public partial class BattleController 
 	{
 		[Header("UI")]
 		public SkillIcon _Skill1SkillIcon;

@@ -576,6 +576,8 @@ namespace Battle
 
 			IEnumerator Internal()
 			{
+				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
+				state.Time = 0f;
 				_JustGuardEffect.gameObject.SetActive(true);
 				_JustGuardEffect.Play(true);
 				float start = Time.time;

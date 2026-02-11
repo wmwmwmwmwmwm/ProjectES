@@ -5,7 +5,7 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public partial class BattleController : MonoBehaviour
+	public partial class BattleController : SingleInstance<BattleController>
 	{
 		public Transform _MainCamera, _BackgroundCamera;
 		public Transform _BgSky, _BgGround, _BgNear;

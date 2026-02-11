@@ -5,6 +5,7 @@ using Animancer;
 using Animancer.FSM;
 using System.Linq;
 using DG.Tweening;
+using Animancer.TransitionLibraries;
 
 namespace Battle
 {
