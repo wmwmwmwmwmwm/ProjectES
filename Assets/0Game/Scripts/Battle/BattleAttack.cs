@@ -5,10 +5,8 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public class AttackCollider : MonoBehaviour
+	public class BattleAttack : MonoBehaviour
 	{
-		public BoxCollider _Collider;
-
 		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;
 	}

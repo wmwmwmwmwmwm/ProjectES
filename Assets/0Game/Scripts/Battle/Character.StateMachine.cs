@@ -58,7 +58,7 @@ namespace Battle
 		State _JumpAttack;
 		State _DashAttack;
 		State _SpecialAttack;
-		State _JumpSpecialAttack;
+		[HideInInspector] public State _JumpSpecialAttack;
 		State _GuardAttack;
 		[HideInInspector] public State _Skill1;
 		[HideInInspector] public State _Skill2;
@@ -313,7 +313,7 @@ namespace Battle
 				_NextAttackInput = false;
 				_AttackIndex++;
 				_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
-				GiveDamage();
+				Attack();
 			}
 
 			// 공격 시 살짝 이동 가능

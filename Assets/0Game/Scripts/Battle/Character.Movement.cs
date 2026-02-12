@@ -305,7 +305,10 @@ namespace Battle
 					currentVelocity = _RootMotionPosDelta / deltaTime;
 
 					// 전후 이동으로 강도 조정
-					currentVelocity *= _MoveInput.z + 1f;
+					if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._SkillType <= AttackSkillType.Special)
+					{
+						currentVelocity *= _MoveInput.z + 1f;
+					}
 
 					// 공격 시 살짝 이동
 					currentVelocity += moveSpeed * _AttackMovePercent * moveInputVector;

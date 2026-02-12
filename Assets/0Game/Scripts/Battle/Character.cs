@@ -23,7 +23,6 @@ namespace Battle
 		public Transform _CooltimeJitter;
 
 		CapsuleCollider _Collider;
-		Collider[] _MeleeAttackResults;
 		RaycastHit[] _RaycastResults;
 		[HideInInspector] public int _AttackIndex;
 		[HideInInspector] public bool _NextAttackAvailable;
@@ -49,7 +48,6 @@ namespace Battle
 
 		void Start()
 		{
-			_MeleeAttackResults = new Collider[100];
 			_RaycastResults = new RaycastHit[10];
 			_Collider = GetComponent<CapsuleCollider>();
 
@@ -113,7 +111,7 @@ namespace Battle
 			if (IsJustGuard())
 			{
 				_FSM.TrySetState(_GuardAttack);
-				GiveDamage();
+				Attack();
 				_JustGuardCancelTrigger = true;
 			}
 			// 대쉬 
@@ -122,7 +120,7 @@ namespace Battle
 				_FadeOutDeaccelTimer = _DashDuration;
 				DashCancel();
 				_FSM.TrySetState(_DashAttack);
-				GiveDamage();
+				Attack();
 			}
 			// 지상
 			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
@@ -132,7 +130,7 @@ namespace Battle
 				{
 					_AttackIndex = 0;
 					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
-					GiveDamage();
+					Attack();
 				}
 				// 2~타 공격
 				else
@@ -141,10 +139,10 @@ namespace Battle
 				}
 			}
 			// 공중
-			else
+			else if (_FSM.CurrentState != _JumpAttack) 
 			{
 				_FSM.TrySetState(_JumpAttack);
-				GiveDamage();
+				Attack();
 			}
 		}
 
@@ -169,13 +167,13 @@ namespace Battle
 				{
 					_FSM.TrySetState(_SpecialAttack);
 				}
-				GiveDamage();
+				Attack();
 			}
 			// 공중
 			else
 			{
 				_FSM.TrySetState(_JumpSpecialAttack);
-				GiveDamage();
+				Attack();
 			}
 		}
 
@@ -204,7 +202,7 @@ namespace Battle
 			{
 				_FSM.TrySetState(_Skill1);
 			}
-			GiveDamage();
+			Attack();
 			_LastSkill1Time = Time.time;
 		}
 
@@ -233,7 +231,7 @@ namespace Battle
 			{
 				_FSM.TrySetState(_Skill2);
 			}
-			GiveDamage();
+			Attack();
 			_LastSkill2Time = Time.time;
 		}
 
@@ -262,7 +260,7 @@ namespace Battle
 			{
 				_FSM.TrySetState(_Ultimate);
 			}
-			GiveDamage();
+			Attack();
 			_LastUltimateTime = Time.time;
 		}
 
@@ -292,35 +290,45 @@ namespace Battle
 			}
 		}
 
-		void GiveDamage()
+		void Attack()
+		{
+			switch (_FSM.CurrentState._AttackData._RangeType)
+			{
+				case AttackRangeType.Melee:
+					MeleeAttack();
+					break;
+				case AttackRangeType.Range:
+					FireMissile();
+					break;
+			}
+		}
+
+		void MeleeAttack()
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				AttackCollider attack = Instantiate(state._AttackData._AttackColliderPrefab, transform);
+
+				// 공격 최소 딜레이
+				yield return new WaitForSeconds(AttackPreDelay);
+				if (_FSM.CurrentState != state) yield break; 
+
+				BattleAttack attack = Instantiate(state._AttackData._AttackPrefab, transform);
 				attack._Owner = this;
 				attack._StateInfo = state;
 				Effect effectData = state._EffectData;
 				Attack attackData = state._AttackData;
-
-				// 공격 최소 딜레이
-				yield return new WaitForSeconds(AttackPreDelay);
-				if (_FSM.CurrentState != attack._StateInfo)
-				{
-					Destroy(attack.gameObject);
-					yield break;
-				}
+				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
 
 				// 공중 공격으로 점프
-				RaycastHit[] raycastResults = new RaycastHit[10];
 				int raycastCount = Physics.RaycastNonAlloc(
 						origin: Center,
 						direction: _Motor.CharacterForward,
-						results: raycastResults,
-						maxDistance: attack._Collider.size.z,
+						results: _RaycastResults,
+						maxDistance: melee._Collider.size.z,
 						layerMask: Layer.TerrainLayerMask);
-				List<RaycastHit> hits = raycastResults.ArrayToList(raycastCount);
+				List<RaycastHit> hits = _RaycastResults.ArrayToList(raycastCount);
 				RaycastHit nearest = hits.MinBy(x => x.distance);
 				if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
 				{
@@ -339,16 +347,16 @@ namespace Battle
 
 				// 히트 판정
 				int overlapCount = Physics.OverlapBoxNonAlloc(
-					center: attack._Collider.GetCenter(),
-					halfExtents: attack._Collider.size / 2f,
-					results: _MeleeAttackResults,
+					center: melee._Collider.GetCenter(),
+					halfExtents: melee._Collider.size / 2f,
+					results: melee._HitResults,
 					orientation: attack.transform.rotation,
 					mask: GetOppositeLayerMask());
 
 				// 공격 적중
 				if (overlapCount > 0)
 				{
-					List<Collider> overlaps = _MeleeAttackResults.ArrayToList(overlapCount);
+					List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
 					overlaps.Sort((a, b) =>
 					{
 						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
@@ -359,7 +367,25 @@ namespace Battle
 					foreach (Collider col in overlaps)
 					{
 						Character c = col.GetComponent<Character>();
-						c.TakeDamage(this, attack);
+						Vector3 attackDir = c.Center - Center;
+						attackDir.Normalize();
+						int count = Physics.RaycastNonAlloc(
+							origin: Center,
+							direction: attackDir,
+							results: _RaycastResults,
+							maxDistance: 100f,
+							layerMask: GetOppositeLayerMask());
+						RaycastHit hit = default;
+						for (int i = 0; i < count; i++)
+						{
+							RaycastHit iter = _RaycastResults[i];
+							if (col == iter.collider)
+							{
+								hit = iter;
+								break;
+							}
+						}
+						c.TakeDamage(this, attack, hit.point, attackDir);
 						yield return new WaitForSeconds(attackData._AttackerHitStunDuration);
 					}
 				}
@@ -373,17 +399,18 @@ namespace Battle
 			}
 		}
 
-		void GiveDamage2()
+		void FireMissile()
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				AttackCollider attack = Instantiate(state._AttackData._AttackColliderPrefab, transform);
+				BattleAttack attack = Instantiate(state._AttackData._AttackPrefab);
 				attack._Owner = this;
 				attack._StateInfo = state;
 				Effect effectData = state._EffectData;
-				Attack attackData = state._AttackData;
+				Missile missile = attack.GetComponent<Missile>();
+				missile.transform.SetPositionAndRotation(Center, _AimDestRotation);
 
 				// 딜레이
 				yield return new WaitForSeconds(effectData._Delay);
@@ -391,62 +418,19 @@ namespace Battle
 				// 이펙트
 				PlayEffect(effectData);
 
-				// 히트 판정
-				int overlapCount = Physics.OverlapBoxNonAlloc(
-					center: attack._Collider.GetCenter(),
-					halfExtents: attack._Collider.size / 2f,
-					results: _MeleeAttackResults,
-					orientation: attack.transform.rotation,
-					mask: GetOppositeLayerMask());
-
-				// 공격 적중
-				if (overlapCount > 0)
-				{
-					List<Collider> overlaps = _MeleeAttackResults.ArrayToList(overlapCount);
-					overlaps.Sort((a, b) =>
-					{
-						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
-						float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
-						float v = (aDistance - bDistance) * 100f;
-						return (int)v;
-					});
-					foreach (Collider col in overlaps)
-					{
-						Character c = col.GetComponent<Character>();
-						c.TakeDamage(this, attack);
-						yield return new WaitForSeconds(attackData._AttackerHitStunDuration);
-					}
-				}
+				float startTime = Time.time;
+				yield return new WaitUntil(() => Time.time - startTime > missile._Duration || missile._DestroyTrigger);
 
 				Destroy(attack.gameObject);
 			}
 		}
 
-		public void TakeDamage(Character attacker, AttackCollider attack)
+		public void TakeDamage(Character attacker, BattleAttack attack, Vector3 hitPoint, Vector3 attackDirection)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				OnTakeDamage?.Invoke();
-
-				Vector3 attackDir = Center - attacker.Center;
-				attackDir.Normalize();
-				int count = Physics.RaycastNonAlloc(
-					origin: attacker.Center,
-					direction: attackDir,
-					results: _RaycastResults,
-					maxDistance: 100f,
-					layerMask: GetLayerMask());
-				RaycastHit hit = default;
-				for (int i = 0; i < count; i++)
-				{
-					RaycastHit iter = _RaycastResults[i];
-					if (_Collider == iter.collider)
-					{
-						hit = iter;
-						break;
-					}
-				}
 
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
@@ -460,7 +444,7 @@ namespace Battle
 
 				// 가드 판정
 				bool guard = IsGuardingEffective();
-				float angle = Vector3.Angle(transform.forward, new(-attackDir.x, 0f, -attackDir.z));
+				float angle = Vector3.Angle(transform.forward, new(-attackDirection.x, 0f, -attackDirection.z));
 				guard &= angle < 90f;
 				if (guard)
 				{
@@ -474,7 +458,7 @@ namespace Battle
 					{
 						_FadeInDeaccelTimer = 0.6f;
 					}
-					PlayEffect123123(_GuardEffectPrefab, this, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(_GuardEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
 				}
 				else
 				{
@@ -487,7 +471,7 @@ namespace Battle
 						_FSM.TrySetState(_Damage);
 					}
 					// 밀어내기
-					else if (attackData._ForceForward > 0f && attackData._ForceUp == 0f)
+					else if (attackData._ForceForward != 0f && attackData._ForceUp == 0f)
 					{
 						_Impulse = new(0f, 0f, attackData._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
@@ -502,8 +486,8 @@ namespace Battle
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FSM.TrySetState(_GetDown);
 					}
-					PlayEffect123123(attackData._HitEffectPrefab, attacker, hit.point, Quaternion.LookRotation(attackDir));
-					PlayEffect123123(_HitEffectPrefab, this, hit.point, Quaternion.LookRotation(attackDir));
+					PlayEffect123123(attackData._HitEffectPrefab, attacker, hitPoint, Quaternion.LookRotation(attackDirection));
+					PlayEffect123123(_HitEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
 				}
 
 				// 쓰러짐
@@ -515,10 +499,10 @@ namespace Battle
 
 				// 특수 공격으로 점프
 				bool wallJump = attack._StateInfo == attacker._JumpSpecialAttack;
-				wallJump &= !_AlreadyWallJump;
+				wallJump &= !attacker._AlreadyWallJump;
 				if (wallJump)
 				{
-					_AlreadyWallJump = true;
+					attacker._AlreadyWallJump = true;
 					Vector3 jumpDir = attacker.Center - Center;
 					jumpDir.y = 0f;
 					attacker._AttackJumpDirection = jumpDir.normalized;
@@ -627,7 +611,7 @@ namespace Battle
 				_JustGuardEffect.Play(true);
 				float start = Time.time;
 				_JustGuardCancelTrigger = false;
-				yield return new WaitUntil(() => Time.time - start > 1.2f || _JustGuardCancelTrigger);
+				yield return new WaitUntil(() => Time.time - start > 2.4f || _JustGuardCancelTrigger);
 				_JustGuardCancelTrigger = false;
 				_JustGuardEffect.gameObject.SetActive(false);
 				_JustGuardCoroutine = null;

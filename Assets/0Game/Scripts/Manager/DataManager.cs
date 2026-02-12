@@ -25,17 +25,37 @@ public class DataManager : Singleton<DataManager>
 	public class Attack
 	{
 		public AnimationClip _Clip;
-		public AttackCollider _AttackColliderPrefab;
+		public BattleAttack _AttackPrefab;
+		public float _Cooltime;
+		public AttackSkillType _SkillType;
+
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
 		public float _DamageDuration, _AttackerHitStunDuration;
 		public float _ForceForward, _ForceUp;
-		public float _Cooltime;
-		public AttackSkillType _SkillType;
+		public AttackRangeType _RangeType;
+		public AttackAreaType _AreaType;
+	}
+	[Serializable]
+	public class AttackHit
+	{
+		public GameObject _HitEffectPrefab;
+		public float _HitDelay;
+		public float _DamageDuration, _AttackerHitStunDuration;
+		public float _ForceForward, _ForceUp;
 		public AttackRangeType _RangeType;
 		public AttackAreaType _AreaType;
 	}
 	public List<Attack> _Attacks;
+
+    private void OnValidate()
+    {
+		foreach(var at in _Attacks)
+		{
+
+		}
+		Util.SetDirty(this);
+    }
 
     public Dictionary<AnimationClip, Effect> _EffectDict;
 	public Dictionary<AnimationClip, Attack> _AttackDict;
