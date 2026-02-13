@@ -8,6 +8,7 @@ namespace Battle
 	public class Missile : MonoBehaviour
 	{
 		public SphereCollider _Collider;
+		public AttackHit _AttackHit;
 
 		public float _MoveSpeed;
 		public float _Duration;
@@ -47,7 +48,7 @@ namespace Battle
 				// 지형에 충돌
 				if (hit.collider.gameObject.layer == Layer.TerrainLayer)
 				{
-					_Attack._Owner.PlayEffect123123(_Attack._StateInfo._AttackData._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
+					_Attack._Owner.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
 					_DestroyTrigger = true;
 					continue;
 				}
@@ -56,7 +57,7 @@ namespace Battle
 				Character target = hit.collider.GetComponent<Character>();
                 if (!_AlreadyTargets.Contains(target))
                 {
-                    target.TakeDamage(_Attack._Owner, _Attack, hit.point, transform.forward);
+                    target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
                     _AlreadyTargets.Add(target);
 					_DestroyTrigger = true;
 				}

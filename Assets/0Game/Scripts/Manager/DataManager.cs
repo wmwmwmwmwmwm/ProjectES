@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DataManager : Singleton<DataManager>
@@ -26,38 +27,44 @@ public class DataManager : Singleton<DataManager>
 	{
 		public AnimationClip _Clip;
 		public BattleAttack _AttackPrefab;
+
 		public float _Cooltime;
 		public AttackSkillType _SkillType;
+		public AttackRangeType _RangeType;
+		public AttackAreaType _AreaType;
 
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
 		public float _DamageDuration, _AttackerHitStunDuration;
 		public float _ForceForward, _ForceUp;
-		public AttackRangeType _RangeType;
-		public AttackAreaType _AreaType;
-	}
-	[Serializable]
-	public class AttackHit
-	{
-		public GameObject _HitEffectPrefab;
-		public float _HitDelay;
-		public float _DamageDuration, _AttackerHitStunDuration;
-		public float _ForceForward, _ForceUp;
-		public AttackRangeType _RangeType;
-		public AttackAreaType _AreaType;
 	}
 	public List<Attack> _Attacks;
 
-    private void OnValidate()
-    {
-		foreach(var at in _Attacks)
+	public List<BattleAttack> _BattleAttacks;
+	[Button("asdf")]
+	public void aaa()
+	{
+        for (int i = 0; i < _Attacks.Count; i++)
 		{
-
+            Attack attack = _Attacks[i];
+			BattleAttack battleAttack = _BattleAttacks[i];
+			battleAttack._Cooltime = attack._Cooltime;
+			battleAttack._SkillType = attack._SkillType;
+			battleAttack._RangeType = attack._RangeType;
+			battleAttack._AreaType = attack._AreaType;
+			var melee = battleAttack.GetComponent<MeleeAttack>();
+			var hit = melee._AttackHits.First();
+			hit._HitEffectPrefab = attack._HitEffectPrefab;
+			hit._HitDelay = attack._HitDelay;
+			hit._DamageDuration = attack._DamageDuration;
+			hit._AttackerHitStunDuration = attack._AttackerHitStunDuration;
+			hit._ForceForward = attack._ForceForward;
+			hit._ForceUp = attack._ForceUp;
 		}
 		Util.SetDirty(this);
-    }
+	}
 
-    public Dictionary<AnimationClip, Effect> _EffectDict;
+	public Dictionary<AnimationClip, Effect> _EffectDict;
 	public Dictionary<AnimationClip, Attack> _AttackDict;
 
 	protected override void Init()

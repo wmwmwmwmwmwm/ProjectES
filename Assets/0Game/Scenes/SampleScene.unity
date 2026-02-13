@@ -6515,6 +6515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 796315785}
+  _AttackHits: []
   _Owner: {fileID: 0}
   _HitResults: []
 --- !u!65 &796315785
@@ -6728,6 +6729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 802888448}
+  _AttackHits: []
   _Owner: {fileID: 0}
   _HitResults: []
 --- !u!1 &804586163
@@ -13623,6 +13625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 1927211141}
+  _AttackHits: []
   _Owner: {fileID: 0}
   _HitResults: []
 --- !u!65 &1927211141

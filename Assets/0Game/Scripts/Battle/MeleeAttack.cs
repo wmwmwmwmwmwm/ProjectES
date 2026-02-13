@@ -8,6 +8,7 @@ namespace Battle
 	public class MeleeAttack : MonoBehaviour
 	{
 		public BoxCollider _Collider;
+		public List<AttackHit> _AttackHits;
 
 		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;

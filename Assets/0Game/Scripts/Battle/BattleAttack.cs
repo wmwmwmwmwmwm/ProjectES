@@ -7,6 +7,13 @@ namespace Battle
 {
 	public class BattleAttack : MonoBehaviour
 	{
+		public AnimationClip _Clip;
+
+		public float _Cooltime;
+		public AttackSkillType _SkillType;
+		public AttackRangeType _RangeType;
+		public AttackAreaType _AreaType;
+
 		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;
 	}

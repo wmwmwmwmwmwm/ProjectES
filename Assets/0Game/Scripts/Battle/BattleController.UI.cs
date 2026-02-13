@@ -14,9 +14,9 @@ namespace Battle
 
 		void UpdateUI()
 		{
-			RefreshSkillIcon(_Skill1SkillIcon, _Player._Skill1._AttackData._Cooltime, _Player._LastSkill1Time);
-			RefreshSkillIcon(_Skill2SkillIcon, _Player._Skill2._AttackData._Cooltime, _Player._LastSkill2Time);
-			RefreshSkillIcon(_UltimateSkillIcon, _Player._Ultimate._AttackData._Cooltime, _Player._LastUltimateTime);
+			RefreshSkillIcon(_Skill1SkillIcon, _Player._Skill1._AttackData._AttackPrefab._Cooltime, _Player._LastSkill1Time);
+			RefreshSkillIcon(_Skill2SkillIcon, _Player._Skill2._AttackData._AttackPrefab._Cooltime, _Player._LastSkill2Time);
+			RefreshSkillIcon(_UltimateSkillIcon, _Player._Ultimate._AttackData._AttackPrefab._Cooltime, _Player._LastUltimateTime);
 
 			void RefreshSkillIcon(SkillIcon icon, float cooltime, float lastTime)
 			{

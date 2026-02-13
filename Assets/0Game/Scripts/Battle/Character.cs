@@ -104,7 +104,10 @@ namespace Battle
 		{
 			bool canAttack = _FSM.CurrentState._CanAttack;
 			canAttack &= !IsGuarding();
-			canAttack &= !(_FSM.CurrentState.IsAttack && _FSM.CurrentState._AttackData._SkillType > AttackSkillType.Normal);
+			if (_FSM.CurrentState.IsAttack)
+			{
+				canAttack &= _FSM.CurrentState._AttackData._AttackPrefab._SkillType <= AttackSkillType.Normal;
+			}
 			if (!canAttack) return;
 
 			// 저스트 가드
@@ -157,7 +160,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
-					if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Special)
+					if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Special)
 					{
 						Play_Canceling(_SpecialAttack, true);
 					}
@@ -184,7 +187,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill1Time < _Skill1._AttackData._Cooltime)
+			if (Time.time - _LastSkill1Time < _Skill1._AttackData._AttackPrefab._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -192,7 +195,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill1, true);
 				}
@@ -213,7 +216,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill2Time < _Skill2._AttackData._Cooltime)
+			if (Time.time - _LastSkill2Time < _Skill2._AttackData._AttackPrefab._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -221,7 +224,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill2, true);
 				}
@@ -242,7 +245,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastUltimateTime < _Ultimate._AttackData._Cooltime)
+			if (Time.time - _LastUltimateTime < _Ultimate._AttackData._AttackPrefab._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -250,7 +253,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._SkillType < AttackSkillType.Ultimate)
+				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Ultimate)
 				{
 					Play_Canceling(_Ultimate, true);
 				}
@@ -292,7 +295,7 @@ namespace Battle
 
 		void Attack()
 		{
-			switch (_FSM.CurrentState._AttackData._RangeType)
+			switch (_FSM.CurrentState._AttackData._AttackPrefab._RangeType)
 			{
 				case AttackRangeType.Melee:
 					MeleeAttack();
@@ -321,78 +324,82 @@ namespace Battle
 				Attack attackData = state._AttackData;
 				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
 
-				// 공중 공격으로 점프
-				int raycastCount = Physics.RaycastNonAlloc(
-						origin: Center,
-						direction: _Motor.CharacterForward,
-						results: _RaycastResults,
-						maxDistance: melee._Collider.size.z,
-						layerMask: Layer.TerrainLayerMask);
-				List<RaycastHit> hits = _RaycastResults.ArrayToList(raycastCount);
-				RaycastHit nearest = hits.MinBy(x => x.distance);
-				if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
+				foreach (AttackHit attackHit in melee._AttackHits)
 				{
-					float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
-					if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
-					{
-						_AttackJumpDirection = -_Motor.CharacterForward;
-					}
-				}
-
-				// 공격 판정 딜레이
-				yield return new WaitForSeconds(effectData._Delay - AttackPreDelay);
-
-				// 이펙트
-				PlayEffect(effectData);
-
-				// 히트 판정
-				int overlapCount = Physics.OverlapBoxNonAlloc(
-					center: melee._Collider.GetCenter(),
-					halfExtents: melee._Collider.size / 2f,
-					results: melee._HitResults,
-					orientation: attack.transform.rotation,
-					mask: GetOppositeLayerMask());
-
-				// 공격 적중
-				if (overlapCount > 0)
-				{
-					List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
-					overlaps.Sort((a, b) =>
-					{
-						float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
-						float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
-						float v = (aDistance - bDistance) * 100f;
-						return (int)v;
-					});
-					foreach (Collider col in overlaps)
-					{
-						Character c = col.GetComponent<Character>();
-						Vector3 attackDir = c.Center - Center;
-						attackDir.Normalize();
-						int count = Physics.RaycastNonAlloc(
+					// 공중 공격으로 점프
+					int raycastCount = Physics.RaycastNonAlloc(
 							origin: Center,
-							direction: attackDir,
+							direction: _Motor.CharacterForward,
 							results: _RaycastResults,
-							maxDistance: 100f,
-							layerMask: GetOppositeLayerMask());
-						RaycastHit hit = default;
-						for (int i = 0; i < count; i++)
+							maxDistance: melee._Collider.size.z,
+							layerMask: Layer.TerrainLayerMask);
+					List<RaycastHit> hits = _RaycastResults.ArrayToList(raycastCount);
+					RaycastHit nearest = hits.MinBy(x => x.distance);
+					if (raycastCount > 0 && attackData._AttackPrefab._SkillType == AttackSkillType.Normal)
+					{
+						float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
+						if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
 						{
-							RaycastHit iter = _RaycastResults[i];
-							if (col == iter.collider)
-							{
-								hit = iter;
-								break;
-							}
+							_AttackJumpDirection = -_Motor.CharacterForward;
 						}
-						c.TakeDamage(this, attack, hit.point, attackDir);
-						yield return new WaitForSeconds(attackData._AttackerHitStunDuration);
 					}
-				}
-				// 벽에 적중
-				else if (raycastCount > 0) 
-				{
-					PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
+
+					// 딜레이
+					float delay = melee._AttackHits.IndexOf(attackHit) == 0 ? effectData._Delay - AttackPreDelay : effectData._Delay;
+					yield return new WaitForSeconds(delay);
+
+					// 이펙트
+					PlayEffect(effectData);
+
+					// 히트 판정
+					int overlapCount = Physics.OverlapBoxNonAlloc(
+						center: melee._Collider.GetCenter(),
+						halfExtents: melee._Collider.size / 2f,
+						results: melee._HitResults,
+						orientation: attack.transform.rotation,
+						mask: GetOppositeLayerMask());
+
+					// 공격 적중
+					if (overlapCount > 0)
+					{
+						List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
+						overlaps.Sort((a, b) =>
+						{
+							float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
+							float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
+							float v = (aDistance - bDistance) * 100f;
+							return (int)v;
+						});
+						foreach (Collider col in overlaps)
+						{
+							Character c = col.GetComponent<Character>();
+							Vector3 attackDir = c.Center - Center;
+							attackDir.Normalize();
+							int count = Physics.RaycastNonAlloc(
+								origin: Center,
+								direction: attackDir,
+								results: _RaycastResults,
+								maxDistance: 100f,
+								layerMask: GetOppositeLayerMask());
+							RaycastHit hit = default;
+							for (int i = 0; i < count; i++)
+							{
+								RaycastHit iter = _RaycastResults[i];
+								if (col == iter.collider)
+								{
+									hit = iter;
+									break;
+								}
+							}
+							c.TakeDamage(this, attack, attackHit, hit.point, attackDir);
+							yield return new WaitForSeconds(attackHit._AttackerHitStunDuration);
+						}
+					}
+					// 벽에 적중
+					else if (raycastCount > 0)
+					{
+						PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
+					}
 				}
 
 				Destroy(attack.gameObject);
@@ -425,7 +432,7 @@ namespace Battle
 			}
 		}
 
-		public void TakeDamage(Character attacker, BattleAttack attack, Vector3 hitPoint, Vector3 attackDirection)
+		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3 hitPoint, Vector3 attackDirection)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
@@ -435,12 +442,12 @@ namespace Battle
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
 				Attack attackData = attack._StateInfo._AttackData;
-				float delay = attackData._HitDelay - effectData._Delay - AttackPreDelay;
+				float delay = attackHit._HitDelay - effectData._Delay - AttackPreDelay;
 				yield return new WaitForSeconds(delay);
 
 				// 경직
-				AddHitStunTimer(attackData._AttackerHitStunDuration);
-				attacker.AddHitStunTimer(attackData._AttackerHitStunDuration);
+				AddHitStunTimer(attackHit._AttackerHitStunDuration);
+				attacker.AddHitStunTimer(attackHit._AttackerHitStunDuration);
 
 				// 가드 판정
 				bool guard = IsGuardingEffective();
@@ -463,30 +470,32 @@ namespace Battle
 				else
 				{
 					// 일반 경직
-					if (attackData._ForceForward == 0f && attackData._ForceUp == 0f)
+					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
 					{
-						_Damage._Duration = attackData._DamageDuration;
-						_FadeInDeaccelTimer = attackData._DamageDuration;
+						_Damage._Duration = attackHit._DamageDuration;
+						_FadeInDeaccelTimer = attackHit._DamageDuration;
 						_Damage._Asset = _DamageAssets.PickOne();
 						_FSM.TrySetState(_Damage);
 					}
 					// 밀어내기
-					else if (attackData._ForceForward != 0f && attackData._ForceUp == 0f)
+					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
 					{
-						_Impulse = new(0f, 0f, attackData._ForceForward);
+						_Impulse = new(0f, 0f, attackHit._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
-						_FadeOutDeaccelTimer = attackData._DamageDuration;
+						_FadeOutDeaccelTimer = attackHit._DamageDuration;
 						_Damage._Asset = _DamageAssets.PickOne();
 						_FSM.TrySetState(_Damage);
 					}
 					// 날리기
 					else 
 					{
-						_Impulse = new(0f, attackData._ForceUp, attackData._ForceForward);
+						_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FSM.TrySetState(_GetDown);
 					}
-					PlayEffect123123(attackData._HitEffectPrefab, attacker, hitPoint, Quaternion.LookRotation(attackDirection));
+
+					// 이펙트
+					PlayEffect123123(attackHit._HitEffectPrefab, attacker, hitPoint, Quaternion.LookRotation(attackDirection));
 					PlayEffect123123(_HitEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
 				}
 
