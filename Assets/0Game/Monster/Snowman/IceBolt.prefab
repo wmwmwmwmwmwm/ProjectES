@@ -1,12 +1,12 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &1043596274516936664
+--- !u!1001 &5541138029745199271
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8685070215749700738}
+    m_TransformParent: {fileID: 7961471706987333474}
     m_Modifications:
     - target: {fileID: 4840880294674937119, guid: 1481da09699153c4498ce6719d071969,
         type: 3}
@@ -88,13 +88,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1481da09699153c4498ce6719d071969, type: 3}
---- !u!4 &5572601673970971192 stripped
+--- !u!4 &1137248330722012487 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4840880294674937312, guid: 1481da09699153c4498ce6719d071969,
     type: 3}
-  m_PrefabInstance: {fileID: 1043596274516936664}
+  m_PrefabInstance: {fileID: 5541138029745199271}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &9120180247030052547
+--- !u!1001 &7523868528946527523
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -105,7 +105,7 @@ PrefabInstance:
     - target: {fileID: 146658982985273343, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
       propertyPath: m_Name
-      value: JumpAttack
+      value: IceBolt
       objectReference: {fileID: 0}
     - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
@@ -162,18 +162,24 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Transition
+      value: 
+      objectReference: {fileID: -8344083487149880939, guid: 37a284cab18a95440b35270a49d0946f,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
       insertIndex: 0
-      addedObject: {fileID: 5572601673970971192}
+      addedObject: {fileID: 1137248330722012487}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48fd12d9544516949a37d926d0ac8213, type: 3}
---- !u!4 &8685070215749700738 stripped
+--- !u!4 &7961471706987333474 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
     type: 3}
-  m_PrefabInstance: {fileID: 9120180247030052547}
+  m_PrefabInstance: {fileID: 7523868528946527523}
   m_PrefabAsset: {fileID: 0}

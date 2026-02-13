@@ -1,0 +1,436 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8655182195538229920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Move
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188374097592934
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188374097592934
+      type: {class: MixerTransition2D, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 2.5
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Animations:
+        - {fileID: 7400000, guid: 3332743ea3ba44644bdfe4103ca62985, type: 3}
+        - {fileID: 7400000, guid: 9ab722be26c9cc14e90c05144e7f77b6, type: 3}
+        - {fileID: 7400000, guid: 2a8e925a8beccf6468a6884caa426075, type: 3}
+        - {fileID: 7400000, guid: b2ef53f045ef39449bfcb94064a08c05, type: 3}
+        - {fileID: 7400000, guid: b9789c136315edd41a60ee9b4163f4e8, type: 3}
+        - {fileID: 7400000, guid: c595b8d4ac51f4f4f8f89cca7cf259be, type: 3}
+        - {fileID: 7400000, guid: a6cb645a41db6d748a577b0d6a8b261d, type: 3}
+        - {fileID: 7400000, guid: 895510abbc1b6ed49847c0bfd2d84a82, type: 3}
+        - {fileID: 7400000, guid: ed17d546363fe534fa04ec171c47bd7f, type: 3}
+        _Speeds: []
+        _SynchronizeChildren: 
+        _Thresholds:
+        - {x: 0, y: 0}
+        - {x: 0, y: 1}
+        - {x: 0.70710677, y: 0.70710677}
+        - {x: 1, y: 0}
+        - {x: 0.70710677, y: -0.70710677}
+        - {x: 0, y: -1}
+        - {x: -0.70710677, y: -0.70710677}
+        - {x: -1, y: 0}
+        - {x: -0.70710677, y: 0.70710677}
+        _DefaultParameter: {x: 0, y: 0}
+        _Type: 1
+        _ParameterNameX: {fileID: 11400000, guid: 47e8eb78ff7936f4091a3077c10a73de,
+          type: 2}
+        _ParameterNameY: {fileID: 11400000, guid: e640cf11c704f9b42950ddb6e2354a35,
+          type: 2}
+--- !u!114 &-8344083487149880939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Skill1
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 7506709068337381507
+  references:
+    version: 2
+    RefIds:
+    - rid: 7506709068337381507
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.05
+        _Speed: 3
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: f7ada600a890e3342b90fe47b221409d, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-7421574899298343059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Damage4
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116254
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116254
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3122b876adb119c4d99ff9681ecf9682, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-7081037375373209758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Damage3
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116253
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116253
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3b5e23f044bcf524596429815f35e64d, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-4978170568794986257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GetDown
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223762
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223762
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0
+        _Speed: 3
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 7ff1964123f697a45ab0c1a1114532a9, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-2672302275770774861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Damage1
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116251
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116251
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3c35d82860afedc478213d29d0c4ebe5, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-1892071472285688390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Land
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188395825397836
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188395825397836
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 2
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400008, guid: 7e2f63084669fcb468e28abbb836648b, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &-79381918844599894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Jump
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188374097592925
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188374097592925
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400006, guid: 7e2f63084669fcb468e28abbb836648b, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f08fdd50e79d0c4bb235a5c2696516d, type: 3}
+  m_Name: Snowman_Library
+  m_EditorClassIdentifier: 
+  _Definition:
+    _Transitions:
+    - {fileID: 7425039641060706603}
+    - {fileID: -8655182195538229920}
+    - {fileID: -79381918844599894}
+    - {fileID: -1892071472285688390}
+    - {fileID: 5798627385561996276}
+    - {fileID: -2672302275770774861}
+    - {fileID: 5812658905395691501}
+    - {fileID: -7081037375373209758}
+    - {fileID: -7421574899298343059}
+    - {fileID: -4978170568794986257}
+    - {fileID: 3815873642644383339}
+    - {fileID: -8344083487149880939}
+    - {fileID: 4652592177226673511}
+    _Modifiers: []
+    _Aliases: []
+    _AliasAllTransitions: 0
+--- !u!114 &3815873642644383339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: GetUp
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223763
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223763
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 3
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 386a55716c2f91c4fb861d97e77bff7a, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &4652592177226673511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Skill2
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 7506709068337381508
+  references:
+    version: 2
+    RefIds:
+    - rid: 7506709068337381508
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.05
+        _Speed: 2
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 6e6d51950809c484bb7b58c6ed0de31c, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &5644055141692683845
+MonoBehaviour:
+  m_ObjectHideFlags: 17
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 139803103, guid: c8f836b9e2ef7eb41ad944e21ec66ce4, type: 3}
+  m_Name: Editor Data
+  m_EditorClassIdentifier: 
+  _Library: {fileID: 11400000}
+  _TransitionSortMode: 0
+--- !u!114 &5798627385561996276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Die
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 9092877133038223545
+  references:
+    version: 2
+    RefIds:
+    - rid: 9092877133038223545
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 61042900091ab0f4ca5fc20a44c95e34, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &5812658905395691501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Damage2
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188561235116252
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188561235116252
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.1
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: a7f4648a91c539d42a1c405f12b29e95, type: 3}
+        _NormalizedStartTime: NaN
+--- !u!114 &7425039641060706603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a8877f26e7a6a43aaf06fade1a064a, type: 3}
+  m_Name: Idle
+  m_EditorClassIdentifier: 
+  _Transition:
+    rid: 1328188374097592579
+  references:
+    version: 2
+    RefIds:
+    - rid: 1328188374097592579
+      type: {class: ClipTransition, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        _FadeDuration: 0.25
+        _Speed: 1
+        _Events:
+          _NormalizedTimes: []
+          _Callbacks: []
+          _Names: []
+        _Clip: {fileID: 7400000, guid: 3332743ea3ba44644bdfe4103ca62985, type: 3}
+        _NormalizedStartTime: NaN

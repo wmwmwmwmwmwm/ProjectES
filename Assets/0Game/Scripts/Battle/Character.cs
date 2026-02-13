@@ -106,7 +106,7 @@ namespace Battle
 			canAttack &= !IsGuarding();
 			if (_FSM.CurrentState.IsAttack)
 			{
-				canAttack &= _FSM.CurrentState._AttackData._AttackPrefab._SkillType <= AttackSkillType.Normal;
+				canAttack &= _FSM.CurrentState._Attack._SkillType <= AttackSkillType.Normal;
 			}
 			if (!canAttack) return;
 
@@ -160,7 +160,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
-					if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Special)
+					if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Special)
 					{
 						Play_Canceling(_SpecialAttack, true);
 					}
@@ -187,7 +187,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill1Time < _Skill1._AttackData._AttackPrefab._Cooltime)
+			if (Time.time - _LastSkill1Time < _Skill1._Attack._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -195,7 +195,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill1, true);
 				}
@@ -216,7 +216,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill2Time < _Skill2._AttackData._AttackPrefab._Cooltime)
+			if (Time.time - _LastSkill2Time < _Skill2._Attack._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -224,7 +224,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Skill2, true);
 				}
@@ -245,7 +245,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastUltimateTime < _Ultimate._AttackData._AttackPrefab._Cooltime)
+			if (Time.time - _LastUltimateTime < _Ultimate._Attack._Cooltime)
 			{
 				CooltimeJitter();
 				return;
@@ -253,7 +253,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._AttackData._AttackPrefab._SkillType < AttackSkillType.Ultimate)
+				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Ultimate)
 				{
 					Play_Canceling(_Ultimate, true);
 				}
@@ -295,7 +295,7 @@ namespace Battle
 
 		void Attack()
 		{
-			switch (_FSM.CurrentState._AttackData._AttackPrefab._RangeType)
+			switch (_FSM.CurrentState._Attack._RangeType)
 			{
 				case AttackRangeType.Melee:
 					MeleeAttack();
@@ -317,11 +317,11 @@ namespace Battle
 				yield return new WaitForSeconds(AttackPreDelay);
 				if (_FSM.CurrentState != state) yield break; 
 
-				BattleAttack attack = Instantiate(state._AttackData._AttackPrefab, transform);
+				BattleAttack attack = Instantiate(state._Attack, transform);
 				attack._Owner = this;
 				attack._StateInfo = state;
 				Effect effectData = state._EffectData;
-				Attack attackData = state._AttackData;
+				BattleAttack attackData = state._Attack;
 				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
 
 				foreach (AttackHit attackHit in melee._AttackHits)
@@ -335,7 +335,7 @@ namespace Battle
 							layerMask: Layer.TerrainLayerMask);
 					List<RaycastHit> hits = _RaycastResults.ArrayToList(raycastCount);
 					RaycastHit nearest = hits.MinBy(x => x.distance);
-					if (raycastCount > 0 && attackData._AttackPrefab._SkillType == AttackSkillType.Normal)
+					if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
 					{
 						float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
 						if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
@@ -412,7 +412,7 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				BattleAttack attack = Instantiate(state._AttackData._AttackPrefab);
+				BattleAttack attack = Instantiate(state._Attack);
 				attack._Owner = this;
 				attack._StateInfo = state;
 				Effect effectData = state._EffectData;
@@ -441,7 +441,7 @@ namespace Battle
 
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
-				Attack attackData = attack._StateInfo._AttackData;
+				BattleAttack attackData = attack._StateInfo._Attack;
 				float delay = attackHit._HitDelay - effectData._Delay - AttackPreDelay;
 				yield return new WaitForSeconds(delay);
 

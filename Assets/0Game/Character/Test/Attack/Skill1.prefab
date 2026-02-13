@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 839822871757027597, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: m_Name
-      value: MeleeAttack Variant
+      value: Skill1
       objectReference: {fileID: 0}
     - target: {fileID: 2587819426944855229, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
@@ -62,6 +62,47 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: f7ada600a890e3342b90fe47b221409d, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Cooltime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _SkillType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ForceUp
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitDelay
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ForceForward
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitEffectPrefab
+      value: 
+      objectReference: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+        type: 3}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _AttackerHitStunDuration
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

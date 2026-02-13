@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 839822871757027597, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: m_Name
-      value: MeleeAttack Variant
+      value: SpecialAttack
       objectReference: {fileID: 0}
     - target: {fileID: 2587819426944855229, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
@@ -62,6 +62,42 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _SkillType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitDelay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ForceForward
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _DamageDuration
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitEffectPrefab
+      value: 
+      objectReference: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+        type: 3}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _AttackerHitStunDuration
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -27,9 +27,9 @@ namespace Battle
 		public Action _OnEnd;
 
 		public Effect _EffectData;
-		public Attack _AttackData;
+		public BattleAttack _Attack;
 
-		public bool IsAttack => _AttackData != null;
+		public bool IsAttack => _Attack != null;
 
 		public bool CanEnterState => true;
 
@@ -40,8 +40,8 @@ namespace Battle
 			if (_Asset == null) return;
 
 			_State = c._BaseLayer.Play(_Asset);
-			_EffectData = Data.GetEffectData(_State.Clip);
-			_AttackData = Data.GetAttackData(_State.Clip);
+			_EffectData = Data.GetEffectData(_Asset);
+			_Attack = Data.GetAttackData(_Asset);
 
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
 			if (_Duration == 0f)

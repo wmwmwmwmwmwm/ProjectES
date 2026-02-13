@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 839822871757027597, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: m_Name
-      value: MeleeAttack Variant
+      value: NormalAttack_1
       objectReference: {fileID: 0}
     - target: {fileID: 2587819426944855229, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
@@ -63,6 +63,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 01fa12c27ce71ea4382e2c1c8a5a52bd, type: 2}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitDelay
+      value: 0.215
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _DamageDuration
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _HitEffectPrefab
+      value: 
+      objectReference: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
