@@ -11,5 +11,6 @@ namespace Battle
 		public float _HitDelay;
 		public float _DamageDuration, _AttackerHitStunDuration;
 		public float _ForceForward, _ForceUp;
+		public float _Damage;
 	}
 }

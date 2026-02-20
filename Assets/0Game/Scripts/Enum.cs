@@ -4,4 +4,4 @@ public enum AttackSkillType { Normal, Special, Skill, Ultimate };
 
 public enum AttackRangeType { Melee, Range };
 
-public enum AttackAreaType { Small, Large };
+public enum AttackAreaType { Single, Area };

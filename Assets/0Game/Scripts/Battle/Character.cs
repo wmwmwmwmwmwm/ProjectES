@@ -22,6 +22,7 @@ namespace Battle
 		public Material _WhiteMaterial;
 		public Transform _CooltimeJitter;
 
+		Enemy _Enemy;
 		CapsuleCollider _Collider;
 		RaycastHit[] _RaycastResults;
 		[HideInInspector] public int _AttackIndex;
@@ -37,19 +38,19 @@ namespace Battle
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 		[HideInInspector] public bool _AlreadyWallJump;
 
-		public event Action OnTakeDamage;
-
 		const float AttackPreDelay = 0.1f;
 		const float MoveGraceDuration = 0.1f;
 		const float WallJumpAngleThreshold = 60f;
 
+		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center => transform.position + _Collider.center;
 		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
 
 		void Start()
 		{
-			_RaycastResults = new RaycastHit[10];
+			_Enemy = GetComponent<Enemy>();
 			_Collider = GetComponent<CapsuleCollider>();
+			_RaycastResults = new RaycastHit[10];
 
 			_GuardUpTime = Const.TimeDefault;
 			_GuardDownTime = Const.TimeDefault;
@@ -64,6 +65,8 @@ namespace Battle
 			InitFSM();
 			_AttackIndex = -1;
 			_JustGuardEffect.gameObject.SetActive(false);
+
+			SetHP(_MaxHP);
 
 			//StartCoroutine(Internal());
 			//IEnumerator Internal()
@@ -175,6 +178,8 @@ namespace Battle
 			// 공중
 			else
 			{
+				if (_FSM.CurrentState.IsAttack) return;
+
 				_FSM.TrySetState(_JumpSpecialAttack);
 				Attack();
 			}
@@ -315,7 +320,6 @@ namespace Battle
 
 				// 공격 최소 딜레이
 				yield return new WaitForSeconds(AttackPreDelay);
-				if (_FSM.CurrentState != state) yield break; 
 
 				BattleAttack attack = Instantiate(state._Attack, transform);
 				attack._Owner = this;
@@ -326,6 +330,8 @@ namespace Battle
 
 				foreach (AttackHit attackHit in melee._AttackHits)
 				{
+					if (_FSM.CurrentState != state) yield break;
+
 					// 공중 공격으로 점프
 					int raycastCount = Physics.RaycastNonAlloc(
 							origin: Center,
@@ -437,7 +443,11 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				OnTakeDamage?.Invoke();
+				// 주변 적 활성화
+				if (_Enemy)
+				{
+					_Enemy.NoticeAround();
+				}
 
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
@@ -450,20 +460,26 @@ namespace Battle
 				attacker.AddHitStunTimer(attackHit._AttackerHitStunDuration);
 
 				// 가드 판정
+				float damage = attackHit._Damage;
 				bool guard = IsGuardingEffective();
 				float angle = Vector3.Angle(transform.forward, new(-attackDirection.x, 0f, -attackDirection.z));
 				guard &= angle < 90f;
 				if (guard)
 				{
 					// 저스트 가드
-					if (Time.time - _GuardUpTime < 0.3f && Inputs.Guard.IsPressed()) 
+					bool justGuard = Time.time - _GuardUpTime < 0.3f;
+					justGuard &= Inputs.Guard.IsPressed();
+					justGuard &= attack._RangeType == AttackRangeType.Melee;
+					if (justGuard) 
 					{
 						JustGuard();
+						damage = 0f;
 					}
 					// 일반 가드
 					else
 					{
 						_FadeInDeaccelTimer = 0.6f;
+						damage *= attack._AreaType == AttackAreaType.Single ? 0f : 0.5f;
 					}
 					PlayEffect123123(_GuardEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
 				}
@@ -497,6 +513,20 @@ namespace Battle
 					// 이펙트
 					PlayEffect123123(attackHit._HitEffectPrefab, attacker, hitPoint, Quaternion.LookRotation(attackDirection));
 					PlayEffect123123(_HitEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
+				}
+
+				// 데미지 표시
+				SetHP(_HP - damage);
+				if (_Enemy)
+				{
+					Controller.ShowDamageText(damage, hitPoint);
+				}
+				else
+				{
+					if (damage > 0f)
+					{
+						Controller.ShowDamageScreen();
+					}
 				}
 
 				// 쓰러짐
@@ -636,6 +666,17 @@ namespace Battle
 		{
 			_CooltimeJitter.DOShakePosition(0.3f, strength: 0.06f, vibrato: 100, fadeOut: false).SetEase(Ease.Flash)
 				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
+		}
+
+		void SetHP(float hp)
+		{
+			_HP = hp;
+
+			if (_Enemy)
+			{
+				float percent = _HP / _MaxHP;
+				_Enemy.SetHPSliderValue(percent);
+			}
 		}
 
 		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)

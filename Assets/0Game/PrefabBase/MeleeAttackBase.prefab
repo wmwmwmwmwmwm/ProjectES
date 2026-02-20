@@ -48,8 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Clip: {fileID: 0}
-  _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
-    type: 3}
+  _Transition: {fileID: 0}
   _Cooltime: 0
   _SkillType: 0
   _RangeType: 0
@@ -104,7 +103,7 @@ GameObject:
   - component: {fileID: 7478801279392564711}
   - component: {fileID: 7876020948378023349}
   m_Layer: 0
-  m_Name: AttackHit
+  m_Name: AttackHit_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,9 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edd0246cbda99cf48a00ffd35ea905d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _HitEffectPrefabOverride: {fileID: 0}
+  _HitEffectPrefab: {fileID: 0}
   _HitDelay: 0.3
   _DamageDuration: 0.3
   _AttackerHitStunDuration: 0.03
   _ForceForward: 0
   _ForceUp: 0
+  _Damage: 150

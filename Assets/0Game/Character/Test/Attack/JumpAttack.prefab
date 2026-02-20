@@ -162,6 +162,12 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Transition
+      value: 
+      objectReference: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

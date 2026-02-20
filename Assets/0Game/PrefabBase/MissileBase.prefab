@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Clip: {fileID: 0}
+  _Transition: {fileID: 0}
   _Cooltime: 0
   _SkillType: 0
   _RangeType: 1
@@ -151,6 +152,7 @@ MonoBehaviour:
   _AttackerHitStunDuration: 0.03
   _ForceForward: 10
   _ForceUp: 10
+  _Damage: 150
 --- !u!1 &5803323295818537969
 GameObject:
   m_ObjectHideFlags: 0

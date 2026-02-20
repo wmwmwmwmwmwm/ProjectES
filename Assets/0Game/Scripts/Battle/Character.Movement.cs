@@ -80,6 +80,8 @@ namespace Battle
 
 		public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
 		{
+			if (!IsMovable()) return;
+
 			// Y회전
 			if (_RootMotionRotDelta != Quaternion.identity)
 			{

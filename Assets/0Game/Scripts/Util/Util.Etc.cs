@@ -7,19 +7,6 @@ using Random = UnityEngine.Random;
 
 public static partial class Util
 {
-	public static float ClampInnerAngle(float angle)
-	{
-		if (angle < -180f)
-		{
-			angle += 360f;
-		}
-		if (angle > 180f)
-		{
-			angle -= 360f;
-		}
-		return angle;
-	}
-
 	public static void TryAndAddDictionaryList<TKey, T>(this Dictionary<TKey, List<T>> dict, TKey key, T item)
 	{
 		if (!dict.ContainsKey(key)) dict.Add(key, new List<T>());

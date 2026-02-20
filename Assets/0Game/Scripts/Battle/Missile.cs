@@ -16,7 +16,7 @@ namespace Battle
 		[HideInInspector] public BattleAttack _Attack;
 		[HideInInspector] public Rigidbody _Rigidbody;
 		[HideInInspector] public RaycastHit[] _HitResults;
-		[HideInInspector] public HashSet<Character> _AlreadyTargets;
+		[HideInInspector] public HashSet<GameObject> _AlreadyTargets;
 		[HideInInspector] public bool _DestroyTrigger;
 
 		void Awake()
@@ -29,6 +29,8 @@ namespace Battle
 
 		void FixedUpdate()
 		{
+			if (_DestroyTrigger) return;
+
 			// 히트 판정
 			Vector3 deltaPosition = _MoveSpeed * Time.fixedDeltaTime * transform.forward;
 			int layerMask = _Attack._Owner.GetOppositeLayerMask();
@@ -42,29 +44,31 @@ namespace Battle
 				layerMask: layerMask);
 
 			for (int i = 0; i < count; i++)
-            {
-                RaycastHit hit = _HitResults[i];
+			{
+				RaycastHit hit = _HitResults[i];
+				if (_AlreadyTargets.Contains(hit.collider.gameObject)) continue;
 
 				// 지형에 충돌
 				if (hit.collider.gameObject.layer == Layer.TerrainLayer)
 				{
 					_Attack._Owner.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
+					_AlreadyTargets.Add(hit.collider.gameObject);
 					_DestroyTrigger = true;
 					continue;
 				}
 
 				// 공격 적중
 				Character target = hit.collider.GetComponent<Character>();
-                if (!_AlreadyTargets.Contains(target))
-                {
-                    target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
-                    _AlreadyTargets.Add(target);
+				if (target)
+				{
+					target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
+					_AlreadyTargets.Add(target.gameObject);
 					_DestroyTrigger = true;
 				}
 			}
 
-            // 이동
-            _Rigidbody.MovePosition(transform.position + deltaPosition);
+			// 이동
+			_Rigidbody.MovePosition(transform.position + deltaPosition);
 		}
 	}
 }

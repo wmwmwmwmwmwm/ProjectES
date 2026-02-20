@@ -68,6 +68,12 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Transition
+      value: 
+      objectReference: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860,
+        type: 2}
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _HitDelay
