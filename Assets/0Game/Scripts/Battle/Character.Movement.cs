@@ -16,6 +16,7 @@ namespace Battle
 		public float _MoveAccel;
 		public float _DashDuration;
 		public float _JumpSpeed;
+		public float _ShoulderHeight;
 
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
@@ -31,6 +32,7 @@ namespace Battle
 		float _FadeInDeaccelTimer, _FadeOutDeaccelTimer;
 		Vector3 _Impulse;
 		Vector3? _AttackJumpDirection;
+		[HideInInspector] public bool _StopYTrigger;
 
 		void InitMovement()
 		{
@@ -56,13 +58,14 @@ namespace Battle
 							MoveRequest.DashLeft => -_Motor.CharacterRight,
 							_ => _Motor.CharacterRight
 						};
-						_Dash._Asset = _MoveRequest switch
+						TransitionAsset asset = _MoveRequest switch
 						{
 							MoveRequest.DashFwd => _DashFwdAsset,
 							MoveRequest.DashBwd => _DashBwdAsset,
 							MoveRequest.DashLeft => _DashLeftAsset,
 							_ => _DashRightAsset
 						};
+						_Dash.SetAsset(asset);
 						_FSM.TrySetState(_Dash);
 						_FadeOutDeaccelTimer = 0f;
 						_Impulse = _MoveSpeed * _Dash._MoveSpeed * _DashDir;
@@ -162,6 +165,13 @@ namespace Battle
 			if (!_Motor.GroundingStatus.IsStableOnGround)
 			{
 				currentVelocity += Physics.gravity * deltaTime;
+			}
+
+			// Y축 정지 트리거
+			if (_StopYTrigger)
+			{
+				currentVelocity.y = 0f;
+				_StopYTrigger = false;
 			}
 
 			// 점프 판정
@@ -275,7 +285,7 @@ namespace Battle
 				}
 				if (asset)
 				{
-					_Jump._Asset = asset;
+					_Jump.SetAsset(asset);
 					_FSM.TryResetState(_Jump);
 				}
 				DashCancel();
@@ -297,30 +307,37 @@ namespace Battle
 			{
 				if (!IsMovable()) return;
 
+				// 대쉬
+				if (IsDashing()) return;
+
 				// 루트 모션 이동
 				bool rootMotion = _RootMotionPosDelta != Vector3.zero;
-				rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
-				rootMotion &= !_Motor.MustUnground();
+				//rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
+				//rootMotion &= !_Motor.MustUnground();
 				rootMotion &= _FSM.CurrentState._UseRootMotion;
 				if (rootMotion)
 				{
-					currentVelocity = _RootMotionPosDelta / deltaTime;
+					Vector2 velocityXZ = new()
+					{
+						x = _RootMotionPosDelta.x / deltaTime,
+						y = _RootMotionPosDelta.z / deltaTime
+					};
 
 					// 전후 이동으로 강도 조정
 					if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._Attack._SkillType <= AttackSkillType.Special)
 					{
-						currentVelocity *= _MoveInput.z + 1f;
+						velocityXZ *= _MoveInput.z + 1f;
 					}
 
 					// 공격 시 살짝 이동
-					currentVelocity += moveSpeed * _AttackMovePercent * moveInputVector;
+					velocityXZ.x += moveSpeed * _AttackMovePercent * moveInputVector.x;
+					velocityXZ.y += moveSpeed * _AttackMovePercent * moveInputVector.z;
 
-					currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
+					currentVelocity.x = velocityXZ.x;
+					currentVelocity.z = velocityXZ.y;
+					//currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
 					return;
 				}
-
-				// 대쉬
-				if (IsDashing()) return;
 
 				// 지상 이동
 				if (_Motor.GroundingStatus.IsStableOnGround)

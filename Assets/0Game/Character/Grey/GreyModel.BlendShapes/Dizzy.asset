@@ -15,7 +15,7 @@ MonoBehaviour:
   m_prefab: {fileID: 2533530169898374822, guid: 0cb5ddf57b6803e4bbf8c4edf0596a2c,
     type: 3}
   BlendShapeName: Dizzy
-  Preset: 1
+  Preset: 0
   Values: []
   MaterialValues: []
   IsBinary: 0

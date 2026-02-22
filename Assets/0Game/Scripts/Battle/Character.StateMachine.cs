@@ -162,6 +162,7 @@ namespace Battle
 			{
 				c = this,
 				_Priority = 1,
+				_Restart = true,
 				_MoveSpeed = 0.6f,
 			};
 			_Damage.Init();
@@ -260,7 +261,6 @@ namespace Battle
 				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_LimitRotate = true,
-				_UseRootMotion = true,
 			};
 			_GuardAttack.Init();
 			_Skill1 = new()
@@ -347,7 +347,7 @@ namespace Battle
 			if (state == _GetDown)
 			{
 				bool getUp = _BaseLayer.CurrentState.NormalizedTime >= 1f;
-				getUp &= _Motor.GroundingStatus.IsStableOnGround;
+				getUp &= _Motor.GroundingStatus.FoundAnyGround;
 				if (getUp)
 				{
 					_FSM.TrySetState(_GetUp);
@@ -360,6 +360,7 @@ namespace Battle
 			_BaseLayer.Play(state._Asset, 0f);
 			_FSM.ForceSetState(state);
 			if (!shadow) return;
+
 			StartCoroutine(Internal());
 
 			IEnumerator Internal()

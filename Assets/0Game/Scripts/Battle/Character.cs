@@ -38,7 +38,6 @@ namespace Battle
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 		[HideInInspector] public bool _AlreadyWallJump;
 
-		const float AttackPreDelay = 0.1f;
 		const float MoveGraceDuration = 0.1f;
 		const float WallJumpAngleThreshold = 60f;
 
@@ -317,15 +316,15 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
+				Effect effectData = state._EffectData;
+				BattleAttack attackData = state._Attack;
 
 				// 공격 최소 딜레이
-				yield return new WaitForSeconds(AttackPreDelay);
+				yield return new WaitForSeconds(effectData._Delay * 0.3f);
 
 				BattleAttack attack = Instantiate(state._Attack, transform);
 				attack._Owner = this;
 				attack._StateInfo = state;
-				Effect effectData = state._EffectData;
-				BattleAttack attackData = state._Attack;
 				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
 
 				foreach (AttackHit attackHit in melee._AttackHits)
@@ -351,7 +350,7 @@ namespace Battle
 					}
 
 					// 딜레이
-					float delay = melee._AttackHits.IndexOf(attackHit) == 0 ? effectData._Delay - AttackPreDelay : effectData._Delay;
+					float delay = melee._AttackHits.IndexOf(attackHit) == 0 ? effectData._Delay * 0.7f : effectData._Delay;
 					yield return new WaitForSeconds(delay);
 
 					// 이펙트
@@ -452,7 +451,7 @@ namespace Battle
 				// 공격 판정 딜레이
 				Effect effectData = attack._StateInfo._EffectData;
 				BattleAttack attackData = attack._StateInfo._Attack;
-				float delay = attackHit._HitDelay - effectData._Delay - AttackPreDelay;
+				float delay = attackHit._HitDelay - effectData._Delay;
 				yield return new WaitForSeconds(delay);
 
 				// 경직
@@ -490,7 +489,7 @@ namespace Battle
 					{
 						_Damage._Duration = attackHit._DamageDuration;
 						_FadeInDeaccelTimer = attackHit._DamageDuration;
-						_Damage._Asset = _DamageAssets.PickOne();
+						_Damage.SetAsset(_DamageAssets.PickOne());
 						_FSM.TrySetState(_Damage);
 					}
 					// 밀어내기
@@ -499,7 +498,7 @@ namespace Battle
 						_Impulse = new(0f, 0f, attackHit._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FadeOutDeaccelTimer = attackHit._DamageDuration;
-						_Damage._Asset = _DamageAssets.PickOne();
+						_Damage.SetAsset(_DamageAssets.PickOne());
 						_FSM.TrySetState(_Damage);
 					}
 					// 날리기

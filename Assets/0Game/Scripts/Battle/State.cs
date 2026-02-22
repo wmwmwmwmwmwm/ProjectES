@@ -39,7 +39,7 @@ namespace Battle
 		{
 			if (_Asset == null) return;
 
-			_State = c._BaseLayer.Play(_Asset);
+			_State = c._BaseLayer.GetOrCreateState(_Asset);
 			_EffectData = Data.GetEffectData(_Asset);
 			_Attack = Data.GetAttackData(_Asset);
 
@@ -64,12 +64,7 @@ namespace Battle
 
 		public void OnEnterState()
 		{
-			if (_State == null)
-			{
-				Init();
-			}
-
-			c._BaseLayer.Play(_Asset);
+			_State = c._BaseLayer.Play(_Asset);
 
 			// 공격이 아니면 N번째 공격 상태 초기화
 			if (!IsAttack)
@@ -92,13 +87,16 @@ namespace Battle
 			{
 				_State.Time = 0f;
 			}
+
+			// Y축 정지 트리거
+			c._StopYTrigger = _UseRootMotion;
 		}
 
 		public void OnExitState() { }
 
 		public void UpdateState()
 		{
-			if (_Duration > 0f && c._Animancer.States.Current.Time > _Duration)
+			if (_Duration > 0f && _State.Time > _Duration)
 			{
 				c._FSM.ForceSetDefaultState.Invoke();
 				_OnEnd?.Invoke();
@@ -106,5 +104,11 @@ namespace Battle
 		}
 
 		public override string ToString() => _Asset.ToString();
+
+		public void SetAsset(TransitionAsset asset)
+		{
+			_Asset = asset;
+			Init();
+		}
 	}
 }

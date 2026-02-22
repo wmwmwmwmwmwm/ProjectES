@@ -11,8 +11,6 @@ namespace Battle
 {
 	public partial class Enemy : MonoBehaviour
 	{
-		public Slider _HPSlider;
-		public Slider _HPSlider_Inner;
 		public Transform _HPSliderPosition;
 
 		Character c;
@@ -21,6 +19,8 @@ namespace Battle
 		bool _Noticed;
 		float _LastAttackTime;
 		Collider[] _ColliderHits;
+		[HideInInspector] public Slider _HPSlider;
+		[HideInInspector] public Slider _HPSlider_Inner;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -42,11 +42,16 @@ namespace Battle
 			Move();
 			Attack();
 
-            // UI
-            Camera camera = Controller._MainCamera.GetComponent<Camera>();
-			_HPSlider.transform.localPosition = Controller._Canvas.WorldToCanvas(camera, _HPSliderPosition.position);
-            float cameraDistance = (transform.position - Controller._MainCamera.position).magnitude;
-			_HPSlider.transform.localScale = Controller._HPSliderScaleCurve.Evaluate(cameraDistance) * Vector3.one;
+			// UI
+			Camera camera = Controller._MainCamera.GetComponent<Camera>();
+			Vector3 distVector = transform.position - Controller._MainCamera.position;
+			float angle = Vector3.Angle(camera.transform.forward, distVector);
+			_HPSlider.gameObject.SetActive(angle < 90f);
+			if (_HPSlider.gameObject.activeSelf)
+			{
+				_HPSlider.transform.localPosition = Controller._Canvas.WorldToCanvas(camera, _HPSliderPosition.position);
+				_HPSlider.transform.localScale = Controller._HPSliderScaleCurve.Evaluate(distVector.magnitude) * Vector3.one;
+			}
 		}
 
 		public void NoticeAround()
@@ -102,7 +107,7 @@ namespace Battle
 		void Attack()
 		{
 			if (!_Noticed) return;
-			if (Time.time - _LastAttackTime < 2f) return;
+			if (Time.time - _LastAttackTime < 1f) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2f)
