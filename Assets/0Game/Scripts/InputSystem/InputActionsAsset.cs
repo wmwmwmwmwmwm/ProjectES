@@ -207,6 +207,24 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Character1"",
+                    ""type"": ""Button"",
+                    ""id"": ""91d715cb-96a7-40d4-9ac2-e1009c60352f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Character2"",
+                    ""type"": ""Button"",
+                    ""id"": ""85b9fefd-122a-4986-a9dc-7f211e360b01"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -394,6 +412,28 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
                     ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8dded7b8-1632-4cc2-a1be-b80fd3eea2f9"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Character1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f853f4a-e9d9-4b90-b155-132b18b97529"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Character2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -972,6 +1012,8 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         m_Battle_Skill1 = m_Battle.FindAction("Skill1", throwIfNotFound: true);
         m_Battle_Skill2 = m_Battle.FindAction("Skill2", throwIfNotFound: true);
         m_Battle_Ultimate = m_Battle.FindAction("Ultimate", throwIfNotFound: true);
+        m_Battle_Character1 = m_Battle.FindAction("Character1", throwIfNotFound: true);
+        m_Battle_Character2 = m_Battle.FindAction("Character2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1078,6 +1120,8 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
     private readonly InputAction m_Battle_Skill1;
     private readonly InputAction m_Battle_Skill2;
     private readonly InputAction m_Battle_Ultimate;
+    private readonly InputAction m_Battle_Character1;
+    private readonly InputAction m_Battle_Character2;
     /// <summary>
     /// Provides access to input actions defined in input action map "Battle".
     /// </summary>
@@ -1141,6 +1185,14 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Battle/Ultimate".
         /// </summary>
         public InputAction @Ultimate => m_Wrapper.m_Battle_Ultimate;
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/Character1".
+        /// </summary>
+        public InputAction @Character1 => m_Wrapper.m_Battle_Character1;
+        /// <summary>
+        /// Provides access to the underlying input action "Battle/Character2".
+        /// </summary>
+        public InputAction @Character2 => m_Wrapper.m_Battle_Character2;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1206,6 +1258,12 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Ultimate.started += instance.OnUltimate;
             @Ultimate.performed += instance.OnUltimate;
             @Ultimate.canceled += instance.OnUltimate;
+            @Character1.started += instance.OnCharacter1;
+            @Character1.performed += instance.OnCharacter1;
+            @Character1.canceled += instance.OnCharacter1;
+            @Character2.started += instance.OnCharacter2;
+            @Character2.performed += instance.OnCharacter2;
+            @Character2.canceled += instance.OnCharacter2;
         }
 
         /// <summary>
@@ -1256,6 +1314,12 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Ultimate.started -= instance.OnUltimate;
             @Ultimate.performed -= instance.OnUltimate;
             @Ultimate.canceled -= instance.OnUltimate;
+            @Character1.started -= instance.OnCharacter1;
+            @Character1.performed -= instance.OnCharacter1;
+            @Character1.canceled -= instance.OnCharacter1;
+            @Character2.started -= instance.OnCharacter2;
+            @Character2.performed -= instance.OnCharacter2;
+            @Character2.canceled -= instance.OnCharacter2;
         }
 
         /// <summary>
@@ -1621,6 +1685,20 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUltimate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Character1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCharacter1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Character2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCharacter2(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

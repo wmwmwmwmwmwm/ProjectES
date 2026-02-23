@@ -13,41 +13,49 @@ namespace Battle
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
 		public float _CameraRotationSpeed;
 
-		Character _Character;
+		[HideInInspector] public Character _Character;
 		Vector2 _LookInput;
 		Vector2 _LookRotation;
+		[HideInInspector] public UI_PlayerHP _UI_HP;
 
-		void Awake()
+		public void Init()
 		{
 			_Character = GetComponent<Character>();
+			_Character.Init();
 		}
 
-		void OnEnable()
+		public void ReceiveInput(bool on)
 		{
-			Inputs.Movement.performed += Move;
-			Inputs.Look.performed += Look;
-			Inputs.Dash += _Character.Dash;
-			Inputs.Jump.performed += _Character.Jump;
-			Inputs.Guard.performed += _Character.Guard;
-			Inputs.NormalAttack.performed += _Character.NormalAttack;
-			Inputs.SpecialAttack.performed += _Character.SpecialAttack;
-			Inputs.Skill1.performed += _Character.Skill1;
-			Inputs.Skill2.performed += _Character.Skill2;
-			Inputs.Ultimate.performed += _Character.Ultimate;
-		}
-
-		void OnDisable()
-		{
-			Inputs.Movement.performed -= Move;
-			Inputs.Look.performed -= Look;
-			Inputs.Dash -= _Character.Dash;
-			Inputs.Jump.performed -= _Character.Jump;
-			Inputs.Guard.performed -= _Character.Guard;
-			Inputs.NormalAttack.performed -= _Character.NormalAttack;
-			Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
-			Inputs.Skill1.performed -= _Character.Skill1;
-			Inputs.Skill2.performed -= _Character.Skill2;
-			Inputs.Ultimate.performed -= _Character.Ultimate;
+			if (on)
+			{
+				Inputs.Movement.performed += Move;
+				Inputs.Look.performed += Look;
+				Inputs.Dash += _Character.Dash;
+				Inputs.Jump.performed += _Character.Jump;
+				Inputs.Guard.performed += _Character.Guard;
+				Inputs.NormalAttack.performed += _Character.NormalAttack;
+				Inputs.SpecialAttack.performed += _Character.SpecialAttack;
+				Inputs.Skill1.performed += _Character.Skill1;
+				Inputs.Skill2.performed += _Character.Skill2;
+				Inputs.Ultimate.performed += _Character.Ultimate;
+				Inputs.Character1.performed += _Character.Character1;
+				Inputs.Character2.performed += _Character.Character2;
+			}
+			else
+			{
+				Inputs.Movement.performed -= Move;
+				Inputs.Look.performed -= Look;
+				Inputs.Dash -= _Character.Dash;
+				Inputs.Jump.performed -= _Character.Jump;
+				Inputs.Guard.performed -= _Character.Guard;
+				Inputs.NormalAttack.performed -= _Character.NormalAttack;
+				Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
+				Inputs.Skill1.performed -= _Character.Skill1;
+				Inputs.Skill2.performed -= _Character.Skill2;
+				Inputs.Ultimate.performed -= _Character.Ultimate;
+				Inputs.Character1.performed -= _Character.Character1;
+				Inputs.Character2.performed -= _Character.Character2;
+			}
 		}
 
 		void Update()

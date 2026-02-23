@@ -45,7 +45,7 @@ namespace Battle
 		public Vector3 Center => transform.position + _Collider.center;
 		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
 
-		void Start()
+		public void Init()
 		{
 			_Enemy = GetComponent<Enemy>();
 			_Collider = GetComponent<CapsuleCollider>();
@@ -297,6 +297,26 @@ namespace Battle
 			}
 		}
 
+		public void Character1(CallbackContext obj)
+		{
+			ChangeCharacter(0);
+		}
+
+		public void Character2(CallbackContext obj)
+		{
+			ChangeCharacter(1);
+		}
+
+		void ChangeCharacter(int index)
+		{
+			bool stateCondition = _FSM.CurrentState == _Idle;
+			stateCondition |= _FSM.CurrentState == _Move;
+			if (!stateCondition) return;
+			if (Controller._Players[index]._Character.IsDead()) return;
+
+			Controller.SetActivePlayer(index);
+		}
+
 		void Attack()
 		{
 			switch (_FSM.CurrentState._Attack._RangeType)
@@ -529,7 +549,7 @@ namespace Battle
 				}
 
 				// 쓰러짐
-				if (_HP <= 0)
+				if (_HP <= 0f)
 				{
 					_FSM.TrySetState(_Die);
 					_Collider.enabled = false;
@@ -589,6 +609,11 @@ namespace Battle
 		bool IsDashing()
 		{
 			return Time.time - _LastDashTime < _DashDuration;
+		}
+
+		bool IsDead()
+		{
+			return _HP <= 0f;
 		}
 
 		void DashCancel()

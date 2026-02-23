@@ -24,6 +24,8 @@ public class InputManager : Singleton<InputManager>
 	public InputAction Skill1 => InputActions.Battle.Skill1;
 	public InputAction Skill2 => InputActions.Battle.Skill2;
 	public InputAction Ultimate => InputActions.Battle.Ultimate;
+	public InputAction Character1 => InputActions.Battle.Character1;
+	public InputAction Character2 => InputActions.Battle.Character2;
 
 	protected override void Init()
 	{

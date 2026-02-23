@@ -13,9 +13,8 @@ namespace Battle
 	{
 		public Transform _HPSliderPosition;
 
-		Character c;
+		[HideInInspector] public Character _Character;
 		NavMeshAgent _Agent;
-
 		bool _Noticed;
 		float _LastAttackTime;
 		Collider[] _ColliderHits;
@@ -24,9 +23,10 @@ namespace Battle
 
 		BattleController Controller => BattleController.Instance;
 
-		void Awake()
+		public void Init()
 		{
-			c = GetComponent<Character>();
+			_Character = GetComponent<Character>();
+			_Character.Init();
 			_Agent = GetComponent<NavMeshAgent>();
 			_Agent.updatePosition = false;
 			_Agent.updateRotation = false;
@@ -89,18 +89,18 @@ namespace Battle
 			if (first != Vector3.zero)
 			{
 				Vector3 dir = first - transform.position;
-				c._AimDestRotation = Quaternion.LookRotation(dir);
-				c._MoveInput = move ? Vector3.forward : Vector3.zero;
+				_Character._AimDestRotation = Quaternion.LookRotation(dir);
+				_Character._MoveInput = move ? Vector3.forward : Vector3.zero;
 			}
 			else if (_Agent.path.corners.Length > 1)
 			{
 				Vector3 second = _Agent.path.corners[1];
 				Vector3 dir = second - transform.position;
-				c._AimDestRotation = Quaternion.LookRotation(dir);
-				c._MoveInput = move ? Vector3.forward : Vector3.zero;
+				_Character._AimDestRotation = Quaternion.LookRotation(dir);
+				_Character._MoveInput = move ? Vector3.forward : Vector3.zero;
 			}
 
-			Vector3 playerPos = Controller._Player.transform.position;
+			Vector3 playerPos = Controller._ActivePlayer.transform.position;
 			_Agent.SetDestination(playerPos);
 		}
 
@@ -112,14 +112,14 @@ namespace Battle
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2f)
 			{
-				c.NormalAttack(default);
+				_Character.NormalAttack(default);
 				_LastAttackTime = Time.time;
 			}
 		}
 
 		Vector3 GetPlayerDistanceVector()
 		{
-			Vector3 playerPos = Controller._Player.transform.position;
+			Vector3 playerPos = Controller._ActivePlayer.transform.position;
 			return transform.position - playerPos;
 		}
 

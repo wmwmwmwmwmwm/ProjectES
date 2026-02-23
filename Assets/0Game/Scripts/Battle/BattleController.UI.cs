@@ -16,39 +16,60 @@ namespace Battle
 		public SkillIcon _Skill2SkillIcon;
 		public SkillIcon _UltimateSkillIcon;
 		public AnimationCurve _HPSliderScaleCurve;
-		public Slider _PlayerHPSlider;
-		public Slider _PlayerHPSlider_Inner;
-		public TMP_Text _PlayerHPText;
 		public GameObject _DamageText;
 		public Transform _DamageTextParent;
 		public GameObject _DamageScreen;
+		public GameObject _EnemyHPPrefab;
+		public Transform _EnemyHPParent;
+		public UI_PlayerHP _PlayerHPPrefab;
+		public Transform _PlayerHPParent;
+
+		void InitUI()
+		{
+			foreach (Player player in _Players)
+			{
+                UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
+				player._UI_HP = ui;
+			}
+			foreach (Enemy enemy in _Enemys)
+			{
+				GameObject ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
+				enemy._HPSlider = ui.GetComponent<Slider>();
+				enemy._HPSlider_Inner = ui.transform.Find("Inner").GetComponent<Slider>();
+			}
+		}
 
 		void UpdateUI()
 		{
-			// 체력
-			float percent = _Player._HP / _Player._MaxHP;
-			_PlayerHPSlider.value = percent;
-			_PlayerHPSlider_Inner.value = Mathf.MoveTowards(_PlayerHPSlider_Inner.value, percent, 0.3f * Time.deltaTime);
-			_PlayerHPText.text = $"{_Player._HP} / {_Player._MaxHP}";
-
-			// 스킬
-			RefreshSkillIcon(_Skill1SkillIcon, _Player._Skill1._Attack._Cooltime, _Player._LastSkill1Time);
-			RefreshSkillIcon(_Skill2SkillIcon, _Player._Skill2._Attack._Cooltime, _Player._LastSkill2Time);
-			RefreshSkillIcon(_UltimateSkillIcon, _Player._Ultimate._Attack._Cooltime, _Player._LastUltimateTime);
-
-			void RefreshSkillIcon(SkillIcon icon, float cooltime, float lastTime)
+			foreach (Player player in _Players)
 			{
-				float elapsed = Time.time - lastTime;
-				if (elapsed < cooltime)
+                // 체력
+                Character c = player._Character;
+				float hp = Mathf.Max(1f, c._HP);
+				float percent = hp / c._MaxHP;
+				player._UI_HP._Slider.value = percent;
+				player._UI_HP._Slider_Inner.value = Mathf.MoveTowards(player._UI_HP._Slider_Inner.value, percent, 0.3f * Time.deltaTime);
+				player._UI_HP._HPText.text = $"{hp:0} / {c._MaxHP:0}";
+
+				// 스킬
+				RefreshSkillIcon(_Skill1SkillIcon, c._Skill1._Attack._Cooltime, c._LastSkill1Time);
+				RefreshSkillIcon(_Skill2SkillIcon, c._Skill2._Attack._Cooltime, c._LastSkill2Time);
+				RefreshSkillIcon(_UltimateSkillIcon, c._Ultimate._Attack._Cooltime, c._LastUltimateTime);
+
+				void RefreshSkillIcon(SkillIcon icon, float cooltime, float lastTime)
 				{
-					icon._Slider.value = elapsed / cooltime;
-					float remained = cooltime - elapsed;
-					icon._Text.text = remained.ToString(remained < 1f ? "0.0" : "0");
-				}
-				else
-				{
-					icon._Slider.value = 0f;
-					icon._Text.text = "";
+					float elapsed = Time.time - lastTime;
+					if (elapsed < cooltime)
+					{
+						icon._Slider.value = elapsed / cooltime;
+						float remained = cooltime - elapsed;
+						icon._Text.text = remained.ToString(remained < 1f ? "0.0" : "0");
+					}
+					else
+					{
+						icon._Slider.value = 0f;
+						icon._Text.text = "";
+					}
 				}
 			}
 		}
@@ -63,7 +84,7 @@ namespace Battle
 				float t = 0f;
 				while (t < 3f)
 				{
-                    newText.transform.localPosition = _Canvas.WorldToCanvas(_MainCamera.GetComponent<Camera>(), position);
+					newText.transform.localPosition = _Canvas.WorldToCanvas(_MainCamera.GetComponent<Camera>(), position);
 					t += Time.deltaTime;
 					yield return null;
 				}
@@ -73,7 +94,7 @@ namespace Battle
 
 		public void ShowDamageScreen()
 		{
-            CanvasGroup canvasGroup = _DamageScreen.GetComponent<CanvasGroup>();
+			CanvasGroup canvasGroup = _DamageScreen.GetComponent<CanvasGroup>();
 			canvasGroup.alpha = 0.5f;
 			canvasGroup.DOKill();
 			canvasGroup.DOFade(0f, 0.3f);

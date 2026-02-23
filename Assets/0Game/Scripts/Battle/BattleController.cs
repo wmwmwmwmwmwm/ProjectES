@@ -10,24 +10,30 @@ namespace Battle
 	{
 		public Transform _MainCamera, _BackgroundCamera;
 		public Transform _BgSky, _BgGround, _BgNear;
-		public Character _Player;
-		public List<Character> _Enemys;
+		public List<Player> _Players;
+		public List<Enemy> _Enemys;
 
-		[Header("UI")]
-		public GameObject _EnemyHPSliderPrefab;
-		public Transform _EnemyHPSliderParent;
+		[HideInInspector] public Player _ActivePlayer;
+
+		protected override void Awake()
+		{
+			base.Awake();
+
+			InitUI();
+			foreach (Player player in _Players)
+            {
+				player.Init();
+            }
+            foreach (Enemy enemy in _Enemys)
+            {
+				enemy.Init();
+            }
+		}
 
 		void Start()
 		{
-			foreach (Character enemyChar in _Enemys)
-			{
-				GameObject enemyHPSlider = Instantiate(_EnemyHPSliderPrefab, _EnemyHPSliderParent);
-				Enemy enemy = enemyChar.GetComponent<Enemy>();
-				enemy._HPSlider = enemyHPSlider.GetComponent<Slider>();
-				enemy._HPSlider_Inner = enemyHPSlider.transform.Find("Inner").GetComponent<Slider>();
-			}
-
 			Game.LockCursor(true);
+			SetActivePlayer(0);
 		}
 
 		void Update()
@@ -38,5 +44,18 @@ namespace Battle
 
 			UpdateUI();
 		}
+
+		public void SetActivePlayer(int index)
+		{
+            _Players[index].transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
+            _ActivePlayer = _Players[index];
+			foreach (Player player in _Players)
+            {
+				bool active = player == _ActivePlayer;
+				player.gameObject.SetActive(active);
+				player.ReceiveInput(active);
+            }
+			_ActivePlayer.transform.SetPositionAndRotation(pos, rot);
+        }
 	}
 }
