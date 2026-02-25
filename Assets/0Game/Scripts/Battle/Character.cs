@@ -4,6 +4,7 @@ using KinematicCharacterController;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VRM;
 using static DataManager;
@@ -43,6 +44,7 @@ namespace Battle
 
 		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center => transform.position + _Collider.center;
+		public Vector3 Top => transform.position + _Motor.CharacterTransformToCapsuleTop;
 		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
 
 		public void Init()
@@ -115,7 +117,7 @@ namespace Battle
 			// 저스트 가드
 			if (IsJustGuard())
 			{
-				_FSM.TrySetState(_GuardAttack);
+				Play(_GuardAttack);
 				Attack();
 				_JustGuardCancelTrigger = true;
 			}
@@ -124,7 +126,7 @@ namespace Battle
 			{
 				_FadeOutDeaccelTimer = _DashDuration;
 				DashCancel();
-				_FSM.TrySetState(_DashAttack);
+				Play(_DashAttack);
 				Attack();
 			}
 			// 지상
@@ -134,7 +136,7 @@ namespace Battle
 				if (_AttackIndex < 0)
 				{
 					_AttackIndex = 0;
-					_FSM.TrySetState(_NormalAttacks[_AttackIndex]);
+					Play(_NormalAttacks[_AttackIndex]);
 					Attack();
 				}
 				// 2~타 공격
@@ -146,7 +148,7 @@ namespace Battle
 			// 공중
 			else if (_FSM.CurrentState != _JumpAttack) 
 			{
-				_FSM.TrySetState(_JumpAttack);
+				Play(_JumpAttack);
 				Attack();
 			}
 		}
@@ -162,7 +164,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
-					if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Special)
+					if (_NormalAttacks.Contains(_FSM.CurrentState))
 					{
 						Play_Canceling(_SpecialAttack, true);
 					}
@@ -170,7 +172,7 @@ namespace Battle
 				}
 				else
 				{
-					_FSM.TrySetState(_SpecialAttack);
+					Play(_SpecialAttack);
 				}
 				Attack();
 			}
@@ -179,7 +181,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack) return;
 
-				_FSM.TrySetState(_JumpSpecialAttack);
+				Play(_JumpSpecialAttack);
 				Attack();
 			}
 		}
@@ -207,7 +209,7 @@ namespace Battle
 			}
 			else
 			{
-				_FSM.TrySetState(_Skill1);
+				Play(_Skill1);
 			}
 			Attack();
 			_LastSkill1Time = Time.time;
@@ -236,7 +238,7 @@ namespace Battle
 			}
 			else
 			{
-				_FSM.TrySetState(_Skill2);
+				Play(_Skill2);
 			}
 			Attack();
 			_LastSkill2Time = Time.time;
@@ -265,7 +267,7 @@ namespace Battle
 			}
 			else
 			{
-				_FSM.TrySetState(_Ultimate);
+				Play(_Ultimate);
 			}
 			Attack();
 			_LastUltimateTime = Time.time;
@@ -311,6 +313,9 @@ namespace Battle
 		{
 			bool stateCondition = _FSM.CurrentState == _Idle;
 			stateCondition |= _FSM.CurrentState == _Move;
+			stateCondition |= _FSM.CurrentState == _Jump;
+			stateCondition |= _FSM.CurrentState == _Fall;
+			stateCondition |= _FSM.CurrentState == _Land;
 			if (!stateCondition) return;
 			if (Controller._Players[index]._Character.IsDead()) return;
 
@@ -336,11 +341,12 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				Effect effectData = state._EffectData;
+                Effect firstEffectData = state._EffectDatas.First();
+				List<Effect>.Enumerator effectEnum = state._EffectDatas.GetEnumerator();
 				BattleAttack attackData = state._Attack;
 
 				// 공격 최소 딜레이
-				yield return new WaitForSeconds(effectData._Delay * 0.3f);
+				yield return new WaitForSeconds(firstEffectData._Delay * 0.3f);
 
 				BattleAttack attack = Instantiate(state._Attack, transform);
 				attack._Owner = this;
@@ -350,6 +356,9 @@ namespace Battle
 				foreach (AttackHit attackHit in melee._AttackHits)
 				{
 					if (_FSM.CurrentState != state) yield break;
+
+					bool hasNext = effectEnum.MoveNext();
+                    Effect effectData = hasNext ? effectEnum.Current : firstEffectData;
 
 					// 공중 공격으로 점프
 					int raycastCount = Physics.RaycastNonAlloc(
@@ -423,7 +432,7 @@ namespace Battle
 					// 벽에 적중
 					else if (raycastCount > 0)
 					{
-						PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
+						Controller.PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
 					}
 				}
 
@@ -440,7 +449,7 @@ namespace Battle
 				BattleAttack attack = Instantiate(state._Attack);
 				attack._Owner = this;
 				attack._StateInfo = state;
-				Effect effectData = state._EffectData;
+				Effect effectData = state._EffectDatas.First();
 				Missile missile = attack.GetComponent<Missile>();
 				missile.transform.SetPositionAndRotation(Center, _AimDestRotation);
 
@@ -457,11 +466,15 @@ namespace Battle
 			}
 		}
 
-		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3 hitPoint, Vector3 attackDirection)
+		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3? hitPoint, Vector3 attackDirection)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
+				// 이펙트 위치
+				Vector3 effectPosition = hitPoint != null ? hitPoint.Value : Center;
+				Vector3 damageTextPosition = hitPoint != null ? hitPoint.Value : Top;
+
 				// 주변 적 활성화
 				if (_Enemy)
 				{
@@ -469,8 +482,7 @@ namespace Battle
 				}
 
 				// 공격 판정 딜레이
-				Effect effectData = attack._StateInfo._EffectData;
-				BattleAttack attackData = attack._StateInfo._Attack;
+				Effect effectData = attack._StateInfo._EffectDatas.First();
 				float delay = attackHit._HitDelay - effectData._Delay;
 				yield return new WaitForSeconds(delay);
 
@@ -500,7 +512,7 @@ namespace Battle
 						_FadeInDeaccelTimer = 0.6f;
 						damage *= attack._AreaType == AttackAreaType.Single ? 0f : 0.5f;
 					}
-					PlayEffect123123(_GuardEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
+					Controller.PlayEffect123123(_GuardEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
 				}
 				else
 				{
@@ -510,7 +522,7 @@ namespace Battle
 						_Damage._Duration = attackHit._DamageDuration;
 						_FadeInDeaccelTimer = attackHit._DamageDuration;
 						_Damage.SetAsset(_DamageAssets.PickOne());
-						_FSM.TrySetState(_Damage);
+						Play(_Damage);
 					}
 					// 밀어내기
 					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
@@ -519,7 +531,7 @@ namespace Battle
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FadeOutDeaccelTimer = attackHit._DamageDuration;
 						_Damage.SetAsset(_DamageAssets.PickOne());
-						_FSM.TrySetState(_Damage);
+						Play(_Damage);
 					}
 					// 날리기
 					else 
@@ -530,15 +542,15 @@ namespace Battle
 					}
 
 					// 이펙트
-					PlayEffect123123(attackHit._HitEffectPrefab, attacker, hitPoint, Quaternion.LookRotation(attackDirection));
-					PlayEffect123123(_HitEffectPrefab, this, hitPoint, Quaternion.LookRotation(attackDirection));
+					Controller.PlayEffect123123(attackHit._HitEffectPrefab, attacker, effectPosition, Quaternion.LookRotation(attackDirection));
+					Controller.PlayEffect123123(_HitEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
 				}
 
 				// 데미지 표시
 				SetHP(_HP - damage);
 				if (_Enemy)
 				{
-					Controller.ShowDamageText(damage, hitPoint);
+					Controller.ShowDamageText(damage, damageTextPosition);
 				}
 				else
 				{
@@ -700,20 +712,6 @@ namespace Battle
 			{
 				float percent = _HP / _MaxHP;
 				_Enemy.SetHPSliderValue(percent);
-			}
-		}
-
-		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)
-		{
-			StartCoroutine(Internal());
-			IEnumerator Internal()
-			{
-				GameObject hitEffect = Instantiate(prefab, pos, rot);
-				BattleEffect e = hitEffect.AddComponent<BattleEffect>();
-				e._Owner = owner;
-				e.Init();
-				yield return new WaitForSeconds(3f);
-				Destroy(hitEffect);
 			}
 		}
 	}

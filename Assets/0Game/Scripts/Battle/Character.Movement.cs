@@ -249,7 +249,7 @@ namespace Battle
 									Direction4.Left => _DashLeftAsset,
 									_ => _DashRightAsset
 								};
-								PlayEffect123123(_GuardEffectPrefab, this, Bottom, Quaternion.identity);
+								Controller.PlayEffect123123(_GuardEffectPrefab, this, Bottom, Quaternion.identity);
 								break;
 							}
 						}
@@ -286,7 +286,7 @@ namespace Battle
 				if (asset)
 				{
 					_Jump.SetAsset(asset);
-					_FSM.TryResetState(_Jump);
+					Play(_Jump);
 				}
 				DashCancel();
 				_MoveRequest = MoveRequest.None;
@@ -312,9 +312,16 @@ namespace Battle
 
 				// 루트 모션 이동
 				bool rootMotion = _RootMotionPosDelta != Vector3.zero;
-				//rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
-				//rootMotion &= !_Motor.MustUnground();
-				rootMotion &= _FSM.CurrentState._UseRootMotion;
+                switch (_FSM.CurrentState._RootMotionMode)
+                {
+                    case State.RootMotionMode.None:
+						rootMotion = false;
+                        break;
+                    case State.RootMotionMode.GroundOnly:
+						rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
+						rootMotion &= !_Motor.MustUnground();
+						break;
+                }
 				if (rootMotion)
 				{
 					Vector2 velocityXZ = new()
@@ -396,10 +403,10 @@ namespace Battle
 					currentVelocity += addedVelocity;
 					_FSM.TrySetState(_Fall);
 				}
-			}
-		}
+            }
+        }
 
-		public void AfterCharacterUpdate(float deltaTime)
+        public void AfterCharacterUpdate(float deltaTime)
 		{
 			if (_MoveRequest != MoveRequest.None && Time.time - _LastRequestTime > MoveGraceDuration)
 			{
@@ -445,5 +452,5 @@ namespace Battle
 		{
 			// This is called by the motor when it is detecting a collision that did not result from a "movement hit".
 		}
-	}
+    }
 }

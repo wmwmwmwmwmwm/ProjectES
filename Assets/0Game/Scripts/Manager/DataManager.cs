@@ -12,7 +12,6 @@ public class DataManager : Singleton<DataManager>
 	[Serializable]
 	public class Effect
 	{
-		public AnimationClip _Clip;
 		public TransitionAsset _Transition;
 		public GameObject _EffectPrefab;
 		//public AssetReferenceT<GameObject> _Prefab;
@@ -68,28 +67,20 @@ public class DataManager : Singleton<DataManager>
 	//	Util.SetDirty(this);
 	//}
 
-	public Dictionary<TransitionAsset, Effect> _EffectDict;
+	public Dictionary<TransitionAsset, List<Effect>> _EffectDict;
 	public Dictionary<TransitionAsset, BattleAttack> _AttackDict;
 
 	protected override void Init()
 	{
-		_EffectDict = new();
-		foreach (Effect data in _Effects)
-		{
-			_EffectDict.Add(data._Transition, data);
-		}
-		_AttackDict = new();
-		foreach (BattleAttack data in _BattleAttacks)
-		{
-			_AttackDict.Add(data._Transition, data);
-		}
+		_EffectDict = _Effects.GroupBy(x => x._Transition).ToDictionary(a => a.Key, b => b.ToList());
+		_AttackDict = _BattleAttacks.ToDictionary(a => a._Transition, b => b);
 	}
 
-	public Effect GetEffectData(TransitionAsset transition)
+	public List<Effect> GetEffectDatas(TransitionAsset transition)
 	{
 		if (!transition) return null;
-		_EffectDict.TryGetValue(transition, out Effect data);
-		return data;
+		_EffectDict.TryGetValue(transition, out List<Effect> datas);
+		return datas;
 	}
 
 	public BattleAttack GetAttackData(TransitionAsset transition)

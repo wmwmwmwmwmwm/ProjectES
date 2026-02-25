@@ -19,14 +19,15 @@ namespace Battle
 		public float _Duration;
 		public bool _LimitRotate;
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
-		public bool _UseRootMotion;
+		public enum RootMotionMode { None, GroundOnly, All }
+		public RootMotionMode _RootMotionMode;
 		public string _EffectName;
 		public string _AttackName;
 
 		public AnimancerState _State;
 		public Action _OnEnd;
 
-		public Effect _EffectData;
+		public List<Effect> _EffectDatas;
 		public BattleAttack _Attack;
 
 		public bool IsAttack => _Attack != null;
@@ -40,7 +41,7 @@ namespace Battle
 			if (_Asset == null) return;
 
 			_State = c._BaseLayer.GetOrCreateState(_Asset);
-			_EffectData = Data.GetEffectData(_Asset);
+			_EffectDatas = Data.GetEffectDatas(_Asset);
 			_Attack = Data.GetAttackData(_Asset);
 
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
@@ -89,7 +90,7 @@ namespace Battle
 			}
 
 			// Y축 정지 트리거
-			c._StopYTrigger = _UseRootMotion;
+			c._StopYTrigger = _RootMotionMode == RootMotionMode.All;
 		}
 
 		public void OnExitState() { }
@@ -98,7 +99,7 @@ namespace Battle
 		{
 			if (_Duration > 0f && _State.Time > _Duration)
 			{
-				c._FSM.ForceSetDefaultState.Invoke();
+				c._FSM.ForceSetDefaultState();
 				_OnEnd?.Invoke();
 			}
 		}

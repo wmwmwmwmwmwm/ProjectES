@@ -18,7 +18,7 @@ namespace Battle
 		void Awake()
 		{
 			_HitResults = new Collider[30];
-			_AttackHits = GetComponentsInChildren<AttackHit>().ToList();
+            GetComponentsInChildren(_AttackHits);
 		}
 	}
 }

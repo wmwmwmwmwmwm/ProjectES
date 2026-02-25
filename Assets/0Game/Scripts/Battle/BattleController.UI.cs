@@ -26,9 +26,12 @@ namespace Battle
 
 		void InitUI()
 		{
+			_PlayerHPPrefab.gameObject.SetActive(false);
+
 			foreach (Player player in _Players)
 			{
-                UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
+				UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
+				ui.gameObject.SetActive(true);
 				player._UI_HP = ui;
 			}
 			foreach (Enemy enemy in _Enemys)
@@ -43,8 +46,8 @@ namespace Battle
 		{
 			foreach (Player player in _Players)
 			{
-                // 체력
-                Character c = player._Character;
+				// 체력
+				Character c = player._Character;
 				float hp = Mathf.Max(1f, c._HP);
 				float percent = hp / c._MaxHP;
 				player._UI_HP._Slider.value = percent;

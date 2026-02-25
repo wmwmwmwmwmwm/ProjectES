@@ -14,8 +14,8 @@ namespace Battle
 		public float _CameraRotationSpeed;
 
 		[HideInInspector] public Character _Character;
-		Vector2 _LookInput;
-		Vector2 _LookRotation;
+		[HideInInspector] public Vector2 _LookInput;
+		[HideInInspector] public Vector2 _LookRotation;
 		[HideInInspector] public UI_PlayerHP _UI_HP;
 
 		public void Init()

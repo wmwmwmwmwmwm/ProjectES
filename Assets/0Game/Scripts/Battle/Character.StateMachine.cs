@@ -203,7 +203,7 @@ namespace Battle
 					_LimitRotate = true,
 					_CanGuard = true,
 					_CanAttack = true,
-					_UseRootMotion = true,
+					_RootMotionMode = State.RootMotionMode.GroundOnly,
 				};
 				newState.Init();
 				_NormalAttacks.Add(newState);
@@ -240,7 +240,7 @@ namespace Battle
 				_LimitRotate = true,
 				_CanGuard = true,
 				_CanAttack = true,
-				_UseRootMotion = true,
+				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_SpecialAttack.Init();
 			_JumpSpecialAttack = new()
@@ -271,7 +271,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
-				_UseRootMotion = true,
+				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_Skill1.Init();
 			_Skill2 = new()
@@ -282,7 +282,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
-				_UseRootMotion = true,
+				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_Skill2.Init();
 			_Ultimate = new()
@@ -292,7 +292,7 @@ namespace Battle
 				_MoveSpeed = 0f,
 				_Restart = true,
 				_LimitRotate = true,
-				_UseRootMotion = true,
+				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_Ultimate.Init();
 
@@ -355,9 +355,20 @@ namespace Battle
 			}
 		}
 
+		void Play(State state)
+		{
+			if (state._Restart)
+			{
+				_FSM.TryResetState(state);
+			}
+			else
+			{
+				_FSM.TrySetState(state);
+			}
+		}
+
 		void Play_Canceling(State state, bool shadow)
 		{
-			_BaseLayer.Play(state._Asset, 0f);
 			_FSM.ForceSetState(state);
 			if (!shadow) return;
 

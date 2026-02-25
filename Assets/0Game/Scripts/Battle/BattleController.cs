@@ -15,23 +15,19 @@ namespace Battle
 
 		[HideInInspector] public Player _ActivePlayer;
 
-		protected override void Awake()
-		{
-			base.Awake();
-
-			InitUI();
-			foreach (Player player in _Players)
-            {
-				player.Init();
-            }
-            foreach (Enemy enemy in _Enemys)
-            {
-				enemy.Init();
-            }
-		}
-
 		void Start()
 		{
+			InitUI();
+			foreach (Player player in _Players)
+			{
+				player.Init();
+				player.gameObject.SetActive(false);
+			}
+			foreach (Enemy enemy in _Enemys)
+			{
+				enemy.Init();
+			}
+
 			Game.LockCursor(true);
 			SetActivePlayer(0);
 		}
@@ -47,15 +43,43 @@ namespace Battle
 
 		public void SetActivePlayer(int index)
 		{
-            _Players[index].transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
-            _ActivePlayer = _Players[index];
+			Player nextPlayer = _Players[index];
+			if (_ActivePlayer == nextPlayer) return;
+
+			// 이동
+			if (_ActivePlayer)
+			{
+				nextPlayer._Character._MoveInput = _ActivePlayer._Character._MoveInput;
+				nextPlayer._LookInput = _ActivePlayer._LookInput;
+				nextPlayer._LookRotation = _ActivePlayer._LookRotation;
+				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
+				nextPlayer._Character._Motor.SetPositionAndRotation(pos, rot);
+				nextPlayer._Character._FSM.ForceSetDefaultState();
+			}
+
 			foreach (Player player in _Players)
-            {
-				bool active = player == _ActivePlayer;
+			{
+				bool active = player == nextPlayer;
 				player.gameObject.SetActive(active);
 				player.ReceiveInput(active);
-            }
-			_ActivePlayer.transform.SetPositionAndRotation(pos, rot);
-        }
+				player._UI_HP.transform.localScale = active ? Vector3.one : 0.8f * Vector3.one;
+			}
+
+			_ActivePlayer = nextPlayer;
+		}
+
+		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				GameObject hitEffect = Instantiate(prefab, pos, rot);
+				BattleEffect e = hitEffect.AddComponent<BattleEffect>();
+				e._Owner = owner;
+				e.Init();
+				yield return new WaitForSeconds(3f);
+				Destroy(hitEffect);
+			}
+		}
 	}
 }

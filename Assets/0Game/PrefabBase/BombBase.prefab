@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7962001881997064712}
   - component: {fileID: 3152885022966669924}
   - component: {fileID: 7952066989866752520}
-  - component: {fileID: 2204090715861840270}
+  - component: {fileID: 3733807904395900310}
+  - component: {fileID: 4950080998799803799}
   m_Layer: 0
-  m_Name: MissileBase
+  m_Name: BombBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 595698724755854391}
+  - {fileID: 7464031876476060458}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7962001881997064712
@@ -95,14 +97,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 2230065087802561693}
-  _AttackHit: {fileID: 2204090715861840270}
+  _AttackHit: {fileID: 3733807904395900310}
   _MoveSpeed: 10
   _Duration: 5
   _Attack: {fileID: 0}
   _Rigidbody: {fileID: 0}
   _DestroyTrigger: 0
   _Bomb: {fileID: 0}
---- !u!114 &2204090715861840270
+--- !u!114 &3733807904395900310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,6 +124,21 @@ MonoBehaviour:
   _ForceForward: 10
   _ForceUp: 10
   _Damage: 150
+--- !u!114 &4950080998799803799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146658982985273343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c284f1f0e60e144b3f54f9ed8cd203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AreaCollider: {fileID: 1499903733439316206}
+  _Particle: {fileID: 0}
+  _HitResults: []
 --- !u!1 &5803323295818537969
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,4 +191,57 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7129045761105417973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7464031876476060458}
+  - component: {fileID: 1499903733439316206}
+  m_Layer: 0
+  m_Name: BombArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7464031876476060458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129045761105417973}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 438804944403085889}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1499903733439316206
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129045761105417973}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
