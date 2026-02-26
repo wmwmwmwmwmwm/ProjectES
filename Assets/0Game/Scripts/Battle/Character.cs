@@ -19,7 +19,10 @@ namespace Battle
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
 		public ParticleSystem _JustGuardEffect;
-		public GameObject _CancelModel;
+		public GameObject _ChangeCharacterEffectPrefab;
+		public ParticleSystem _DashWindEffect;
+		public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
+		public GameObject _Model;
 		public Material _WhiteMaterial;
 		public Transform _CooltimeJitter;
 
@@ -36,6 +39,8 @@ namespace Battle
 		bool _IsRunning;
 		Coroutine _JustGuardCoroutine;
 		bool _JustGuardCancelTrigger;
+		Coroutine _FeetSmokeCoroutine;
+		Coroutine _DashWindCoroutine;
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 		[HideInInspector] public bool _AlreadyWallJump;
 
@@ -66,6 +71,13 @@ namespace Battle
 			InitFSM();
 			_AttackIndex = -1;
 			_JustGuardEffect.gameObject.SetActive(false);
+			_DashWindEffect.gameObject.SetActive(false);
+			_FeetSmokeLeftEffect.gameObject.SetActive(false);
+			_FeetSmokeRightEffect.gameObject.SetActive(false);
+			Transform leftFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot) : transform;
+			_FeetSmokeLeftEffect.transform.SetParent(leftFoot, false);
+			Transform rightFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot) : transform;
+			_FeetSmokeRightEffect.transform.SetParent(rightFoot, false);
 
 			SetHP(_MaxHP);
 
@@ -320,6 +332,7 @@ namespace Battle
 			if (Controller._Players[index]._Character.IsDead()) return;
 
 			Controller.SetActivePlayer(index);
+			Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, this, transform.position, transform.rotation);
 		}
 
 		void Attack()
@@ -341,7 +354,7 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-                Effect firstEffectData = state._EffectDatas.First();
+				Effect firstEffectData = state._EffectDatas.First();
 				List<Effect>.Enumerator effectEnum = state._EffectDatas.GetEnumerator();
 				BattleAttack attackData = state._Attack;
 
@@ -358,7 +371,7 @@ namespace Battle
 					if (_FSM.CurrentState != state) yield break;
 
 					bool hasNext = effectEnum.MoveNext();
-                    Effect effectData = hasNext ? effectEnum.Current : firstEffectData;
+					Effect effectData = hasNext ? effectEnum.Current : firstEffectData;
 
 					// 공중 공격으로 점프
 					int raycastCount = Physics.RaycastNonAlloc(
@@ -532,6 +545,7 @@ namespace Battle
 						_FadeOutDeaccelTimer = attackHit._DamageDuration;
 						_Damage.SetAsset(_DamageAssets.PickOne());
 						Play(_Damage);
+						FeetSmoke(attackHit._DamageDuration);
 					}
 					// 날리기
 					else 
@@ -704,14 +718,42 @@ namespace Battle
 				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
 		}
 
-		void SetHP(float hp)
+		void FeetSmoke(float time)
 		{
-			_HP = hp;
-
-			if (_Enemy)
+			if (_FeetSmokeCoroutine != null)
 			{
-				float percent = _HP / _MaxHP;
-				_Enemy.SetHPSliderValue(percent);
+				StopCoroutine(_FeetSmokeCoroutine);
+				_FeetSmokeCoroutine = null;
+			}
+			_FeetSmokeCoroutine = StartCoroutine(Internal());
+
+			IEnumerator Internal()
+			{
+				_FeetSmokeLeftEffect.gameObject.SetActive(true);
+				_FeetSmokeRightEffect.gameObject.SetActive(true);
+				float start = Time.time;
+				yield return new WaitUntil(() => Time.time - start > time || !_Motor.GroundingStatus.IsStableOnGround);
+				_FeetSmokeLeftEffect.gameObject.SetActive(false);
+				_FeetSmokeRightEffect.gameObject.SetActive(false);
+				_FeetSmokeCoroutine = null;
+			}
+		}
+
+		void DashWind()
+		{
+			if (_DashWindCoroutine != null)
+			{
+				StopCoroutine(_DashWindCoroutine);
+				_DashWindCoroutine = null;
+			}
+			_DashWindCoroutine = StartCoroutine(Internal());
+
+			IEnumerator Internal()
+			{
+				_DashWindEffect.gameObject.SetActive(true);
+				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
+				_DashWindEffect.gameObject.SetActive(false);
+				_DashWindCoroutine = null;
 			}
 		}
 	}

@@ -378,7 +378,7 @@ namespace Battle
 			{
 				// 잔상 생성
 				float duration = 1f;
-				GameObject model = Instantiate(_CancelModel, transform.position, transform.rotation);
+				GameObject model = Instantiate(_Model, transform.position, transform.rotation);
 				Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
 				Material whiteMaterial = new(_WhiteMaterial);
 				foreach (Renderer renderer in renderers)
