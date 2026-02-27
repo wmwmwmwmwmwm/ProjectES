@@ -70,10 +70,10 @@ namespace Battle
 			InitMovement();
 			InitFSM();
 			_AttackIndex = -1;
-			_JustGuardEffect.gameObject.SetActive(false);
-			_DashWindEffect.gameObject.SetActive(false);
-			_FeetSmokeLeftEffect.gameObject.SetActive(false);
-			_FeetSmokeRightEffect.gameObject.SetActive(false);
+			EmitEffect(_JustGuardEffect, false);
+			EmitEffect(_DashWindEffect, false);
+			EmitEffect(_FeetSmokeLeftEffect, false);
+			EmitEffect(_FeetSmokeRightEffect, false);
 			Transform leftFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot) : transform;
 			_FeetSmokeLeftEffect.transform.SetParent(leftFoot, false);
 			Transform rightFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot) : transform;
@@ -696,13 +696,12 @@ namespace Battle
 			{
 				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
 				state.Time = 0f;
-				_JustGuardEffect.gameObject.SetActive(true);
-				_JustGuardEffect.Play(true);
+				EmitEffect(_JustGuardEffect, true);
 				float start = Time.time;
 				_JustGuardCancelTrigger = false;
 				yield return new WaitUntil(() => Time.time - start > 2.4f || _JustGuardCancelTrigger);
 				_JustGuardCancelTrigger = false;
-				_JustGuardEffect.gameObject.SetActive(false);
+				EmitEffect(_JustGuardEffect, false);
 				_JustGuardCoroutine = null;
 			}
 		}
@@ -729,12 +728,12 @@ namespace Battle
 
 			IEnumerator Internal()
 			{
-				_FeetSmokeLeftEffect.gameObject.SetActive(true);
-				_FeetSmokeRightEffect.gameObject.SetActive(true);
+				EmitEffect(_FeetSmokeLeftEffect, true);
+				EmitEffect(_FeetSmokeRightEffect, true);
 				float start = Time.time;
 				yield return new WaitUntil(() => Time.time - start > time || !_Motor.GroundingStatus.IsStableOnGround);
-				_FeetSmokeLeftEffect.gameObject.SetActive(false);
-				_FeetSmokeRightEffect.gameObject.SetActive(false);
+				EmitEffect(_FeetSmokeLeftEffect, false);
+				EmitEffect(_FeetSmokeRightEffect, false);
 				_FeetSmokeCoroutine = null;
 			}
 		}
@@ -750,11 +749,22 @@ namespace Battle
 
 			IEnumerator Internal()
 			{
-				_DashWindEffect.gameObject.SetActive(true);
+				EmitEffect(_DashWindEffect, true);
 				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
-				_DashWindEffect.gameObject.SetActive(false);
+				EmitEffect(_DashWindEffect, false);
 				_DashWindCoroutine = null;
 			}
+		}
+
+		void EmitEffect(ParticleSystem particle, bool on)
+		{
+			ParticleSystem[] particles = particle.GetComponentsInChildren<ParticleSystem>();
+			foreach (ParticleSystem p in particles)
+			{
+				ParticleSystem.EmissionModule emission = p.emission;
+				emission.enabled = on;
+			}
+			particle.Play(true);
 		}
 	}
 }
