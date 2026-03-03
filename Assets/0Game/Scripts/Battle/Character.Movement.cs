@@ -69,7 +69,7 @@ namespace Battle
 						_FSM.TrySetState(_Dash);
 						_FadeOutDeaccelTimer = 0f;
 						_Impulse = _MoveSpeed * _Dash._MoveSpeed * _DashDir;
-						DashWind();
+						DashWind(_MoveRequest);
 
 						// 달리기
 						if (_MoveRequest == MoveRequest.DashFwd)

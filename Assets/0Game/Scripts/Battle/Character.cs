@@ -738,7 +738,7 @@ namespace Battle
 			}
 		}
 
-		void DashWind()
+		void DashWind(MoveRequest dashDir)
 		{
 			if (_DashWindCoroutine != null)
 			{
@@ -749,7 +749,14 @@ namespace Battle
 
 			IEnumerator Internal()
 			{
-				EmitEffect(_DashWindEffect, true);
+				_DashWindEffect.transform.localEulerAngles = dashDir switch
+				{
+					MoveRequest.DashFwd => new Vector3(0f, 0f, 0f),
+					MoveRequest.DashBwd => new Vector3(0f, 180f, 0f),
+					MoveRequest.DashLeft => new Vector3(0f, 270f, 0f),
+					_ => new Vector3(0f, 90f, 0f),
+				};
+                EmitEffect(_DashWindEffect, true);
 				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
 				EmitEffect(_DashWindEffect, false);
 				_DashWindCoroutine = null;
@@ -763,8 +770,13 @@ namespace Battle
 			{
 				ParticleSystem.EmissionModule emission = p.emission;
 				emission.enabled = on;
+				if (on)
+				{
+					p.time = 0f;
+					p.Clear();
+					p.Play();
+				}
 			}
-			particle.Play(true);
 		}
 	}
 }
