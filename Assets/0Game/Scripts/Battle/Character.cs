@@ -773,7 +773,7 @@ namespace Battle
 				if (on)
 				{
 					p.time = 0f;
-					p.Clear();
+					p.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
 					p.Play();
 				}
 			}

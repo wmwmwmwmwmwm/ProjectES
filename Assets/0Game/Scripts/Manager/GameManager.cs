@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 	public GameObject _DebugLine;
 	public GameObject _DebugBox;
 
+	string _CurrentScene;
 	float _FixedDeltaTime;
 
 	protected override void Init()
@@ -35,6 +36,23 @@ public class GameManager : Singleton<GameManager>
 	{
 		Cursor.lockState = _lock ? CursorLockMode.Locked : CursorLockMode.None;
 		Cursor.visible = !_lock;
+	}
+
+	public void LoadBattleScene(string sceneName)
+	{
+		StartCoroutine(Internal());
+		IEnumerator Internal()
+		{
+			SceneManager.LoadScene(SceneName.Loading, LoadSceneMode.Additive);
+			AsyncOperation unloadProgress = SceneManager.UnloadSceneAsync(_CurrentScene);
+			yield return new WaitUntil(() => unloadProgress.isDone);
+            AsyncOperation loadProgress = SceneManager.LoadSceneAsync(SceneName.Battle, LoadSceneMode.Additive);
+			AsyncOperation loadProgress2 = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+			yield return new WaitUntil(() => loadProgress.isDone);
+			yield return new WaitUntil(() => loadProgress2.isDone);
+            Scene scene = SceneManager.GetSceneByName(sceneName);
+			SceneManager.SetActiveScene(scene);
+		}
 	}
 
 	public void DrawDebugLine(Vector3 from, Vector3 to, float width = 1f)

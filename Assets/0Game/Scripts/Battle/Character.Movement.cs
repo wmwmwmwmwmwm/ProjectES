@@ -313,16 +313,16 @@ namespace Battle
 
 				// 루트 모션 이동
 				bool rootMotion = _RootMotionPosDelta != Vector3.zero;
-                switch (_FSM.CurrentState._RootMotionMode)
-                {
-                    case State.RootMotionMode.None:
+				switch (_FSM.CurrentState._RootMotionMode)
+				{
+					case State.RootMotionMode.None:
 						rootMotion = false;
-                        break;
-                    case State.RootMotionMode.GroundOnly:
+						break;
+					case State.RootMotionMode.GroundOnly:
 						rootMotion &= _Motor.GroundingStatus.IsStableOnGround;
 						rootMotion &= !_Motor.MustUnground();
 						break;
-                }
+				}
 				if (rootMotion)
 				{
 					Vector2 velocityXZ = new()
@@ -343,7 +343,7 @@ namespace Battle
 
 					currentVelocity.x = velocityXZ.x;
 					currentVelocity.z = velocityXZ.y;
-					//currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
+					currentVelocity = _Motor.GetDirectionTangentToSurface(currentVelocity, _Motor.GroundingStatus.GroundNormal) * currentVelocity.magnitude;
 					return;
 				}
 
@@ -353,6 +353,7 @@ namespace Battle
 					Vector3 targetVelocity = moveInputVector * moveSpeed;
 					currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, moveAccel * deltaTime);
 
+					// 애니메이션
 					if (currentVelocity.sqrMagnitude > 0.01f)
 					{
 						State moveState = _IsRunning ? _Run : _Move;
@@ -394,20 +395,27 @@ namespace Battle
 						}
 					}
 
-					// 공중에서 오르기 방지
 					if (_Motor.GroundingStatus.FoundAnyGround)
 					{
+						// 공중에서 오르기 방지
 						Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
 						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
+
+						//// 경사 미끄러짐
+						//float angle = Vector3.Angle(Physics.gravity, _Motor.GroundingStatus.GroundNormal);
+						//float t = Mathf.InverseLerp(180f - _Motor.MaxStableSlopeAngle, 0f, angle);
+						//addedVelocity += deltaTime * t * Physics.gravity;
+						//print(addedVelocity);
+						//print(t);
 					}
 
 					currentVelocity += addedVelocity;
 					_FSM.TrySetState(_Fall);
 				}
-            }
-        }
+			}
+		}
 
-        public void AfterCharacterUpdate(float deltaTime)
+		public void AfterCharacterUpdate(float deltaTime)
 		{
 			if (_MoveRequest != MoveRequest.None && Time.time - _LastRequestTime > MoveGraceDuration)
 			{
@@ -453,5 +461,5 @@ namespace Battle
 		{
 			// This is called by the motor when it is detecting a collision that did not result from a "movement hit".
 		}
-    }
+	}
 }

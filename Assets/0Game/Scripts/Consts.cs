@@ -7,14 +7,11 @@ public static class Const
 
 public static class SceneName
 {
-	public const string Title = "Bg_Title";
-	public const string Lobby = "FPS Title";
-	public const string Battle1 = "stage1_2_SpiderLevel";
-	public const string Battle2 = "Lev_HighWay";
-	public const string BattleStory = "BattleStory";
-	public const string Story = "TestScene";
-	public const string Intro1 = "Colony";
-	public const string Intro2 = "Lev_Elevator_Prologue";
+	public const string Title = "Title";
+	public const string Loading = "Loading";
+	public const string Battle = "Battle";
+
+	public const string Glacier = "Glacier";
 }
 
 //public static class SortingLayerName

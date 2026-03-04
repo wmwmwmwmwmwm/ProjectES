@@ -346,7 +346,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!195 &38252350
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5980,7 +5980,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &567691368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6245,6 +6245,37 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!1 &600194947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600194948}
+  m_Layer: 0
+  m_Name: Bg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &600194948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600194947}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &602133531
 GameObject:
   m_ObjectHideFlags: 0
@@ -6265,7 +6296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!195 &602133532
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -12241,7 +12272,7 @@ MonoBehaviour:
   LedgeAndDenivelationHandling: 1
   MaxStableDistanceFromLedge: 0.5
   MaxVelocityForLedgeSnap: 10
-  MaxStableDenivelationAngle: 180
+  MaxStableDenivelationAngle: 90
   InteractiveRigidbodyHandling: 1
   RigidbodyInteractionType: 0
   SimulatedCharacterMass: 1
@@ -12742,18 +12773,18 @@ MonoBehaviour:
   LedgeAndDenivelationHandling: 1
   MaxStableDistanceFromLedge: 0.5
   MaxVelocityForLedgeSnap: 10
-  MaxStableDenivelationAngle: 180
+  MaxStableDenivelationAngle: 90
   InteractiveRigidbodyHandling: 1
   RigidbodyInteractionType: 0
   SimulatedCharacterMass: 1
   PreserveAttachedRigidbodyMomentum: 1
   HasPlanarConstraint: 0
   PlanarConstraintAxis: {x: 0, y: 0, z: 1}
-  MaxMovementIterations: 5
+  MaxMovementIterations: 1
   MaxDecollisionIterations: 1
   CheckMovementInitialOverlaps: 1
-  KillVelocityWhenExceedMaxMovementIterations: 1
-  KillRemainingMovementWhenExceedMaxMovementIterations: 1
+  KillVelocityWhenExceedMaxMovementIterations: 0
+  KillRemainingMovementWhenExceedMaxMovementIterations: 0
 --- !u!136 &1171284224
 CapsuleCollider:
   m_ObjectHideFlags: 8
@@ -19429,7 +19460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2032755546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24146,10 +24177,11 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 400184574}
   - {fileID: 1421278363}
-  - {fileID: 832575519}
   - {fileID: 1627288307}
-  - {fileID: 92429458}
   - {fileID: 11579553}
+  - {fileID: 600194948}
+  - {fileID: 832575519}
+  - {fileID: 92429458}
   - {fileID: 1695343635}
   - {fileID: 25946137}
   - {fileID: 1171284226}
