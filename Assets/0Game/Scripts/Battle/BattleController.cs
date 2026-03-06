@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +67,19 @@ namespace Battle
 			}
 
 			_ActivePlayer = nextPlayer;
+		}
+
+		public GameObject _AttackAreaDecalPrefab;
+		public void ShowAttackAreaDecal(Vector3 position, Quaternion rotation, float duration)
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				GameObject decal = Instantiate(_AttackAreaDecalPrefab, position, rotation);
+				decal.transform.DOLocalRotate(Vector3.up * 360f, 2.4f, RotateMode.LocalAxisAdd).SetLoops(-1);
+				yield return new WaitForSeconds(duration);
+				Destroy(decal);
+			}
 		}
 
 		public void PlayEffect123123(GameObject prefab, Character owner, Vector3 pos, Quaternion rot)

@@ -1161,22 +1161,22 @@ namespace KinematicCharacterController
                 BaseVelocity = Vector3.zero;
             }
 
-            #region Calculate Character movement from base velocity   
-            // Perform the move from base velocity
-            if (BaseVelocity.sqrMagnitude > 0f)
+			#region Calculate Character movement from base velocity   
+			// Perform the move from base velocity
+			if (BaseVelocity.sqrMagnitude > 0f)
             {
                 if (_solveMovementCollisions)
                 {
                     InternalCharacterMove(ref BaseVelocity, deltaTime);
-                }
+				}
                 else
                 {
                     _transientPosition += BaseVelocity * deltaTime;
                 }
             }
 
-            // Process rigidbody hits/overlaps to affect velocity
-            if (InteractiveRigidbodyHandling)
+			// Process rigidbody hits/overlaps to affect velocity
+			if (InteractiveRigidbodyHandling)
             {
                 ProcessVelocityForRigidbodyHits(ref BaseVelocity, deltaTime);
             }
@@ -1364,9 +1364,9 @@ namespace KinematicCharacterController
         /// </summary>
         /// <returns> Returns false if movement could not be solved until the end </returns>
         private bool InternalCharacterMove(ref Vector3 transientVelocity, float deltaTime)
-        {
-            if (deltaTime <= 0f)
-                return false;
+		{
+			if (deltaTime <= 0f)
+				return false;
 
             // Planar constraint
             if (HasPlanarConstraint)
@@ -1386,8 +1386,8 @@ namespace KinematicCharacterController
             Vector3 previousObstructionNormal = _cachedZeroVector;
             MovementSweepState sweepState = MovementSweepState.Initial;
 
-            // Project movement against current overlaps before doing the sweeps
-            for (int i = 0; i < _overlapsCount; i++)
+			// Project movement against current overlaps before doing the sweeps
+			for (int i = 0; i < _overlapsCount; i++)
             {
                 Vector3 overlapNormal = _overlaps[i].Normal;
                 if (Vector3.Dot(remainingMovementDirection, overlapNormal) < 0f)
@@ -1415,12 +1415,13 @@ namespace KinematicCharacterController
                 }
             }
 
-            // Sweep the desired movement to detect collisions
-            while (remainingMovementMagnitude > 0f &&
+			// Sweep the desired movement to detect collisions
+			while (remainingMovementMagnitude > 0f &&
                 (sweepsMade <= MaxMovementIterations) &&
                 hitSomethingThisSweepIteration)
-            {
-                bool foundClosestHit = false;
+			{
+				var aa = transientVelocity;
+				bool foundClosestHit = false;
                 Vector3 closestSweepHitPoint = default;
                 Vector3 closestSweepHitNormal = default;
                 float closestSweepHitDistance = 0f;
@@ -1600,14 +1601,15 @@ namespace KinematicCharacterController
                         transientVelocity = Vector3.zero;
                     }
                     wasCompleted = false;
-                }
-            }
+				}
+				print($"{Time.frameCount} {aa} {transientVelocity} {closestSweepHitCollider} {remainingMovementMagnitude}");
+			}
 
             // Move position for the remainder of the movement
             tmpMovedPosition += (remainingMovementDirection * remainingMovementMagnitude);
             _transientPosition = tmpMovedPosition;
 
-            return wasCompleted;
+			return wasCompleted;
         }
 
         /// <summary>
