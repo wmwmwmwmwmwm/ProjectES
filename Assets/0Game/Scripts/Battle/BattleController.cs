@@ -56,6 +56,9 @@ namespace Battle
 				nextPlayer._Character._AimDestRotation = _ActivePlayer._Character._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
 				nextPlayer._Character._Motor.SetPositionAndRotation(pos, rot);
+				nextPlayer._Character._Motor.MoveCharacter(pos);
+				nextPlayer._Character._Motor.RotateCharacter(rot);
+				nextPlayer._Character._Motor.BaseVelocity = _ActivePlayer._Character._Motor.BaseVelocity;
 				nextPlayer._Character._FSM.ForceSetDefaultState();
 			}
 
@@ -68,7 +71,6 @@ namespace Battle
 			}
 
 			_ActivePlayer = nextPlayer;
-			Util.Pause();
 			return true;
 		}
 
