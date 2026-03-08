@@ -227,7 +227,7 @@ Material:
     - _ZOverDrawMode: 1
     - _ZWrite: 0
     - _ZWriteMode: 0
-    - _simpleUI: 1
+    - _simpleUI: 0
     - _utsTechnique: 0
     - _utsVersionX: 2
     - _utsVersionY: 5

@@ -66,6 +66,7 @@ namespace Battle
 			_CameraThirdPerson.ShoulderOffset.y = y;
 
 			// 카메라 회전
+			var a = _LookRotation;
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;
 			_LookRotation.x = Mathf.Clamp(_LookRotation.x, -80f, 60f);
 			_LookRotation.y += _LookInput.x * _CameraRotationSpeed * 0.01f;

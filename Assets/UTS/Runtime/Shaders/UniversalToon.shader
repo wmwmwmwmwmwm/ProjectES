@@ -46,7 +46,7 @@ Shader "Universal Render Pipeline/Toon" {
         // ClippingMask paramaters from Here.
         _ClippingMask("ClippingMask", 2D) = "white" {}
         //v.2.0.4
-        [HideInInspector] _IsBaseMapAlphaAsClippingMask("IsBaseMapAlphaAsClippingMask", Float) = 0
+        _IsBaseMapAlphaAsClippingMask("IsBaseMapAlphaAsClippingMask", Float) = 0
         //
         [Toggle(_)] _Inverse_Clipping("Inverse_Clipping", Float) = 0
         _Clipping_Level("Clipping_Level", Range(0, 1)) = 0

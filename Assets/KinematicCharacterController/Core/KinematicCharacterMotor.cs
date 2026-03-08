@@ -735,7 +735,7 @@ namespace KinematicCharacterController
             _characterTransformToCapsuleTopHemi = Capsule.center + (_cachedWorldUp * (Capsule.height * 0.5f)) + (-_cachedWorldUp * Capsule.radius);
         }
 
-        private void Awake()
+        public void Init()
         {
             _transform = this.transform;
             ValidateData();
@@ -1420,7 +1420,6 @@ namespace KinematicCharacterController
                 (sweepsMade <= MaxMovementIterations) &&
                 hitSomethingThisSweepIteration)
 			{
-				var aa = transientVelocity;
 				bool foundClosestHit = false;
                 Vector3 closestSweepHitPoint = default;
                 Vector3 closestSweepHitNormal = default;
@@ -1602,7 +1601,6 @@ namespace KinematicCharacterController
                     }
                     wasCompleted = false;
 				}
-				print($"{Time.frameCount} {aa} {transientVelocity} {closestSweepHitCollider} {remainingMovementMagnitude}");
 			}
 
             // Move position for the remainder of the movement

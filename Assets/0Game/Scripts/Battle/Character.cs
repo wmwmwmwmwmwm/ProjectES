@@ -67,6 +67,7 @@ namespace Battle
 			_LastSkill2Time = Const.TimeDefault;
 			_LastUltimateTime = Const.TimeDefault;
 
+			_Motor.Init();
 			InitMovement();
 			InitFSM();
 			_AttackIndex = -1;
@@ -331,8 +332,10 @@ namespace Battle
 			if (!stateCondition) return;
 			if (Controller._Players[index]._Character.IsDead()) return;
 
-			Controller.SetActivePlayer(index);
-			Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, this, transform.position, transform.rotation);
+			if (Controller.SetActivePlayer(index))
+			{
+				Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, this, transform.position, transform.rotation);
+			}
 		}
 
 		void Attack()
@@ -455,7 +458,7 @@ namespace Battle
 
 		void FireMissile()
 		{
-			StartCoroutine(Internal());
+			Controller.StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
@@ -756,7 +759,7 @@ namespace Battle
 					MoveRequest.DashLeft => new Vector3(0f, 270f, 0f),
 					_ => new Vector3(0f, 90f, 0f),
 				};
-                EmitEffect(_DashWindEffect, true);
+				EmitEffect(_DashWindEffect, true);
 				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
 				EmitEffect(_DashWindEffect, false);
 				_DashWindCoroutine = null;

@@ -42,10 +42,10 @@ namespace Battle
 			UpdateUI();
 		}
 
-		public void SetActivePlayer(int index)
+		public bool SetActivePlayer(int index)
 		{
 			Player nextPlayer = _Players[index];
-			if (_ActivePlayer == nextPlayer) return;
+			if (_ActivePlayer == nextPlayer) return false;
 
 			// 이동
 			if (_ActivePlayer)
@@ -53,6 +53,7 @@ namespace Battle
 				nextPlayer._Character._MoveInput = _ActivePlayer._Character._MoveInput;
 				nextPlayer._LookInput = _ActivePlayer._LookInput;
 				nextPlayer._LookRotation = _ActivePlayer._LookRotation;
+				nextPlayer._Character._AimDestRotation = _ActivePlayer._Character._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
 				nextPlayer._Character._Motor.SetPositionAndRotation(pos, rot);
 				nextPlayer._Character._FSM.ForceSetDefaultState();
@@ -67,6 +68,8 @@ namespace Battle
 			}
 
 			_ActivePlayer = nextPlayer;
+			Util.Pause();
+			return true;
 		}
 
 		public GameObject _AttackAreaDecalPrefab;
