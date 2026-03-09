@@ -25,6 +25,11 @@ public class GameManager : Singleton<GameManager>
 		_FixedDeltaTime = Time.fixedDeltaTime;
 	}
 
+	void OnDestroy()
+	{
+		LockCursor(false);
+	}
+
 	void Update()
 	{
 		Application.targetFrameRate = _FrameRate;
@@ -38,6 +43,12 @@ public class GameManager : Singleton<GameManager>
 		Cursor.visible = !_lock;
 	}
 
+	public void LoadTitleScene()
+	{
+		SceneManager.LoadScene(SceneName.Title);
+		_CurrentScene = SceneName.Title;
+	}
+
 	public void LoadBattleScene(string sceneName)
 	{
 		StartCoroutine(Internal());
@@ -45,13 +56,27 @@ public class GameManager : Singleton<GameManager>
 		{
 			SceneManager.LoadScene(SceneName.Loading, LoadSceneMode.Additive);
 			AsyncOperation unloadProgress = SceneManager.UnloadSceneAsync(_CurrentScene);
-			yield return new WaitUntil(() => unloadProgress.isDone);
-            AsyncOperation loadProgress = SceneManager.LoadSceneAsync(SceneName.Battle, LoadSceneMode.Additive);
+			AsyncOperation loadProgress = SceneManager.LoadSceneAsync(SceneName.Battle, LoadSceneMode.Additive);
 			AsyncOperation loadProgress2 = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+			while (true)
+			{
+				float progress = unloadProgress.progress;
+				progress += loadProgress.progress;
+				progress += loadProgress2.progress;
+				progress /= 3f;
+				LoadingController.Instance._Progress.value = progress;
+				LoadingController.Instance._Text.text = progress.ToPercentString();
+
+				if (unloadProgress.isDone && loadProgress.isDone && loadProgress2.isDone) break;
+				yield return null;
+			}
+			yield return new WaitUntil(() => unloadProgress.isDone);
 			yield return new WaitUntil(() => loadProgress.isDone);
 			yield return new WaitUntil(() => loadProgress2.isDone);
             Scene scene = SceneManager.GetSceneByName(sceneName);
 			SceneManager.SetActiveScene(scene);
+			SceneManager.UnloadSceneAsync(SceneName.Loading);
+			_CurrentScene = sceneName;
 		}
 	}
 
