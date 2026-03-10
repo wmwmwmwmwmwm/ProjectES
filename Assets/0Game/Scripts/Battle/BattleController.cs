@@ -9,10 +9,13 @@ namespace Battle
 {
 	public partial class BattleController : SingleInstance<BattleController>
 	{
-		public Transform _MainCamera, _BackgroundCamera;
-		public Transform _BgSky, _BgGround, _BgNear;
+		public Transform _MainCamera;
+		public Transform _BgGround, _BgNear;
 		public List<Player> _Players;
 		public List<Enemy> _Enemys;
+
+		[Header("테스트")]
+		public string _TestStageName;
 
 		[HideInInspector] public Player _ActivePlayer;
 
@@ -59,6 +62,7 @@ namespace Battle
 				nextPlayer._Character._Motor.MoveCharacter(pos);
 				nextPlayer._Character._Motor.RotateCharacter(rot);
 				nextPlayer._Character._Motor.BaseVelocity = _ActivePlayer._Character._Motor.BaseVelocity;
+				nextPlayer._Character._Motor.GroundingStatus = _ActivePlayer._Character._Motor.GroundingStatus;
 				nextPlayer._Character._FSM.ForceSetDefaultState();
 			}
 

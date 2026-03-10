@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 	public GameObject _DebugLine;
 	public GameObject _DebugBox;
 
+	[HideInInspector] public string _StartScene;
 	string _CurrentScene;
 	float _FixedDeltaTime;
 
@@ -23,6 +24,7 @@ public class GameManager : Singleton<GameManager>
 		_DebugLine.SetActive(false);
 		_DebugBox.SetActive(false);
 		_FixedDeltaTime = Time.fixedDeltaTime;
+		_StartScene = SceneManager.GetActiveScene().name;
 	}
 
 	void OnDestroy()
