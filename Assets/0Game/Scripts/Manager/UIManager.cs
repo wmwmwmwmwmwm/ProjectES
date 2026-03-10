@@ -2,12 +2,11 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-	public Image BlackOverlay;
+	public Image _Black;
 
 	protected override void Init()
 	{
