@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 796803429c1d48e387ad7f060771246c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 36300000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/PureNature_Glacier/Scenes/Glacier_Demo/OcclusionCullingData.asset
+  uploadId: 751927

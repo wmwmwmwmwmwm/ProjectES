@@ -28,12 +28,11 @@ Material:
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
-  m_InvalidKeywords:
-  - _METALLICGLOSSMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses:
@@ -116,7 +115,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
+    - _AlphaCutoff: 0.5
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
@@ -146,6 +147,7 @@ Material:
     - _NormalPower: 0.4456522
     - _OcclusionStrength: 0.25
     - _Parallax: 0.02
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 1
@@ -156,9 +158,11 @@ Material:
     - _Surface: 0
     - _TransAmbient: 0
     - _TransDirect: 0
+    - _TransNormal: 0.5
     - _TransNormalDistortion: 0
     - _TransScattering: 1
     - _TransShadow: 0
+    - _TransStrength: 1
     - _Translucency: 0
     - _UVSec: 0
     - _VertexOcclusionPower: 0

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4c0f8b6cfeddcc248ae29c6d55b95fcb
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/PureNature_Glacier/Settings/URP/Glacier_PostProcess.asset
+  uploadId: 751927
