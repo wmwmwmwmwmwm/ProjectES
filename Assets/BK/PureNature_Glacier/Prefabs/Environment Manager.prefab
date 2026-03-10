@@ -165,9 +165,40 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 5
     m_NumAlphaKeys: 2
+  ambientColorGradient:
+    serializedVersion: 2
+    key0: {r: 0.44474104, g: 0.6109603, b: 0.7106918, a: 1}
+    key1: {r: 0.42274827, g: 0.46621433, b: 0.4716981, a: 1}
+    key2: {r: 0.34591186, g: 0.34591186, b: 0.34591186, a: 0}
+    key3: {r: 0.16820927, g: 0.19974229, b: 0.22012573, a: 0}
+    key4: {r: 0.125885, g: 0.25463793, b: 0.42138356, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 20624
+    ctime1: 29876
+    ctime2: 36109
+    ctime3: 41827
+    ctime4: 48380
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
   overrideSunColor: 1
   overrideFogColor: 1
   overrideCloudColor: 1
+  overrideAmbientColor: 1
   baseWindPower: 0
   baseWindSpeed: 1
   burstsPower: 1
