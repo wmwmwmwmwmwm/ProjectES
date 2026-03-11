@@ -1,6 +1,7 @@
 ﻿using Animancer;
 using DG.Tweening;
 using KinematicCharacterController;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,15 @@ namespace Battle
 {
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
+		[BoxGroup("설정")] public GameObject _ModelPrefab;
+		[BoxGroup("설정")] public float _RotationSpeed;
+		[BoxGroup("설정")] public float _MoveSpeed;
+		[BoxGroup("설정")] public float _MoveAccel;
+		[BoxGroup("설정")] public float _DashDuration;
+		[BoxGroup("설정")] public float _JumpSpeed;
+		[BoxGroup("설정")] public float _ShoulderHeight;
+		[BoxGroup("설정")] public float _MaxHP;
+
 		public VRMBlendShapeProxy _BlendShapeProxy;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
@@ -22,10 +32,9 @@ namespace Battle
 		public GameObject _ChangeCharacterEffectPrefab;
 		public ParticleSystem _DashWindEffect;
 		public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
-		public GameObject _Model;
 		public Material _WhiteMaterial;
-		public Transform _CooltimeJitter;
 
+		Player _Player;
 		Enemy _Enemy;
 		CapsuleCollider _Collider;
 		RaycastHit[] _RaycastResults;
@@ -54,10 +63,12 @@ namespace Battle
 
 		public void Init()
 		{
+			_Player = GetComponent<Player>();
 			_Enemy = GetComponent<Enemy>();
 			_Collider = GetComponent<CapsuleCollider>();
 			_RaycastResults = new RaycastHit[10];
 
+			// 시간 초기화
 			_GuardUpTime = Const.TimeDefault;
 			_GuardDownTime = Const.TimeDefault;
 			_LastRequestTime = Const.TimeDefault;
@@ -67,6 +78,17 @@ namespace Battle
 			_LastSkill2Time = Const.TimeDefault;
 			_LastUltimateTime = Const.TimeDefault;
 
+			// 모델 생성
+			Transform parent = _Player ? _Player._CooltimeJitter : transform;
+			GameObject model = Instantiate(_ModelPrefab, parent);
+			_Animancer = model.AddComponent<AnimancerComponent>();
+			_Animancer.Animator = model.GetComponent<Animator>();
+			RedirectRootMotionToCharacter redirect = model.AddComponent<RedirectRootMotionToCharacter>();
+			redirect._Animator = _Animancer.Animator;
+			redirect._Character = this;
+
+			// 컴포넌트 초기화
+			_Motor = GetComponent<KinematicCharacterMotor>();
 			_Motor.Init();
 			InitMovement();
 			InitFSM();
@@ -80,6 +102,7 @@ namespace Battle
 			Transform rightFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot) : transform;
 			_FeetSmokeRightEffect.transform.SetParent(rightFoot, false);
 
+			// 스탯 초기화
 			SetHP(_MaxHP);
 
 			//StartCoroutine(Internal());
@@ -206,9 +229,9 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill1Time < _Skill1._Attack._Cooltime)
+			if (_Player && Time.time - _LastSkill1Time < _Skill1._Attack._Cooltime)
 			{
-				CooltimeJitter();
+				_Player.CooltimeJitter();
 				return;
 			}
 
@@ -235,9 +258,9 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastSkill2Time < _Skill2._Attack._Cooltime)
+			if (_Player && Time.time - _LastSkill2Time < _Skill2._Attack._Cooltime)
 			{
-				CooltimeJitter();
+				_Player.CooltimeJitter();
 				return;
 			}
 
@@ -264,9 +287,9 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 쿨타임
-			if (Time.time - _LastUltimateTime < _Ultimate._Attack._Cooltime)
+			if (_Player && Time.time - _LastUltimateTime < _Ultimate._Attack._Cooltime)
 			{
-				CooltimeJitter();
+				_Player.CooltimeJitter();
 				return;
 			}
 
@@ -712,12 +735,6 @@ namespace Battle
 		bool IsJustGuard()
 		{
 			return _JustGuardCoroutine != null;
-		}
-
-		void CooltimeJitter()
-		{
-			_CooltimeJitter.DOShakePosition(0.3f, strength: 0.06f, vibrato: 100, fadeOut: false).SetEase(Ease.Flash)
-				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
 		}
 
 		void FeetSmoke(float time)

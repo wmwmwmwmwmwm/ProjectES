@@ -9,17 +9,9 @@ namespace Battle
 {
 	public partial class Character
 	{
-		[Header("움직임")]
-		public KinematicCharacterMotor _Motor;
-		public float _RotationSpeed;
-		public float _MoveSpeed;
-		public float _MoveAccel;
-		public float _DashDuration;
-		public float _JumpSpeed;
-		public float _ShoulderHeight;
-
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
+		[HideInInspector] public KinematicCharacterMotor _Motor;
 		[HideInInspector] public Vector3 _MoveInput;
 		MoveRequest _MoveRequest;
 		float _LastRequestTime;

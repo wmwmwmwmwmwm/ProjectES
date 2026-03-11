@@ -8,8 +8,6 @@ namespace Battle
 {
 	public partial class Character
 	{
-		public float _MaxHP;
-
 		[HideInInspector] public float _HP;
 
 		void SetHP(float hp)

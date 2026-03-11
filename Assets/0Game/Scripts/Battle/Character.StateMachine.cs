@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Animancer;
 using Animancer.FSM;
-using System.Linq;
 using DG.Tweening;
 
 namespace Battle
@@ -11,7 +10,6 @@ namespace Battle
 	public partial class Character
 	{
 		[Header("애니메이션")]
-		public AnimancerComponent _Animancer;
 		public AvatarMask _UpperBodyMask;
 		public AnimationCurve _AttackMoveCurve;
 
@@ -40,6 +38,7 @@ namespace Battle
 		public StringAsset _MoveX, _MoveY;
 		public StringAsset _NextAttack;
 
+		AnimancerComponent _Animancer;
 		[HideInInspector] public AnimancerLayer _BaseLayer, _UpperBodyLayer;
 		[HideInInspector] public StateMachine<State>.WithDefault _FSM;
 		SmoothedVector2Parameter _MoveParameter;
@@ -369,16 +368,17 @@ namespace Battle
 
 		void Play_Canceling(State state, bool shadow)
 		{
+			if (shadow)
+			{
+				StartCoroutine(Internal());
+			}
 			_FSM.ForceSetState(state);
-			if (!shadow) return;
-
-			StartCoroutine(Internal());
 
 			IEnumerator Internal()
 			{
 				// 잔상 생성
 				float duration = 1f;
-				GameObject model = Instantiate(_Model, transform.position, transform.rotation);
+				GameObject model = Instantiate(_ModelPrefab, transform.position, transform.rotation);
 				Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
 				Material whiteMaterial = new(_WhiteMaterial);
 				foreach (Renderer renderer in renderers)
@@ -392,10 +392,11 @@ namespace Battle
 				}
 				whiteMaterial.DOFade(0f, duration);
 				SoloAnimation animation = model.AddComponent<SoloAnimation>();
+				animation.Animator = model.GetComponent<Animator>();
 				animation.Clip = _Animancer.States.Current.Clip;
+				animation.Play();
 				animation.NormalizedTime = _Animancer.States.Current.NormalizedTime;
 				animation.Speed = 0f;
-				animation.Play();
 				yield return new WaitForSeconds(duration);
 				Destroy(model);
 			}

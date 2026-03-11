@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 using static SingletonManager;
@@ -10,12 +11,11 @@ namespace Battle
 	public partial class BattleController : SingleInstance<BattleController>
 	{
 		public Transform _MainCamera;
+		public Transform _CameraTarget;
+		public CinemachineThirdPersonFollow _CameraThirdPerson;
 		public Transform _BgGround, _BgNear;
 		public List<Player> _Players;
 		public List<Enemy> _Enemys;
-
-		[Header("테스트")]
-		public string _TestStageName;
 
 		[HideInInspector] public Player _ActivePlayer;
 

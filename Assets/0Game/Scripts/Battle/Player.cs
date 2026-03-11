@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -9,14 +10,15 @@ namespace Battle
 {
 	public partial class Player : MonoBehaviour
 	{
-		public Transform _CameraTarget;
-		public CinemachineThirdPersonFollow _CameraThirdPerson;
+		public Transform _CooltimeJitter;
 		public float _CameraRotationSpeed;
 
 		[HideInInspector] public Character _Character;
 		[HideInInspector] public Vector2 _LookInput;
 		[HideInInspector] public Vector2 _LookRotation;
 		[HideInInspector] public UI_PlayerHP _UI_HP;
+
+		BattleController Controller => BattleController.Instance;
 
 		public void Init()
 		{
@@ -62,8 +64,8 @@ namespace Battle
 		{
 			// 카메라 위치
 			float shoulderHeight = _Character._Motor.GroundingStatus.FoundAnyGround ? _Character._ShoulderHeight : _Character._ShoulderHeight - 0.5f;
-			float y = Mathf.MoveTowards(_CameraThirdPerson.ShoulderOffset.y, shoulderHeight, 5f * Time.deltaTime);
-			_CameraThirdPerson.ShoulderOffset.y = y;
+			float y = Mathf.MoveTowards(Controller._CameraThirdPerson.ShoulderOffset.y, shoulderHeight, 5f * Time.deltaTime);
+			Controller._CameraThirdPerson.ShoulderOffset.y = y;
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;
@@ -78,8 +80,8 @@ namespace Battle
 				_LookRotation.y += 360f;
 			}
 			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
-			_CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
-			_Character._AimDestRotation = _CameraTarget.rotation;
+			Controller._CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
+			_Character._AimDestRotation = Controller._CameraTarget.rotation;
 		}
 
 		void Move(CallbackContext obj)
@@ -90,6 +92,12 @@ namespace Battle
 		void Look(CallbackContext obj)
 		{
 			_LookInput = obj.ReadValue<Vector2>();
+		}
+
+		public void CooltimeJitter()
+		{
+			_CooltimeJitter.DOShakePosition(0.3f, strength: 0.06f, vibrato: 100, fadeOut: false).SetEase(Ease.Flash)
+				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
 		}
 	}
 }
