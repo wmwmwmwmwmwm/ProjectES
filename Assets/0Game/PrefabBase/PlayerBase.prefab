@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7944196368236216995
 Transform:
   m_ObjectHideFlags: 0
@@ -53,6 +53,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _CooltimeJitter: {fileID: 8193356346752807162}
+  _JustGuardEffect: {fileID: 6311738229728916137}
+  _ChangeCharacterEffectPrefab: {fileID: 1549672409025840, guid: dfd74ddc665c2e649897faee417aa440,
+    type: 3}
+  _DashWindEffect: {fileID: 4216976309678957436}
   _CameraRotationSpeed: 20
   _Character: {fileID: 0}
   _LookInput: {x: 0, y: 0}

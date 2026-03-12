@@ -47,7 +47,7 @@ namespace Battle
 			foreach (Player player in _Players)
 			{
 				// 체력
-				Character c = player._Character;
+				Character c = player.c;
 				float hp = Mathf.Max(1f, c._HP);
 				float percent = hp / c._MaxHP;
 				player._UI_HP._Slider.value = percent;

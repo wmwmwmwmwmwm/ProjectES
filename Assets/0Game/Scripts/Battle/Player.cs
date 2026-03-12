@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Animancer;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -11,19 +12,24 @@ namespace Battle
 	public partial class Player : MonoBehaviour
 	{
 		public Transform _CooltimeJitter;
+		public ParticleSystem _JustGuardEffect;
+		public GameObject _ChangeCharacterEffectPrefab;
 		public float _CameraRotationSpeed;
 
-		[HideInInspector] public Character _Character;
+		[HideInInspector] public Character c;
 		[HideInInspector] public Vector2 _LookInput;
 		[HideInInspector] public Vector2 _LookRotation;
 		[HideInInspector] public UI_PlayerHP _UI_HP;
+		[HideInInspector] public Coroutine _JustGuardCoroutine;
+		[HideInInspector] public bool _JustGuardCancelTrigger;
 
 		BattleController Controller => BattleController.Instance;
 
 		public void Init()
 		{
-			_Character = GetComponent<Character>();
-			_Character.Init();
+			c = GetComponent<Character>();
+			c.Init();
+			c.EmitEffect(_JustGuardEffect, false);
 		}
 
 		public void ReceiveInput(bool on)
@@ -32,38 +38,38 @@ namespace Battle
 			{
 				Inputs.Movement.performed += Move;
 				Inputs.Look.performed += Look;
-				Inputs.Dash += _Character.Dash;
-				Inputs.Jump.performed += _Character.Jump;
-				Inputs.Guard.performed += _Character.Guard;
-				Inputs.NormalAttack.performed += _Character.NormalAttack;
-				Inputs.SpecialAttack.performed += _Character.SpecialAttack;
-				Inputs.Skill1.performed += _Character.Skill1;
-				Inputs.Skill2.performed += _Character.Skill2;
-				Inputs.Ultimate.performed += _Character.Ultimate;
-				Inputs.Character1.performed += _Character.Character1;
-				Inputs.Character2.performed += _Character.Character2;
+				Inputs.Dash += c.Dash;
+				Inputs.Jump.performed += c.Jump;
+				Inputs.Guard.performed += c.Guard;
+				Inputs.NormalAttack.performed += c.NormalAttack;
+				Inputs.SpecialAttack.performed += c.SpecialAttack;
+				Inputs.Skill1.performed += c.Skill1;
+				Inputs.Skill2.performed += c.Skill2;
+				Inputs.Ultimate.performed += c.Ultimate;
+				Inputs.Character1.performed += Character1;
+				Inputs.Character2.performed += Character2;
 			}
 			else
 			{
 				Inputs.Movement.performed -= Move;
 				Inputs.Look.performed -= Look;
-				Inputs.Dash -= _Character.Dash;
-				Inputs.Jump.performed -= _Character.Jump;
-				Inputs.Guard.performed -= _Character.Guard;
-				Inputs.NormalAttack.performed -= _Character.NormalAttack;
-				Inputs.SpecialAttack.performed -= _Character.SpecialAttack;
-				Inputs.Skill1.performed -= _Character.Skill1;
-				Inputs.Skill2.performed -= _Character.Skill2;
-				Inputs.Ultimate.performed -= _Character.Ultimate;
-				Inputs.Character1.performed -= _Character.Character1;
-				Inputs.Character2.performed -= _Character.Character2;
+				Inputs.Dash -= c.Dash;
+				Inputs.Jump.performed -= c.Jump;
+				Inputs.Guard.performed -= c.Guard;
+				Inputs.NormalAttack.performed -= c.NormalAttack;
+				Inputs.SpecialAttack.performed -= c.SpecialAttack;
+				Inputs.Skill1.performed -= c.Skill1;
+				Inputs.Skill2.performed -= c.Skill2;
+				Inputs.Ultimate.performed -= c.Ultimate;
+				Inputs.Character1.performed -= Character1;
+				Inputs.Character2.performed -= Character2;
 			}
 		}
 
 		void Update()
 		{
 			// 카메라 위치
-			float shoulderHeight = _Character._Motor.GroundingStatus.FoundAnyGround ? _Character._ShoulderHeight : _Character._ShoulderHeight - 0.5f;
+			float shoulderHeight = c._Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
 			float y = Mathf.MoveTowards(Controller._CameraThirdPerson.ShoulderOffset.y, shoulderHeight, 5f * Time.deltaTime);
 			Controller._CameraThirdPerson.ShoulderOffset.y = y;
 
@@ -81,12 +87,12 @@ namespace Battle
 			}
 			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
 			Controller._CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
-			_Character._AimDestRotation = Controller._CameraTarget.rotation;
+			c._AimDestRotation = Controller._CameraTarget.rotation;
 		}
 
 		void Move(CallbackContext obj)
 		{
-			_Character._MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
+			c._MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
 		}
 
 		void Look(CallbackContext obj)
@@ -98,6 +104,61 @@ namespace Battle
 		{
 			_CooltimeJitter.DOShakePosition(0.3f, strength: 0.06f, vibrato: 100, fadeOut: false).SetEase(Ease.Flash)
 				.OnKill(() => _CooltimeJitter.localPosition = Vector3.zero);
+		}
+
+		void Character1(CallbackContext obj)
+		{
+			ChangeCharacter(0);
+		}
+
+		void Character2(CallbackContext obj)
+		{
+			ChangeCharacter(1);
+		}
+
+		void ChangeCharacter(int index)
+		{
+			State state = c._FSM.CurrentState;
+			bool stateCondition = state == c._Idle;
+			stateCondition |= state == c._Move;
+			stateCondition |= state == c._Jump;
+			stateCondition |= state == c._Fall;
+			stateCondition |= state == c._Land;
+			if (!stateCondition) return;
+			if (Controller._Players[index].c.IsDead()) return;
+
+			if (Controller.SetActivePlayer(index))
+			{
+				Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, c, transform.position, transform.rotation);
+			}
+		}
+
+		public void JustGuard()
+		{
+			if (_JustGuardCoroutine != null)
+			{
+				StopCoroutine(_JustGuardCoroutine);
+				_JustGuardCoroutine = null;
+			}
+			_JustGuardCoroutine = StartCoroutine(Internal());
+
+			IEnumerator Internal()
+			{
+				AnimancerState state = c._UpperBodyLayer.Play(c._GuardUpAsset);
+				state.Time = 0f;
+				c.EmitEffect(_JustGuardEffect, true);
+				float start = Time.time;
+				_JustGuardCancelTrigger = false;
+				yield return new WaitUntil(() => Time.time - start > 2.4f || _JustGuardCancelTrigger);
+				_JustGuardCancelTrigger = false;
+				c.EmitEffect(_JustGuardEffect, false);
+				_JustGuardCoroutine = null;
+			}
+		}
+
+		public bool IsJustGuard()
+		{
+			return _JustGuardCoroutine != null;
 		}
 	}
 }

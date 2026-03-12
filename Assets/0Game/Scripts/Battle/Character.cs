@@ -28,8 +28,6 @@ namespace Battle
 		public VRMBlendShapeProxy _BlendShapeProxy;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
-		public ParticleSystem _JustGuardEffect;
-		public GameObject _ChangeCharacterEffectPrefab;
 		public ParticleSystem _DashWindEffect;
 		public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
 		public Material _WhiteMaterial;
@@ -46,8 +44,6 @@ namespace Battle
 		float _HitStunTimer;
 		Vector3 _HitStunPrevVelocity;
 		bool _IsRunning;
-		Coroutine _JustGuardCoroutine;
-		bool _JustGuardCancelTrigger;
 		Coroutine _FeetSmokeCoroutine;
 		Coroutine _DashWindCoroutine;
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
@@ -93,7 +89,6 @@ namespace Battle
 			InitMovement();
 			InitFSM();
 			_AttackIndex = -1;
-			EmitEffect(_JustGuardEffect, false);
 			EmitEffect(_DashWindEffect, false);
 			EmitEffect(_FeetSmokeLeftEffect, false);
 			EmitEffect(_FeetSmokeRightEffect, false);
@@ -151,11 +146,11 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 저스트 가드
-			if (IsJustGuard())
+			if (_Player && _Player.IsJustGuard())
 			{
 				Play(_GuardAttack);
 				Attack();
-				_JustGuardCancelTrigger = true;
+				_Player._JustGuardCancelTrigger = true;
 			}
 			// 대쉬 
 			else if (IsDashing())
@@ -335,32 +330,6 @@ namespace Battle
 			}
 		}
 
-		public void Character1(CallbackContext obj)
-		{
-			ChangeCharacter(0);
-		}
-
-		public void Character2(CallbackContext obj)
-		{
-			ChangeCharacter(1);
-		}
-
-		void ChangeCharacter(int index)
-		{
-			bool stateCondition = _FSM.CurrentState == _Idle;
-			stateCondition |= _FSM.CurrentState == _Move;
-			stateCondition |= _FSM.CurrentState == _Jump;
-			stateCondition |= _FSM.CurrentState == _Fall;
-			stateCondition |= _FSM.CurrentState == _Land;
-			if (!stateCondition) return;
-			if (Controller._Players[index]._Character.IsDead()) return;
-
-			if (Controller.SetActivePlayer(index))
-			{
-				Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, this, transform.position, transform.rotation);
-			}
-		}
-
 		void Attack()
 		{
 			switch (_FSM.CurrentState._Attack._RangeType)
@@ -531,7 +500,8 @@ namespace Battle
 
 				// 가드 판정
 				float damage = attackHit._Damage;
-				bool guard = IsGuardingEffective();
+				bool guard = _Player;
+				guard &= IsGuardingEffective();
 				float angle = Vector3.Angle(transform.forward, new(-attackDirection.x, 0f, -attackDirection.z));
 				guard &= angle < 90f;
 				if (guard)
@@ -540,9 +510,10 @@ namespace Battle
 					bool justGuard = Time.time - _GuardUpTime < 0.3f;
 					justGuard &= Inputs.Guard.IsPressed();
 					justGuard &= attack._RangeType == AttackRangeType.Melee;
-					if (justGuard) 
+					justGuard &= _Player;
+					if (justGuard)
 					{
-						JustGuard();
+						_Player.JustGuard();
 						damage = 0f;
 					}
 					// 일반 가드
@@ -663,7 +634,7 @@ namespace Battle
 			return Time.time - _LastDashTime < _DashDuration;
 		}
 
-		bool IsDead()
+		public bool IsDead()
 		{
 			return _HP <= 0f;
 		}
@@ -707,34 +678,6 @@ namespace Battle
 				_HitStunPrevVelocity = _Motor.Velocity;
 			}
 			_HitStunTimer += t;
-		}
-
-		void JustGuard()
-		{
-			if (_JustGuardCoroutine != null)
-			{
-				StopCoroutine(_JustGuardCoroutine);
-				_JustGuardCoroutine = null;
-			}
-			_JustGuardCoroutine = StartCoroutine(Internal());
-
-			IEnumerator Internal()
-			{
-				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
-				state.Time = 0f;
-				EmitEffect(_JustGuardEffect, true);
-				float start = Time.time;
-				_JustGuardCancelTrigger = false;
-				yield return new WaitUntil(() => Time.time - start > 2.4f || _JustGuardCancelTrigger);
-				_JustGuardCancelTrigger = false;
-				EmitEffect(_JustGuardEffect, false);
-				_JustGuardCoroutine = null;
-			}
-		}
-
-		bool IsJustGuard()
-		{
-			return _JustGuardCoroutine != null;
 		}
 
 		void FeetSmoke(float time)
@@ -783,7 +726,7 @@ namespace Battle
 			}
 		}
 
-		void EmitEffect(ParticleSystem particle, bool on)
+		public void EmitEffect(ParticleSystem particle, bool on)
 		{
 			ParticleSystem[] particles = particle.GetComponentsInChildren<ParticleSystem>();
 			foreach (ParticleSystem p in particles)

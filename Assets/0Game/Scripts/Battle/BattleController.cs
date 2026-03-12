@@ -53,17 +53,17 @@ namespace Battle
 			// 이동
 			if (_ActivePlayer)
 			{
-				nextPlayer._Character._MoveInput = _ActivePlayer._Character._MoveInput;
+				nextPlayer.c._MoveInput = _ActivePlayer.c._MoveInput;
 				nextPlayer._LookInput = _ActivePlayer._LookInput;
 				nextPlayer._LookRotation = _ActivePlayer._LookRotation;
-				nextPlayer._Character._AimDestRotation = _ActivePlayer._Character._AimDestRotation;
+				nextPlayer.c._AimDestRotation = _ActivePlayer.c._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
-				nextPlayer._Character._Motor.SetPositionAndRotation(pos, rot);
-				nextPlayer._Character._Motor.MoveCharacter(pos);
-				nextPlayer._Character._Motor.RotateCharacter(rot);
-				nextPlayer._Character._Motor.BaseVelocity = _ActivePlayer._Character._Motor.BaseVelocity;
-				nextPlayer._Character._Motor.GroundingStatus = _ActivePlayer._Character._Motor.GroundingStatus;
-				nextPlayer._Character._FSM.ForceSetDefaultState();
+				nextPlayer.c._Motor.SetPositionAndRotation(pos, rot);
+				nextPlayer.c._Motor.MoveCharacter(pos);
+				nextPlayer.c._Motor.RotateCharacter(rot);
+				nextPlayer.c._Motor.BaseVelocity = _ActivePlayer.c._Motor.BaseVelocity;
+				nextPlayer.c._Motor.GroundingStatus = _ActivePlayer.c._Motor.GroundingStatus;
+				nextPlayer.c._FSM.ForceSetDefaultState();
 			}
 
 			foreach (Player player in _Players)
