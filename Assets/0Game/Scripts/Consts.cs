@@ -12,7 +12,7 @@ public static class SceneName
 	public const string Loading = "Loading";
 	public const string Battle = "Battle";
 
-	public const string Tutorial = "Tutorial";
+	public const string Glacier = "Glacier";
 }
 
 //public static class SortingLayerName

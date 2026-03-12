@@ -102,7 +102,7 @@ namespace Battle
 				c = this,
 				_Asset = _RunAsset,
 				_Priority = -2,
-				_MoveSpeed = 2.5f,
+				_MoveSpeed = 2f,
 				_Duration = -1f,
 				_CanJump = true,
 				_CanAttack = true,
@@ -112,7 +112,7 @@ namespace Battle
 			_Dash = new()
 			{
 				c = this,
-				_MoveSpeed = 2.5f,
+				_MoveSpeed = 3f,
 				_Restart = true,
 				_Duration = _DashDuration,
 				_LimitRotate = true,
@@ -150,7 +150,6 @@ namespace Battle
 				c = this,
 				_Asset = _LandAsset,
 				_Priority = -1,
-				_MoveSpeed = 1f,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,

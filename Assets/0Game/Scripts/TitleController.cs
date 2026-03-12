@@ -14,6 +14,6 @@ public class TitleController : MonoBehaviour
 
 	void StartButton()
 	{
-		Game.LoadBattleScene(SceneName.Tutorial);
+		Game.LoadBattleScene(SceneName.Glacier);
 	}
 }

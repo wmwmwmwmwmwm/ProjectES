@@ -112,6 +112,12 @@ namespace Battle
 			float moveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
 			float moveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
 
+			// 착지 시 속도 별도 처리
+			if (_FSM.CurrentState == _Land)
+			{
+				moveSpeed = _IsRunning ? _MoveSpeed * _Run._MoveSpeed : _MoveSpeed * _Move._MoveSpeed;
+			}
+
 			// 페이드 인 감속
 			if (_FadeInDeaccelTimer > 0f)
 			{

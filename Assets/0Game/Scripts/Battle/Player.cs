@@ -121,6 +121,7 @@ namespace Battle
 			State state = c._FSM.CurrentState;
 			bool stateCondition = state == c._Idle;
 			stateCondition |= state == c._Move;
+			stateCondition |= state == c._Run;
 			stateCondition |= state == c._Jump;
 			stateCondition |= state == c._Fall;
 			stateCondition |= state == c._Land;

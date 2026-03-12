@@ -14,12 +14,13 @@ namespace Battle
 		public Transform _CameraTarget;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
 		public Transform _BgGround, _BgNear;
-		public List<Player> _Players;
-		public List<Enemy> _Enemys;
 
+		bool _Init;
+		[HideInInspector] public List<Player> _Players;
+		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
 
-		void Start()
+		public void Init()
 		{
 			InitUI();
 			foreach (Player player in _Players)
@@ -34,10 +35,14 @@ namespace Battle
 
 			Game.LockCursor(true);
 			SetActivePlayer(0);
+
+			_Init = true;
 		}
 
 		void Update()
 		{
+			if (!_Init) return;
+
 			// 배경 회전
 			_BgNear.rotation = _MainCamera.rotation;
 			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
