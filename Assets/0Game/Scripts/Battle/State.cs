@@ -42,7 +42,7 @@ namespace Battle
 
 			_State = c._BaseLayer.GetOrCreateState(_Asset);
 			_EffectDatas = Data.GetEffectDatas(_Asset);
-			_Attack = Data.GetAttackData(_Asset);
+			_Attack = Data.GetAttack(_Asset);
 
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
 			if (_Duration == 0f)

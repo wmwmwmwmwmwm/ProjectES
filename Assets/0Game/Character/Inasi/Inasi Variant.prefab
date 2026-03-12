@@ -20,6 +20,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7455138135084191989, guid: f2d32f8e99ac3b443bbc43858b6ae758,
         type: 3}
+      propertyPath: _Name
+      value: Inasi
+      objectReference: {fileID: 0}
+    - target: {fileID: 7455138135084191989, guid: f2d32f8e99ac3b443bbc43858b6ae758,
+        type: 3}
       propertyPath: _ModelPrefab
       value: 
       objectReference: {fileID: 8832297721259585091, guid: 54eb591a499ee1b4d821804a3f3804fb,

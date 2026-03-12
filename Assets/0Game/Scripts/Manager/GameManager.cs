@@ -57,6 +57,7 @@ public class GameManager : Singleton<GameManager>
 		IEnumerator Internal()
 		{
 			SceneManager.LoadScene(SceneName.Loading, LoadSceneMode.Additive);
+			yield return new WaitUntil(() => SceneManager.GetSceneByName(SceneName.Loading).isLoaded);
 			AsyncOperation unloadProgress = SceneManager.UnloadSceneAsync(_CurrentScene);
 			AsyncOperation loadProgress = SceneManager.LoadSceneAsync(SceneName.Battle, LoadSceneMode.Additive);
 			AsyncOperation loadProgress2 = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -72,9 +73,6 @@ public class GameManager : Singleton<GameManager>
 				if (unloadProgress.isDone && loadProgress.isDone && loadProgress2.isDone) break;
 				yield return null;
 			}
-			yield return new WaitUntil(() => unloadProgress.isDone);
-			yield return new WaitUntil(() => loadProgress.isDone);
-			yield return new WaitUntil(() => loadProgress2.isDone);
             Scene scene = SceneManager.GetSceneByName(sceneName);
 			SceneManager.SetActiveScene(scene);
 			SceneManager.UnloadSceneAsync(SceneName.Loading);

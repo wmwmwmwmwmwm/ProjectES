@@ -119,7 +119,7 @@ GameObject:
   m_Layer: 8
   m_Name: EnemyBase
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -171,8 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ef45ba3a4ae2742823cce28fe762d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ModelPrefab: {fileID: 9137032837993464747, guid: 4534b9cc6330aed499be54b02abf5283,
-    type: 3}
+  _Name: 
+  _ModelPrefab: {fileID: 0}
   _RotationSpeed: 150
   _MoveSpeed: 3
   _MoveAccel: 100

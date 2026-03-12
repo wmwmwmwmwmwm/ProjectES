@@ -20,8 +20,35 @@ namespace Battle
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
 
+		public List<Player> _PlayerPrefabs;
+		public List<Enemy> _EnemyPrefabs;
+
 		public void Init()
 		{
+			bool isTest = Game._StartScene == SceneName.Glacier;
+
+			// 배치
+			if (!isTest)
+			{
+				// prefab 없애고 stage로 대체
+				List<Player> players = new();
+				foreach (Player prefab in _PlayerPrefabs)
+				{
+					Player player = Instantiate(prefab);
+					//player.transform.SetPositionAndRotation(_StartPosition.position, _StartPosition.rotation);
+					players.Add(player);
+				}
+				_Players = players;
+				List<Enemy> enemys = new();
+				foreach (Enemy prefab in _EnemyPrefabs)
+				{
+					Enemy enemy = Instantiate(prefab);
+					enemys.Add(enemy);
+				}
+				_Enemys = enemys;
+			}
+
+			// 초기화
 			InitUI();
 			foreach (Player player in _Players)
 			{

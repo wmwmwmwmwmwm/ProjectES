@@ -25,6 +25,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
+      propertyPath: _Name
+      value: Snowman_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
       propertyPath: _MoveSpeed
       value: 8
       objectReference: {fileID: 0}
@@ -37,7 +42,7 @@ PrefabInstance:
     - target: {fileID: 4014474705152691691, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: m_Name
-      value: Snowman2 Variant
+      value: Snowman_2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4014474705152691691, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}

@@ -16,6 +16,7 @@ namespace Battle
 {
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
+		[BoxGroup("설정")] public string _Name;
 		[BoxGroup("설정")] public GameObject _ModelPrefab;
 		[BoxGroup("설정")] public float _RotationSpeed;
 		[BoxGroup("설정")] public float _MoveSpeed;

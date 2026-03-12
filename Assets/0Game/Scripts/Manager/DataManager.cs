@@ -23,57 +23,38 @@ public class DataManager : Singleton<DataManager>
 	}
 	public List<Effect> _Effects;
 
+	[Serializable]
+	public class Stage
+	{
+		public string _Name;
+		public Vector3 _StartPosition;
+		public Quaternion _StartRotation;
+
+		[Serializable]
+		public class Spawn
+		{
+			public string _CharacterName;
+			public Vector3 _Position;
+			public Quaternion _Rotation;
+		}
+		public List<Spawn> _Spawns;
+	}
+	public List<Stage> _Stages;
+
 	public List<BattleAttack> _BattleAttacks;
-	//[Serializable]
-	//public class Attack
-	//{
-	//	public AnimationClip _Clip;
-	//	public BattleAttack _AttackPrefab;
-
-	//	public float _Cooltime;
-	//	public AttackSkillType _SkillType;
-	//	public AttackRangeType _RangeType;
-	//	public AttackAreaType _AreaType;
-
-	//	public GameObject _HitEffectPrefab;
-	//	public float _HitDelay;
-	//	public float _DamageDuration, _AttackerHitStunDuration;
-	//	public float _ForceForward, _ForceUp;
-	//}
-	//public List<Attack> _Attacks;
-
-	//[Button("asdf")]
-	//public void aaa()
-	//{
-	//	for (int i = 0; i < _BattleAttacks.Count; i++)
-	//	{
-	//		e attack = _BattleAttacks[i];
-	//		BattleAttack battleAttack = _BattleAttacks[i];
-	//		battleAttack._Clip = attack._Clip;
-	//		battleAttack._Cooltime = attack._Cooltime;
-	//		battleAttack._SkillType = attack._SkillType;
-	//		battleAttack._RangeType = attack._RangeType;
-	//		battleAttack._AreaType = attack._AreaType;
-	//		var melee = battleAttack.GetComponent<MeleeAttack>();
-	//		var hit = melee._AttackHits.First();
-	//		hit._HitEffectPrefab = attack._HitEffectPrefab;
-	//		hit._HitDelay = attack._HitDelay;
-	//		hit._DamageDuration = attack._DamageDuration;
-	//		hit._AttackerHitStunDuration = attack._AttackerHitStunDuration;
-	//		hit._ForceForward = attack._ForceForward;
-	//		hit._ForceUp = attack._ForceUp;
-	//		Util.SetDirty(battleAttack);
-	//	}
-	//	Util.SetDirty(this);
-	//}
+	public List<Character> _Characters;
 
 	public Dictionary<TransitionAsset, List<Effect>> _EffectDict;
 	public Dictionary<TransitionAsset, BattleAttack> _AttackDict;
+	public Dictionary<string, Stage> _StageDict;
+	public Dictionary<string, Character> _CharacterDict;
 
 	protected override void Init()
 	{
 		_EffectDict = _Effects.GroupBy(x => x._Transition).ToDictionary(a => a.Key, b => b.ToList());
 		_AttackDict = _BattleAttacks.ToDictionary(a => a._Transition, b => b);
+		_StageDict = _Stages.ToDictionary(a => a._Name, b => b);
+		_CharacterDict = _Characters.ToDictionary(a => a._Name, b => b);
 	}
 
 	public List<Effect> GetEffectDatas(TransitionAsset transition)
@@ -83,11 +64,23 @@ public class DataManager : Singleton<DataManager>
 		return datas;
 	}
 
-	public BattleAttack GetAttackData(TransitionAsset transition)
+	public BattleAttack GetAttack(TransitionAsset transition)
 	{
 		if (!transition) return null;
 		_AttackDict.TryGetValue(transition, out BattleAttack data);
 		return data;
+	}
+
+	public Stage GetStageData(string name)
+	{
+		_StageDict.TryGetValue(name, out Stage stage);
+		return stage;
+	}
+
+	public Character GetCharacter(string name)
+	{
+		_CharacterDict.TryGetValue(name, out Character character);
+		return character;
 	}
 
 	public void SetupEffectPosition(GameObject instance, Effect info, Transform parent)

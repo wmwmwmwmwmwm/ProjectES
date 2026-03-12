@@ -13,6 +13,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nolan Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7455138135084191989, guid: f2d32f8e99ac3b443bbc43858b6ae758,
+        type: 3}
+      propertyPath: _Name
+      value: Nolan
+      objectReference: {fileID: 0}
     - target: {fileID: 7944196368236216995, guid: f2d32f8e99ac3b443bbc43858b6ae758,
         type: 3}
       propertyPath: m_LocalPosition.x
