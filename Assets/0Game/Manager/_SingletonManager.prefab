@@ -52,3 +52,5 @@ MonoBehaviour:
     type: 3}
   _DataManagerPrefab: {fileID: 9150884734748941803, guid: e8f20c613e0b0f64d92026e2007a3a40,
     type: 3}
+  _StoryManagerPrefab: {fileID: 8084057522443662106, guid: a499bb69e87f493419e32f92a9430c21,
+    type: 3}

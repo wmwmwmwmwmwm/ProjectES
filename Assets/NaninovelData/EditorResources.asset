@@ -145,4 +145,7 @@ MonoBehaviour:
       pathPrefix: UI
       guid: 735d6aa767879aa469134858c5b2f0a7
   - Id: Scripts
-    Resources: []
+    Resources:
+    - name: TestScript
+      pathPrefix: Scripts
+      guid: 0a420c6c43235a14dbfd92ca29962042

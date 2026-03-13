@@ -10,6 +10,7 @@ public class UIManager : Singleton<UIManager>
 
 	protected override void Init()
 	{
+		_Fader.gameObject.SetActive(false);
 	}
 
 	public void FadeIn(float time = 0.6f)

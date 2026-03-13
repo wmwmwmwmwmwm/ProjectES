@@ -6,11 +6,13 @@ public class SingletonManager : MonoBehaviour
 	public InputManager _InputManagerPrefab;
 	public UIManager _UIManagerPrefab;
 	public DataManager _DataManagerPrefab;
+	public StoryManager _StoryManagerPrefab;
 
 	public static GameManager Game => GameManager.Instance;
 	public static InputManager Inputs => InputManager.Instance;
 	public static UIManager UI => UIManager.Instance;
 	public static DataManager Data => DataManager.Instance;
+	public static StoryManager Story => StoryManager.Instance;
 
 	bool _Init;
 
@@ -27,6 +29,7 @@ public class SingletonManager : MonoBehaviour
 		GameManager.CreateInstance(_GameControllerPrefab.gameObject);
 		UIManager.CreateInstance(_UIManagerPrefab.gameObject);
 		DataManager.CreateInstance(_DataManagerPrefab.gameObject);
+		StoryManager.CreateInstance(_StoryManagerPrefab.gameObject);
 		_Init = true;
 	}
 }

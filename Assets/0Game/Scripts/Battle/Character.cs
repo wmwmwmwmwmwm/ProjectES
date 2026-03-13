@@ -17,7 +17,6 @@ namespace Battle
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
 		[BoxGroup("설정")] public string _Name;
-		[BoxGroup("설정")] public GameObject _ModelPrefab;
 		[BoxGroup("설정")] public float _RotationSpeed;
 		[BoxGroup("설정")] public float _MoveSpeed;
 		[BoxGroup("설정")] public float _MoveAccel;
@@ -33,6 +32,7 @@ namespace Battle
 		public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
 		public Material _WhiteMaterial;
 
+		GameObject _Model;
 		Player _Player;
 		Enemy _Enemy;
 		CapsuleCollider _Collider;
@@ -75,12 +75,13 @@ namespace Battle
 			_LastSkill2Time = Const.TimeDefault;
 			_LastUltimateTime = Const.TimeDefault;
 
-			// 모델 생성
+			// 모델 초기화
+			_Model = GetComponentInChildren<Animator>().gameObject;
 			Transform parent = _Player ? _Player._CooltimeJitter : transform;
-			GameObject model = Instantiate(_ModelPrefab, parent);
-			_Animancer = model.AddComponent<AnimancerComponent>();
-			_Animancer.Animator = model.GetComponent<Animator>();
-			RedirectRootMotionToCharacter redirect = model.AddComponent<RedirectRootMotionToCharacter>();
+			_Model.transform.SetParent(parent);
+			_Animancer = _Model.AddComponent<AnimancerComponent>();
+			_Animancer.Animator = _Model.GetComponent<Animator>();
+			RedirectRootMotionToCharacter redirect = _Model.AddComponent<RedirectRootMotionToCharacter>();
 			redirect._Animator = _Animancer.Animator;
 			redirect._Character = this;
 

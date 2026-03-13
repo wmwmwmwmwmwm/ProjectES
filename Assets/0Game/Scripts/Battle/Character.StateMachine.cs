@@ -335,7 +335,7 @@ namespace Battle
 			{
 				float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 				bool active = degree > 30f && degree < 150f;
-				active &= state._MoveSpeed > 0f || state == _Dash;
+				active &= state._MoveSpeed > 0f || state == _Dash || state == _Land;
 				active &= !state.IsAttack;
 				active &= !IsGuarding();
 				_IsRunning = active;
@@ -377,7 +377,7 @@ namespace Battle
 			{
 				// 잔상 생성
 				float duration = 1f;
-				GameObject model = Instantiate(_ModelPrefab, transform.position, transform.rotation);
+				GameObject model = Instantiate(_Model, transform.position, transform.rotation);
 				Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
 				Material whiteMaterial = new(_WhiteMaterial);
 				foreach (Renderer renderer in renderers)
