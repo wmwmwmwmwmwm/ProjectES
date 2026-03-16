@@ -1,5 +1,6 @@
 {
     "name": "Elringus.Naninovel.Runtime",
+    "rootNamespace": "",
     "references": [
         "GUID:26c3782e36cc1874587ef07692accab2",
         "GUID:88c54edcfcc58e24c8b704cdd7d780e1",

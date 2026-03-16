@@ -89,12 +89,12 @@ namespace Naninovel
                 throw new Error(Engine.FormatMessage(
                     "Failed to parametrize generic text: make sure [< ...] is inlined after text.", Spot));
 
-            if (Command.Assigned(param.PrinterId)) print.PrinterId = param.PrinterId;
+            //if (Command.Assigned(param.PrinterId)) print.PrinterId = param.PrinterId;
             if (Command.Assigned(param.AuthorId)) print.AuthorId = param.AuthorId;
-            if (Command.Assigned(param.AuthorLabel)) print.AuthorLabel = param.AuthorLabel.Value.Ref();
-            if (Command.Assigned(param.RevealSpeed)) print.RevealSpeed = param.RevealSpeed;
+            //if (Command.Assigned(param.AuthorLabel)) print.AuthorLabel = param.AuthorLabel.Value.Ref();
+            //if (Command.Assigned(param.RevealSpeed)) print.RevealSpeed = param.RevealSpeed;
             if (Command.Assigned(param.SkipWaitingInput)) print.WaitForInput = !param.SkipWaitingInput;
-            if (Command.Assigned(param.Join)) print.ResetPrinter = !param.Join;
+            //if (Command.Assigned(param.Join)) print.ResetPrinter = !param.Join;
         }
 
         protected virtual void AddGenericText (MixedValue genericText)
@@ -105,8 +105,8 @@ namespace Naninovel
             print.Text = CommandParameter.FromRaw<LocalizableTextParameter>(raw, Spot, out var errors);
             if (errors != null) errorHandler?.HandleError(new ParseError(errors, 0, 0));
             if (!string.IsNullOrEmpty(AuthorId)) print.AuthorId = AuthorId;
-            if (printedBefore) print.ResetPrinter = false;
-            if (printedBefore) print.LineBreaks = 0;
+            //if (printedBefore) print.ResetPrinter = false;
+            //if (printedBefore) print.LineBreaks = 0;
             print.Wait = true;
             print.WaitForInput = false;
             print.PlaybackSpot = Spot;

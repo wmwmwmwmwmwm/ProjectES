@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -168,10 +169,10 @@ namespace Naninovel
         /// <param name="asyncToken">Throw if canceled after each async operation (except when the operation handles the token itself).</param>
         public abstract UniTask ExecuteAsync (AsyncToken asyncToken = default);
 
-        /// <summary>
-        /// Logs an informational message to the console; will include script name and line number of the command.
-        /// </summary>
-        public virtual void Log (string message) => Engine.Log(message, PlaybackSpot);
+		/// <summary>
+		/// Logs an informational message to the console; will include script name and line number of the command.
+		/// </summary>
+		public virtual void Log (string message) => Engine.Log(message, PlaybackSpot);
 
         /// <summary>
         /// Logs a warning to the console; will include script name and line number of the command.
