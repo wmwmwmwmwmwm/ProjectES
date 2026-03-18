@@ -51,7 +51,6 @@ namespace Battle
 				}
 				Controller._Enemys = enemys;
 				Controller.Init();
-				Game.LockCursor(true);
 			}
 		}
 	}

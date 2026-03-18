@@ -32,7 +32,7 @@ MonoBehaviour:
   WatchedDirectory: 
   CountTotalCommands: 0
   ShowScriptNavigator: 0
-  EnableVisualEditor: 1
+  EnableVisualEditor: 0
   HideUnusedParameters: 1
   SelectPlayedScript: 1
   InsertLineKey: 32

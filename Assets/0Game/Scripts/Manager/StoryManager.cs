@@ -26,31 +26,21 @@ public class StoryManager : Singleton<StoryManager>
 	protected override void Init()
 	{
 		_NextButton.onClick.AddListener(NextButton);
-
-		_Background.SetActive(false);
-		_Character.SetActive(false);
-		_TextBox.SetActive(false);
-
-		StartCoroutine(ShowStory());
+		SetActivePanels(false);
 	}
 
 	public IEnumerator ShowStory()
 	{
-		_Background.SetActive(true);
-		_Character.SetActive(true);
-		_TextBox.SetActive(true);
+		SetActivePanels(true);
 		List<Command> commands = _Script.ExtractCommands();
 		foreach (Command com in commands)
 		{
 			Func<Command, IEnumerator> func = null;
 			if (com is PrintText) func = ExecutePrintText;
 
-			print(com.GetType());
 			yield return StartCoroutine(func(com));
 		}
-		_Background.SetActive(false);
-		_Character.SetActive(false);
-		_TextBox.SetActive(false);
+		SetActivePanels(false);
 	}
 
 	IEnumerator ExecutePrintText(Command command)
@@ -60,7 +50,7 @@ public class StoryManager : Singleton<StoryManager>
 		foreach (LocalizableTextPart part in c.Text.Value.Parts)
 		{
 			string text = _Script.TextMap.GetTextOrNull(part.Id);
-			for (int i = 0; i < text.Length; i++)
+			for (int i = 1; i <= text.Length; i++)
 			{
 				_MainText.text = text[..i];
 				yield return new WaitForSeconds(0.03f);
@@ -76,22 +66,36 @@ public class StoryManager : Singleton<StoryManager>
 		_Next = true;
 	}
 
+	void SetActivePanels(bool on)
+	{
+		Game.LockCursor(!on);
+		_Background.SetActive(on);
+		_Character.SetActive(on);
+		_TextBox.SetActive(on);
+		_NextButton.gameObject.SetActive(on);
+	}
+
 	[Button("aa")]
 	public void aa()
 	{
-		//print(_Script);
-		//var coms = _Script.ExtractCommands();
-		//foreach (var com in coms)
-		//{
-		//	print($"{com.GetType()}  {com.PlaybackSpot}  {com.Wait}");
-		//	if(com is PrintText printtext)
-		//	{
-		//		print($"{printtext.AuthorId}  {printtext.Text.Value}  {printtext.Text.Value.Parts}");
-		//		foreach (var item in printtext.Text.Value.Parts)
-		//		{
-		//			print($"{_Script.TextMap.GetTextOrNull(item.Id)}");
-		//		}
-		//	}
-		//}
+		print("----");
+		foreach (var line in _Script.Lines)
+		{
+			print($"{line.LineIndex}  {_Script.GetLabelForLine(line.LineIndex)}");
+		}
+		print("----");
+		List<Command> coms = _Script.ExtractCommands();
+		foreach (var com in coms)
+		{
+			print($"{_Script.GetLabelForLine(com.PlaybackSpot.LineIndex)} {com.GetType()}  {com.PlaybackSpot}  {com.Wait}");
+			if (com is PrintText printtext)
+			{
+				print($"{printtext.AuthorId}  {printtext.Text.Value}  {printtext.Text.Value.Parts}");
+				foreach (var item in printtext.Text.Value.Parts)
+				{
+					print($"{_Script.TextMap.GetTextOrNull(item.Id)}");
+				}
+			}
+		}
 	}
 }
