@@ -353,7 +353,7 @@ namespace Battle
 			}
 		}
 
-		void Play(State state)
+		void PlayAction(State state)
 		{
 			if (state._Restart)
 			{

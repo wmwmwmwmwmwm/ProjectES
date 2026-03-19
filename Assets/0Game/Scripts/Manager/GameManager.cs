@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -16,7 +15,7 @@ public class GameManager : Singleton<GameManager>
 	public GameObject _DebugBox;
 
 	[HideInInspector] public string _StartScene;
-	string _CurrentScene;
+	[HideInInspector] public string _CurrentScene;
 	float _FixedDeltaTime;
 
 	protected override void Init()

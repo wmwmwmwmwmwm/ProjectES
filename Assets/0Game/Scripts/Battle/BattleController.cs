@@ -13,9 +13,13 @@ namespace Battle
 		public Transform _MainCamera;
 		public Transform _CameraTarget;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
-		public Transform _BgGround, _BgNear;
+		public Transform _MinimapCameraHandle;
+		public Camera _MinimapCamera;
+		public RenderTexture _MinimapRT;
 
 		bool _Init;
+		[HideInInspector] public Transform _BgGround;
+		[HideInInspector] public Transform _BgNear;
 		[HideInInspector] public List<Player> _Players;
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
@@ -27,10 +31,13 @@ namespace Battle
 		{
 			bool isTest = Game._StartScene == SceneName.Glacier;
 
+			// 미니맵
+			_MinimapCamera.targetTexture = new(_MinimapRT);
+
 			// 배치
 			if (!isTest)
 			{
-				// prefab 없애고 stage로 대체
+				// todo prefab 없애고 stage로 대체
 				List<Player> players = new();
 				foreach (Player prefab in _PlayerPrefabs)
 				{
@@ -60,6 +67,8 @@ namespace Battle
 				enemy.Init();
 			}
 
+			_BgGround = GameObject.Find("Bg/Ground").transform;
+			_BgNear = GameObject.Find("Bg/Near").transform;
 			Game.LockCursor(true);
 			SetActivePlayer(0);
 
@@ -73,6 +82,9 @@ namespace Battle
 			// 배경 회전
 			_BgNear.rotation = _MainCamera.rotation;
 			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
+
+			// 미니맵
+			_MinimapCameraHandle.position = _ActivePlayer.transform.position;
 
 			UpdateUI();
 		}

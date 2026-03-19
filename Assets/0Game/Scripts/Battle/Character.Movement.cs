@@ -285,7 +285,7 @@ namespace Battle
 				if (asset)
 				{
 					_Jump.SetAsset(asset);
-					Play(_Jump);
+					PlayAction(_Jump);
 				}
 				DashCancel();
 				_MoveRequest = MoveRequest.None;
@@ -345,6 +345,12 @@ namespace Battle
 					return;
 				}
 
+				// 착지
+				if (!_Motor.LastGroundingStatus.IsStableOnGround)
+				{
+					_FSM.TrySetState(_Land);
+				}
+
 				// 지상 이동
 				if (_Motor.GroundingStatus.IsStableOnGround)
 				{
@@ -363,12 +369,6 @@ namespace Battle
 					else
 					{
 						_FSM.TrySetState(_Idle);
-					}
-
-					// 착지
-					if (!_Motor.LastGroundingStatus.IsStableOnGround)
-					{
-						_FSM.TrySetState(_Land);
 					}
 				}
 				// 공중 이동
@@ -398,13 +398,6 @@ namespace Battle
 						// 공중에서 오르기 방지
 						Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal), _Motor.CharacterUp).normalized;
 						addedVelocity = Vector3.ProjectOnPlane(addedVelocity, perpenticularObstructionNormal);
-
-						//// 경사 미끄러짐
-						//float angle = Vector3.Angle(Physics.gravity, _Motor.GroundingStatus.GroundNormal);
-						//float t = Mathf.InverseLerp(180f - _Motor.MaxStableSlopeAngle, 0f, angle);
-						//addedVelocity += deltaTime * t * Physics.gravity;
-						//print(addedVelocity);
-						//print(t);
 					}
 
 					currentVelocity += addedVelocity;

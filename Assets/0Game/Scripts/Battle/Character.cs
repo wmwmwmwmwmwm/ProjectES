@@ -150,7 +150,7 @@ namespace Battle
 			// 저스트 가드
 			if (_Player && _Player.IsJustGuard())
 			{
-				Play(_GuardAttack);
+				PlayAction(_GuardAttack);
 				Attack();
 				_Player._JustGuardCancelTrigger = true;
 			}
@@ -159,7 +159,7 @@ namespace Battle
 			{
 				_FadeOutDeaccelTimer = _DashDuration;
 				DashCancel();
-				Play(_DashAttack);
+				PlayAction(_DashAttack);
 				Attack();
 			}
 			// 지상
@@ -169,7 +169,7 @@ namespace Battle
 				if (_AttackIndex < 0)
 				{
 					_AttackIndex = 0;
-					Play(_NormalAttacks[_AttackIndex]);
+					PlayAction(_NormalAttacks[_AttackIndex]);
 					Attack();
 				}
 				// 2~타 공격
@@ -181,7 +181,7 @@ namespace Battle
 			// 공중
 			else if (_FSM.CurrentState != _JumpAttack) 
 			{
-				Play(_JumpAttack);
+				PlayAction(_JumpAttack);
 				Attack();
 			}
 		}
@@ -205,7 +205,7 @@ namespace Battle
 				}
 				else
 				{
-					Play(_SpecialAttack);
+					PlayAction(_SpecialAttack);
 				}
 				Attack();
 			}
@@ -214,7 +214,7 @@ namespace Battle
 			{
 				if (_FSM.CurrentState.IsAttack) return;
 
-				Play(_JumpSpecialAttack);
+				PlayAction(_JumpSpecialAttack);
 				Attack();
 			}
 		}
@@ -242,7 +242,7 @@ namespace Battle
 			}
 			else
 			{
-				Play(_Skill1);
+				PlayAction(_Skill1);
 			}
 			Attack();
 			_LastSkill1Time = Time.time;
@@ -271,7 +271,7 @@ namespace Battle
 			}
 			else
 			{
-				Play(_Skill2);
+				PlayAction(_Skill2);
 			}
 			Attack();
 			_LastSkill2Time = Time.time;
@@ -300,7 +300,7 @@ namespace Battle
 			}
 			else
 			{
-				Play(_Ultimate);
+				PlayAction(_Ultimate);
 			}
 			Attack();
 			_LastUltimateTime = Time.time;
@@ -534,7 +534,7 @@ namespace Battle
 						_Damage._Duration = attackHit._DamageDuration;
 						_FadeInDeaccelTimer = attackHit._DamageDuration;
 						_Damage.SetAsset(_DamageAssets.PickOne());
-						Play(_Damage);
+						PlayAction(_Damage);
 					}
 					// 밀어내기
 					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
@@ -543,7 +543,7 @@ namespace Battle
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FadeOutDeaccelTimer = attackHit._DamageDuration;
 						_Damage.SetAsset(_DamageAssets.PickOne());
-						Play(_Damage);
+						PlayAction(_Damage);
 						FeetSmoke(attackHit._DamageDuration);
 					}
 					// 날리기
