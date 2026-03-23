@@ -6,7 +6,7 @@ namespace MToon
 {
     public static partial class Utils
     {
-        public const string ShaderName = "VRM/MToon";
+		public const string ShaderName = "VRM/MToon";
 
         public const string PropVersion = "_MToonVersion";
         public const string PropDebugMode = "_DebugMode";

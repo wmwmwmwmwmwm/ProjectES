@@ -16,8 +16,8 @@ namespace VRM
         private static void ShowVersion() { }
 
 
-        [MenuItem(UserMenuPrefix + "/" + VRMExporterWizard.MENU_NAME, false, 1)]
-        private static void ExportToVrmFile() => VRMExporterWizard.OpenExportMenu();
+        //[MenuItem(UserMenuPrefix + "/" + VRMExporterWizard.MENU_NAME, false, 1)]
+        //private static void ExportToVrmFile() => VRMExporterWizard.OpenExportMenu();
 
 
         [MenuItem(UserMenuPrefix + "/" + VRMImporterMenu.MENU_NAME, false, 2)]

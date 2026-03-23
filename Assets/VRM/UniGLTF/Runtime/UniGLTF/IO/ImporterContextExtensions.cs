@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace UniGLTF
@@ -10,8 +11,8 @@ namespace UniGLTF
         /// </summary>
         public static RuntimeGltfInstance Load(this ImporterContext self)
         {
-            var meassureTime = new ImporterContextSpeedLog();
-            var task = self.LoadAsync(new ImmediateCaller(), meassureTime.MeasureTime);
+			ImporterContextSpeedLog meassureTime = new();
+			Task<RuntimeGltfInstance> task = self.LoadAsync(new ImmediateCaller(), meassureTime.MeasureTime);
             if (!task.IsCompleted)
             {
                 throw new Exception();

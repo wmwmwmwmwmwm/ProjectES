@@ -7,403 +7,425 @@ using UnityEngine.Profiling;
 
 namespace UniGLTF
 {
-    /// <summary>
-    /// GLTF importer
-    /// </summary>
-    public class ImporterContext : IResponsibilityForDestroyObjects
-    {
-        public readonly bool IsAssetImport;
-        private readonly ImporterContextSettings _settings;
-        
-        public ITextureDescriptorGenerator TextureDescriptorGenerator { get; protected set; }
-        public IMaterialDescriptorGenerator MaterialDescriptorGenerator { get; protected set; }
-        public TextureFactory TextureFactory { get; }
-        public MaterialFactory MaterialFactory { get; }
-        public AnimationClipFactory AnimationClipFactory { get; }
-        private bool LoadAnimation => _settings.LoadAnimation;
+	/// <summary>
+	/// GLTF importer
+	/// </summary>
+	public class ImporterContext : IResponsibilityForDestroyObjects
+	{
+		public readonly bool IsAssetImport;
+		private readonly ImporterContextSettings _settings;
+		
+		public ITextureDescriptorGenerator TextureDescriptorGenerator { get; protected set; }
+		public IMaterialDescriptorGenerator MaterialDescriptorGenerator { get; protected set; }
+		public TextureFactory TextureFactory { get; }
+		public MaterialFactory MaterialFactory { get; }
+		public AnimationClipFactory AnimationClipFactory { get; }
+		private bool LoadAnimation => _settings.LoadAnimation;
 
-        public IReadOnlyDictionary<SubAssetKey, UnityEngine.Object> ExternalObjectMap;
+		public IReadOnlyDictionary<SubAssetKey, UnityEngine.Object> ExternalObjectMap;
 
-        /// <summary>
-        /// UnityObject の 生成(LoadAsync) と 破棄(Dispose) を行う。
-        /// LoadAsync が成功した場合、返り値(RuntimeGltfInstance) に破棄する責務を移動させる。
-        /// </summary>
-        /// <param name="data">Jsonからデシリアライズされた GLTF 情報など</param>
-        /// <param name="externalObjectMap">外部オブジェクトのリスト(主にScriptedImporterのRemapで使う)</param>
-        /// <param name="textureDeserializer">Textureロードをカスタマイズする</param>
-        /// <param name="materialGenerator">Materialロードをカスタマイズする(URP向け)</param>
-        /// <param name="settings">ImporterContextの設定</param>
-        public ImporterContext(
-            GltfData data,
-            IReadOnlyDictionary<SubAssetKey, UnityEngine.Object> externalObjectMap = null,
-            ITextureDeserializer textureDeserializer = null,
-            IMaterialDescriptorGenerator materialGenerator = null,
-            ImporterContextSettings settings = null,
-            bool isAssetImport = false)
-        {
-            IsAssetImport = isAssetImport;
-            _settings = settings ?? new ImporterContextSettings();
-            Data = data;
-            TextureDescriptorGenerator = new GltfTextureDescriptorGenerator(Data);
-            MaterialDescriptorGenerator = materialGenerator ?? MaterialDescriptorGeneratorUtility.GetValidGltfMaterialDescriptorGenerator();
+		/// <summary>
+		/// UnityObject の 生成(LoadAsync) と 破棄(Dispose) を行う。
+		/// LoadAsync が成功した場合、返り値(RuntimeGltfInstance) に破棄する責務を移動させる。
+		/// </summary>
+		/// <param name="data">Jsonからデシリアライズされた GLTF 情報など</param>
+		/// <param name="externalObjectMap">外部オブジェクトのリスト(主にScriptedImporterのRemapで使う)</param>
+		/// <param name="textureDeserializer">Textureロードをカスタマイズする</param>
+		/// <param name="materialGenerator">Materialロードをカスタマイズする(URP向け)</param>
+		/// <param name="settings">ImporterContextの設定</param>
+		public ImporterContext(
+			GltfData data,
+			IReadOnlyDictionary<SubAssetKey, UnityEngine.Object> externalObjectMap = null,
+			ITextureDeserializer textureDeserializer = null,
+			IMaterialDescriptorGenerator materialGenerator = null,
+			ImporterContextSettings settings = null,
+			bool isAssetImport = false)
+		{
+			IsAssetImport = isAssetImport;
+			_settings = settings ?? new ImporterContextSettings();
+			Data = data;
+			TextureDescriptorGenerator = new GltfTextureDescriptorGenerator(Data);
+			MaterialDescriptorGenerator = materialGenerator ?? MaterialDescriptorGeneratorUtility.GetValidGltfMaterialDescriptorGenerator();
 
-            ExternalObjectMap = externalObjectMap ?? new Dictionary<SubAssetKey, UnityEngine.Object>();
-            textureDeserializer = textureDeserializer ?? new UnityTextureDeserializer(_settings.ImportedTexturesAccessibility);
+			ExternalObjectMap = externalObjectMap ?? new Dictionary<SubAssetKey, UnityEngine.Object>();
+			textureDeserializer = textureDeserializer ?? new UnityTextureDeserializer(_settings.ImportedTexturesAccessibility);
 
-            TextureFactory = new TextureFactory(textureDeserializer, ExternalObjectMap
-                .Where(x => x.Value is Texture)
-                .ToDictionary(x => x.Key, x => (Texture)x.Value),
-                Data.MigrationFlags.IsRoughnessTextureValueSquared);
-            MaterialFactory = new MaterialFactory(ExternalObjectMap
-                .Where(x => x.Value is Material)
-                .ToDictionary(x => x.Key, x => (Material)x.Value),
-                MaterialDescriptorGenerator.GetGltfDefault());
-            AnimationClipFactory = new AnimationClipFactory(ExternalObjectMap
-                .Where(x => x.Value is AnimationClip)
-                .ToDictionary(x => x.Key, x => (AnimationClip)x.Value));
-        }
+			TextureFactory = new TextureFactory(textureDeserializer, ExternalObjectMap
+				.Where(x => x.Value is Texture)
+				.ToDictionary(x => x.Key, x => (Texture)x.Value),
+				Data.MigrationFlags.IsRoughnessTextureValueSquared);
+			MaterialFactory = new MaterialFactory(ExternalObjectMap
+				.Where(x => x.Value is Material)
+				.ToDictionary(x => x.Key, x => (Material)x.Value),
+				MaterialDescriptorGenerator.GetGltfDefault());
+			AnimationClipFactory = new AnimationClipFactory(ExternalObjectMap
+				.Where(x => x.Value is AnimationClip)
+				.ToDictionary(x => x.Key, x => (AnimationClip)x.Value));
+		}
 
-        #region Source
-        public GltfData Data { get; }
-        public String Json => Data.Json;
-        public glTF GLTF => Data.GLTF;
-        #endregion
+		#region Source
+		public GltfData Data { get; }
+		public String Json => Data.Json;
+		public glTF GLTF => Data.GLTF;
+		#endregion
 
-        // configuration
+		// configuration
 
-        /// <summary>
-        /// GLTF から Unity に変換するときに反転させる軸
-        /// </summary>
-        private Axes InvertAxis => _settings.InvertAxis;
+		/// <summary>
+		/// GLTF から Unity に変換するときに反転させる軸
+		/// </summary>
+		private Axes InvertAxis => _settings.InvertAxis;
 
-        public static List<string> UnsupportedExtensions = new List<string>
-        {
-            // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_draco_mesh_compression
-            "KHR_draco_mesh_compression",
-        };
+		public static List<string> UnsupportedExtensions = new List<string>
+		{
+			// https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_draco_mesh_compression
+			"KHR_draco_mesh_compression",
+		};
 
-        #region Load. Build unity objects
-        public virtual async Task<RuntimeGltfInstance> LoadAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime = null)
-        {
-            if (awaitCaller == null)
-            {
-                throw new ArgumentNullException();
-            }
+		#region Load. Build unity objects
+		public virtual async Task<RuntimeGltfInstance> LoadAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime = null)
+		{
+			if (awaitCaller == null)
+			{
+				throw new ArgumentNullException();
+			}
 
-            if (MeasureTime == null)
-            {
-                MeasureTime = new ImporterContextSpeedLog().MeasureTime;
-            }
+			if (MeasureTime == null)
+			{
+				MeasureTime = new ImporterContextSpeedLog().MeasureTime;
+			}
 
-            if (GLTF.extensionsRequired != null)
-            {
-                var sb = new List<string>();
-                foreach (var required in GLTF.extensionsRequired)
-                {
-                    if (UnsupportedExtensions.Contains(required))
-                    {
-                        sb.Add(required);
-                    }
-                }
-                if (sb.Any())
-                {
-                    throw new UniGLTFNotSupportedException(string.Join(", ", sb) + " is not supported");
-                }
-            }
+			if (GLTF.extensionsRequired != null)
+			{
+				var sb = new List<string>();
+				foreach (var required in GLTF.extensionsRequired)
+				{
+					if (UnsupportedExtensions.Contains(required))
+					{
+						sb.Add(required);
+					}
+				}
+				if (sb.Any())
+				{
+					throw new UniGLTFNotSupportedException(string.Join(", ", sb) + " is not supported");
+				}
+			}
 
-            using (MeasureTime("LoadTextures"))
-            {
-                await LoadTexturesAsync(awaitCaller);
-            }
+			using (MeasureTime("LoadTextures"))
+			{
+				await LoadTexturesAsync(awaitCaller);
+			}
 
-            using (MeasureTime("LoadMaterials"))
-            {
-                await LoadMaterialsAsync(awaitCaller);
-            }
+			using (MeasureTime("LoadMaterials"))
+			{
+				await LoadMaterialsAsync(awaitCaller);
+			}
 
-            await LoadGeometryAsync(awaitCaller, MeasureTime);
+			await LoadGeometryAsync(awaitCaller, MeasureTime);
 
-            if (LoadAnimation)
-            {
-                using (MeasureTime("AnimationImporter"))
-                {
-                    await LoadAnimationAsync(awaitCaller);
-                    await SetupAnimationsAsync(awaitCaller);
-                }
-            }
+			if (LoadAnimation)
+			{
+				using (MeasureTime("AnimationImporter"))
+				{
+					await LoadAnimationAsync(awaitCaller);
+					await SetupAnimationsAsync(awaitCaller);
+				}
+			}
 
-            await OnLoadHierarchy(awaitCaller, MeasureTime);
+			await OnLoadHierarchy(awaitCaller, MeasureTime);
 
-            var instance = RuntimeGltfInstance.AttachTo(Root, this);
+			RuntimeGltfInstance instance = RuntimeGltfInstance.AttachTo(Root, this);
 
-            // RuntimeGltfInstance を使う初期化(SpringBone)
-            await FinalizeAsync(awaitCaller);
+			// RuntimeGltfInstance を使う初期化(SpringBone)
+			await FinalizeAsync(awaitCaller);
 
-            return instance;
-        }
+			// UTS 옵션 설정
+			foreach (Material material in instance.Materials)
+			{
+				bool opaque = false;
+				opaque |= material.name.Contains("_Body_");
+				opaque |= material.name.Contains("_EyeWhite_");
+				opaque |= material.name.Contains("_Face_");
+				opaque |= material.name.Contains("_Hair_");
+				opaque |= material.name.Contains("_Onepiece_");
+				material.SetFloat("_TransparentEnabled", opaque ? 0f : 1f);
+				material.SetFloat("_Use_BaseAs1st", 1f);
+				material.SetFloat("_Use_1stAs2nd", 1f);
+				material.SetFloat("_IsBaseMapAlphaAsClippingMask", 1f);
 
-        public virtual async Task LoadAnimationAsync(IAwaitCaller awaitCaller)
-        {
-            if (GLTF.animations != null && GLTF.animations.Any())
-            {
-                foreach (var (key, gltfAnimation) in Enumerable.Zip(AnimationImporterUtil.EnumerateSubAssetKeys(GLTF), GLTF.animations, (x, y) => (x, y)))
-                {
-                    await AnimationClipFactory.LoadAnimationClipAsync(key, () =>
-                        AnimationImporterUtil.ConvertAnimationClipAsync(Data, gltfAnimation, InvertAxis.Create(), awaitCaller));
-                }
+				// Eyelash 픽스
+				if (material.name.Contains("_FaceEyelash_"))
+				{
+					material.SetInt("_AutoRenderQueue", 0);
+					material.renderQueue = 3001;
+				}
+			}
 
-                await awaitCaller.NextFrame();
-            }
-        }
+			return instance;
+		}
 
-        /// <summary>
-        /// AnimationClips を AnimationComponent に載せる
-        /// </summary>
-        protected virtual async Task SetupAnimationsAsync(IAwaitCaller awaitCaller)
-        {
-            if (AnimationClipFactory.LoadedClipKeys.Count == 0) return;
+		public virtual async Task LoadAnimationAsync(IAwaitCaller awaitCaller)
+		{
+			if (GLTF.animations != null && GLTF.animations.Any())
+			{
+				foreach (var (key, gltfAnimation) in Enumerable.Zip(AnimationImporterUtil.EnumerateSubAssetKeys(GLTF), GLTF.animations, (x, y) => (x, y)))
+				{
+					await AnimationClipFactory.LoadAnimationClipAsync(key, () =>
+						AnimationImporterUtil.ConvertAnimationClipAsync(Data, gltfAnimation, InvertAxis.Create(), awaitCaller));
+				}
 
-            var animation = Root.AddComponent<Animation>();
-            for (var clipIdx = 0; clipIdx < AnimationClipFactory.LoadedClipKeys.Count; ++clipIdx)
-            {
-                var key = AnimationClipFactory.LoadedClipKeys[clipIdx];
-                var clip = AnimationClipFactory.GetAnimationClip(key);
-                animation.AddClip(clip, key.Name);
+				await awaitCaller.NextFrame();
+			}
+		}
 
-                if (clipIdx == 0)
-                {
-                    animation.clip = clip;
-                }
-            }
-            await awaitCaller.NextFrame();
-        }
+		/// <summary>
+		/// AnimationClips を AnimationComponent に載せる
+		/// </summary>
+		protected virtual async Task SetupAnimationsAsync(IAwaitCaller awaitCaller)
+		{
+			if (AnimationClipFactory.LoadedClipKeys.Count == 0) return;
 
-        protected virtual async Task LoadGeometryAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime)
-        {
-            var inverter = InvertAxis.Create();
+			var animation = Root.AddComponent<Animation>();
+			for (var clipIdx = 0; clipIdx < AnimationClipFactory.LoadedClipKeys.Count; ++clipIdx)
+			{
+				var key = AnimationClipFactory.LoadedClipKeys[clipIdx];
+				var clip = AnimationClipFactory.GetAnimationClip(key);
+				animation.AddClip(clip, key.Name);
 
-            if (GLTF.meshes.Count > 0)
-            {
-                var maxVertexCapacity = 0;
-                var maxIndexCapacity = 0;
-                foreach (var gltfMesh in GLTF.meshes)
-                {
-                    var (vertexCapacity, indexCapacity) = MeshData.GetCapacity(Data, gltfMesh);
-                    maxVertexCapacity = Math.Max(maxVertexCapacity, vertexCapacity);
-                    maxIndexCapacity = Math.Max(maxIndexCapacity, indexCapacity);
-                }
+				if (clipIdx == 0)
+				{
+					animation.clip = clip;
+				}
+			}
+			await awaitCaller.NextFrame();
+		}
 
-                // 一番長い VertexBuffer, IndexBuffer の長さでNativeArray を確保し、
-                // 最後に Dispose する
-                using (var meshData = new MeshData(maxVertexCapacity, maxIndexCapacity))
-                {
-                    for (var i = 0; i < GLTF.meshes.Count; ++i)
-                    {
-                        var index = i;
-                        var gltfMesh = Data.GLTF.meshes[index];
+		protected virtual async Task LoadGeometryAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime)
+		{
+			var inverter = InvertAxis.Create();
 
-                        using (MeasureTime("ReadMesh"))
-                            await awaitCaller.Run(() => meshData.LoadFromGltf(Data, index, inverter));
-                        var meshWithMaterials = await BuildMeshAsync(awaitCaller, MeasureTime, meshData, index);
-                        Meshes.Add(meshWithMaterials);
-                    }
-                }
-                await awaitCaller.NextFrame();
-            }
+			if (GLTF.meshes.Count > 0)
+			{
+				var maxVertexCapacity = 0;
+				var maxIndexCapacity = 0;
+				foreach (var gltfMesh in GLTF.meshes)
+				{
+					var (vertexCapacity, indexCapacity) = MeshData.GetCapacity(Data, gltfMesh);
+					maxVertexCapacity = Math.Max(maxVertexCapacity, vertexCapacity);
+					maxIndexCapacity = Math.Max(maxIndexCapacity, indexCapacity);
+				}
 
-            if (GLTF.nodes.Count > 0)
-            {
-                using (MeasureTime("LoadNodes"))
-                {
-                    for (var i = 0; i < GLTF.nodes.Count; i++)
-                    {
-                        await awaitCaller.NextFrameIfTimedOut();
-                        Profiler.BeginSample("ImporterContext.LoadNodes");
-                        Nodes.Add(NodeImporter.ImportNode(GLTF.nodes[i], i).transform);
-                        Profiler.EndSample();
-                    }
-                }
+				// 一番長い VertexBuffer, IndexBuffer の長さでNativeArray を確保し、
+				// 最後に Dispose する
+				using (var meshData = new MeshData(maxVertexCapacity, maxIndexCapacity))
+				{
+					for (var i = 0; i < GLTF.meshes.Count; ++i)
+					{
+						var index = i;
+						var gltfMesh = Data.GLTF.meshes[index];
 
-                await awaitCaller.NextFrame();
-            }
+						using (MeasureTime("ReadMesh"))
+							await awaitCaller.Run(() => meshData.LoadFromGltf(Data, index, inverter));
+						var meshWithMaterials = await BuildMeshAsync(awaitCaller, MeasureTime, meshData, index);
+						Meshes.Add(meshWithMaterials);
+					}
+				}
+				await awaitCaller.NextFrame();
+			}
 
-            using (MeasureTime("BuildHierarchy"))
-            {
-                var nodes = new List<NodeImporter.TransformWithSkin>();
-                if (Nodes.Count > 0)
-                {
-                    for (var i = 0; i < Nodes.Count; ++i)
-                    {
-                        await awaitCaller.NextFrameIfTimedOut();
-                        Profiler.BeginSample("NodeImporter.BuildHierarchy");
-                        nodes.Add(NodeImporter.BuildHierarchy(GLTF, i, Nodes, Meshes));
-                        Profiler.EndSample();
-                    }
+			if (GLTF.nodes.Count > 0)
+			{
+				using (MeasureTime("LoadNodes"))
+				{
+					for (var i = 0; i < GLTF.nodes.Count; i++)
+					{
+						await awaitCaller.NextFrameIfTimedOut();
+						Profiler.BeginSample("ImporterContext.LoadNodes");
+						Nodes.Add(NodeImporter.ImportNode(GLTF.nodes[i], i).transform);
+						Profiler.EndSample();
+					}
+				}
 
-                    await awaitCaller.NextFrame();
-                }
+				await awaitCaller.NextFrame();
+			}
 
-                NodeImporter.FixCoordinate(GLTF, nodes, inverter);
+			using (MeasureTime("BuildHierarchy"))
+			{
+				var nodes = new List<NodeImporter.TransformWithSkin>();
+				if (Nodes.Count > 0)
+				{
+					for (var i = 0; i < Nodes.Count; ++i)
+					{
+						await awaitCaller.NextFrameIfTimedOut();
+						Profiler.BeginSample("NodeImporter.BuildHierarchy");
+						nodes.Add(NodeImporter.BuildHierarchy(GLTF, i, Nodes, Meshes));
+						Profiler.EndSample();
+					}
 
-                // skinning
-                if (nodes.Count > 0)
-                {
-                    for (var i = 0; i < nodes.Count; ++i)
-                    {
-                        await awaitCaller.NextFrameIfTimedOut();
-                        Profiler.BeginSample("NodeImporter.SetupSkinning");
-                        NodeImporter.SetupSkinning(Data, nodes, i, inverter);
-                        Profiler.EndSample();
-                    }
+					await awaitCaller.NextFrame();
+				}
 
-                    await awaitCaller.NextFrame();
-                }
+				NodeImporter.FixCoordinate(GLTF, nodes, inverter);
 
-                if (Root == null)
-                {
-                    Root = new GameObject("GLTF");
-                }
-                if (GLTF.rootnodes != null)
-                {
-                    // connect root
-                    foreach (var x in GLTF.rootnodes)
-                    {
-                        var t = nodes[x].Transform;
-                        t.SetParent(Root.transform, false);
-                    }
-                }
-            }
-            await awaitCaller.NextFrame();
-        }
+				// skinning
+				if (nodes.Count > 0)
+				{
+					for (var i = 0; i < nodes.Count; ++i)
+					{
+						await awaitCaller.NextFrameIfTimedOut();
+						Profiler.BeginSample("NodeImporter.SetupSkinning");
+						NodeImporter.SetupSkinning(Data, nodes, i, inverter);
+						Profiler.EndSample();
+					}
 
-        public async Task LoadTexturesAsync(IAwaitCaller awaitCaller)
-        {
-            if (awaitCaller == null)
-            {
-                throw new ArgumentNullException();
-            }
+					await awaitCaller.NextFrame();
+				}
 
-            var textures = TextureDescriptorGenerator.Get().GetEnumerable();
-            foreach (var param in textures)
-            {
-                await awaitCaller.NextFrameIfTimedOut();
-                var tex = await TextureFactory.GetTextureAsync(param, awaitCaller);
-            }
-        }
+				if (Root == null)
+				{
+					Root = new GameObject("GLTF");
+				}
+				if (GLTF.rootnodes != null)
+				{
+					// connect root
+					foreach (var x in GLTF.rootnodes)
+					{
+						var t = nodes[x].Transform;
+						t.SetParent(Root.transform, false);
+					}
+				}
+			}
+			await awaitCaller.NextFrame();
+		}
 
-        public async Task LoadMaterialsAsync(IAwaitCaller awaitCaller)
-        {
-            if (awaitCaller == null)
-            {
-                throw new ArgumentNullException();
-            }
+		public async Task LoadTexturesAsync(IAwaitCaller awaitCaller)
+		{
+			if (awaitCaller == null)
+			{
+				throw new ArgumentNullException();
+			}
 
-            if (Data.GLTF.materials != null)
-            {
-                for (int i = 0; i < Data.GLTF.materials.Count; ++i)
-                {
-                    await awaitCaller.NextFrameIfTimedOut();
-                    var param = MaterialDescriptorGenerator.Get(Data, i);
-                    await MaterialFactory.LoadAsync(param, TextureFactory.GetTextureAsync, awaitCaller);
-                }
-            }
-        }
+			var textures = TextureDescriptorGenerator.Get().GetEnumerable();
+			foreach (var param in textures)
+			{
+				await awaitCaller.NextFrameIfTimedOut();
+				var tex = await TextureFactory.GetTextureAsync(param, awaitCaller);
+			}
+		}
 
-        protected virtual Task OnLoadHierarchy(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime)
-        {
-            // do nothing
-            return Task.FromResult<object>(null);
-        }
+		public async Task LoadMaterialsAsync(IAwaitCaller awaitCaller)
+		{
+			if (awaitCaller == null)
+			{
+				throw new ArgumentNullException();
+			}
 
-        protected virtual Task FinalizeAsync(IAwaitCaller awaitCaller)
-        {
-            // do nothing
-            return Task.FromResult<object>(null);
-        }
+			if (Data.GLTF.materials != null)
+			{
+				for (int i = 0; i < Data.GLTF.materials.Count; ++i)
+				{
+					await awaitCaller.NextFrameIfTimedOut();
+					MaterialDescriptor param = MaterialDescriptorGenerator.Get(Data, i);
+					await MaterialFactory.LoadAsync(param, TextureFactory.GetTextureAsync, awaitCaller);
+				}
+			}
+		}
 
-        async Task<MeshWithMaterials> BuildMeshAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime, MeshData meshData, int i)
-        {
-            using (MeasureTime("BuildMesh"))
-            {
-                var meshWithMaterials = await MeshUploader.BuildMeshAndUploadAsync(awaitCaller, meshData,
-                    async materialIndex =>
-                    {
-                        if (materialIndex.HasValidIndex())
-                        {
-                            return MaterialFactory.GetMaterial(materialIndex.Value);
-                        }
-                        else
-                        {
-                            return await MaterialFactory.GetDefaultMaterialAsync(awaitCaller);
-                        }
-                    });
-                var mesh = meshWithMaterials.Mesh;
+		protected virtual Task OnLoadHierarchy(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime)
+		{
+			// do nothing
+			return Task.FromResult<object>(null);
+		}
 
-                // mesh name
-                if (string.IsNullOrEmpty(mesh.name))
-                {
-                    mesh.name = string.Format("UniGLTF import#{0}", i);
-                }
-                var originalName = mesh.name;
-                for (int j = 1; Meshes.Any(y => y.Mesh.name == mesh.name); ++j)
-                {
-                    mesh.name = string.Format("{0}({1})", originalName, j);
-                }
+		protected virtual Task FinalizeAsync(IAwaitCaller awaitCaller)
+		{
+			// do nothing
+			return Task.FromResult<object>(null);
+		}
 
-                return meshWithMaterials;
-            }
-        }
-        #endregion
+		async Task<MeshWithMaterials> BuildMeshAsync(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime, MeshData meshData, int i)
+		{
+			using (MeasureTime("BuildMesh"))
+			{
+				var meshWithMaterials = await MeshUploader.BuildMeshAndUploadAsync(awaitCaller, meshData,
+					async materialIndex =>
+					{
+						if (materialIndex.HasValidIndex())
+						{
+							return MaterialFactory.GetMaterial(materialIndex.Value);
+						}
+						else
+						{
+							return await MaterialFactory.GetDefaultMaterialAsync(awaitCaller);
+						}
+					});
+				var mesh = meshWithMaterials.Mesh;
 
-        #region Imported
-        protected GameObject Root;
-        public List<Transform> Nodes = new List<Transform>();
-        protected bool TryGetNode(int index, out Transform node)
-        {
-            if (index < 0 || index >= Nodes.Count)
-            {
-                UniGLTFLogger.Warning($"nodes[{index}] is not found !");
-                node = default;
-                return false;
-            }
-            node = Nodes[index];
-            return true;
-        }
+				// mesh name
+				if (string.IsNullOrEmpty(mesh.name))
+				{
+					mesh.name = string.Format("UniGLTF import#{0}", i);
+				}
+				var originalName = mesh.name;
+				for (int j = 1; Meshes.Any(y => y.Mesh.name == mesh.name); ++j)
+				{
+					mesh.name = string.Format("{0}({1})", originalName, j);
+				}
 
-        public List<MeshWithMaterials> Meshes = new List<MeshWithMaterials>();
-        #endregion
+				return meshWithMaterials;
+			}
+		}
+		#endregion
 
-        /// <summary>
-        /// ImporterContextが所有する UnityEngine.Object を破棄する
-        /// </summary>
-        public virtual void Dispose()
-        {
-            foreach (var x in Meshes)
-            {
-                UnityObjectDestroyer.DestroyRuntimeOrEditor(x.Mesh);
-            }
-            Meshes.Clear();
+		#region Imported
+		protected GameObject Root;
+		public List<Transform> Nodes = new List<Transform>();
+		protected bool TryGetNode(int index, out Transform node)
+		{
+			if (index < 0 || index >= Nodes.Count)
+			{
+				UniGLTFLogger.Warning($"nodes[{index}] is not found !");
+				node = default;
+				return false;
+			}
+			node = Nodes[index];
+			return true;
+		}
 
-            AnimationClipFactory?.Dispose();
-            MaterialFactory?.Dispose();
-            TextureFactory?.Dispose();
-        }
+		public List<MeshWithMaterials> Meshes = new List<MeshWithMaterials>();
+		#endregion
 
-        /// <summary>
-        /// Root ヒエラルキーで使っているリソース
-        /// </summary>
-        /// <returns></returns>
-        public virtual void TransferOwnership(TakeResponsibilityForDestroyObjectFunc take)
-        {
-            foreach (var mesh in Meshes.ToArray())
-            {
-                take(SubAssetKey.Create(mesh.Mesh), mesh.Mesh);
-                Meshes.Remove(mesh);
-            }
+		/// <summary>
+		/// ImporterContextが所有する UnityEngine.Object を破棄する
+		/// </summary>
+		public virtual void Dispose()
+		{
+			foreach (var x in Meshes)
+			{
+				UnityObjectDestroyer.DestroyRuntimeOrEditor(x.Mesh);
+			}
+			Meshes.Clear();
 
-            AnimationClipFactory.TransferOwnership(take);
-            TextureFactory.TransferOwnership(take);
-            MaterialFactory.TransferOwnership(take);
-        }
-    }
+			AnimationClipFactory?.Dispose();
+			MaterialFactory?.Dispose();
+			TextureFactory?.Dispose();
+		}
+
+		/// <summary>
+		/// Root ヒエラルキーで使っているリソース
+		/// </summary>
+		/// <returns></returns>
+		public virtual void TransferOwnership(TakeResponsibilityForDestroyObjectFunc take)
+		{
+			foreach (var mesh in Meshes.ToArray())
+			{
+				take(SubAssetKey.Create(mesh.Mesh), mesh.Mesh);
+				Meshes.Remove(mesh);
+			}
+
+			AnimationClipFactory.TransferOwnership(take);
+			TextureFactory.TransferOwnership(take);
+			MaterialFactory.TransferOwnership(take);
+		}
+	}
 }

@@ -107,20 +107,20 @@ namespace UniGLTF
             AsyncActions = asyncActions ?? new List<MaterialGenerateAsyncFunc>();
         }
 
-        public MaterialDescriptor(
-            string name,
-            Shader shader,
-            IReadOnlyList<MaterialGenerateAsyncFunc> asyncActions)
-        {
-            Name = name;
-            Shader = shader;
-            RenderQueue = default;
-            TextureSlots = new Dictionary<string, TextureDescriptor>();
-            FloatValues = new Dictionary<string, float>();
-            Colors = new Dictionary<string, Color>();
-            Vectors = new Dictionary<string, Vector4>();
-            Actions = new List<Action<Material>>();
-            AsyncActions = asyncActions;
-        }
+    //    public MaterialDescriptor(
+    //        string name,
+    //        Shader shader,
+    //        IReadOnlyList<MaterialGenerateAsyncFunc> asyncActions)
+    //    {
+    //        Name = name;
+    //        Shader = shader;
+    //        RenderQueue = default;
+    //        TextureSlots = new Dictionary<string, TextureDescriptor>();
+    //        FloatValues = new Dictionary<string, float>();
+    //        Colors = new Dictionary<string, Color>();
+    //        Vectors = new Dictionary<string, Vector4>();
+    //        Actions = new List<Action<Material>>();
+    //        AsyncActions = asyncActions;
+    //    }
     }
 }

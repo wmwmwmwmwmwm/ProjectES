@@ -4,24 +4,24 @@ namespace UniGLTF
 {
     public static class TestGltf
     {
-        public static RuntimeGltfInstance LoadBytesAsBuiltInRP(byte[] bytes)
-        {
-            return GltfUtility.LoadBytesAsync(
-                "",
-                bytes,
-                awaitCaller: new ImmediateCaller(),
-                materialGenerator: new BuiltInGltfMaterialDescriptorGenerator()
-            ).Result;
-        }
+        //public static RuntimeGltfInstance LoadBytesAsBuiltInRP(byte[] bytes)
+        //{
+        //    return GltfUtility.LoadBytesAsync(
+        //        "",
+        //        bytes,
+        //        awaitCaller: new ImmediateCaller(),
+        //        materialGenerator: new BuiltInGltfMaterialDescriptorGenerator()
+        //    ).Result;
+        //}
 
-        public static RuntimeGltfInstance LoadPathAsBuiltInRP(string path)
-        {
-            return GltfUtility.LoadAsync(
-                path,
-                awaitCaller: new ImmediateCaller(),
-                materialGenerator: new BuiltInGltfMaterialDescriptorGenerator()
-            ).Result;
-        }
+        //public static RuntimeGltfInstance LoadPathAsBuiltInRP(string path)
+        //{
+        //    return GltfUtility.LoadAsync(
+        //        path,
+        //        awaitCaller: new ImmediateCaller(),
+        //        materialGenerator: new BuiltInGltfMaterialDescriptorGenerator()
+        //    ).Result;
+        //}
 
         public static ExportingGltfData ExportAsBuiltInRP(GameObject gameObject, GltfExportSettings exportSettings = null)
         {

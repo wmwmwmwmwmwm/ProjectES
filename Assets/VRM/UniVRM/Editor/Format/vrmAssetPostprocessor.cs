@@ -73,30 +73,28 @@ namespace VRM
             /// <value></value>
             Action<IEnumerable<UnityPath>> onCompleted = texturePaths =>
             {
-                var map = texturePaths
+				Dictionary<SubAssetKey, UnityEngine.Object> map = texturePaths
                     .Select(x => x.LoadAsset<Texture>())
                     .ToDictionary(x => new SubAssetKey(x), x => x as UnityEngine.Object);
-                var settings = new ImporterContextSettings();
+				ImporterContextSettings settings = new();
 
-                // 確実に Dispose するために敢えて再パースしている
-                using (var data = new GlbFileParser(vrmPath).Parse())
-                using (var context = new VRMImporterContext(new VRMData(data), externalObjectMap: map, settings: settings))
-                {
-                    var editor = new VRMEditorImporterContext(context, prefabPath);
-                    foreach (var textureInfo in context.TextureDescriptorGenerator.Get().GetEnumerable())
-                    {
-                        TextureImporterConfigurator.Configure(textureInfo, context.TextureFactory.ExternalTextures);
-                    }
-                    var loaded = context.Load();
-                    editor.SaveAsAsset(loaded);
-                }
+				// 確実に Dispose するために敢えて再パースしている
+				using GltfData data = new GlbFileParser(vrmPath).Parse();
+				using VRMImporterContext context = new(new VRMData(data), externalObjectMap: map, settings: settings);
+				VRMEditorImporterContext editor = new(context, prefabPath);
+				foreach (TextureDescriptor textureInfo in context.TextureDescriptorGenerator.Get().GetEnumerable())
+				{
+					TextureImporterConfigurator.Configure(textureInfo, context.TextureFactory.ExternalTextures);
+				}
+				RuntimeGltfInstance loaded = context.Load();
+				editor.SaveAsAsset(loaded);
 
-            };
+			};
 
-            using (var data = new GlbFileParser(vrmPath).Parse())
-            using (var context = new VRMImporterContext(new VRMData(data)))
+            using (GltfData data = new GlbFileParser(vrmPath).Parse())
+            using (VRMImporterContext context = new(new VRMData(data)))
             {
-                var editor = new VRMEditorImporterContext(context, prefabPath);
+				VRMEditorImporterContext editor = new(context, prefabPath);
                 // extract texture images
                 editor.ConvertAndExtractImages(onCompleted);
             }

@@ -130,7 +130,6 @@ Material:
     - _BaseColor_Step: 0.5
     - _BaseShade_Feather: 0.0001
     - _Base_Speed: 0
-    - _BlendMode: 1
     - _BlurLevelMatcap: 0
     - _BlurLevelSGM: 0
     - _BumpScale: 1
@@ -141,7 +140,6 @@ Material:
     - _ColorShift_Speed: 0
     - _CullMode: 2
     - _Cutoff: 0.5
-    - _DstBlend: 0
     - _EMISSIVE: 0
     - _Farthest_Distance: 100
     - _GI_Intensity: 0
@@ -202,7 +200,6 @@ Material:
     - _Set_SystemShadowsToBase: 1
     - _ShadeColor_Step: 0
     - _Smoothness: 0.5
-    - _SrcBlend: 1
     - _StencilComp: 0
     - _StencilMode: 0
     - _StencilNo: 1
@@ -223,9 +220,7 @@ Material:
     - _Unlit_Intensity: 1
     - _Use_1stAs2nd: 1
     - _Use_BaseAs1st: 1
-    - _VColBlendMode: 0
     - _ZOverDrawMode: 1
-    - _ZWrite: 1
     - _ZWriteMode: 0
     - _simpleUI: 0
     - _utsTechnique: 0
