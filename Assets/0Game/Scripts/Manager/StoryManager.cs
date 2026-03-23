@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Animancer;
+using DG.Tweening;
 using Naninovel;
 using Naninovel.Commands;
 using NaughtyAttributes;
@@ -25,8 +26,12 @@ public class StoryManager : Singleton<StoryManager>
 
 	protected override void Init()
 	{
+		_CharCamera.gameObject.SetActive(false);
 		_NextButton.onClick.AddListener(NextButton);
 		SetActivePanels(false);
+
+		CharactorCapture();
+		StartCoroutine(ShowStory());
 	}
 
 	public IEnumerator ShowStory()
@@ -96,6 +101,34 @@ public class StoryManager : Singleton<StoryManager>
 					print($"{_Script.TextMap.GetTextOrNull(item.Id)}");
 				}
 			}
+		}
+	}
+
+	public Camera _CharCamera;
+	public GameObject _Astar, _Inasi;
+	public Transform _CharParent;
+	public AnimationClip _Clip;
+	void CharactorCapture()
+	{
+		float a_xPos = 0.25f / 0.888f;
+		float b_xPos = -0.25f / 0.888f;
+		GameObject astar = Instantiate(_Astar);
+		astar.transform.SetParent(_CharParent);
+		astar.transform.SetLocalPositionAndRotation(new Vector3(a_xPos, 0f, 1f), Quaternion.Euler(0f, 180f, 0f));
+		SetChar(astar);
+		GameObject inasi = Instantiate(_Inasi, new Vector3(b_xPos, 0f, 1f), Quaternion.identity);
+		inasi.transform.SetParent(_CharParent);
+		inasi.transform.SetLocalPositionAndRotation(new Vector3(b_xPos, 0f, 1f), Quaternion.Euler(0f, 180f, 0f));
+		SetChar(inasi);
+		_CharCamera.Render();
+
+		void SetChar(GameObject obj)
+		{
+			SoloAnimation anim = obj.TryAddComponent<SoloAnimation>();
+			anim.Animator = obj.GetComponent<Animator>();
+			anim.Clip = _Clip;
+			anim.Play();
+			anim.Evaluate();
 		}
 	}
 }

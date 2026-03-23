@@ -188,6 +188,12 @@ public static partial class Util
 	public static Vector3 Vector2ToXY(this Vector2 v) => new(v.x, v.y, 0f);
 	public static Vector2 Vector2(this Vector3 v) => new(v.x, v.y);
 
+	public static Vector2 ScreenToCanvas(this Canvas canvas, Vector3 screenPosition)
+	{
+		Vector2 normalized = screenPosition / new Vector2(Screen.width, Screen.height);
+		return normalized * canvas.GetComponent<RectTransform>().sizeDelta;
+	}
+
 	public static Vector2 WorldToCanvas(this Canvas canvas, Camera camera, Vector3 world_position)
 	{
 		Vector3 viewport_position = camera.WorldToViewportPoint(world_position);

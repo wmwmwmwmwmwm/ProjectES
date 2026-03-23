@@ -407,9 +407,9 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 5744827667165288532}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: -0.0025685802, y: 1.4351115, z: -0.09044328}
+    m_Extent: {x: 0.13114905, y: 0.15405726, z: 0.18205619}
+  m_DirtyAABB: 0
 --- !u!1 &487318119182882551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,9 +1059,9 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 5744827667165288532}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: 0, y: 0.7741411, z: 0.0010727122}
+    m_Extent: {x: 0.6690227, y: 0.7741411, z: 0.13893402}
+  m_DirtyAABB: 0
 --- !u!1 &1299431593488529391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,7 +2476,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 79a276b72782e214bb119839d33d6c67, type: 2}
+  m_Mesh: {fileID: 5001244340000559194, guid: fcd7abedcff35564a9051cedc168bc19, type: 3}
   m_Bones:
   - {fileID: 5744827667165288532}
   - {fileID: 7193928808037857204}
@@ -2611,12 +2611,71 @@ SkinnedMeshRenderer:
   - {fileID: 3887566415100969170}
   - {fileID: 876182468225372567}
   - {fileID: 9105318351883453369}
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 100
   m_RootBone: {fileID: 5744827667165288532}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_DirtyAABB: 1
+    m_Center: {x: 0, y: 1.4224772, z: 0.011210598}
+    m_Extent: {x: 0.08707474, y: 0.113080025, z: 0.078264385}
+  m_DirtyAABB: 0
 --- !u!1 &4047792941969976380
 GameObject:
   m_ObjectHideFlags: 0

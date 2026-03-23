@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VRM;
+//using VRM;
 using static DataManager;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
@@ -25,7 +25,7 @@ namespace Battle
 		[BoxGroup("설정")] public float _ShoulderHeight;
 		[BoxGroup("설정")] public float _MaxHP;
 
-		public VRMBlendShapeProxy _BlendShapeProxy;
+		//public VRMBlendShapeProxy _BlendShapeProxy;
 		public GameObject _HitEffectPrefab;
 		public GameObject _GuardEffectPrefab;
 		public ParticleSystem _DashWindEffect;

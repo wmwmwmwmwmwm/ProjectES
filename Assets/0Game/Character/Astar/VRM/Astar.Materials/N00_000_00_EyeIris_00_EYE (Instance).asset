@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: N00_000_00_EyeHighlight_00_EYE (Instance)
+  m_Name: N00_000_00_EyeIris_00_EYE (Instance)
   m_Shader: {fileID: 4800000, guid: 766736548846cdf459a9766614dcccab, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -65,7 +65,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 90b9e8a1a899fca41bee87675bbba341, type: 3}
+        m_Texture: {fileID: 2800000, guid: c88e202846a84c94980339bf0334534f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCap_Sampler:
@@ -139,7 +139,7 @@ Material:
     - _ClippingMode: 2
     - _Clipping_Level: 0
     - _ColorShift_Speed: 0
-    - _CullMode: 0
+    - _CullMode: 2
     - _Cutoff: 0.5
     - _DstBlend: 10
     - _EMISSIVE: 0
@@ -227,7 +227,7 @@ Material:
     - _ZOverDrawMode: 1
     - _ZWrite: 0
     - _ZWriteMode: 0
-    - _simpleUI: 2
+    - _simpleUI: 0
     - _utsTechnique: 0
     - _utsVersionX: 2
     - _utsVersionY: 5
