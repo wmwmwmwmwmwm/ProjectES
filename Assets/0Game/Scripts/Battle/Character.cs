@@ -292,7 +292,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Ultimate)
+				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
 				{
 					Play_Canceling(_Ultimate, true);
 				}
@@ -578,6 +578,7 @@ namespace Battle
 				{
 					_FSM.TrySetState(_Die);
 					_Collider.enabled = false;
+					Controller.RemoveMinimapMarker(this);
 				}
 
 				// 특수 공격으로 점프

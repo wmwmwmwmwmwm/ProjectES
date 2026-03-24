@@ -30,8 +30,8 @@ public class StoryManager : Singleton<StoryManager>
 		_NextButton.onClick.AddListener(NextButton);
 		SetActivePanels(false);
 
-		CharactorCapture();
-		StartCoroutine(ShowStory());
+		//CharactorCapture();
+		//StartCoroutine(ShowStory());
 	}
 
 	public IEnumerator ShowStory()

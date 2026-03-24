@@ -92,7 +92,7 @@ namespace Battle
 
 		void Move(CallbackContext obj)
 		{
-			c._MoveInput = obj.ReadValue<Vector2>().Vector2ToXZ();
+			c._MoveInput = obj.ReadValue<Vector2>().ToVector3XZ();
 		}
 
 		void Look(CallbackContext obj)

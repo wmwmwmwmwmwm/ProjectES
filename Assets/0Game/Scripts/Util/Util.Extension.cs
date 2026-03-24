@@ -184,9 +184,10 @@ public static partial class Util
 		return string.Format("{0}%", Percent);
 	}
 
-	public static Vector3 Vector2ToXZ(this Vector2 v) => new(v.x, 0f, v.y);
-	public static Vector3 Vector2ToXY(this Vector2 v) => new(v.x, v.y, 0f);
-	public static Vector2 Vector2(this Vector3 v) => new(v.x, v.y);
+	public static Vector3 ToVector3XZ(this Vector2 v) => new(v.x, 0f, v.y);
+	public static Vector3 ToVector3XY(this Vector2 v) => new(v.x, v.y, 0f);
+	public static Vector2 XYToVector2(this Vector3 v) => new(v.x, v.y);
+	public static Vector2 XZToVector2(this Vector3 v) => new(v.x, v.z);
 
 	public static Vector2 ScreenToCanvas(this Canvas canvas, Vector3 screenPosition)
 	{

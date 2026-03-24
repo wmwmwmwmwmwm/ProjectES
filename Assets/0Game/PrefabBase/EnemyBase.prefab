@@ -64,9 +64,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 3.6735213, y: 3.8861518, z: 3.438612}
   m_Center: {x: -0.00000035398946, y: 1.165865, z: 2.0647357}
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _HPSliderPosition: {fileID: 4255991526585487192}
-  _Character: {fileID: 0}
+  c: {fileID: 0}
   _HPSlider: {fileID: 0}
   _HPSlider_Inner: {fileID: 0}
 --- !u!114 &1632507095128983233
@@ -172,7 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Name: 
-  _ModelPrefab: {fileID: 0}
   _RotationSpeed: 150
   _MoveSpeed: 3
   _MoveAccel: 100
@@ -180,7 +179,6 @@ MonoBehaviour:
   _JumpSpeed: 10
   _ShoulderHeight: 0
   _MaxHP: 11111
-  _BlendShapeProxy: {fileID: 0}
   _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,

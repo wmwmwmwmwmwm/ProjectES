@@ -51,6 +51,7 @@ MonoBehaviour:
   _AttackerHitStunDuration: 0.1
   _ForceForward: 10
   _ForceUp: 10
+  _Damage: 0
 --- !u!1 &1495445289577644905
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,6 +103,7 @@ MonoBehaviour:
   _AttackerHitStunDuration: 0.1
   _ForceForward: 0
   _ForceUp: 0
+  _Damage: 0
 --- !u!1 &4210893641494320974
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +155,7 @@ MonoBehaviour:
   _AttackerHitStunDuration: 0.1
   _ForceForward: 0
   _ForceUp: 0
+  _Damage: 0
 --- !u!1001 &7806994046883276059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -229,7 +232,7 @@ PrefabInstance:
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _SkillType
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
