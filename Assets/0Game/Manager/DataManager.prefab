@@ -179,6 +179,27 @@ MonoBehaviour:
     - _CharacterName: Snowman_3
       _Position: {x: 430.81433, y: 0.000024795532, z: 618.5328}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+  _Characters:
+  - _Name: Astar
+    _Facials:
+    - _Name: Het
+      _BlendShapes:
+      - _BlendShapeName: Het
+        _Value: 100
+      - _BlendShapeName: Fcl_MTH_Small
+        _Value: 100
+      - _BlendShapeName: Fcl_MTH_A
+        _Value: 100
+    - _Name: Hehe
+      _BlendShapes:
+      - _BlendShapeName: Het
+        _Value: 100
+    - _Name: Um
+      _BlendShapes:
+      - _BlendShapeName: Het
+        _Value: 100
+      - _BlendShapeName: Fcl_MTH_Angry
+        _Value: 100
   _BattleAttacks:
   - {fileID: 1089202556315184931, guid: b4ad69198dc6bd348a4507ba23ba117e, type: 3}
   - {fileID: 1089202556315184931, guid: 85d9919a98f6de64287360f12b107d3e, type: 3}
@@ -192,9 +213,7 @@ MonoBehaviour:
   - {fileID: 1089202556315184931, guid: e539502a436fd5448b9a22d388277c13, type: 3}
   - {fileID: 1089202556315184931, guid: 4656f80bab826204093cf5dcdbee3bae, type: 3}
   - {fileID: 1526727010825513800, guid: 90f52fce9d14aab4893b3f19e0a6bf46, type: 3}
-  _Characters:
+  _BattleCharacters:
+  - {fileID: 3936041308567490837, guid: bff46722a922ea14aac613df1251db55, type: 3}
   - {fileID: 1216595358569299562, guid: 5b4ed32d10fea0344949a55fe4ed7a63, type: 3}
   - {fileID: 1243488618114573513, guid: 80d5e281bc033b14a9c8f437423ba713, type: 3}
-  - {fileID: 2142092871659235717, guid: 4d000882fed80014aa8daf6c876c25bf, type: 3}
-  - {fileID: 2084557406900281848, guid: f47465a0b7d11aa489b5f5381698869f, type: 3}
-  - {fileID: 2646858196513057425, guid: 10bce10303dc0fb49822ca65ea6cbbda, type: 3}

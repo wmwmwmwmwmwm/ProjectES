@@ -30,8 +30,8 @@ public class StoryManager : Singleton<StoryManager>
 		_NextButton.onClick.AddListener(NextButton);
 		SetActivePanels(false);
 
-		CharactorCapture();
-		StartCoroutine(ShowStory());
+		//CharactorCapture();
+		//StartCoroutine(ShowStory());
 	}
 
 	public IEnumerator ShowStory()
@@ -73,7 +73,6 @@ public class StoryManager : Singleton<StoryManager>
 
 	void SetActivePanels(bool on)
 	{
-		Game.LockCursor(!on);
 		_Background.SetActive(on);
 		_Character.SetActive(on);
 		_TextBox.SetActive(on);
@@ -114,11 +113,11 @@ public class StoryManager : Singleton<StoryManager>
 		float b_xPos = -0.25f / 0.888f;
 		GameObject astar = Instantiate(_Astar);
 		astar.transform.SetParent(_CharParent);
-		astar.transform.SetLocalPositionAndRotation(new Vector3(a_xPos, 0f, 1f), Quaternion.Euler(0f, 180f, 0f));
+		astar.transform.SetLocalPositionAndRotation(new Vector3(a_xPos, 0f, 2.1f), Quaternion.Euler(0f, 180f, 0f));
 		SetChar(astar);
 		GameObject inasi = Instantiate(_Inasi, new Vector3(b_xPos, 0f, 1f), Quaternion.identity);
 		inasi.transform.SetParent(_CharParent);
-		inasi.transform.SetLocalPositionAndRotation(new Vector3(b_xPos, 0f, 1f), Quaternion.Euler(0f, 180f, 0f));
+		inasi.transform.SetLocalPositionAndRotation(new Vector3(b_xPos, 0f, 2.1f), Quaternion.Euler(0f, 180f, 0f));
 		SetChar(inasi);
 		_CharCamera.Render();
 

@@ -43,8 +43,11 @@ namespace UniGLTF
 
             var materialGenerator = GetMaterialDescriptorGenerator(renderPipeline);
             var importerContextSettings = new ImporterContextSettings(loadAnimation: true, invertAxis: reverseAxis);
+			Debug.Log($"{extractedObjects.Count}");
+			Debug.Log($"{materialGenerator}");
+			Debug.Log($"{importerContextSettings}");
 
-            using (var data = new AutoGltfFileParser(scriptedImporter.assetPath).Parse())
+			using (var data = new AutoGltfFileParser(scriptedImporter.assetPath).Parse())
             using (var loader = new ImporterContext(data, extractedObjects, materialGenerator: materialGenerator, settings: importerContextSettings))
             {
                 // Configure TextureImporter to Extracted Textures.

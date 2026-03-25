@@ -144,21 +144,38 @@ namespace UniGLTF
 			{
 				bool opaque = false;
 				opaque |= material.name.Contains("_Body_");
-				opaque |= material.name.Contains("_EyeWhite_");
 				opaque |= material.name.Contains("_Face_");
+				opaque |= material.name.Contains("_FaceMouth_");
 				opaque |= material.name.Contains("_Hair_");
+				opaque |= material.name.Contains("_Tops_");
 				opaque |= material.name.Contains("_Onepiece_");
 				material.SetFloat("_TransparentEnabled", opaque ? 0f : 1f);
 				material.SetFloat("_Use_BaseAs1st", 1f);
 				material.SetFloat("_Use_1stAs2nd", 1f);
 				material.SetFloat("_IsBaseMapAlphaAsClippingMask", 1f);
 
-				// Eyelash 픽스
-				if (material.name.Contains("_FaceEyelash_"))
+				// RenderQueue 픽스
+				SetRenderQueue("_FaceEyelash_", 3001);
+				SetRenderQueue("_EyeHighlight_", 3001);
+				SetRenderQueue("_EyeIris_", 3001);
+				SetRenderQueue("_Tops_", 2501);
+				SetRenderQueue("_Onepiece_", 2501);
+
+				void SetRenderQueue(string keyword, int renderQueue)
 				{
-					material.SetInt("_AutoRenderQueue", 0);
-					material.renderQueue = 3001;
+					if (material.name.Contains(keyword))
+					{
+						material.SetInt("_AutoRenderQueue", 0);
+						material.renderQueue = renderQueue;
+					}
 				}
+
+				const string ShaderDefineIS_CLIPPING_OFF = "_IS_CLIPPING_OFF";
+				const string ShaderDefineIS_CLIPPING_MODE = "_IS_CLIPPING_MODE";
+				const string ShaderDefineIS_CLIPPING_TRANSMODE = "_IS_CLIPPING_TRANSMODE";
+				material.DisableKeyword(ShaderDefineIS_CLIPPING_OFF);
+				material.DisableKeyword(ShaderDefineIS_CLIPPING_MODE);
+				material.EnableKeyword(ShaderDefineIS_CLIPPING_TRANSMODE);
 			}
 
 			return instance;

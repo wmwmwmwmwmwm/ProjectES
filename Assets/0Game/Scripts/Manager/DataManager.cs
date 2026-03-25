@@ -1,5 +1,4 @@
 ﻿using Animancer;
-using Battle;
 using NaughtyAttributes;
 using System;
 using System.Collections;
@@ -41,12 +40,39 @@ public class DataManager : Singleton<DataManager>
 	}
 	public List<Stage> _Stages;
 
-	public List<BattleAttack> _BattleAttacks;
+	[Serializable]
+	public class Character
+	{
+		public string _Name;
+
+		[Serializable]
+		public class Facial
+		{
+			public string _Name;
+
+			[Serializable]
+			public class BlendShape
+			{
+				public string _BlendShapeName;
+				public float _Value;
+			}
+			public List<BlendShape> _BlendShapes;
+		}
+		public List<Facial> _Facials;
+
+		[HideInInspector] public Dictionary<string, Facial> _FacialDict;
+
+		public Facial GetFacial(string name) => _FacialDict[name];
+	}
 	public List<Character> _Characters;
 
+	public List<Battle.BattleAttack> _BattleAttacks;
+	public List<Battle.Character> _BattleCharacters;
+
 	public Dictionary<TransitionAsset, List<Effect>> _EffectDict;
-	public Dictionary<TransitionAsset, BattleAttack> _AttackDict;
+	public Dictionary<TransitionAsset, Battle.BattleAttack> _AttackDict;
 	public Dictionary<string, Stage> _StageDict;
+	public Dictionary<string, Battle.Character> _BattleCharacterDict;
 	public Dictionary<string, Character> _CharacterDict;
 
 	protected override void Init()
@@ -54,7 +80,12 @@ public class DataManager : Singleton<DataManager>
 		_EffectDict = _Effects.GroupBy(x => x._Transition).ToDictionary(a => a.Key, b => b.ToList());
 		_AttackDict = _BattleAttacks.ToDictionary(a => a._Transition, b => b);
 		_StageDict = _Stages.ToDictionary(a => a._Name, b => b);
+		_BattleCharacterDict = _BattleCharacters.ToDictionary(a => a._Name, b => b);
 		_CharacterDict = _Characters.ToDictionary(a => a._Name, b => b);
+		foreach (Character c in _Characters)
+		{
+			c._FacialDict = c._Facials.ToDictionary(a => a._Name, b => b);
+		}
 	}
 
 	public List<Effect> GetEffectDatas(TransitionAsset transition)
@@ -64,10 +95,10 @@ public class DataManager : Singleton<DataManager>
 		return datas;
 	}
 
-	public BattleAttack GetAttack(TransitionAsset transition)
+	public Battle.BattleAttack GetAttack(TransitionAsset transition)
 	{
 		if (!transition) return null;
-		_AttackDict.TryGetValue(transition, out BattleAttack data);
+		_AttackDict.TryGetValue(transition, out Battle.BattleAttack data);
 		return data;
 	}
 
@@ -75,6 +106,12 @@ public class DataManager : Singleton<DataManager>
 	{
 		_StageDict.TryGetValue(name, out Stage stage);
 		return stage;
+	}
+
+	public Battle.Character GetBattleCharacter(string name)
+	{
+		_BattleCharacterDict.TryGetValue(name, out Battle.Character character);
+		return character;
 	}
 
 	public Character GetCharacter(string name)
