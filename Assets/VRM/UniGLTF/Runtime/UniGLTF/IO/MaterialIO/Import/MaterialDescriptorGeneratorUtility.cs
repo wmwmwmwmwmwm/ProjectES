@@ -15,7 +15,7 @@ namespace UniGLTF
 			//	RenderPipelineTypes.BuiltinRenderPipeline => new BuiltInGltfMaterialDescriptorGenerator(),
 			//	_ => new BuiltInGltfMaterialDescriptorGenerator(),
 			//};
-			return null;// new UrpGltfMaterialDescriptorGenerator();
+			return new UrpGltfMaterialDescriptorGenerator();
 		}
 	}
 }

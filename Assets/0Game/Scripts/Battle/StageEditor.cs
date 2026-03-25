@@ -69,7 +69,7 @@ namespace Battle
 			_StartPosition.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
 			foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
 			{
-				Character c = _DataManagerPrefab._Characters.Find(x => x._Name == spawn._CharacterName);
+				Character c = _DataManagerPrefab._BattleCharacters.Find(x => x._Name == spawn._CharacterName);
 				Character character = PrefabUtility.InstantiatePrefab(c) as Character;
 				character.transform.SetPositionAndRotation(spawn._Position, spawn._Rotation);
 			}

@@ -44,7 +44,7 @@ namespace Battle
 				List<Enemy> enemys = new();
 				foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
 				{
-					Character c = Data.GetCharacter(spawn._CharacterName);
+					Character c = Data.GetBattleCharacter(spawn._CharacterName);
 					Enemy enemy = Instantiate(c).GetComponent<Enemy>();
 					enemy.transform.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
 					enemys.Add(enemy);
