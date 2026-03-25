@@ -2693,6 +2693,41 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 414554850}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &418145790
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 418145791}
+  m_Layer: 0
+  m_Name: WorldBound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &418145791
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418145790}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 521.1797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 485.47238, y: 0}
+  m_SizeDelta: {x: 307.1898, y: 302.7575}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &432871320
 GameObject:
   m_ObjectHideFlags: 0
@@ -12744,6 +12779,7 @@ SceneRoots:
   - {fileID: 568984113}
   - {fileID: 1140308836}
   - {fileID: 1389369468}
+  - {fileID: 418145791}
   - {fileID: 1789123748}
   - {fileID: 718545324}
   - {fileID: 357408363}

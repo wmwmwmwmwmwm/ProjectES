@@ -17,6 +17,7 @@ namespace Battle
 		bool _Init;
 		[HideInInspector] public Transform _BgGround;
 		[HideInInspector] public Transform _BgNear;
+		[HideInInspector] public RectTransform _WorldBound;
 		[HideInInspector] public List<Player> _Players;
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
@@ -27,6 +28,10 @@ namespace Battle
 		public void Init()
 		{
 			bool isTest = Game._StartScene == SceneName.Glacier;
+
+			_BgGround = GameObject.Find("Bg/Ground").transform;
+			_BgNear = GameObject.Find("Bg/Near").transform;
+			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
 			InitMinimap();
 
 			// 배치
@@ -64,8 +69,6 @@ namespace Battle
 				AddMinimapMarker(enemy.c, false);
 			}
 
-			_BgGround = GameObject.Find("Bg/Ground").transform;
-			_BgNear = GameObject.Find("Bg/Near").transform;
 			Game.LockCursor(true);
 			SetActivePlayer(0);
 
@@ -77,7 +80,7 @@ namespace Battle
 			if (!_Init) return;
 
 			// 배경 회전
-			_BgNear.rotation = _MainCamera.rotation;
+			_BgNear.eulerAngles = new(-_MainCamera.eulerAngles.x, -_MainCamera.eulerAngles.y, 0f);
 			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
 
 			UpdateMinimap();

@@ -95,7 +95,7 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	public void DrawDebugBox(Vector3 position, Quaternion rotation, float size = 1f)
+	public void DrawDebugBox(Vector3 position, Quaternion rotation = default, float size = 1f)
 	{
 		StartCoroutine(Internal());
 		IEnumerator Internal()

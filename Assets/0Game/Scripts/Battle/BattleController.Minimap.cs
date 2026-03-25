@@ -19,16 +19,26 @@ namespace Battle
 		public MinimapMarker _MinimapMarker_Player, _MinimapMarker_Enemy;
 		public Transform _MinimapMarkerParent;
 
+		int _SightRange;
 		List<MinimapMarker> _MinimapMarkers;
+		Vector2Int _TraceTextureSize;
 		Texture2D _MinimapTraceTexture;
+		Color32[] _TraceColorArray;
+		Vector3[] _WorldBoundCorners;
 
 		void InitMinimap()
 		{
 			_MinimapMarkers = new();
 			RenderTexture minimapRT = new(_MinimapRT);
+			_WorldBoundCorners = new Vector3[4];
+			_WorldBound.GetWorldCorners(_WorldBoundCorners);
+			Vector2 padding = _MinimapImage.GetComponent<RectTransform>().sizeDelta;
+			_TraceTextureSize = _WorldBound.sizeDelta.ToVector2Int() * 3;
+			_TraceTextureSize += padding.ToVector2Int();
+			_SightRange = 30;
 			_MinimapTraceTexture = new(
-				width: 2048,
-				height: 2048,
+				width: _TraceTextureSize.x,
+				height: _TraceTextureSize.y,
 				textureFormat: TextureFormat.RGBA32,
 				mipChain: false);
 			Color32[] initColors = _MinimapTraceTexture.GetPixels32();
@@ -38,7 +48,18 @@ namespace Battle
 				initColors[i] = black;
 			}
 			_MinimapTraceTexture.SetPixels32(initColors);
+			_TraceColorArray = new Color32[_SightRange * _SightRange];
+			Color32 clear = new(0, 0, 0, 0);
+			for (int x = 0; x < _SightRange; x++)
+			{
+				for (int y = 0; y < _SightRange; y++)
+				{
+					_TraceColorArray[x * _SightRange + y] = clear;
+				}
+			}
 			_MinimapTraceImage.texture = _MinimapTraceTexture;
+			Vector2 worldBoundSizeRate = _WorldBound.sizeDelta / (_MinimapCamera.orthographicSize * 2f);
+			_MinimapTraceImage.transform.localScale = new(worldBoundSizeRate.x, worldBoundSizeRate.y, 1f);
 			_MinimapCamera.targetTexture = minimapRT;
 			_MinimapImage.texture = minimapRT;
 			_MinimapMarker_Player.gameObject.SetActive(false);
@@ -67,6 +88,11 @@ namespace Battle
 
 			// 미니맵 좌표
 			Rect minimapRect = _MinimapImage.GetComponent<RectTransform>().rect;
+			RectTransform traceImageRT = _MinimapTraceImage.GetComponent<RectTransform>();
+			Vector3 viewportPos2 = _MinimapCamera.WorldToViewportPoint(_WorldBound.transform.position);
+			traceImageRT.anchoredPosition = new Vector2(
+				(viewportPos2.x - 0.5f) * minimapRect.width,
+				(viewportPos2.y - 0.5f) * minimapRect.height);
 			foreach (MinimapMarker marker in _MinimapMarkers)
 			{
 				marker.gameObject.SetActive(marker._Character.isActiveAndEnabled);
@@ -76,24 +102,15 @@ namespace Battle
 					(viewportPos.y - 0.5f) * minimapRect.height);
 			}
 
-			// 흔적 남기기
-			Vector2 coord = _ActivePlayer.transform.position.XZToVector2();
-			Vector2Int coordInt = new((int)coord.x, (int)coord.y);
-			int range = 30;
-			Color32[] traceColors = new Color32[range * range];
-			Color32 clear = new(0, 0, 0, 0);
-			for (int x = 0; x < range; x++)
-			{
-				for (int y = 0; y < range; y++)
-				{
-					traceColors[x * range + y] = clear;
-				}
-			}
-			int texX = coordInt.x - range / 2;
-			texX = Mathf.Clamp(texX, 0, 2048 - 1);
-			int texY = coordInt.y - range / 2;
-			texY = Mathf.Clamp(texY, 0, 2048 - 1);
-			_MinimapTraceTexture.SetPixels32(texX, texY, range, range, traceColors);
+			// 미니맵 밝히기
+			Vector2 coord = (_ActivePlayer.transform.position - _WorldBoundCorners[0]).XZToVector2();
+			coord /= _WorldBound.sizeDelta;
+			coord *= _TraceTextureSize;
+			Vector2Int coordInt = coord.ToVector2Int();
+			int texX = coordInt.x - _SightRange / 2;
+			int texY = coordInt.y - _SightRange / 2;
+			_MinimapTraceTexture.SetPixels32(texX, texY, _SightRange, _SightRange, _TraceColorArray);
+			_MinimapTraceTexture.Apply();
 		}
 	}
 }
