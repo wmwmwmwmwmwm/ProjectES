@@ -27,19 +27,20 @@ namespace Battle
 		void InitUI()
 		{
 			_PlayerHPPrefab.gameObject.SetActive(false);
+		}
 
-			foreach (Player player in _Players)
-			{
-				UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
-				ui.gameObject.SetActive(true);
-				player._UI_HP = ui;
-			}
-			foreach (Enemy enemy in _Enemys)
-			{
-				GameObject ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
-				enemy._HPSlider = ui.GetComponent<Slider>();
-				enemy._HPSlider_Inner = ui.transform.Find("Inner").GetComponent<Slider>();
-			}
+		public void AddPlayerHPUI(Player player)
+		{
+			UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
+			ui.gameObject.SetActive(true);
+			player._UI_HP = ui;
+		}
+
+		public void AddEnemyHPUI(Enemy enemy)
+		{
+			GameObject ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
+			enemy._HPSlider = ui.GetComponent<Slider>();
+			enemy._HPSlider_Inner = ui.transform.Find("Inner").GetComponent<Slider>();
 		}
 
 		void UpdateUI()

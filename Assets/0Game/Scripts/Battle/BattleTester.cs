@@ -37,7 +37,8 @@ namespace Battle
 				foreach (Player prefab in _PlayerPrefabs)
 				{
 					Player player = Instantiate(prefab);
-					player.transform.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
+					player.Init();
+					player.c.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
 					players.Add(player);
 				}
 				Controller._Players = players;
@@ -46,7 +47,8 @@ namespace Battle
 				{
 					Character c = Data.GetBattleCharacter(spawn._CharacterName);
 					Enemy enemy = Instantiate(c).GetComponent<Enemy>();
-					enemy.transform.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
+					enemy.Init();
+					enemy.c.SetPositionAndRotation(spawn._Position, spawn._Rotation);
 					enemys.Add(enemy);
 				}
 				Controller._Enemys = enemys;

@@ -40,7 +40,6 @@ public class GameManager : Singleton<GameManager>
 
 	public void LockCursor(bool _lock)
 	{
-		print(_lock);
 		Cursor.lockState = _lock ? CursorLockMode.Locked : CursorLockMode.None;
 		Cursor.visible = !_lock;
 	}

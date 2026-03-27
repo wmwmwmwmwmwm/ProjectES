@@ -155,29 +155,29 @@ MonoBehaviour:
     _IsLocal: 1
   _Stages:
   - _Name: Tutorial
-    _StartPosition: {x: 447.39795, y: 0, z: 637.7926}
-    _StartRotation: {x: 0, y: 0, z: 0, w: 1}
+    _StartPosition: {x: 456.52, y: 0, z: 635.33}
+    _StartRotation: {x: -0, y: -0.73787844, z: -0, w: 0.6749337}
     _Spawns:
     - _CharacterName: Golem
-      _Position: {x: 427.61, y: 0.000020980835, z: 625.76}
+      _Position: {x: 421.2, y: 0, z: 578.1}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
     - _CharacterName: Golem
-      _Position: {x: 414.32, y: 0.000020980835, z: 629.36}
+      _Position: {x: 466.9, y: 0, z: 571.4}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
     - _CharacterName: Golem
-      _Position: {x: 420.08, y: 0.000020980835, z: 622.95}
+      _Position: {x: 405.1, y: 0, z: 583.6}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
     - _CharacterName: Golem
-      _Position: {x: 449.59, y: 0.000020980835, z: 625.68}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-    - _CharacterName: Golem
-      _Position: {x: 445.81152, y: 0.000020980835, z: 621.73474}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-    - _CharacterName: Snowman_2
-      _Position: {x: 439.2, y: 0.000024795532, z: 621.4}
+      _Position: {x: 432.4, y: 0, z: 575.4}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
     - _CharacterName: Snowman_3
-      _Position: {x: 430.81433, y: 0.000024795532, z: 618.5328}
+      _Position: {x: 440.39, y: 0, z: 624.12}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+    - _CharacterName: Golem
+      _Position: {x: 447.3, y: 0, z: 574.1}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+    - _CharacterName: Snowman_2
+      _Position: {x: 439.2, y: 0, z: 621.4}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
   _Characters:
   - _Name: Astar
@@ -217,3 +217,6 @@ MonoBehaviour:
   - {fileID: 3936041308567490837, guid: bff46722a922ea14aac613df1251db55, type: 3}
   - {fileID: 1216595358569299562, guid: 5b4ed32d10fea0344949a55fe4ed7a63, type: 3}
   - {fileID: 1243488618114573513, guid: 80d5e281bc033b14a9c8f437423ba713, type: 3}
+  - {fileID: 2142092871659235717, guid: 4d000882fed80014aa8daf6c876c25bf, type: 3}
+  - {fileID: 2084557406900281848, guid: f47465a0b7d11aa489b5f5381698869f, type: 3}
+  - {fileID: 2646858196513057425, guid: 10bce10303dc0fb49822ca65ea6cbbda, type: 3}

@@ -744,5 +744,12 @@ namespace Battle
 				}
 			}
 		}
+
+		public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
+		{
+			_Motor.SetPositionAndRotation(pos, rot);
+			_Motor.MoveCharacter(pos);
+			_Motor.RotateCharacter(rot);
+		}
 	}
 }

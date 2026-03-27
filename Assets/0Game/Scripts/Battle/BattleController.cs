@@ -33,6 +33,7 @@ namespace Battle
 			_BgNear = GameObject.Find("Bg/Near").transform;
 			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
 			InitMinimap();
+			InitUI();
 
 			// 배치
 			if (!isTest)
@@ -43,6 +44,7 @@ namespace Battle
 				{
 					Player player = Instantiate(prefab);
 					//player.transform.SetPositionAndRotation(_StartPosition.position, _StartPosition.rotation);
+					player.Init();
 					players.Add(player);
 				}
 				_Players = players;
@@ -50,22 +52,20 @@ namespace Battle
 				foreach (Enemy prefab in _EnemyPrefabs)
 				{
 					Enemy enemy = Instantiate(prefab);
+					enemy.Init();
 					enemys.Add(enemy);
 				}
 				_Enemys = enemys;
 			}
 
 			// 초기화
-			InitUI();
 			foreach (Player player in _Players)
 			{
-				player.Init();
 				player.gameObject.SetActive(false);
 				AddMinimapMarker(player.c, true);
 			}
 			foreach (Enemy enemy in _Enemys)
 			{
-				enemy.Init();
 				AddMinimapMarker(enemy.c, false);
 			}
 
@@ -100,9 +100,7 @@ namespace Battle
 				nextPlayer._LookRotation = _ActivePlayer._LookRotation;
 				nextPlayer.c._AimDestRotation = _ActivePlayer.c._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
-				nextPlayer.c._Motor.SetPositionAndRotation(pos, rot);
-				nextPlayer.c._Motor.MoveCharacter(pos);
-				nextPlayer.c._Motor.RotateCharacter(rot);
+				nextPlayer.c.SetPositionAndRotation(pos, rot);
 				nextPlayer.c._Motor.BaseVelocity = _ActivePlayer.c._Motor.BaseVelocity;
 				nextPlayer.c._Motor.GroundingStatus = _ActivePlayer.c._Motor.GroundingStatus;
 				nextPlayer.c._FSM.ForceSetDefaultState();
@@ -145,6 +143,23 @@ namespace Battle
 				yield return new WaitForSeconds(3f);
 				Destroy(hitEffect);
 			}
+		}
+
+		public Transform _VirtualCameraHandle;
+		public float duration = 0.1f;
+		public float strength = 1f;
+		public int vibrato = 10;
+		public float randomness = 90f;
+		public bool fadeout = false;
+		[NaughtyAttributes.Button("aa")]
+		public void aa()
+		{
+			_VirtualCameraHandle.DOShakePosition(
+				duration: duration,
+				strength: strength,
+				vibrato: vibrato,
+				randomness: randomness,
+				fadeOut: fadeout);
 		}
 	}
 }

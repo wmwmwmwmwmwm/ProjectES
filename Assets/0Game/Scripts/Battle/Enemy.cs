@@ -25,14 +25,17 @@ namespace Battle
 
 		public void Init()
 		{
+			_ColliderHits = new Collider[30];
 			c = GetComponent<Character>();
-			c.Init();
 			_Agent = GetComponent<NavMeshAgent>();
+
 			_Agent.updatePosition = false;
 			_Agent.updateRotation = false;
 			_Agent.updateUpAxis = false;
 			_LastAttackTime = Const.TimeDefault;
-			_ColliderHits = new Collider[30];
+
+			Controller.AddEnemyHPUI(this);
+			c.Init();
 		}
 
 		void Update()
