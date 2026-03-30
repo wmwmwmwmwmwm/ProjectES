@@ -178,7 +178,7 @@ MonoBehaviour:
   _DashDuration: 0.4
   _JumpSpeed: 10
   _ShoulderHeight: 0
-  _MaxHP: 11111
+  _MaxHP: 100
   _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,

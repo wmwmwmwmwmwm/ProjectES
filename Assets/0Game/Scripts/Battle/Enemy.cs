@@ -59,7 +59,8 @@ namespace Battle
 
 		public void NoticeAround()
 		{
-			int count = Physics.OverlapSphereNonAlloc(position: transform.position,
+			int count = Physics.OverlapSphereNonAlloc(
+				position: transform.position,
 				radius: 30f,
 				results: _ColliderHits,
 				layerMask: Layer.EnemyLayerMask);

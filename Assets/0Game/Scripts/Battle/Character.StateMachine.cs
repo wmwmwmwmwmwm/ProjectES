@@ -4,39 +4,40 @@ using UnityEngine;
 using Animancer;
 using Animancer.FSM;
 using DG.Tweening;
+using NaughtyAttributes;
 
 namespace Battle
 {
 	public partial class Character
 	{
 		[Header("애니메이션")]
-		public AvatarMask _UpperBodyMask;
-		public AnimationCurve _AttackMoveCurve;
-
+		[ShowIf("_ShowAll")] public AvatarMask _UpperBodyMask;
+		[ShowIf("_ShowAll")] public AnimationCurve _AttackMoveCurve;
+		
 		// BaseLayer
-		public TransitionAsset _IdleAsset;
-		public TransitionAsset _MoveAsset;
-		public TransitionAsset _RunAsset;
-		public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
-		public TransitionAsset _JumpAsset, _LandAsset;
-		public List<TransitionAsset> _DamageAssets;
-		public TransitionAsset _GetDownAsset, _GetUpAsset;
-		public TransitionAsset _DieAsset;
-		public List<TransitionAsset> _NormalAttackAssets;
-		public TransitionAsset _JumpAttackAsset;
-		public TransitionAsset _DashAttackAsset;
-		public TransitionAsset _SpecialAttackAsset;
-		public TransitionAsset _JumpSpecialAttackAsset;
-		public TransitionAsset _GuardAttackAsset;
-		public TransitionAsset _Skill1Asset;
-		public TransitionAsset _Skill2Asset;
-		public TransitionAsset _UltimateAsset;
-
+		[ShowIf("_ShowAll")] public TransitionAsset _IdleAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _MoveAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _RunAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _JumpAsset, _LandAsset;
+		[ShowIf("_ShowAll")] public List<TransitionAsset> _DamageAssets;
+		[ShowIf("_ShowAll")] public TransitionAsset _GetDownAsset, _GetUpAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _DieAsset;
+		[ShowIf("_ShowAll")] public List<TransitionAsset> _NormalAttackAssets;
+		[ShowIf("_ShowAll")] public TransitionAsset _JumpAttackAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _DashAttackAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _SpecialAttackAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _JumpSpecialAttackAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _GuardAttackAsset;
+		[ShowIf("_ShowAll")] public TransitionAsset _Skill1Asset;
+		[ShowIf("_ShowAll")] public TransitionAsset _Skill2Asset;
+		[ShowIf("_ShowAll")] public TransitionAsset _UltimateAsset;
+		
 		// UpperBodyLayer
-		public TransitionAsset _GuardUpAsset, _GuardDownAsset;
-
-		public StringAsset _MoveX, _MoveY;
-		public StringAsset _NextAttack;
+		[ShowIf("_ShowAll")] public TransitionAsset _GuardUpAsset, _GuardDownAsset;
+		 
+		[ShowIf("_ShowAll")] public StringAsset _MoveX, _MoveY;
+		[ShowIf("_ShowAll")] public StringAsset _NextAttack;
 
 		AnimancerComponent _Animancer;
 		[HideInInspector] public AnimancerLayer _BaseLayer, _UpperBodyLayer;

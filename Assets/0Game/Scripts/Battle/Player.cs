@@ -22,6 +22,7 @@ namespace Battle
 		[HideInInspector] public UI_PlayerHP _UI_HP;
 		[HideInInspector] public Coroutine _JustGuardCoroutine;
 		[HideInInspector] public bool _JustGuardCancelTrigger;
+		[HideInInspector] public float _CameraOffsetY;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -72,8 +73,7 @@ namespace Battle
 		{
 			// 카메라 위치
 			float shoulderHeight = c._Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
-			float y = Mathf.MoveTowards(Controller._CameraThirdPerson.ShoulderOffset.y, shoulderHeight, 5f * Time.deltaTime);
-			Controller._CameraThirdPerson.ShoulderOffset.y = y;
+			_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, shoulderHeight, 5f * Time.deltaTime);
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;

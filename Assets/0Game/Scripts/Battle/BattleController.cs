@@ -13,6 +13,7 @@ namespace Battle
 		public Transform _MainCamera;
 		public Transform _CameraTarget;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
+		public Transform _ShakeCameraTransform;
 
 		bool _Init;
 		[HideInInspector] public Transform _BgGround;
@@ -21,6 +22,7 @@ namespace Battle
 		[HideInInspector] public List<Player> _Players;
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
+		float _CurrentShakeCameraStrength;
 
 		public List<Player> _PlayerPrefabs;
 		public List<Enemy> _EnemyPrefabs;
@@ -82,6 +84,11 @@ namespace Battle
 			// 배경 회전
 			_BgNear.eulerAngles = new(-_MainCamera.eulerAngles.x, -_MainCamera.eulerAngles.y, 0f);
 			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
+
+			// 카메라 위치
+			Vector3 cameraOffset = _ShakeCameraTransform.position;
+			cameraOffset.y += _ActivePlayer._CameraOffsetY;
+			_CameraThirdPerson.ShoulderOffset = cameraOffset;
 
 			UpdateMinimap();
 			UpdateUI();
@@ -145,21 +152,19 @@ namespace Battle
 			}
 		}
 
-		public Transform _VirtualCameraHandle;
-		public float duration = 0.1f;
-		public float strength = 1f;
-		public int vibrato = 10;
-		public float randomness = 90f;
-		public bool fadeout = false;
-		[NaughtyAttributes.Button("aa")]
-		public void aa()
+		public void ShakeCamera(float duration)
 		{
-			_VirtualCameraHandle.DOShakePosition(
+			if (duration == 0f) return;
+
+			float t = Mathf.InverseLerp(0.1f, 1f, duration);
+			float strength = Mathf.Lerp(0.05f, 0.1f, t);
+			if (strength < _CurrentShakeCameraStrength) return;
+
+			_CurrentShakeCameraStrength = strength;
+			_ShakeCameraTransform.DOShakePosition(
 				duration: duration,
 				strength: strength,
-				vibrato: vibrato,
-				randomness: randomness,
-				fadeOut: fadeout);
+				vibrato: 1000);
 		}
 	}
 }

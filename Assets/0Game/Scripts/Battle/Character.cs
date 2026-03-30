@@ -16,6 +16,8 @@ namespace Battle
 {
 	public partial class Character : MonoBehaviour, ICharacterController
 	{
+		public bool _ShowAll;
+
 		[BoxGroup("설정")] public string _Name;
 		[BoxGroup("설정")] public float _RotationSpeed;
 		[BoxGroup("설정")] public float _MoveSpeed;
@@ -26,11 +28,11 @@ namespace Battle
 		[BoxGroup("설정")] public float _MaxHP;
 
 		//public VRMBlendShapeProxy _BlendShapeProxy;
-		public GameObject _HitEffectPrefab;
-		public GameObject _GuardEffectPrefab;
-		public ParticleSystem _DashWindEffect;
-		public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
-		public Material _WhiteMaterial;
+		[ShowIf("_ShowAll")] public GameObject _HitEffectPrefab;
+		[ShowIf("_ShowAll")] public GameObject _GuardEffectPrefab;
+		[ShowIf("_ShowAll")] public ParticleSystem _DashWindEffect;
+		[ShowIf("_ShowAll")] public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
+		[ShowIf("_ShowAll")]  public Material _WhiteMaterial;
 
 		GameObject _Model;
 		Player _Player;
@@ -524,6 +526,8 @@ namespace Battle
 						_FadeInDeaccelTimer = 0.6f;
 						damage *= attack._AreaType == AttackAreaType.Single ? 0f : 0.5f;
 					}
+
+					// 이펙트
 					Controller.PlayEffect123123(_GuardEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
 				}
 				else
@@ -564,6 +568,7 @@ namespace Battle
 				if (_Enemy)
 				{
 					Controller.ShowDamageText(damage, damageTextPosition);
+					Controller.ShakeCamera(attackHit._ShakeCameraDuration);
 				}
 				else
 				{
