@@ -30,7 +30,6 @@ namespace Battle
 		{
 			c = GetComponent<Character>();
 
-			Controller.AddPlayerHPUI(this);
 			c.Init();
 			c.EmitEffect(_JustGuardEffect, false);
 		}

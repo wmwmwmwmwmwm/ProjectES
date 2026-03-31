@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 using static SingletonManager;
 
@@ -10,6 +11,7 @@ namespace Battle
 {
 	public partial class BattleController : SingleInstance<BattleController>
 	{
+		public Transform _StartPosition;
 		public Transform _MainCamera;
 		public Transform _CameraTarget;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
@@ -40,35 +42,28 @@ namespace Battle
 			// 배치
 			if (!isTest)
 			{
-				// todo prefab 없애고 stage로 대체
-				List<Player> players = new();
+				_StartPosition.gameObject.SetActive(false);
+				foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+				{
+					Destroy(enemy.gameObject);
+				}
+				DataManager.Stage stage = Data.GetStageData(Game._CurrentScene);
+				_Players = new();
 				foreach (Player prefab in _PlayerPrefabs)
 				{
 					Player player = Instantiate(prefab);
-					//player.transform.SetPositionAndRotation(_StartPosition.position, _StartPosition.rotation);
 					player.Init();
-					players.Add(player);
+					player.c.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
+					player.gameObject.SetActive(false);
+					AddPlayerHPUI(player);
+					AddMinimapMarker(player.c, true);
+					_Players.Add(player);
 				}
-				_Players = players;
-				List<Enemy> enemys = new();
-				foreach (Enemy prefab in _EnemyPrefabs)
+				_Enemys = new();
+				foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
 				{
-					Enemy enemy = Instantiate(prefab);
-					enemy.Init();
-					enemys.Add(enemy);
+					SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
 				}
-				_Enemys = enemys;
-			}
-
-			// 초기화
-			foreach (Player player in _Players)
-			{
-				player.gameObject.SetActive(false);
-				AddMinimapMarker(player.c, true);
-			}
-			foreach (Enemy enemy in _Enemys)
-			{
-				AddMinimapMarker(enemy.c, false);
 			}
 
 			Game.LockCursor(true);
@@ -125,6 +120,21 @@ namespace Battle
 			return true;
 		}
 
+		public void ShakeCamera(float duration)
+		{
+			if (duration == 0f) return;
+
+			float t = Mathf.InverseLerp(0.1f, 1f, duration);
+			float strength = Mathf.Lerp(0.05f, 0.1f, t);
+			if (strength < _CurrentShakeCameraStrength) return;
+
+			_CurrentShakeCameraStrength = strength;
+			_ShakeCameraTransform.DOShakePosition(
+				duration: duration,
+				strength: strength,
+				vibrato: 1000);
+		}
+
 		public GameObject _AttackAreaDecalPrefab;
 		public void ShowAttackAreaDecal(Vector3 position, Quaternion rotation, float duration)
 		{
@@ -152,19 +162,16 @@ namespace Battle
 			}
 		}
 
-		public void ShakeCamera(float duration)
+		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot)
 		{
-			if (duration == 0f) return;
-
-			float t = Mathf.InverseLerp(0.1f, 1f, duration);
-			float strength = Mathf.Lerp(0.05f, 0.1f, t);
-			if (strength < _CurrentShakeCameraStrength) return;
-
-			_CurrentShakeCameraStrength = strength;
-			_ShakeCameraTransform.DOShakePosition(
-				duration: duration,
-				strength: strength,
-				vibrato: 1000);
+			Character c = Data.GetBattleCharacter(name);
+			Enemy enemy = Instantiate(c).GetComponent<Enemy>();
+			enemy.Init();
+			enemy.c.SetPositionAndRotation(pos, rot);
+			enemy.GetComponent<NavMeshAgent>().enabled = true;
+			AddEnemyHPUI(enemy);
+			AddMinimapMarker(enemy.c, false);
+			_Enemys.Add(enemy);
 		}
 	}
 }

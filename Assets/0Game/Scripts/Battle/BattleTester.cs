@@ -33,25 +33,19 @@ namespace Battle
 				Scene battleScene = SceneManager.GetSceneByName(SceneName.Battle);
 				yield return new WaitUntil(() => battleScene.isLoaded);
 				DataManager.Stage stage = Data.GetStageData(_StageName);
-				List<Player> players = new();
+				Controller._Players = new();
 				foreach (Player prefab in _PlayerPrefabs)
 				{
 					Player player = Instantiate(prefab);
 					player.Init();
 					player.c.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
-					players.Add(player);
+					Controller._Players.Add(player);
 				}
-				Controller._Players = players;
-				List<Enemy> enemys = new();
+				Controller._Enemys = new();
 				foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
 				{
-					Character c = Data.GetBattleCharacter(spawn._CharacterName);
-					Enemy enemy = Instantiate(c).GetComponent<Enemy>();
-					enemy.Init();
-					enemy.c.SetPositionAndRotation(spawn._Position, spawn._Rotation);
-					enemys.Add(enemy);
+					Controller.SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
 				}
-				Controller._Enemys = enemys;
 				Controller.Init();
 			}
 		}

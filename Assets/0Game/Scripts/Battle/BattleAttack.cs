@@ -8,7 +8,6 @@ namespace Battle
 {
 	public class BattleAttack : MonoBehaviour
 	{
-		public AnimationClip _Clip;
 		public TransitionAsset _Transition;
 
 		public float _Cooltime;

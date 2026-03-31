@@ -33,8 +33,8 @@ namespace Battle
 			_Agent.updateRotation = false;
 			_Agent.updateUpAxis = false;
 			_LastAttackTime = Const.TimeDefault;
+			_LastSummonTime = Const.TimeDefault;
 
-			Controller.AddEnemyHPUI(this);
 			c.Init();
 		}
 
@@ -44,6 +44,7 @@ namespace Battle
 			Idle();
 			Move();
 			Attack();
+			SummonOnAir();
 
 			// UI
 			Camera camera = Controller._MainCamera.GetComponent<Camera>();
@@ -119,6 +120,22 @@ namespace Battle
 				c.NormalAttack(default);
 				_LastAttackTime = Time.time;
 			}
+		}
+
+		float _LastSummonTime;
+		public GameObject _SummonParticlePrefab;
+		public string _SummonEnemyName;
+		public SphereCollider _SummonArea;
+		void SummonOnAir()
+		{
+			if (string.IsNullOrEmpty(_SummonEnemyName)) return;
+			if (!_Noticed) return;
+			if (Time.time - _LastSummonTime < 1f) return;
+
+			// todo _SummonArea 안의 반구 위의 무작위 지점으로 설정, 다른 콜라이더에 충돌하지 않아야 함
+			Vector3 pos = transform.position;
+			Controller.SpawnEnemy(_SummonEnemyName, pos, transform.rotation);
+			_LastSummonTime = Time.time;
 		}
 
 		Vector3 GetPlayerDistanceVector()

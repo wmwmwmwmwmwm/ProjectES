@@ -29,14 +29,14 @@ namespace Battle
 			_PlayerHPPrefab.gameObject.SetActive(false);
 		}
 
-		public void AddPlayerHPUI(Player player)
+		void AddPlayerHPUI(Player player)
 		{
 			UI_PlayerHP ui = Instantiate(_PlayerHPPrefab, _PlayerHPParent);
 			ui.gameObject.SetActive(true);
 			player._UI_HP = ui;
 		}
 
-		public void AddEnemyHPUI(Enemy enemy)
+		void AddEnemyHPUI(Enemy enemy)
 		{
 			GameObject ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
 			enemy._HPSlider = ui.GetComponent<Slider>();

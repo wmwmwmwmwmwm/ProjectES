@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8195482941906961204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7584904410428444387}
+  - component: {fileID: 9146592983383343057}
+  m_Layer: 8
+  m_Name: SummonArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7584904410428444387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8195482941906961204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8543809553002476320}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &9146592983383343057
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8195482941906961204}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 6.4523873
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &801054228663693124
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8,10 +61,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1175728339631246263, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: CapsuleHeight
+      value: 5.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175728339631246263, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: CapsuleRadius
+      value: 1.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175728339631246263, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: CapsuleYOffset
+      value: 2.36
+      objectReference: {fileID: 0}
     - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: _Name
       value: BigGolem
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _MaxHP
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
@@ -44,6 +117,37 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 5.37
       objectReference: {fileID: 0}
+    - target: {fileID: 6030086884996853404, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: m_Height
+      value: 5.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030086884996853404, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030086884996853404, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 2.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311729804866244189, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _SummonArea
+      value: 
+      objectReference: {fileID: 9146592983383343057}
+    - target: {fileID: 6311729804866244189, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _SummonEnemyName
+      value: Golem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6311729804866244189, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _SummonParticlePrefab
+      value: 
+      objectReference: {fileID: 7096831063139484797, guid: bb38fc9c43ca83a448053e9a9bacadb6,
+        type: 3}
     - target: {fileID: 9046710303099706468, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -101,6 +205,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2628142569463517510}
+    - targetCorrespondingSourceObject: {fileID: 9046710303099706468, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7584904410428444387}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9110d79557fe54e44927aa5f623d34c2, type: 3}
 --- !u!4 &8543809553002476320 stripped
