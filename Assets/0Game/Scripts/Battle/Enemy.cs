@@ -18,8 +18,7 @@ namespace Battle
 		bool _Noticed;
 		float _LastAttackTime;
 		Collider[] _ColliderHits;
-		[HideInInspector] public Slider _HPSlider;
-		[HideInInspector] public Slider _HPSlider_Inner;
+		[HideInInspector] public UI_EnemyHP _HPUI;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -38,24 +37,20 @@ namespace Battle
 			c.Init();
 		}
 
+		public void Init2()
+		{
+			c.Init2();
+		}
+
 		void Update()
 		{
+			if (c.IsDead()) return;
+
 			// AI
 			Idle();
 			Move();
 			Attack();
 			SummonOnAir();
-
-			// UI
-			Camera camera = Controller._MainCamera.GetComponent<Camera>();
-			Vector3 distVector = transform.position - Controller._MainCamera.position;
-			float angle = Vector3.Angle(camera.transform.forward, distVector);
-			_HPSlider.gameObject.SetActive(angle < 90f);
-			if (_HPSlider.gameObject.activeSelf)
-			{
-				_HPSlider.transform.localPosition = Controller._Canvas.WorldToCanvas(camera, _HPSliderPosition.position);
-				_HPSlider.transform.localScale = Controller._HPSliderScaleCurve.Evaluate(distVector.magnitude) * Vector3.one;
-			}
 		}
 
 		public void NoticeAround()
@@ -146,10 +141,10 @@ namespace Battle
 
 		public void SetHPSliderValue(float value)
 		{
-			_HPSlider.gameObject.SetActive(value > 0f && value < 1f);
-			_HPSlider.value = value;
-			_HPSlider_Inner.DOComplete();
-			_HPSlider_Inner.DOValue(value, 0.3f).SetEase(Ease.Linear).SetSpeedBased(true);
+			_HPUI._HPSlider.gameObject.SetActive(value > 0f && value < 1f);
+			_HPUI._HPSlider.value = value;
+			_HPUI._HPSlider_Inner.DOComplete();
+			_HPUI._HPSlider_Inner.DOValue(value, 0.3f).SetEase(Ease.Linear).SetSpeedBased(true);
 		}
 	}
 }

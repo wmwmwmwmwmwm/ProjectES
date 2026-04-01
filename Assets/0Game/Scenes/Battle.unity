@@ -3301,6 +3301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 653359045}
+  - component: {fileID: 653359047}
   - component: {fileID: 653359046}
   m_Layer: 5
   m_Name: EnemyHPPrefab
@@ -3316,7 +3317,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653359044}
-  m_LocalRotation: {x: -0, y: -0.13047288, z: -0, w: -0.9914519}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -3329,7 +3330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 11111, y: 11111}
+  m_AnchoredPosition: {x: 1786, y: 831}
   m_SizeDelta: {x: 189.9548, y: 28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &653359046
@@ -3383,6 +3384,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &653359047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653359044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd6d52856af21dc4092085c98e13ddfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _HPSlider: {fileID: 653359046}
+  _HPSlider_Inner: {fileID: 1966205686}
 --- !u!1 &689859942
 GameObject:
   m_ObjectHideFlags: 0
@@ -4841,7 +4856,7 @@ MonoBehaviour:
   _DamageText: {fileID: 206281522}
   _DamageTextParent: {fileID: 286814825}
   _DamageScreen: {fileID: 1631644377}
-  _EnemyHPPrefab: {fileID: 653359044}
+  _EnemyHPPrefab: {fileID: 653359047}
   _EnemyHPParent: {fileID: 1803621302}
   _PlayerHPPrefab: {fileID: 2116932846}
   _PlayerHPParent: {fileID: 814669088}

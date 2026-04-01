@@ -34,6 +34,11 @@ namespace Battle
 			c.EmitEffect(_JustGuardEffect, false);
 		}
 
+		public void Init2()
+		{
+			c.Init2(); 
+		}
+
 		public void ReceiveInput(bool on)
 		{
 			if (on)

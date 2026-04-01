@@ -100,7 +100,10 @@ namespace Battle
 			_FeetSmokeLeftEffect.transform.SetParent(leftFoot, false);
 			Transform rightFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.RightFoot) : transform;
 			_FeetSmokeRightEffect.transform.SetParent(rightFoot, false);
+		}
 
+		public void Init2()
+		{
 			// 스탯 초기화
 			SetHP(_MaxHP);
 
@@ -579,10 +582,14 @@ namespace Battle
 				}
 
 				// 쓰러짐
-				if (_HP <= 0f)
+				if (IsDead())
 				{
 					_FSM.TrySetState(_Die);
 					_Collider.enabled = false;
+					if (_Enemy)
+					{
+						Controller.RemoveEnemyHPUI(_Enemy);
+					}
 					Controller.RemoveMinimapMarker(this);
 				}
 

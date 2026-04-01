@@ -7,8 +7,9 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public class MinimapMarker : MonoBehaviour
+	public class UI_EnemyHP : MonoBehaviour
 	{
-		[HideInInspector] public Character _Character;
+		public Slider _HPSlider;
+		public Slider _HPSlider_Inner;
 	}
 }

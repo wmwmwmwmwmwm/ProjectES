@@ -16,12 +16,12 @@ namespace Battle
 		public RawImage _MinimapTraceImage;
 		public RawImage _MinimapImage;
 		public RenderTexture _MinimapRT;
-		public MinimapMarker _MinimapMarker_Player, _MinimapMarker_Enemy;
+		public UI_MinimapMarker _MinimapMarker_Player, _MinimapMarker_Enemy;
 		public Transform _MinimapMarkerParent;
 		public AnimationCurve _MinimapSightCurve;
 
 		int _SightRange;
-		List<MinimapMarker> _MinimapMarkers;
+		List<UI_MinimapMarker> _MinimapMarkers;
 		Vector2Int _TraceTextureSize;
 		Texture2D _MinimapTraceTexture;
 		Color32[] _BlurColorArray;
@@ -79,8 +79,8 @@ namespace Battle
 
 		void AddMinimapMarker(Character character, bool isPlayer)
 		{
-			MinimapMarker prefab = isPlayer ? _MinimapMarker_Player : _MinimapMarker_Enemy;
-			MinimapMarker marker = Instantiate(prefab, _MinimapMarkerParent);
+			UI_MinimapMarker prefab = isPlayer ? _MinimapMarker_Player : _MinimapMarker_Enemy;
+			UI_MinimapMarker marker = Instantiate(prefab, _MinimapMarkerParent);
 			marker._Character = character;
 			marker.gameObject.SetActive(true);
 			_MinimapMarkers.Add(marker);
@@ -88,7 +88,7 @@ namespace Battle
 
 		public void RemoveMinimapMarker(Character character)
 		{
-			MinimapMarker marker = _MinimapMarkers.Find(x => x._Character == character);
+			UI_MinimapMarker marker = _MinimapMarkers.Find(x => x._Character == character);
 			Destroy(marker.gameObject);
 			_MinimapMarkers.Remove(marker);
 		}
@@ -104,7 +104,7 @@ namespace Battle
 			traceImageRT.anchoredPosition = new Vector2(
 				(viewportPos2.x - 0.5f) * minimapRect.width,
 				(viewportPos2.y - 0.5f) * minimapRect.height);
-			foreach (MinimapMarker marker in _MinimapMarkers)
+			foreach (UI_MinimapMarker marker in _MinimapMarkers)
 			{
 				bool active = marker._Character.isActiveAndEnabled;
 				Vector2Int traceTextureCoord = GetTraceTextureCoord(marker._Character.transform.position);
@@ -142,36 +142,5 @@ namespace Battle
 				return coord.ToVector2Int();
 			}
 		}
-
-		//float[,] CreateGaussianKernel(int size, float sigma)
-		//{
-		//	float[,] kernel = new float[size, size];
-		//	int radius = size / 2;
-		//	float sum = 0;
-		//	float constant = 1.0f / (2.0f * Mathf.PI * Mathf.Pow(sigma, 2));
-
-		//	for (int y = -radius; y < radius; y++)
-		//	{
-		//		for (int x = -radius; x < radius; x++)
-		//		{
-		//			// 가우시안 공식: G(x,y) = (1 / 2πσ²) * e^(-(x²+y²)/2σ²)
-		//			float distance = Mathf.Pow(x, 2) + Mathf.Pow(y, 2);
-		//			kernel[y + radius, x + radius] = constant * Mathf.Exp(-distance / (2.0f * Mathf.Pow(sigma, 2)));
-		//			sum += kernel[y + radius, x + radius];
-		//		}
-		//	}
-
-		//	// 정규화: 커널 값의 합이 1이 되도록 함
-		//	for (int y = 0; y < size; y++)
-		//	{
-		//		for (int x = 0; x < size; x++)
-		//		{
-		//			print(kernel[y, x]);
-		//			kernel[y, x] /= sum;
-		//		}
-		//	}
-
-		//	return kernel;
-		//}
 	}
 }

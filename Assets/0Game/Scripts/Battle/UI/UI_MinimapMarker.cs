@@ -7,9 +7,8 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public class SkillIcon : MonoBehaviour
+	public class UI_MinimapMarker : MonoBehaviour
 	{
-		public Slider _Slider;
-		public TMP_Text _Text;
+		[HideInInspector] public Character _Character;
 	}
 }

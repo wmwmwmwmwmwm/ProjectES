@@ -11,7 +11,6 @@ namespace Battle
 {
 	public partial class BattleController : SingleInstance<BattleController>
 	{
-		public Transform _StartPosition;
 		public Transform _MainCamera;
 		public Transform _CameraTarget;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
@@ -33,39 +32,36 @@ namespace Battle
 		{
 			bool isTest = Game._StartScene == SceneName.Glacier;
 
+			_Players = new();
+			_Enemys = new();
+			_EnemyHPUIs = new();
 			_BgGround = GameObject.Find("Bg/Ground").transform;
 			_BgNear = GameObject.Find("Bg/Near").transform;
 			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
+			GameObject.Find("StartPosition").SetActive(false);
 			InitMinimap();
 			InitUI();
 
 			// 배치
-			if (!isTest)
+			if (isTest) return;
+			foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
 			{
-				_StartPosition.gameObject.SetActive(false);
-				foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
-				{
-					Destroy(enemy.gameObject);
-				}
-				DataManager.Stage stage = Data.GetStageData(Game._CurrentScene);
-				_Players = new();
-				foreach (Player prefab in _PlayerPrefabs)
-				{
-					Player player = Instantiate(prefab);
-					player.Init();
-					player.c.SetPositionAndRotation(stage._StartPosition, stage._StartRotation);
-					player.gameObject.SetActive(false);
-					AddPlayerHPUI(player);
-					AddMinimapMarker(player.c, true);
-					_Players.Add(player);
-				}
-				_Enemys = new();
-				foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
-				{
-					SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
-				}
+				Destroy(enemy.gameObject);
 			}
+			DataManager.Stage stage = Data.GetStageData(Game._CurrentScene);
+			List<string> playerNames = new() { "Nolan", "Inasi" }; // todo 전투 캐릭터 리스트
+			foreach (string playerName in playerNames)
+			{
+				SpawnPlayer(playerName, stage._StartPosition, stage._StartRotation);
+			}
+			foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
+			{
+				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
+			}
+		}
 
+		public void Init2()
+		{
 			Game.LockCursor(true);
 			SetActivePlayer(0);
 
@@ -162,6 +158,19 @@ namespace Battle
 			}
 		}
 
+		public void SpawnPlayer(string name, Vector3 pos, Quaternion rot)
+		{
+			Character c = Data.GetBattleCharacter(name);
+			Player player = Instantiate(c).GetComponent<Player>();
+			player.Init();
+			player.c.SetPositionAndRotation(pos, rot);
+			player.gameObject.SetActive(false);
+			AddPlayerHPUI(player);
+			AddMinimapMarker(player.c, true);
+			player.Init2();
+			_Players.Add(player);
+		}
+
 		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot)
 		{
 			Character c = Data.GetBattleCharacter(name);
@@ -171,6 +180,7 @@ namespace Battle
 			enemy.GetComponent<NavMeshAgent>().enabled = true;
 			AddEnemyHPUI(enemy);
 			AddMinimapMarker(enemy.c, false);
+			enemy.Init2();
 			_Enemys.Add(enemy);
 		}
 	}

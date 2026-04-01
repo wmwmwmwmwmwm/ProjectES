@@ -12,17 +12,19 @@ namespace Battle
 	{
 		[Header("UI")]
 		public Canvas _Canvas;
-		public SkillIcon _Skill1SkillIcon;
-		public SkillIcon _Skill2SkillIcon;
-		public SkillIcon _UltimateSkillIcon;
+		public UI_SkillIcon _Skill1SkillIcon;
+		public UI_SkillIcon _Skill2SkillIcon;
+		public UI_SkillIcon _UltimateSkillIcon;
 		public AnimationCurve _HPSliderScaleCurve;
 		public GameObject _DamageText;
 		public Transform _DamageTextParent;
 		public GameObject _DamageScreen;
-		public GameObject _EnemyHPPrefab;
+		public UI_EnemyHP _EnemyHPPrefab;
 		public Transform _EnemyHPParent;
 		public UI_PlayerHP _PlayerHPPrefab;
 		public Transform _PlayerHPParent;
+
+		List<UI_EnemyHP> _EnemyHPUIs;
 
 		void InitUI()
 		{
@@ -38,9 +40,16 @@ namespace Battle
 
 		void AddEnemyHPUI(Enemy enemy)
 		{
-			GameObject ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
-			enemy._HPSlider = ui.GetComponent<Slider>();
-			enemy._HPSlider_Inner = ui.transform.Find("Inner").GetComponent<Slider>();
+			UI_EnemyHP ui = Instantiate(_EnemyHPPrefab, _EnemyHPParent);
+			enemy._HPUI = ui;
+			_EnemyHPUIs.Add(ui);
+		}
+
+		public void RemoveEnemyHPUI(Enemy enemy)
+		{
+			UI_EnemyHP ui = enemy._HPUI;
+			Destroy(ui.gameObject);
+			_EnemyHPUIs.Remove(ui);
 		}
 
 		void UpdateUI()
@@ -60,7 +69,7 @@ namespace Battle
 				RefreshSkillIcon(_Skill2SkillIcon, c._Skill2._Attack._Cooltime, c._LastSkill2Time);
 				RefreshSkillIcon(_UltimateSkillIcon, c._Ultimate._Attack._Cooltime, c._LastUltimateTime);
 
-				void RefreshSkillIcon(SkillIcon icon, float cooltime, float lastTime)
+				void RefreshSkillIcon(UI_SkillIcon icon, float cooltime, float lastTime)
 				{
 					float elapsed = Time.time - lastTime;
 					if (elapsed < cooltime)
@@ -74,6 +83,22 @@ namespace Battle
 						icon._Slider.value = 0f;
 						icon._Text.text = "";
 					}
+				}
+			}
+
+			Camera camera = _MainCamera.GetComponent<Camera>();
+			foreach (Enemy enemy in _Enemys)
+			{
+				if (enemy.c.IsDead()) continue;
+
+				// 체력
+				Vector3 distVector = enemy.transform.position - _MainCamera.position;
+				float angle = Vector3.Angle(camera.transform.forward, distVector);
+				enemy._HPUI._HPSlider.gameObject.SetActive(angle < 90f);
+				if (enemy._HPUI._HPSlider.gameObject.activeSelf)
+				{
+					enemy._HPUI._HPSlider.transform.localPosition = _Canvas.WorldToCanvas(camera, enemy._HPSliderPosition.position);
+					enemy._HPUI._HPSlider.transform.localScale = _HPSliderScaleCurve.Evaluate(distVector.magnitude) * Vector3.one;
 				}
 			}
 		}
