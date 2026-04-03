@@ -76,8 +76,11 @@ namespace Battle
 		void Update()
 		{
 			// 카메라 위치
-			float shoulderHeight = c._Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
-			_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, shoulderHeight, 5f * Time.deltaTime);
+			if (c.UseKCC)
+			{
+				float shoulderHeight = c.Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
+				_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, shoulderHeight, 5f * Time.deltaTime);
+			}
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;

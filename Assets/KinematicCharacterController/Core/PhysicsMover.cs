@@ -165,7 +165,7 @@ namespace KinematicCharacterController
             KinematicCharacterSystem.UnregisterPhysicsMover(this);
         }
 
-        private void Awake()
+        public void Init()
         {
             Transform = this.transform;
             ValidateData();

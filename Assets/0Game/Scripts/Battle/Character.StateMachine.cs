@@ -343,10 +343,10 @@ namespace Battle
 			}
 
 			// 일어나기
-			if (state == _GetDown)
+			if (UseKCC && state == _GetDown)
 			{
 				bool getUp = _BaseLayer.CurrentState.NormalizedTime >= 1f;
-				getUp &= _Motor.GroundingStatus.FoundAnyGround;
+				getUp &= Motor.GroundingStatus.FoundAnyGround;
 				if (getUp)
 				{
 					_FSM.TrySetState(_GetUp);
@@ -354,7 +354,7 @@ namespace Battle
 			}
 		}
 
-		void PlayAction(State state)
+		public void PlayAction(State state)
 		{
 			if (state._Restart)
 			{

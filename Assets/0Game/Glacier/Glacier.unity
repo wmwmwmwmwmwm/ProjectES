@@ -4756,7 +4756,6 @@ MonoBehaviour:
   - {fileID: 5450576976173568224, guid: bff46722a922ea14aac613df1251db55, type: 3}
   - {fileID: 7816617387971028284, guid: 80d5e281bc033b14a9c8f437423ba713, type: 3}
   _StageName: Tutorial
-  _StartPosition: {fileID: 1856348486}
 --- !u!4 &728746537
 Transform:
   m_ObjectHideFlags: 0

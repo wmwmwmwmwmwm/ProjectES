@@ -14,7 +14,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Battle
 {
-	public partial class Character : MonoBehaviour, ICharacterController
+	public partial class Character : MonoBehaviour 
 	{
 		public bool _ShowAll;
 
@@ -32,47 +32,89 @@ namespace Battle
 		[ShowIf("_ShowAll")] public GameObject _GuardEffectPrefab;
 		[ShowIf("_ShowAll")] public ParticleSystem _DashWindEffect;
 		[ShowIf("_ShowAll")] public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
-		[ShowIf("_ShowAll")]  public Material _WhiteMaterial;
+		[ShowIf("_ShowAll")] public Material _WhiteMaterial;
 
 		GameObject _Model;
 		Player _Player;
 		Enemy _Enemy;
-		CapsuleCollider _Collider;
-		RaycastHit[] _RaycastResults;
+		[HideInInspector] public RaycastHit[] _RaycastResults;
 		[HideInInspector] public int _AttackIndex;
 		[HideInInspector] public bool _NextAttackAvailable;
 		[HideInInspector] public bool _NextAttackInput;
-		float _AttackMovePercent;
+		[HideInInspector] public float _AttackMovePercent;
 		float _GuardUpTime, _GuardDownTime;
-		float _HitStunTimer;
-		Vector3 _HitStunPrevVelocity;
-		bool _IsRunning;
+		[HideInInspector] public float _HitStunTimer;
+		[HideInInspector] public Vector3 _HitStunPrevVelocity;
+		[HideInInspector] public bool _IsRunning;
 		Coroutine _FeetSmokeCoroutine;
 		Coroutine _DashWindCoroutine;
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 		[HideInInspector] public bool _AlreadyWallJump;
-
-		const float MoveGraceDuration = 0.1f;
-		const float WallJumpAngleThreshold = 60f;
+		[HideInInspector] public Quaternion _AimDestRotation;
+		[HideInInspector] public Vector3 _MoveInput;
+		[HideInInspector] public bool _StopYTrigger;
 
 		public BattleController Controller => BattleController.Instance;
-		public Vector3 Center => transform.position + _Collider.center;
-		public Vector3 Top => transform.position + _Motor.CharacterTransformToCapsuleTop;
-		public Vector3 Bottom => transform.position + _Motor.CharacterTransformToCapsuleBottom;
+		public Vector3 Center
+		{
+			get
+			{
+				if (UseKCC)
+				{
+					return transform.position + Motor.CharacterTransformToCapsuleCenter;
+				}
+				else
+				{
+					Vector3 pos = transform.position;
+					pos.y += _KCC_Rigidbody._Collider.bounds.center.y;
+					return pos;
+				}
+			}
+		}
+
+		public Vector3 Top
+		{
+			get
+			{
+				if (UseKCC)
+				{
+					return transform.position + Motor.CharacterTransformToCapsuleTop;
+				}
+				else
+				{
+					Vector3 pos = transform.position;
+					pos.y -= _KCC_Rigidbody._Collider.bounds.min.y;
+					pos.y += _KCC_Rigidbody._Collider.bounds.max.y;
+					return pos;
+				}
+			}
+		}
+
+		public Vector3 Bottom
+		{
+			get
+			{
+				if (UseKCC)
+				{
+					return transform.position + Motor.CharacterTransformToCapsuleBottom;
+				}
+				else
+				{
+					return transform.position;
+				}
+			}
+		}
 
 		public void Init()
 		{
+			_KCC = GetComponent<CharacterController_KCC>();
 			_Player = GetComponent<Player>();
 			_Enemy = GetComponent<Enemy>();
-			_Collider = GetComponent<CapsuleCollider>();
 			_RaycastResults = new RaycastHit[10];
 
 			// 시간 초기화
 			_GuardUpTime = Const.TimeDefault;
 			_GuardDownTime = Const.TimeDefault;
-			_LastRequestTime = Const.TimeDefault;
-			_LastCanJumpTime = Const.TimeDefault;
-			_LastDashTime = Const.TimeDefault;
 			_LastSkill1Time = Const.TimeDefault;
 			_LastSkill2Time = Const.TimeDefault;
 			_LastUltimateTime = Const.TimeDefault;
@@ -88,9 +130,14 @@ namespace Battle
 			redirect._Character = this;
 
 			// 컴포넌트 초기화
-			_Motor = GetComponent<KinematicCharacterMotor>();
-			_Motor.Init();
-			InitMovement();
+			if (UseKCC)
+			{
+				_KCC.Init();
+			}
+			else
+			{
+				_KCC_Rigidbody.Init();
+			}
 			InitFSM();
 			_AttackIndex = -1;
 			EmitEffect(_DashWindEffect, false);
@@ -126,20 +173,12 @@ namespace Battle
 
 		public void Dash(Direction4 dir)
 		{
-			_MoveRequest = dir switch
-			{
-				Direction4.Up => MoveRequest.DashFwd,
-				Direction4.Down => MoveRequest.DashBwd,
-				Direction4.Left => MoveRequest.DashLeft,
-				_ => MoveRequest.DashRight
-			};
-			_LastRequestTime = Time.time;
+			_KCC.Dash(dir);
 		}
 
 		public void Jump(CallbackContext obj)
 		{
-			_MoveRequest = MoveRequest.Jump;
-			_LastRequestTime = Time.time;
+			_KCC.Jump();
 		}
 
 		public void NormalAttack(CallbackContext obj)
@@ -160,15 +199,12 @@ namespace Battle
 				_Player._JustGuardCancelTrigger = true;
 			}
 			// 대쉬 
-			else if (IsDashing())
+			else if (UseKCC && _KCC.IsDashing())
 			{
-				_FadeOutDeaccelTimer = _DashDuration;
-				DashCancel();
-				PlayAction(_DashAttack);
-				Attack();
+				_KCC.DashAttack();
 			}
 			// 지상
-			else if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
+			else if (IsGrounded())
 			{
 				// 1타 공격
 				if (_AttackIndex < 0)
@@ -198,7 +234,7 @@ namespace Battle
 			if (!canAttack) return;
 
 			// 지상
-			if (_Motor.GroundingStatus.IsStableOnGround && !_Motor.MustUnground())
+			if (IsGrounded())
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
@@ -376,20 +412,29 @@ namespace Battle
 					Effect effectData = hasNext ? effectEnum.Current : firstEffectData;
 
 					// 공중 공격으로 점프
-					int raycastCount = Physics.RaycastNonAlloc(
-							origin: Center,
-							direction: _Motor.CharacterForward,
-							results: _RaycastResults,
-							maxDistance: melee._Collider.size.z,
-							layerMask: Layer.TerrainLayerMask);
-					List<RaycastHit> hits = _RaycastResults.ArrayToList(raycastCount);
-					RaycastHit nearest = hits.MinBy(x => x.distance);
-					if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
+					int raycastCount = 0;
+					List<RaycastHit> hits;
+					RaycastHit nearest = default;
+					if (UseKCC)
 					{
-						float angle = Vector3.Angle(_Motor.CharacterForward, -nearest.normal);
-						if (angle < WallJumpAngleThreshold && !_Motor.GroundingStatus.IsStableOnGround)
+						raycastCount = Physics.RaycastNonAlloc(
+								origin: Center,
+								direction: Motor.CharacterForward,
+								results: _RaycastResults,
+								maxDistance: melee._Collider.size.z,
+								layerMask: Layer.TerrainLayerMask);
+						hits = _RaycastResults.ArrayToList(raycastCount);
+						nearest = hits.MinBy(x => x.distance);
+						if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
 						{
-							_AttackJumpDirection = -_Motor.CharacterForward;
+							float angle = Vector3.Angle(Motor.CharacterForward, -nearest.normal);
+							bool jump = UseKCC;
+							jump &= angle < WallJumpAngleThreshold;
+							jump &= !Motor.GroundingStatus.IsStableOnGround;
+							if (jump)
+							{
+								_KCC._AttackJumpDirection = -Motor.CharacterForward;
+							}
 						}
 					}
 
@@ -567,17 +612,20 @@ namespace Battle
 				}
 
 				// 데미지 표시
-				SetHP(_HP - damage);
-				if (_Enemy)
+				if (!IsDead())
 				{
-					Controller.ShowDamageText(damage, damageTextPosition);
-					Controller.ShakeCamera(attackHit._ShakeCameraDuration);
-				}
-				else
-				{
-					if (damage > 0f)
+					SetHP(_HP - damage);
+					if (_Enemy)
 					{
-						Controller.ShowDamageScreen();
+						Controller.ShowDamageText(damage, damageTextPosition);
+						Controller.ShakeCamera(attackHit._ShakeCameraDuration);
+					}
+					else
+					{
+						if (damage > 0f)
+						{
+							Controller.ShowDamageScreen();
+						}
 					}
 				}
 
@@ -585,7 +633,14 @@ namespace Battle
 				if (IsDead())
 				{
 					_FSM.TrySetState(_Die);
-					_Collider.enabled = false;
+					if (UseKCC)
+					{
+						Motor.Capsule.enabled = false;
+					}
+					else
+					{
+						_Collider.enabled = false;
+					}
 					if (_Enemy)
 					{
 						Controller.RemoveEnemyHPUI(_Enemy);
@@ -634,7 +689,7 @@ namespace Battle
 			else return Layer.PlayerLayerMask;
 		}
 
-		bool IsMovable()
+		public bool IsMovable()
 		{
 			bool movable = true;
 			movable &= _FSM.CurrentState != _Damage;
@@ -644,9 +699,16 @@ namespace Battle
 			return movable;
 		}
 
-		bool IsDashing()
+		public bool IsGrounded()
 		{
-			return Time.time - _LastDashTime < _DashDuration;
+			if (UseKCC)
+			{
+				return Motor.GroundingStatus.IsStableOnGround && !Motor.MustUnground();
+			}
+			else
+			{
+				return true;
+			}
 		}
 
 		public bool IsDead()
@@ -654,12 +716,7 @@ namespace Battle
 			return _HP <= 0f;
 		}
 
-		void DashCancel()
-		{
-			_LastDashTime = Const.TimeDefault;
-		}
-
-		bool IsGuarding()
+		public bool IsGuarding()
 		{
 			return _UpperBodyLayer.Weight > 0f;
 		}
@@ -690,7 +747,7 @@ namespace Battle
 		{
 			if (_HitStunTimer < 0f)
 			{
-				_HitStunPrevVelocity = _Motor.Velocity;
+				_HitStunPrevVelocity = UseKCC ? Motor.Velocity : _Rigidbody.linearVelocity;
 			}
 			_HitStunTimer += t;
 		}
@@ -709,35 +766,10 @@ namespace Battle
 				EmitEffect(_FeetSmokeLeftEffect, true);
 				EmitEffect(_FeetSmokeRightEffect, true);
 				float start = Time.time;
-				yield return new WaitUntil(() => Time.time - start > time || !_Motor.GroundingStatus.IsStableOnGround);
+				yield return new WaitUntil(() => Time.time - start > time || !IsGrounded());
 				EmitEffect(_FeetSmokeLeftEffect, false);
 				EmitEffect(_FeetSmokeRightEffect, false);
 				_FeetSmokeCoroutine = null;
-			}
-		}
-
-		void DashWind(MoveRequest dashDir)
-		{
-			if (_DashWindCoroutine != null)
-			{
-				StopCoroutine(_DashWindCoroutine);
-				_DashWindCoroutine = null;
-			}
-			_DashWindCoroutine = StartCoroutine(Internal());
-
-			IEnumerator Internal()
-			{
-				_DashWindEffect.transform.localEulerAngles = dashDir switch
-				{
-					MoveRequest.DashFwd => new Vector3(0f, 0f, 0f),
-					MoveRequest.DashBwd => new Vector3(0f, 180f, 0f),
-					MoveRequest.DashLeft => new Vector3(0f, 270f, 0f),
-					_ => new Vector3(0f, 90f, 0f),
-				};
-				EmitEffect(_DashWindEffect, true);
-				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
-				EmitEffect(_DashWindEffect, false);
-				_DashWindCoroutine = null;
 			}
 		}
 
@@ -759,9 +791,17 @@ namespace Battle
 
 		public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
 		{
-			_Motor.SetPositionAndRotation(pos, rot);
-			_Motor.MoveCharacter(pos);
-			_Motor.RotateCharacter(rot);
+			if (UseKCC)
+			{
+				Motor.SetPositionAndRotation(pos, rot);
+				Motor.MoveCharacter(pos);
+				Motor.RotateCharacter(rot);
+			}
+			else
+			{
+				_Rigidbody.position = pos;
+				_Rigidbody.rotation = rot;
+			}
 		}
 	}
 }

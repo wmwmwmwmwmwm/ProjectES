@@ -99,8 +99,8 @@ namespace Battle
 				nextPlayer.c._AimDestRotation = _ActivePlayer.c._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
 				nextPlayer.c.SetPositionAndRotation(pos, rot);
-				nextPlayer.c._Motor.BaseVelocity = _ActivePlayer.c._Motor.BaseVelocity;
-				nextPlayer.c._Motor.GroundingStatus = _ActivePlayer.c._Motor.GroundingStatus;
+				nextPlayer.c.Motor.BaseVelocity = _ActivePlayer.c.Motor.BaseVelocity;
+				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
 				nextPlayer.c._FSM.ForceSetDefaultState();
 			}
 

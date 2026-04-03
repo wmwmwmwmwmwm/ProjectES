@@ -21,6 +21,7 @@ namespace Battle
 		[HideInInspector] public UI_EnemyHP _HPUI;
 
 		BattleController Controller => BattleController.Instance;
+		bool IsMovable => _Agent;
 
 		public void Init()
 		{
@@ -28,9 +29,12 @@ namespace Battle
 			c = GetComponent<Character>();
 			_Agent = GetComponent<NavMeshAgent>();
 
-			_Agent.updatePosition = false;
-			_Agent.updateRotation = false;
-			_Agent.updateUpAxis = false;
+			if (IsMovable)
+			{
+				_Agent.updatePosition = false;
+				_Agent.updateRotation = false;
+				_Agent.updateUpAxis = false;
+			}
 			_LastAttackTime = Const.TimeDefault;
 			_LastSummonTime = Const.TimeDefault;
 
@@ -127,11 +131,38 @@ namespace Battle
 			if (!_Noticed) return;
 			if (Time.time - _LastSummonTime < 1f) return;
 
-			// todo _SummonArea 안의 반구 위의 무작위 지점으로 설정, 다른 콜라이더에 충돌하지 않아야 함
+			Controller.PlayEffect123123(_SummonParticlePrefab, c, transform.position, transform.rotation);
 			Vector3 pos = transform.position;
 			Controller.SpawnEnemy(_SummonEnemyName, pos, transform.rotation);
 			_LastSummonTime = Time.time;
 		}
+
+		//Vector3 GetRandomSummonPosition()
+		//{
+		//	Vector3 center = _SummonArea.transform.position;
+		//	float radius = _SummonArea.radius * _SummonArea.transform.localScale.x;
+			
+		//	Vector3 randomPos;
+		//	int maxAttempts = 10;
+		//	int attempts = 0;
+			
+		//	do
+		//	{
+		//		// 반구 위의 무작위 지점 생성 (위쪽만)
+		//		float phi = Random.Range(0f, Mathf.PI * 0.5f);
+		//		float theta = Random.Range(0f, Mathf.PI * 2f);
+				
+		//		float x = radius * Mathf.Sin(phi) * Mathf.Cos(theta);
+		//		float y = radius * Mathf.Cos(phi);
+		//		float z = radius * Mathf.Sin(phi) * Mathf.Sin(theta);
+				
+		//		randomPos = center + new Vector3(x, y, z);
+		//		attempts++;
+				
+		//	} while (Physics.OverlapSphere(randomPos, 0.5f).Length > 0 && attempts < maxAttempts);
+			
+		//	return randomPos;
+		//}
 
 		Vector3 GetPlayerDistanceVector()
 		{
