@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7455138135084191989}
   - component: {fileID: 8032969324486699252}
   - component: {fileID: 998664465345593276}
+  - component: {fileID: 6855409595717541380}
   m_Layer: 9
   m_Name: PlayerBase
   m_TagString: Untagged
@@ -88,23 +89,31 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
-  _DashWindEffect: {fileID: 4216976309678957436}
   _FeetSmokeLeftEffect: {fileID: 7988743532983748830}
   _FeetSmokeRightEffect: {fileID: 3430425296603654426}
   _WhiteMaterial: {fileID: 2100000, guid: ea2e2f8c68b8fd841b670bd08640b555, type: 2}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
+  _AttackMovePercent: 0
+  _HitStunTimer: 0
+  _HitStunPrevVelocity: {x: 0, y: 0, z: 0}
+  _IsRunning: 0
   _LastSkill1Time: 0
   _LastSkill2Time: 0
   _LastUltimateTime: 0
   _AlreadyWallJump: 0
-  _Motor: {fileID: 998664465345593276}
+  _AimDestRotation: {x: 0, y: 0, z: 0, w: 0}
   _MoveInput: {x: 0, y: 0, z: 0}
+  _StopYTrigger: 0
+  _FadeInDeaccelTimer: 0
+  _FadeOutDeaccelTimer: 0
   _RootMotionPosDelta: {x: 0, y: 0, z: 0}
   _RootMotionRotDelta: {x: 0, y: 0, z: 0, w: 0}
-  _AimDestRotation: {x: 0, y: 0, z: 0, w: 0}
-  _StopYTrigger: 0
+  _Impulse: {x: 0, y: 0, z: 0}
+  _CurrentMoveSpeed: 0
+  _CurrentMoveAccel: 0
+  _CurrentMoveInputVector: {x: 0, y: 0, z: 0}
   _HP: 11
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
   _AttackMoveCurve:
@@ -262,6 +271,19 @@ MonoBehaviour:
   CheckMovementInitialOverlaps: 1
   KillVelocityWhenExceedMaxMovementIterations: 0
   KillRemainingMovementWhenExceedMaxMovementIterations: 0
+--- !u!114 &6855409595717541380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141389453838918012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0729655593bf1914a807ff0f73f8c50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Motor: {fileID: 0}
 --- !u!1 &8881646460655702514
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,12 +546,6 @@ PrefabInstance:
 --- !u!4 &4059626791360016006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7330426529293360426, guid: b4e19bb6e8c7ecf4bbe1e868de38cb83,
-    type: 3}
-  m_PrefabInstance: {fileID: 6767882307178951596}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &4216976309678957436 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7451747117483921616, guid: b4e19bb6e8c7ecf4bbe1e868de38cb83,
     type: 3}
   m_PrefabInstance: {fileID: 6767882307178951596}
   m_PrefabAsset: {fileID: 0}

@@ -23,10 +23,8 @@ namespace Battle
 		[HideInInspector] public List<Player> _Players;
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
+		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
-
-		public List<Player> _PlayerPrefabs;
-		public List<Enemy> _EnemyPrefabs;
 
 		public void Init()
 		{
@@ -48,13 +46,13 @@ namespace Battle
 			{
 				Destroy(enemy.gameObject);
 			}
-			DataManager.Stage stage = Data.GetStageData(Game._CurrentScene);
+			_CurrentStage = Data.GetStageData(Game._CurrentScene);
 			List<string> playerNames = new() { "Nolan", "Inasi" }; // todo 전투 캐릭터 리스트
 			foreach (string playerName in playerNames)
 			{
-				SpawnPlayer(playerName, stage._StartPosition, stage._StartRotation);
+				SpawnPlayer(playerName, _CurrentStage._StartPosition, _CurrentStage._StartRotation);
 			}
-			foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
+			foreach (DataManager.Stage.Spawn spawn in _CurrentStage._Spawns)
 			{
 				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
 			}
@@ -64,6 +62,7 @@ namespace Battle
 		{
 			Game.LockCursor(true);
 			SetActivePlayer(0);
+			_ActivePlayer._LookRotation = _CurrentStage._StartRotation.eulerAngles;
 
 			_Init = true;
 		}
@@ -80,6 +79,9 @@ namespace Battle
 			Vector3 cameraOffset = _ShakeCameraTransform.position;
 			cameraOffset.y += _ActivePlayer._CameraOffsetY;
 			_CameraThirdPerson.ShoulderOffset = cameraOffset;
+
+			// 카메라 회전
+			_CameraTarget.SetPositionAndRotation(_ActivePlayer.transform.position, Quaternion.Euler(_ActivePlayer._LookRotation));
 
 			UpdateMinimap();
 			UpdateUI();
@@ -99,8 +101,10 @@ namespace Battle
 				nextPlayer.c._AimDestRotation = _ActivePlayer.c._AimDestRotation;
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
 				nextPlayer.c.SetPositionAndRotation(pos, rot);
+				_CameraTarget.SetPositionAndRotation(pos, rot);
 				nextPlayer.c.Motor.BaseVelocity = _ActivePlayer.c.Motor.BaseVelocity;
 				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
+				nextPlayer._CameraOffsetY = nextPlayer.GetShoulderHeight();
 				nextPlayer.c._FSM.ForceSetDefaultState();
 			}
 

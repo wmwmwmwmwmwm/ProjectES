@@ -30,7 +30,6 @@ namespace Battle
 		//public VRMBlendShapeProxy _BlendShapeProxy;
 		[ShowIf("_ShowAll")] public GameObject _HitEffectPrefab;
 		[ShowIf("_ShowAll")] public GameObject _GuardEffectPrefab;
-		[ShowIf("_ShowAll")] public ParticleSystem _DashWindEffect;
 		[ShowIf("_ShowAll")] public ParticleSystem _FeetSmokeLeftEffect, _FeetSmokeRightEffect;
 		[ShowIf("_ShowAll")] public Material _WhiteMaterial;
 
@@ -47,7 +46,6 @@ namespace Battle
 		[HideInInspector] public Vector3 _HitStunPrevVelocity;
 		[HideInInspector] public bool _IsRunning;
 		Coroutine _FeetSmokeCoroutine;
-		Coroutine _DashWindCoroutine;
 		[HideInInspector] public float _LastSkill1Time, _LastSkill2Time, _LastUltimateTime;
 		[HideInInspector] public bool _AlreadyWallJump;
 		[HideInInspector] public Quaternion _AimDestRotation;
@@ -108,9 +106,12 @@ namespace Battle
 		public void Init()
 		{
 			_KCC = GetComponent<CharacterController_KCC>();
+			_KCC_Rigidbody = GetComponent<CharacterController_Rigidbody>();
 			_Player = GetComponent<Player>();
 			_Enemy = GetComponent<Enemy>();
 			_RaycastResults = new RaycastHit[10];
+			_RootMotionPosDelta = Vector3.zero;
+			_RootMotionRotDelta = Quaternion.identity;
 
 			// 시간 초기화
 			_GuardUpTime = Const.TimeDefault;
@@ -140,7 +141,6 @@ namespace Battle
 			}
 			InitFSM();
 			_AttackIndex = -1;
-			EmitEffect(_DashWindEffect, false);
 			EmitEffect(_FeetSmokeLeftEffect, false);
 			EmitEffect(_FeetSmokeRightEffect, false);
 			Transform leftFoot = _Animancer.Animator.avatar ? _Animancer.Animator.GetBoneTransform(HumanBodyBones.LeftFoot) : transform;
@@ -373,7 +373,7 @@ namespace Battle
 			}
 		}
 
-		void Attack()
+		public void Attack()
 		{
 			switch (_FSM.CurrentState._Attack._RangeType)
 			{
@@ -459,14 +459,14 @@ namespace Battle
 						List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
 						overlaps.Sort((a, b) =>
 						{
-							float aDistance = (a.GetComponent<Character>().Center - Center).sqrMagnitude;
-							float bDistance = (b.GetComponent<Character>().Center - Center).sqrMagnitude;
+							float aDistance = (a.GetComponentInParent<Character>().Center - Center).sqrMagnitude;
+							float bDistance = (b.GetComponentInParent<Character>().Center - Center).sqrMagnitude;
 							float v = (aDistance - bDistance) * 100f;
 							return (int)v;
 						});
 						foreach (Collider col in overlaps)
 						{
-							Character c = col.GetComponent<Character>();
+							Character c = col.GetComponentInParent<Character>();
 							Vector3 attackDir = c.Center - Center;
 							attackDir.Normalize();
 							int count = Physics.RaycastNonAlloc(
@@ -639,7 +639,7 @@ namespace Battle
 					}
 					else
 					{
-						_Collider.enabled = false;
+						_KCC_Rigidbody._Collider.enabled = false;
 					}
 					if (_Enemy)
 					{
@@ -656,7 +656,7 @@ namespace Battle
 					attacker._AlreadyWallJump = true;
 					Vector3 jumpDir = attacker.Center - Center;
 					jumpDir.y = 0f;
-					attacker._AttackJumpDirection = jumpDir.normalized;
+					attacker._KCC._AttackJumpDirection = jumpDir.normalized;
 				}
 			}
 		}
@@ -707,7 +707,7 @@ namespace Battle
 			}
 			else
 			{
-				return true;
+				return false;
 			}
 		}
 
@@ -747,7 +747,7 @@ namespace Battle
 		{
 			if (_HitStunTimer < 0f)
 			{
-				_HitStunPrevVelocity = UseKCC ? Motor.Velocity : _Rigidbody.linearVelocity;
+				_HitStunPrevVelocity = UseKCC ? Motor.Velocity : Vector3.zero;
 			}
 			_HitStunTimer += t;
 		}
@@ -791,6 +791,7 @@ namespace Battle
 
 		public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
 		{
+			_AimDestRotation = rot;
 			if (UseKCC)
 			{
 				Motor.SetPositionAndRotation(pos, rot);
@@ -799,8 +800,7 @@ namespace Battle
 			}
 			else
 			{
-				_Rigidbody.position = pos;
-				_Rigidbody.rotation = rot;
+				_KCC_Rigidbody._Mover.SetPositionAndRotation(pos, rot);
 			}
 		}
 	}

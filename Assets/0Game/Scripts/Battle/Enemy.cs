@@ -68,7 +68,7 @@ namespace Battle
 
 			for (int i = 0; i < count; i++)
 			{
-				Enemy enemy = _ColliderHits[i].GetComponent<Enemy>();
+				Enemy enemy = _ColliderHits[i].GetComponentInParent<Enemy>();
 				enemy._Noticed = true;
 			}
 		}
@@ -87,6 +87,7 @@ namespace Battle
 		void Move()
 		{
 			if (!_Noticed) return;
+			if (!_Agent.isOnNavMesh) return;
 
 			bool move = GetPlayerDistanceVector().magnitude > 2f;
 			Vector3 first = _Agent.path.corners[0];

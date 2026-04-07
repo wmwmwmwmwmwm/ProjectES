@@ -31,14 +31,14 @@ namespace Battle
 				yield return new WaitUntil(() => battleScene.isLoaded);
 
 				Controller.Init();
-				DataManager.Stage stage = Data.GetStageData(_StageName);
+				Controller._CurrentStage = Data.GetStageData(_StageName);
 				Controller._Players = new();
 				foreach (Player prefab in _PlayerPrefabs)
 				{
-					Controller.SpawnPlayer(prefab.GetComponent<Character>()._Name, stage._StartPosition, stage._StartRotation);
+					Controller.SpawnPlayer(prefab.GetComponent<Character>()._Name, Controller._CurrentStage._StartPosition, Controller._CurrentStage._StartRotation);
 				}
 				Controller._Enemys = new();
-				foreach (DataManager.Stage.Spawn spawn in stage._Spawns)
+				foreach (DataManager.Stage.Spawn spawn in Controller._CurrentStage._Spawns)
 				{
 					Controller.SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
 				}

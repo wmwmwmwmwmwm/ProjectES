@@ -48,6 +48,8 @@ namespace Battle
 		public void RemoveEnemyHPUI(Enemy enemy)
 		{
 			UI_EnemyHP ui = enemy._HPUI;
+			if (!ui) return;
+
 			Destroy(ui.gameObject);
 			_EnemyHPUIs.Remove(ui);
 		}

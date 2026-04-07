@@ -89,6 +89,8 @@ namespace Battle
 		public void RemoveMinimapMarker(Character character)
 		{
 			UI_MinimapMarker marker = _MinimapMarkers.Find(x => x._Character == character);
+			if (!marker) return;
+
 			Destroy(marker.gameObject);
 			_MinimapMarkers.Remove(marker);
 		}

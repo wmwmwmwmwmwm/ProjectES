@@ -80,7 +80,7 @@ namespace Battle
 				}
 				else
 				{
-					Character target = hit.collider.GetComponent<Character>();
+					Character target = hit.collider.GetComponentInParent<Character>();
 					target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
 					_AlreadyTargets.Add(target.gameObject);
 					_DestroyTrigger = true;
@@ -107,7 +107,7 @@ namespace Battle
 				Collider col = _Bomb._HitResults[i];
 				if (_AlreadyTargets.Contains(col.gameObject)) continue;
 
-				Character target = col.GetComponent<Character>();
+				Character target = col.GetComponentInParent<Character>();
 				Vector3 direction = (target.transform.position - hitPoint).normalized;
 				target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, null, direction);
 				_AlreadyTargets.Add(target.gameObject);

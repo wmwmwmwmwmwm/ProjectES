@@ -29,7 +29,6 @@ namespace Battle
 		public void Init()
 		{
 			c = GetComponent<Character>();
-
 			c.Init();
 			c.EmitEffect(_JustGuardEffect, false);
 		}
@@ -76,11 +75,7 @@ namespace Battle
 		void Update()
 		{
 			// 카메라 위치
-			if (c.UseKCC)
-			{
-				float shoulderHeight = c.Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
-				_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, shoulderHeight, 5f * Time.deltaTime);
-			}
+			_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, GetShoulderHeight(), 5f * Time.deltaTime);
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;
@@ -95,8 +90,7 @@ namespace Battle
 				_LookRotation.y += 360f;
 			}
 			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
-			Controller._CameraTarget.SetPositionAndRotation(transform.position, Quaternion.Euler(_LookRotation));
-			c._AimDestRotation = Controller._CameraTarget.rotation;
+			c._AimDestRotation = Quaternion.Euler(_LookRotation);
 		}
 
 		void Move(CallbackContext obj)
@@ -169,6 +163,11 @@ namespace Battle
 		public bool IsJustGuard()
 		{
 			return _JustGuardCoroutine != null;
+		}
+
+		public float GetShoulderHeight()
+		{
+			return c.Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
 		}
 	}
 }

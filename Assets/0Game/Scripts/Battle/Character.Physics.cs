@@ -21,6 +21,8 @@ namespace Battle
 		[HideInInspector] public float _CurrentMoveAccel;
 		[HideInInspector] public Vector3 _CurrentMoveInputVector;
 
+		public const float WallJumpAngleThreshold = 60f;
+
 		public bool UseKCC => _KCC;
 
 		public KinematicCharacterMotor Motor => _KCC._Motor;
@@ -156,7 +158,7 @@ namespace Battle
 			}
 
 			// 착지
-			if (UseKCC && !Motor.LastGroundingStatus.IsStableOnGround)
+			if (UseKCC && !Motor.LastGroundingStatus.IsStableOnGround && Motor.GroundingStatus.IsStableOnGround)
 			{
 				_FSM.TrySetState(_Land);
 			}

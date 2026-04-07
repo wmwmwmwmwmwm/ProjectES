@@ -20,9 +20,10 @@ namespace Battle
 		float _LastDashTime;
 		Vector3 _DashDir;
 		[HideInInspector] public Vector3? _AttackJumpDirection;
+		ParticleSystem _DashWindEffect;
+		Coroutine _DashWindCoroutine;
 
 		const float MoveGraceDuration = 0.1f;
-		const float WallJumpAngleThreshold = 60f;
 
 		public BattleController Controller => BattleController.Instance;
 
@@ -30,12 +31,15 @@ namespace Battle
 		{
 			c = GetComponent<Character>();
 			_Motor = GetComponent<KinematicCharacterMotor>();
+			_DashWindEffect = transform.Find("DashWind").GetComponent<ParticleSystem>();
+
 			_LastRequestTime = Const.TimeDefault;
 			_LastCanJumpTime = Const.TimeDefault;
 			_LastDashTime = Const.TimeDefault;
 
 			_Motor.Init();
 			_Motor.CharacterController = this;
+			c.EmitEffect(_DashWindEffect, false);
 		}
 
 		public void BeforeCharacterUpdate(float deltaTime)
@@ -164,7 +168,7 @@ namespace Battle
 							// 각도 판정
 							Vector3 jumpDir = -direction;
 							float angle = Vector3.Angle(jumpDir, hit.normal);
-							if (angle < WallJumpAngleThreshold)
+							if (angle < Character.WallJumpAngleThreshold)
 							{
 								jump = true;
 								wallJump = true;
@@ -303,29 +307,29 @@ namespace Battle
 					MoveRequest.DashLeft => new Vector3(0f, 270f, 0f),
 					_ => new Vector3(0f, 90f, 0f),
 				};
-				EmitEffect(_DashWindEffect, true);
-				yield return new WaitUntil(() => !IsDashing() && !_IsRunning);
-				EmitEffect(_DashWindEffect, false);
+				c.EmitEffect(_DashWindEffect, true);
+				yield return new WaitUntil(() => !IsDashing() && !c._IsRunning);
+				c.EmitEffect(_DashWindEffect, false);
 				_DashWindCoroutine = null;
 			}
 		}
 
 		void DashCancel()
 		{
-			_LastDashTime = Time.time;
+			_LastDashTime = Const.TimeDefault;
 		}
 
 		public bool IsDashing()
 		{
-			return Time.time - _LastDashTime < _DashDuration;
+			return Time.time - _LastDashTime < c._DashDuration;
 		}
 
 		public void DashAttack()
 		{
-			_FadeOutDeaccelTimer = _DashDuration;
+			c._FadeOutDeaccelTimer = c._DashDuration;
 			_LastDashTime = Const.TimeDefault;
-			PlayAction(_DashAttack);
-			Attack();
+			c.PlayAction(c._DashAttack);
+			c.Attack();
 		}
 	}
 }

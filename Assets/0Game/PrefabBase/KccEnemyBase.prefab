@@ -116,8 +116,9 @@ GameObject:
   - component: {fileID: 6030086884996853404}
   - component: {fileID: 1175728339631246263}
   - component: {fileID: 4499653049896283527}
+  - component: {fileID: 7881598196341362748}
   m_Layer: 8
-  m_Name: EnemyBase
+  m_Name: KccEnemyBase
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -157,8 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HPSliderPosition: {fileID: 4255991526585487192}
   c: {fileID: 0}
-  _HPSlider: {fileID: 0}
-  _HPSlider_Inner: {fileID: 0}
+  _HPUI: {fileID: 0}
   _SummonParticlePrefab: {fileID: 0}
   _SummonEnemyName: 
   _SummonArea: {fileID: 0}
@@ -187,23 +187,31 @@ MonoBehaviour:
     type: 3}
   _GuardEffectPrefab: {fileID: 7044691720042714530, guid: 4ae4626d313c118458f6ca3213dc57d8,
     type: 3}
-  _DashWindEffect: {fileID: 6341984717765979052}
   _FeetSmokeLeftEffect: {fileID: 2595316164099752549}
   _FeetSmokeRightEffect: {fileID: 5126030600978917656}
   _WhiteMaterial: {fileID: 2100000, guid: ea2e2f8c68b8fd841b670bd08640b555, type: 2}
   _AttackIndex: 0
   _NextAttackAvailable: 0
   _NextAttackInput: 0
+  _AttackMovePercent: 0
+  _HitStunTimer: 0
+  _HitStunPrevVelocity: {x: 0, y: 0, z: 0}
+  _IsRunning: 0
   _LastSkill1Time: 0
   _LastSkill2Time: 0
   _LastUltimateTime: 0
   _AlreadyWallJump: 0
-  _Motor: {fileID: 1175728339631246263}
+  _AimDestRotation: {x: 0, y: 0, z: 0, w: 0}
   _MoveInput: {x: 0, y: 0, z: 0}
+  _StopYTrigger: 0
+  _FadeInDeaccelTimer: 0
+  _FadeOutDeaccelTimer: 0
   _RootMotionPosDelta: {x: 0, y: 0, z: 0}
   _RootMotionRotDelta: {x: 0, y: 0, z: 0, w: 0}
-  _AimDestRotation: {x: 0, y: 0, z: 0, w: 0}
-  _StopYTrigger: 0
+  _Impulse: {x: 0, y: 0, z: 0}
+  _CurrentMoveSpeed: 0
+  _CurrentMoveAccel: 0
+  _CurrentMoveInputVector: {x: 0, y: 0, z: 0}
   _HP: 11
   _UpperBodyMask: {fileID: 31900000, guid: 11e7c8061d3c9c64fa71e7eaf99c0141, type: 2}
   _AttackMoveCurve:
@@ -383,6 +391,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &7881598196341362748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4014474705152691691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0729655593bf1914a807ff0f73f8c50c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Motor: {fileID: 0}
 --- !u!1 &4957284490781775540
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,12 +583,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4e19bb6e8c7ecf4bbe1e868de38cb83, type: 3}
---- !u!198 &6341984717765979052 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7451747117483921616, guid: b4e19bb6e8c7ecf4bbe1e868de38cb83,
-    type: 3}
-  m_PrefabInstance: {fileID: 4569656062597020540}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6543807143960602198 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7330426529293360426, guid: b4e19bb6e8c7ecf4bbe1e868de38cb83,

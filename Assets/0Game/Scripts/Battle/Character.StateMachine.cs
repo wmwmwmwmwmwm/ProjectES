@@ -76,7 +76,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _IdleAsset,
-				_Priority = -2,
+				_Priority = -12,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
 				_CanDash = true,
@@ -89,7 +89,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _MoveAsset,
-				_Priority = -2,
+				_Priority = -12,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
 				_CanDash = true,
@@ -102,7 +102,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _RunAsset,
-				_Priority = -2,
+				_Priority = -12,
 				_MoveSpeed = 2f,
 				_Duration = -1f,
 				_CanJump = true,
@@ -125,7 +125,7 @@ namespace Battle
 			{
 				c = this,
 				_MoveSpeed = 1f,
-				_Priority = -2,
+				_Priority = -12,
 				_Restart = true,
 				_CanDash = true,
 				_CanJump = true,
@@ -137,7 +137,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAsset,
-				_Priority = -2,
+				_Priority = -11,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
 				_CanDash = true,
@@ -150,7 +150,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _LandAsset,
-				_Priority = -1,
+				//_Priority = -10,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -160,7 +160,7 @@ namespace Battle
 			_Damage = new()
 			{
 				c = this,
-				_Priority = 1,
+				_Priority = 10,
 				_Restart = true,
 				_MoveSpeed = 0.6f,
 			};
@@ -169,7 +169,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _GetDownAsset,
-				_Priority = 2,
+				_Priority = 11,
 				_Duration = float.MaxValue,
 			};
 			_GetDown.Init();
@@ -177,14 +177,14 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _GetUpAsset,
-				_Priority = 2,
+				_Priority = 11,
 			};
 			_GetUp.Init();
 			_Die = new()
 			{
 				c = this,
 				_Asset = _DieAsset,
-				_Priority = 3,
+				_Priority = 12,
 				_Duration = float.MaxValue,
 			};
 			_Die.Init();
@@ -223,6 +223,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _DashAttackAsset,
+				_Priority = 1,
 				_MoveSpeed = 1f,
 				_Restart = true,
 				_LimitRotate = true,
