@@ -54,7 +54,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8964837433229272773, guid: ed500436f4d54c28859011744eb5a7bd, type: 3}
---- !u!1001 &6303954395932958174
+--- !u!1001 &627251541423393088
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -62,108 +62,71 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 766038600535688647}
     m_Modifications:
-    - target: {fileID: 4981765559377172757, guid: 9684940c8ab647b38114cd37ba73d549,
-        type: 3}
-      propertyPath: m_Name
-      value: BoulderSnow_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7410174869349632409, guid: 9684940c8ab647b38114cd37ba73d549,
+    - target: {fileID: 1939535806480813451, guid: 184db4c762f67b84fae9771a5dbce13b,
         type: 3}
-      propertyPath: m_Layer
-      value: 0
+      propertyPath: m_Name
+      value: BoulderSnow_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4981765559377172757, guid: 9684940c8ab647b38114cd37ba73d549,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4281480054508599664}
-  m_SourcePrefab: {fileID: 100100000, guid: 9684940c8ab647b38114cd37ba73d549, type: 3}
---- !u!1 &1323755367094224075 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4981765559377172757, guid: 9684940c8ab647b38114cd37ba73d549,
-    type: 3}
-  m_PrefabInstance: {fileID: 6303954395932958174}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &4281480054508599664
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1323755367094224075}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 184db4c762f67b84fae9771a5dbce13b, type: 3}
 --- !u!4 &1807417701113224817 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5650075576346854319, guid: 9684940c8ab647b38114cd37ba73d549,
+  m_CorrespondingSourceObject: {fileID: 1270381398397605681, guid: 184db4c762f67b84fae9771a5dbce13b,
     type: 3}
-  m_PrefabInstance: {fileID: 6303954395932958174}
+  m_PrefabInstance: {fileID: 627251541423393088}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8587760972388964771
 PrefabInstance:

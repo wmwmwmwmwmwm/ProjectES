@@ -114,7 +114,7 @@ Shader "Universal Render Pipeline/Toon" {
         _Set_HighColorMask ("Set_HighColorMask", 2D) = "white" {}
         _Tweak_HighColorMaskLevel ("Tweak_HighColorMaskLevel", Range(-1, 1)) = 0
         [Toggle(_)] _RimLight ("RimLight", Float ) = 0
-        _RimLightColor ("RimLightColor", Color) = (1,1,1,1)
+        [HDR]_RimLightColor ("RimLightColor", Color) = (1,1,1,1)
         [Toggle(_)] _Is_LightColor_RimLight ("Is_LightColor_RimLight", Float ) = 1
         [Toggle(_)] _Is_NormalMapToRimLight ("Is_NormalMapToRimLight", Float ) = 0
         _RimLight_Power ("RimLight_Power", Range(0, 1)) = 0.1

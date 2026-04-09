@@ -28,8 +28,6 @@ namespace Battle
 
 		public void Init()
 		{
-			bool isTest = Game._StartScene == SceneName.Glacier;
-
 			_Players = new();
 			_Enemys = new();
 			_EnemyHPUIs = new();
@@ -37,11 +35,12 @@ namespace Battle
 			_BgNear = GameObject.Find("Bg/Near").transform;
 			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
 			GameObject.Find("StartPosition").SetActive(false);
+			GameObject.Find("EditorCamera").SetActive(false);
 			InitMinimap();
 			InitUI();
 
 			// 배치
-			if (isTest) return;
+			if (IsTestMode()) return;
 			foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
 			{
 				Destroy(enemy.gameObject);
@@ -135,6 +134,32 @@ namespace Battle
 				vibrato: 1000);
 		}
 
+		public void SpawnPlayer(string name, Vector3 pos, Quaternion rot)
+		{
+			Character c = Data.GetBattleCharacter(name);
+			Player player = Instantiate(c).GetComponent<Player>();
+			player.Init();
+			player.c.SetPositionAndRotation(pos, rot);
+			player.gameObject.SetActive(false);
+			AddPlayerHPUI(player);
+			AddMinimapMarker(player.c, true);
+			player.Init2();
+			_Players.Add(player);
+		}
+
+		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot)
+		{
+			Character c = Data.GetBattleCharacter(name);
+			Enemy enemy = Instantiate(c).GetComponent<Enemy>();
+			enemy.Init();
+			enemy.c.SetPositionAndRotation(pos, rot);
+			enemy.GetComponent<NavMeshAgent>().enabled = true;
+			AddEnemyHPUI(enemy);
+			AddMinimapMarker(enemy.c, false);
+			enemy.Init2();
+			_Enemys.Add(enemy);
+		}
+
 		public GameObject _AttackAreaDecalPrefab;
 		public void ShowAttackAreaDecal(Vector3 position, Quaternion rotation, float duration)
 		{
@@ -162,30 +187,11 @@ namespace Battle
 			}
 		}
 
-		public void SpawnPlayer(string name, Vector3 pos, Quaternion rot)
+		public bool IsTestMode()
 		{
-			Character c = Data.GetBattleCharacter(name);
-			Player player = Instantiate(c).GetComponent<Player>();
-			player.Init();
-			player.c.SetPositionAndRotation(pos, rot);
-			player.gameObject.SetActive(false);
-			AddPlayerHPUI(player);
-			AddMinimapMarker(player.c, true);
-			player.Init2();
-			_Players.Add(player);
-		}
-
-		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot)
-		{
-			Character c = Data.GetBattleCharacter(name);
-			Enemy enemy = Instantiate(c).GetComponent<Enemy>();
-			enemy.Init();
-			enemy.c.SetPositionAndRotation(pos, rot);
-			enemy.GetComponent<NavMeshAgent>().enabled = true;
-			AddEnemyHPUI(enemy);
-			AddMinimapMarker(enemy.c, false);
-			enemy.Init2();
-			_Enemys.Add(enemy);
+			bool test = Game._StartScene == SceneName.Glacier;
+			test |= Game._StartScene == "Glacier_Demo";
+			return test;
 		}
 	}
 }

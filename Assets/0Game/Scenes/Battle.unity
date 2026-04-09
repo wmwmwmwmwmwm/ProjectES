@@ -2092,7 +2092,7 @@ MonoBehaviour:
     Enabled: 1
     CollisionFilter:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 320
     IgnoreTag: 
     CameraRadius: 0.001
     DampingIntoCollision: 0
@@ -4772,8 +4772,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _ActivePlayer: {fileID: 0}
-  _PlayerPrefabs: []
-  _EnemyPrefabs: []
+  _CurrentStage:
+    _Name: 
+    _StartPosition: {x: 0, y: 0, z: 0}
+    _StartRotation: {x: 0, y: 0, z: 0, w: 0}
+    _Spawns: []
   _AttackAreaDecalPrefab: {fileID: 0}
   _MinimapCameraHandle: {fileID: 828885687}
   _MinimapCamera: {fileID: 131262234}

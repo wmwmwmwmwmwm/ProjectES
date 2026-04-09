@@ -5,15 +5,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using static SingletonManager;
+using UnityEngine.SceneManagement;
 
 namespace Battle
 { 
 	public class StageEditor : MonoBehaviour
 	{
+		[BoxGroup("설정")] public List<Player> _PlayerPrefabs;
 		[BoxGroup("설정")] public string _StageName;
-
 		public Transform _StartPosition;
 		public DataManager _DataManagerPrefab;
+
+		BattleController Controller => BattleController.Instance;
+
+		void Start()
+		{
+			StartCoroutine(Internal());
+			IEnumerator Internal()
+			{
+				foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+				{
+					Destroy(enemy.gameObject);
+				}
+				SceneManager.LoadScene(SceneName.Battle, LoadSceneMode.Additive);
+				Scene battleScene = SceneManager.GetSceneByName(SceneName.Battle);
+				yield return new WaitUntil(() => battleScene.isLoaded);
+
+				yield return new WaitUntil(() => Controller);
+				if (!Controller.IsTestMode()) yield break;
+
+				Controller.Init();
+				Controller._CurrentStage = Data.GetStageData(_StageName);
+				Controller._Players = new();
+				foreach (Player prefab in _PlayerPrefabs)
+				{
+					Controller.SpawnPlayer(prefab.GetComponent<Character>()._Name, Controller._CurrentStage._StartPosition, Controller._CurrentStage._StartRotation);
+				}
+				Controller._Enemys = new();
+				foreach (DataManager.Stage.Spawn spawn in Controller._CurrentStage._Spawns)
+				{
+					Controller.SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
+				}
+				Controller.Init2();
+			}
+		}
 
 		[Button("저장")]
 		public void SaveButton()
