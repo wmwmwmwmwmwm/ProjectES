@@ -34,8 +34,8 @@ namespace Battle
 		[ShowIf("_ShowAll")] public Material _WhiteMaterial;
 
 		GameObject _Model;
-		Player _Player;
-		Enemy _Enemy;
+		[HideInInspector] public Player _Player;
+		[HideInInspector] public Enemy _Enemy;
 		[HideInInspector] public RaycastHit[] _RaycastResults;
 		[HideInInspector] public int _AttackIndex;
 		[HideInInspector] public bool _NextAttackAvailable;
@@ -43,6 +43,7 @@ namespace Battle
 		[HideInInspector] public float _AttackMovePercent;
 		float _GuardUpTime, _GuardDownTime;
 		[HideInInspector] public float _HitStunTimer;
+		[HideInInspector] public State _HitStunPrevState;
 		[HideInInspector] public Vector3 _HitStunPrevVelocity;
 		[HideInInspector] public bool _IsRunning;
 		Coroutine _FeetSmokeCoroutine;
@@ -547,8 +548,9 @@ namespace Battle
 				yield return new WaitForSeconds(delay);
 
 				// 경직
-				AddHitStunTimer(attackHit._AttackerHitStunDuration);
-				attacker.AddHitStunTimer(attackHit._AttackerHitStunDuration);
+				AddHitStunTimer(attackHit._AttackerHitStunDuration, _FSM.CurrentState);
+				attacker.AddHitStunTimer(attackHit._AttackerHitStunDuration, attacker._FSM.CurrentState);
+				yield return new WaitForSeconds(attackHit._AttackerHitStunDuration);
 
 				// 가드 판정
 				float damage = attackHit._Damage;
@@ -740,13 +742,14 @@ namespace Battle
 
 		public bool IsHitStun()
 		{
-			return _HitStunTimer > 0f;
+			return _HitStunTimer > 0f && _HitStunPrevState == _FSM.CurrentState;
 		}
 
-		public void AddHitStunTimer(float t)
+		public void AddHitStunTimer(float t, State prevState)
 		{
-			if (_HitStunTimer < 0f)
+			if (_HitStunTimer <= 0f)
 			{
+				_HitStunPrevState = prevState;
 				_HitStunPrevVelocity = UseKCC ? Motor.Velocity : Vector3.zero;
 			}
 			_HitStunTimer += t;

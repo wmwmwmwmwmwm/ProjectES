@@ -17,7 +17,7 @@ namespace Battle
 		public RawImage _MinimapImage;
 		public RenderTexture _MinimapRT;
 		public UI_MinimapMarker _MinimapMarker_Player, _MinimapMarker_Enemy;
-		public Transform _MinimapMarkerParent;
+		public Transform _MinimapMarkerParent_Player, _MinimapMarkerParent_Enemy;
 		public AnimationCurve _MinimapSightCurve;
 
 		int _SightRange;
@@ -80,7 +80,8 @@ namespace Battle
 		void AddMinimapMarker(Character character, bool isPlayer)
 		{
 			UI_MinimapMarker prefab = isPlayer ? _MinimapMarker_Player : _MinimapMarker_Enemy;
-			UI_MinimapMarker marker = Instantiate(prefab, _MinimapMarkerParent);
+			Transform parent = isPlayer ? _MinimapMarkerParent_Player : _MinimapMarkerParent_Enemy;
+			UI_MinimapMarker marker = Instantiate(prefab, parent);
 			marker._Character = character;
 			marker.gameObject.SetActive(true);
 			_MinimapMarkers.Add(marker);
@@ -116,6 +117,12 @@ namespace Battle
 				marker.GetComponent<RectTransform>().anchoredPosition = new Vector2(
 					(viewportPos.x - 0.5f) * minimapRect.width,
 					(viewportPos.y - 0.5f) * minimapRect.height);
+
+				// 회전
+				if (marker._Character._Player)
+				{
+					marker.transform.localEulerAngles = new(0f, 0f, -marker._Character.transform.eulerAngles.y);
+				}
 			}
 
 			// 미니맵 밝히기

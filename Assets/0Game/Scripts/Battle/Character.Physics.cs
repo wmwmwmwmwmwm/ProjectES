@@ -64,6 +64,10 @@ namespace Battle
 				}
 				return;
 			}
+			else
+			{
+				_HitStunTimer = 0f;
+			}
 
 			// 착지 시 속도 별도 처리
 			State state = _FSM.CurrentState;

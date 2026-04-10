@@ -186,8 +186,8 @@ MonoBehaviour:
       _Position: {x: 405.1, y: 0, z: 583.6}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
   - _Name: Test
-    _StartPosition: {x: -0.282341, y: 51.317345, z: 288.98706}
-    _StartRotation: {x: -0, y: -0.84181863, z: -0, w: -0.5397605}
+    _StartPosition: {x: -205.94858, y: 126.34961, z: 294.19278}
+    _StartRotation: {x: -0, y: -0.6565693, z: -0, w: 0.7542658}
     _Spawns: []
   _Characters:
   - _Name: Astar
