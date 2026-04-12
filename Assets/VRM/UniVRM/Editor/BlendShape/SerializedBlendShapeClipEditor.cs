@@ -227,12 +227,11 @@ namespace VRM
         List<bool> m_meshFolds = new List<bool>();
         bool BlendShapeBindsGUI()
         {
-            bool changed = false;
+			bool changed = false;
             int foldIndex = 0;
             // すべてのSkinnedMeshRendererを列挙する
             foreach (var renderer in m_items.Select(x => x.SkinnedMeshRenderer))
             {
-				Debug.Log(renderer.name);
 				if (renderer == null)
 				{
                     continue;
