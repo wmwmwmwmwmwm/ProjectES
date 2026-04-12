@@ -106,7 +106,7 @@ namespace VRM
                 .Where(x => x != null)
                 .ToArray()
                 ;
-            MaterialNames = materialNames.ToArray();
+			MaterialNames = materialNames.ToArray();
 
             m_blendShapeMeshes = m_meshes
                 .Where(x => x.SkinnedMeshRenderer != null

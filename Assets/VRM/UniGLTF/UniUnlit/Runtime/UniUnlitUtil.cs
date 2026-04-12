@@ -91,8 +91,11 @@ namespace UniGLTF.UniUnlit
         {
             SetupBlendMode(material, (UniUnlitRenderMode)material.GetFloat(PropNameBlendMode),
                 isRenderModeChangedByUser);
-            SetupVertexColorBlendOp(material, (UniUnlitVertexColorBlendOp)material.GetFloat(PropNameVColBlendMode));
-        }
+			if (material.HasFloat(PropNameVColBlendMode))
+			{
+				SetupVertexColorBlendOp(material, (UniUnlitVertexColorBlendOp)material.GetFloat(PropNameVColBlendMode));
+			}
+		}
 
         private static void SetupBlendMode(Material material, UniUnlitRenderMode renderMode,
             bool isRenderModeChangedByUser = false)

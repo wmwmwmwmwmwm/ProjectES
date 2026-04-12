@@ -198,9 +198,9 @@ namespace VRM
             }
             else if (t.TryGetComponent<SkinnedMeshRenderer>(out var skinnedMeshRenderer))
             {
-                // copy
-                skinnedMeshRenderer.sharedMaterials = skinnedMeshRenderer.sharedMaterials.Select(x => getOrCreateMaterial(x)).ToArray();
-                if (skinnedMeshRenderer.sharedMesh.blendShapeCount > 0)
+				// copy
+				skinnedMeshRenderer.sharedMaterials = skinnedMeshRenderer.sharedMaterials.Select(x => getOrCreateMaterial(x)).ToArray();
+				if (skinnedMeshRenderer.sharedMesh.blendShapeCount > 0)
                 {
                     // bake required
                     var sharedMesh = skinnedMeshRenderer.sharedMesh;

@@ -64,9 +64,9 @@ public static partial class Util
         UnityEditor.EditorApplication.isPaused = true;
 	}
 
-	public static string ToAssetPath(string path)
+	public static string ToAssetPath(string fullPath)
 	{
-        string path2 = Path.GetRelativePath(Application.dataPath, path);
+        string path2 = Path.GetRelativePath(Application.dataPath, fullPath);
 		return $"Assets/{path2}";
 	}
 

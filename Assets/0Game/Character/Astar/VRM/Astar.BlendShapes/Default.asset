@@ -9,8 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 329dca3bf78fcdd42b2df941673db76f, type: 3}
-  m_Name: BlendShape
+  m_Script: {fileID: 11500000, guid: 37562b39ff933b245ac2f35d87edbcd6, type: 3}
+  m_Name: Default
   m_EditorClassIdentifier: 
-  Clips:
-  - {fileID: 11400000, guid: 86da10de8a554794ebcbb0ff20c88376, type: 2}
+  m_prefab: {fileID: 4200811935537974353, guid: c51a0b53cd980134b93a2a84a35f0b33,
+    type: 3}
+  BlendShapeName: Default
+  Preset: 0
+  Values: []
+  MaterialValues: []
+  IsBinary: 0

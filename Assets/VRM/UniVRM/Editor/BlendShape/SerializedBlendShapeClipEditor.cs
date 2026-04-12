@@ -137,7 +137,8 @@ namespace VRM
             EditorGUILayout.Space();
             //m_mode = EditorGUILayout.Popup("SourceType", m_mode, MODES);
             m_mode = GUILayout.Toolbar(m_mode, MODES);
-            switch (m_mode)
+
+			switch (m_mode)
             {
                 case 0:
                     {
@@ -231,25 +232,26 @@ namespace VRM
             // すべてのSkinnedMeshRendererを列挙する
             foreach (var renderer in m_items.Select(x => x.SkinnedMeshRenderer))
             {
-                if (renderer == null)
-                {
+				Debug.Log(renderer.name);
+				if (renderer == null)
+				{
                     continue;
                 }
                 var mesh = renderer.sharedMesh;
                 if (mesh != null && mesh.blendShapeCount > 0)
                 {
-                    //var relativePath = UniGLTF.UnityExtensions.RelativePathFrom(renderer.transform, m_target.transform);
-                    //EditorGUILayout.LabelField(m_target.name + "/" + item.Path);
+					//var relativePath = UniGLTF.UnityExtensions.RelativePathFrom(renderer.transform, m_target.transform);
+					//EditorGUILayout.LabelField(m_target.name + "/" + item.Path);
 
-                    if (foldIndex >= m_meshFolds.Count)
+					if (foldIndex >= m_meshFolds.Count)
                     {
                         m_meshFolds.Add(false);
                     }
                     m_meshFolds[foldIndex] = EditorGUILayout.Foldout(m_meshFolds[foldIndex], renderer.name);
                     if (m_meshFolds[foldIndex])
                     {
-                        //EditorGUI.indentLevel += 1;
-                        for (int i = 0; i < mesh.blendShapeCount; ++i)
+						//EditorGUI.indentLevel += 1;
+						for (int i = 0; i < mesh.blendShapeCount; ++i)
                         {
                             var src = renderer.GetBlendShapeWeight(i);
                             var dst = EditorGUILayout.Slider(mesh.GetBlendShapeName(i), src, 0, 100.0f);
@@ -264,7 +266,7 @@ namespace VRM
                     ++foldIndex;
                 }
             }
-            return changed;
+			return changed;
         }
 
         BlendShapeBinding[] GetBindings(out string _maxWeightName)
@@ -301,7 +303,7 @@ namespace VRM
                             RelativePath = relativePath,
                             Weight = weight
                         });
-                    }
+					}
                 }
                 return list;
             }).ToArray()

@@ -75,7 +75,7 @@ ModelImporter:
       name: N00_010_01_Onepiece_00_CLOTH__Instance_
     second: {instanceID: 0}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 1
     materialSearch: 0
     materialLocation: 1
