@@ -117,7 +117,7 @@ namespace Battle
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2f)
 			{
-				c.NormalAttack(default);
+				c.Skill1(default);
 				_LastAttackTime = Time.time;
 			}
 		}

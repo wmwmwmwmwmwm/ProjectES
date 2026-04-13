@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Battle.BattleAttack;
 using static SingletonManager;
 
 namespace Battle
@@ -143,7 +144,7 @@ namespace Battle
 				};
 
 				// 전후 이동으로 강도 조정
-				if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._Attack._SkillType <= AttackSkillType.Special)
+				if (_FSM.CurrentState.IsAttack && _FSM.CurrentState._Attack._SkillType <= SkillType.Special)
 				{
 					velocityXZ *= _MoveInput.z + 1f;
 				}

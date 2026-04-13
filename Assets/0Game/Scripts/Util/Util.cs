@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -73,6 +74,19 @@ public static partial class Util
 	public static void SetDirty(Object obj)
 	{
 		UnityEditor.EditorUtility.SetDirty(obj);
+	}
+
+	public static TDest CopyByName<TSource, TDest>(TSource source)
+	{
+		BindingFlags flag = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+		TDest obj = Activator.CreateInstance<TDest>();
+		FieldInfo[] fieldInfos = source.GetType().GetFields(flag);
+		foreach (FieldInfo fieldInfo in fieldInfos)
+		{
+			FieldInfo destFieldInfo = obj.GetType().GetField(fieldInfo.Name, flag);
+			destFieldInfo.SetValue(obj, fieldInfo.GetValue(source));
+		}
+		return obj;
 	}
 #endif
 }

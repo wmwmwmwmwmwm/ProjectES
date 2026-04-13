@@ -8,12 +8,16 @@ namespace Battle
 {
 	public class BattleAttack : MonoBehaviour
 	{
+		public enum SkillType { Normal, Special, Skill };
+		public enum RangeType { Melee, Range };
+		public enum AreaType { Single, Area };
+
 		public TransitionAsset _Transition;
 
 		public float _Cooltime;
-		public AttackSkillType _SkillType;
-		public AttackRangeType _RangeType;
-		public AttackAreaType _AreaType;
+		public SkillType _SkillType;
+		public RangeType _RangeType;
+		public AreaType _AreaType;
 
 		[HideInInspector] public Character _Owner;
 		[HideInInspector] public State _StateInfo;

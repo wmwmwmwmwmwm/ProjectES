@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Battle.BattleAttack;
+
 //using VRM;
 using static DataManager;
 using static SingletonManager;
@@ -52,6 +54,8 @@ namespace Battle
 		[HideInInspector] public Quaternion _AimDestRotation;
 		[HideInInspector] public Vector3 _MoveInput;
 		[HideInInspector] public bool _StopYTrigger;
+		[HideInInspector] public EffectContainer _EffectContainer;
+		[HideInInspector] public AttackContainer _AttackContainer;
 
 		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center
@@ -110,6 +114,11 @@ namespace Battle
 			_KCC_Rigidbody = GetComponent<CharacterController_Rigidbody>();
 			_Player = GetComponent<Player>();
 			_Enemy = GetComponent<Enemy>();
+			_EffectContainer = GetComponent<EffectContainer>();
+			_EffectContainer.Init();
+			_AttackContainer = GetComponent<AttackContainer>();
+			_AttackContainer.Init();
+
 			_RaycastResults = new RaycastHit[10];
 			_RootMotionPosDelta = Vector3.zero;
 			_RootMotionRotDelta = Quaternion.identity;
@@ -188,7 +197,7 @@ namespace Battle
 			canAttack &= !IsGuarding();
 			if (_FSM.CurrentState.IsAttack)
 			{
-				canAttack &= _FSM.CurrentState._Attack._SkillType <= AttackSkillType.Normal;
+				canAttack &= _FSM.CurrentState._Attack._SkillType <= SkillType.Normal;
 			}
 			if (!canAttack) return;
 
@@ -276,7 +285,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._Attack._SkillType < SkillType.Skill)
 				{
 					Play_Canceling(_Skill1, true);
 				}
@@ -305,7 +314,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._Attack._SkillType < SkillType.Skill)
 				{
 					Play_Canceling(_Skill2, true);
 				}
@@ -334,7 +343,7 @@ namespace Battle
 
 			if (_FSM.CurrentState.IsAttack)
 			{
-				if (_FSM.CurrentState._Attack._SkillType < AttackSkillType.Skill)
+				if (_FSM.CurrentState._Attack._SkillType < SkillType.Skill)
 				{
 					Play_Canceling(_Ultimate, true);
 				}
@@ -360,7 +369,7 @@ namespace Battle
 					Play_Canceling(_Idle, false);
 				}
 				_UpperBodyLayer.SetWeight(1f);
-				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
+				AnimancerState state = _UpperBodyLayer.Play(_Anims_Player._GuardUpAsset);
 				state.Time = 0f;
 				_GuardUpTime = Time.time;
 			}
@@ -368,7 +377,7 @@ namespace Battle
 			// 가드 해제
 			if (!Inputs.Guard.IsPressed() && IsGuarding())
 			{
-				AnimancerState state = _UpperBodyLayer.Play(_GuardDownAsset);
+				AnimancerState state = _UpperBodyLayer.Play(_Anims_Player._GuardDownAsset);
 				state.Events(this).OnEnd ??= GuardCancel;
 				_GuardDownTime = Time.time;
 			}
@@ -378,10 +387,10 @@ namespace Battle
 		{
 			switch (_FSM.CurrentState._Attack._RangeType)
 			{
-				case AttackRangeType.Melee:
+				case RangeType.Melee:
 					MeleeAttack();
 					break;
-				case AttackRangeType.Range:
+				case RangeType.Range:
 					FireMissile();
 					break;
 			}
@@ -426,7 +435,7 @@ namespace Battle
 								layerMask: Layer.TerrainLayerMask);
 						hits = _RaycastResults.ArrayToList(raycastCount);
 						nearest = hits.MinBy(x => x.distance);
-						if (raycastCount > 0 && attackData._SkillType == AttackSkillType.Normal)
+						if (raycastCount > 0 && attackData._SkillType == SkillType.Normal)
 						{
 							float angle = Vector3.Angle(Motor.CharacterForward, -nearest.normal);
 							bool jump = UseKCC;
@@ -554,8 +563,7 @@ namespace Battle
 
 				// 가드 판정
 				float damage = attackHit._Damage;
-				bool guard = _Player;
-				guard &= IsGuardingEffective();
+				bool guard = IsGuardingEffective();
 				float angle = Vector3.Angle(transform.forward, new(-attackDirection.x, 0f, -attackDirection.z));
 				guard &= angle < 90f;
 				if (guard)
@@ -563,7 +571,7 @@ namespace Battle
 					// 저스트 가드
 					bool justGuard = Time.time - _GuardUpTime < 0.3f;
 					justGuard &= Inputs.Guard.IsPressed();
-					justGuard &= attack._RangeType == AttackRangeType.Melee;
+					justGuard &= attack._RangeType == RangeType.Melee;
 					justGuard &= _Player;
 					if (justGuard)
 					{
@@ -574,7 +582,7 @@ namespace Battle
 					else
 					{
 						_FadeInDeaccelTimer = 0.6f;
-						damage *= attack._AreaType == AttackAreaType.Single ? 0f : 0.5f;
+						damage *= attack._AreaType == AreaType.Single ? 0f : 0.5f;
 					}
 
 					// 이펙트
@@ -587,7 +595,7 @@ namespace Battle
 					{
 						_Damage._Duration = attackHit._DamageDuration;
 						_FadeInDeaccelTimer = attackHit._DamageDuration;
-						_Damage.SetAsset(_DamageAssets.PickOne());
+						_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
 						PlayAction(_Damage);
 					}
 					// 밀어내기
@@ -596,7 +604,7 @@ namespace Battle
 						_Impulse = new(0f, 0f, attackHit._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
 						_FadeOutDeaccelTimer = attackHit._DamageDuration;
-						_Damage.SetAsset(_DamageAssets.PickOne());
+						_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
 						PlayAction(_Damage);
 						FeetSmoke(attackHit._DamageDuration);
 					}
@@ -730,8 +738,10 @@ namespace Battle
 
 		bool IsGuardingEffective()
 		{
+			if (!_Player) return false;
+
 			bool guard = _UpperBodyLayer.Weight > 0f;
-			AnimancerState guardDownState = _UpperBodyLayer.GetOrCreateState(_GuardDownAsset.Transition);
+			AnimancerState guardDownState = _UpperBodyLayer.GetOrCreateState(_Anims_Player._GuardDownAsset.Transition);
 			guard &= _UpperBodyLayer.CurrentState != guardDownState;
 
 			// 가드 해제 그레이스 타임

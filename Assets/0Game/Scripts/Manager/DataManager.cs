@@ -9,20 +9,6 @@ using UnityEngine;
 public class DataManager : Singleton<DataManager>
 {
 	[Serializable]
-	public class Effect
-	{
-		public TransitionAsset _Transition;
-		public GameObject _EffectPrefab;
-		//public AssetReferenceT<GameObject> _Prefab;
-		public Vector3 _Pos;
-		public Vector3 _Rot;
-		public float _Scale;
-		public float _Delay;
-		public bool _IsLocal;
-	}
-	public List<Effect> _Effects;
-
-	[Serializable]
 	public class Stage
 	{
 		public string _Name;
@@ -66,19 +52,14 @@ public class DataManager : Singleton<DataManager>
 	}
 	public List<Character> _Characters;
 
-	public List<Battle.BattleAttack> _BattleAttacks;
 	public List<Battle.Character> _BattleCharacters;
 
-	public Dictionary<TransitionAsset, List<Effect>> _EffectDict;
-	public Dictionary<TransitionAsset, Battle.BattleAttack> _AttackDict;
 	public Dictionary<string, Stage> _StageDict;
 	public Dictionary<string, Battle.Character> _BattleCharacterDict;
 	public Dictionary<string, Character> _CharacterDict;
 
 	protected override void Init()
 	{
-		_EffectDict = _Effects.GroupBy(x => x._Transition).ToDictionary(a => a.Key, b => b.ToList());
-		_AttackDict = _BattleAttacks.ToDictionary(a => a._Transition, b => b);
 		_StageDict = _Stages.ToDictionary(a => a._Name, b => b);
 		_BattleCharacterDict = _BattleCharacters.ToDictionary(a => a._Name, b => b);
 		_CharacterDict = _Characters.ToDictionary(a => a._Name, b => b);
@@ -86,20 +67,6 @@ public class DataManager : Singleton<DataManager>
 		{
 			c._FacialDict = c._Facials.ToDictionary(a => a._Name, b => b);
 		}
-	}
-
-	public List<Effect> GetEffectDatas(TransitionAsset transition)
-	{
-		if (!transition) return null;
-		_EffectDict.TryGetValue(transition, out List<Effect> datas);
-		return datas;
-	}
-
-	public Battle.BattleAttack GetAttack(TransitionAsset transition)
-	{
-		if (!transition) return null;
-		_AttackDict.TryGetValue(transition, out Battle.BattleAttack data);
-		return data;
 	}
 
 	public Stage GetStageData(string name)
@@ -120,7 +87,7 @@ public class DataManager : Singleton<DataManager>
 		return character;
 	}
 
-	public void SetupEffectPosition(GameObject instance, Effect info, Transform parent)
+	public void SetupEffectPosition(GameObject instance, Battle.Character.Effect info, Transform parent)
 	{
 		instance.transform.SetParent(parent);
 		instance.transform.SetLocalPositionAndRotation(info._Pos, Quaternion.Euler(info._Rot));
