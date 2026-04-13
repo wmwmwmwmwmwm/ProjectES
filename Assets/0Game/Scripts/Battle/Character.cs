@@ -385,6 +385,12 @@ namespace Battle
 
 		public void Attack()
 		{
+			if (!_FSM.CurrentState._Attack)
+			{
+				Debug.LogError($"{gameObject.name} {_FSM.CurrentState} 공격 설정 없음");
+				return;
+			}
+
 			switch (_FSM.CurrentState._Attack._RangeType)
 			{
 				case RangeType.Melee:

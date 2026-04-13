@@ -22,13 +22,42 @@ PrefabInstance:
     - target: {fileID: 4014474705152691691, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: m_Name
-      value: Golem Variant
+      value: Golem
       objectReference: {fileID: 0}
     - target: {fileID: 4014474705152691691, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8545966420438610542, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _Attacks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8545966420438610542, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _Attacks.Array.data[0]._Key
+      value: 
+      objectReference: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860,
+        type: 2}
+    - target: {fileID: 8545966420438610542, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _Attacks.Array.data[1]._Key
+      value: 
+      objectReference: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860,
+        type: 2}
+    - target: {fileID: 8545966420438610542, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _Attacks.Array.data[0]._Attack
+      value: 
+      objectReference: {fileID: 4876108296161517383, guid: 4db5e8a8def4c2c468f78c565108d899,
+        type: 3}
+    - target: {fileID: 8545966420438610542, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _Attacks.Array.data[1]._Attack
+      value: 
+      objectReference: {fileID: 225493477385215182, guid: 8975a64ffabf43c4895cef2e0cf8eaa9,
+        type: 3}
     - target: {fileID: 9046710303099706468, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -24,6 +24,12 @@ namespace Battle
 		{
 			if (!transition) return null;
 			_DataDict.TryGetValue(transition, out List<Effect> datas);
+
+			if (_Datas == null)
+			{
+				Debug.LogError($"{gameObject.name} {transition} 이펙트 설정 없음");
+			}
+
 			return datas;
 		}
 	}
