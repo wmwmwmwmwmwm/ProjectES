@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 438804944403085889}
   - component: {fileID: 7962001881997064712}
-  - component: {fileID: 3152885022966669924}
   - component: {fileID: 7952066989866752520}
   - component: {fileID: 3733807904395900310}
   - component: {fileID: 4950080998799803799}
@@ -61,29 +60,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3152885022966669924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 146658982985273343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc6de893300c5484985df5a519d7c447, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Clip: {fileID: 0}
-  _Transition: {fileID: 0}
-  _Cooltime: 0
-  _SkillType: 0
-  _RangeType: 1
-  _AreaType: 0
-  _Owner: {fileID: 0}
 --- !u!114 &7952066989866752520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,13 +77,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Collider: {fileID: 2230065087802561693}
-  _AttackHit: {fileID: 3733807904395900310}
-  _MoveSpeed: 10
   _Duration: 5
+  _Gravity: 0.1
+  _MoveSpeed: 10
+  _MoveSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _GuideRotationSpeed: 0
+  _GuideRotationSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _Attack: {fileID: 0}
+  _AttackHit: {fileID: 3733807904395900310}
+  _Target: {fileID: 0}
   _Rigidbody: {fileID: 0}
-  _DestroyTrigger: 0
-  _Bomb: {fileID: 0}
 --- !u!114 &3733807904395900310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,12 +147,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
-  _HitDelay: 0.33
+  _HitDelay: 0
   _DamageDuration: 0.3
-  _AttackerHitStunDuration: 0.03
+  _HitStunDuration: 0
   _ForceForward: 10
   _ForceUp: 10
   _Damage: 150
+  _ShakeCameraDuration: 0
 --- !u!114 &4950080998799803799
 MonoBehaviour:
   m_ObjectHideFlags: 0

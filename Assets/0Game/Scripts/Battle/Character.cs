@@ -13,6 +13,7 @@ using static Battle.BattleAttack;
 using static DataManager;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
+using Random = UnityEngine.Random;
 
 namespace Battle
 {
@@ -68,9 +69,7 @@ namespace Battle
 				}
 				else
 				{
-					Vector3 pos = transform.position;
-					pos.y += _KCC_Rigidbody._Collider.bounds.center.y;
-					return pos;
+					return _KCC_Rigidbody._Collider.bounds.center;
 				}
 			}
 		}
@@ -85,9 +84,8 @@ namespace Battle
 				}
 				else
 				{
-					Vector3 pos = transform.position;
-					pos.y -= _KCC_Rigidbody._Collider.bounds.min.y;
-					pos.y += _KCC_Rigidbody._Collider.bounds.max.y;
+					Vector3 pos = Center;
+					pos.y = _KCC_Rigidbody._Collider.bounds.max.y;
 					return pos;
 				}
 			}
@@ -103,7 +101,9 @@ namespace Battle
 				}
 				else
 				{
-					return transform.position;
+					Vector3 pos = Center;
+					pos.y = _KCC_Rigidbody._Collider.bounds.min.y;
+					return pos;
 				}
 			}
 		}
@@ -193,8 +193,7 @@ namespace Battle
 
 		public void NormalAttack(CallbackContext obj)
 		{
-			bool canAttack = _FSM.CurrentState._CanAttack;
-			canAttack &= !IsGuarding();
+			bool canAttack = CanAttack();
 			if (_FSM.CurrentState.IsAttack)
 			{
 				canAttack &= _FSM.CurrentState._Attack._SkillType <= SkillType.Normal;
@@ -239,8 +238,7 @@ namespace Battle
 
 		public void SpecialAttack(CallbackContext obj)
 		{
-			bool canAttack = _FSM.CurrentState._CanAttack;
-			canAttack &= !IsGuarding();
+			bool canAttack = CanAttack();
 			if (!canAttack) return;
 
 			// 지상
@@ -272,8 +270,7 @@ namespace Battle
 
 		public void Skill1(CallbackContext obj)
 		{
-			bool canAttack = _FSM.CurrentState._CanAttack;
-			canAttack &= !IsGuarding();
+			bool canAttack = CanAttack();
 			if (!canAttack) return;
 
 			// 쿨타임
@@ -301,8 +298,7 @@ namespace Battle
 
 		public void Skill2(CallbackContext obj)
 		{
-			bool canAttack = _FSM.CurrentState._CanAttack;
-			canAttack &= !IsGuarding();
+			bool canAttack = CanAttack();
 			if (!canAttack) return;
 
 			// 쿨타임
@@ -330,8 +326,7 @@ namespace Battle
 
 		public void Ultimate(CallbackContext obj)
 		{
-			bool canAttack = _FSM.CurrentState._CanAttack;
-			canAttack &= !IsGuarding();
+			bool canAttack = CanAttack();
 			if (!canAttack) return;
 
 			// 쿨타임
@@ -355,6 +350,14 @@ namespace Battle
 			}
 			Attack();
 			_LastUltimateTime = Time.time;
+		}
+
+		bool CanAttack()
+		{
+			bool canAttack = _FSM.CurrentState._CanAttack;
+			canAttack &= !IsGuarding();
+			canAttack &= _FSM.CurrentState != _DashAttack;
+			return canAttack;
 		}
 
 		public void Guard(CallbackContext obj)
@@ -387,7 +390,7 @@ namespace Battle
 		{
 			if (!_FSM.CurrentState._Attack)
 			{
-				Debug.LogError($"{gameObject.name} {_FSM.CurrentState} 공격 설정 없음");
+				Debug.LogError($"[{gameObject.name}] [{_FSM.CurrentState}] 공격 설정 없음");
 				return;
 			}
 
@@ -480,13 +483,15 @@ namespace Battle
 							float v = (aDistance - bDistance) * 100f;
 							return (int)v;
 						});
+						Vector3 shoulder = Bottom;
+						shoulder.y += _ShoulderHeight;
 						foreach (Collider col in overlaps)
 						{
 							Character c = col.GetComponentInParent<Character>();
-							Vector3 attackDir = c.Center - Center;
+							Vector3 attackDir = c.Center - shoulder;
 							attackDir.Normalize();
 							int count = Physics.RaycastNonAlloc(
-								origin: Center,
+								origin: shoulder,
 								direction: attackDir,
 								results: _RaycastResults,
 								maxDistance: 100f,
@@ -502,7 +507,7 @@ namespace Battle
 								}
 							}
 							c.TakeDamage(this, attack, attackHit, hit.point, attackDir);
-							yield return new WaitForSeconds(attackHit._AttackerHitStunDuration);
+							yield return new WaitForSeconds(attackHit._HitStunDuration);
 						}
 					}
 					// 벽에 적중
@@ -522,24 +527,38 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				BattleAttack attack = Instantiate(state._Attack);
+				BattleAttack attack = Instantiate(state._Attack, transform);
 				attack._Owner = this;
 				attack._StateInfo = state;
 				Effect effectData = state._EffectDatas.First();
-				Missile missile = attack.GetComponent<Missile>();
-				missile.transform.SetPositionAndRotation(Center, _AimDestRotation);
-
-				// 딜레이
 				yield return new WaitForSeconds(effectData._Delay);
-
-				// 이펙트
 				PlayEffect(effectData);
 
-				float startTime = Time.time;
-				yield return new WaitUntil(() => Time.time - startTime > missile._Duration || missile._DestroyTrigger);
+				BattleAttack_Range range = attack.GetComponent<BattleAttack_Range>();
+				for (int i = 0; i < range._FireCount; i++)
+				{
+					Missile missile = Instantiate(range._MissilePrefab);
+					missile.Init();
+					missile._Attack = attack;
+					missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
+					Vector3 pos = range._SpawnArea.GetRandomPoint();
+					Vector3 euler = _AimDestRotation.eulerAngles;
+					euler.x += range._SpreadDegree * Random.Range(-1f, 1f);
+					euler.y += range._SpreadDegree * Random.Range(-1f, 1f);
+					missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
+					missile._Rigidbody.Move(Center, Quaternion.Euler(euler));
+
+					float delay = range._FireCount > 1 ? range._FireDuration / (range._FireCount - 1) : range._FireDuration;
+					yield return new WaitForSeconds(delay);
+				}
 
 				Destroy(attack.gameObject);
 			}
+		}
+
+		public void DestroyMissile(Missile missile)
+		{
+			Destroy(missile.gameObject);
 		}
 
 		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3? hitPoint, Vector3 attackDirection)
@@ -563,9 +582,9 @@ namespace Battle
 				yield return new WaitForSeconds(delay);
 
 				// 경직
-				AddHitStunTimer(attackHit._AttackerHitStunDuration, _FSM.CurrentState);
-				attacker.AddHitStunTimer(attackHit._AttackerHitStunDuration, attacker._FSM.CurrentState);
-				yield return new WaitForSeconds(attackHit._AttackerHitStunDuration);
+				AddHitStunTimer(attackHit._HitStunDuration, _FSM.CurrentState);
+				attacker.AddHitStunTimer(attackHit._HitStunDuration, attacker._FSM.CurrentState);
+				yield return new WaitForSeconds(attackHit._HitStunDuration);
 
 				// 가드 판정
 				float damage = attackHit._Damage;

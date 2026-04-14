@@ -327,7 +327,7 @@ namespace Battle
 		public void DashAttack()
 		{
 			c._FadeOutDeaccelTimer = c._DashDuration;
-			_LastDashTime = Const.TimeDefault;
+			DashCancel();
 			c.PlayAction(c._DashAttack);
 			c.Attack();
 		}

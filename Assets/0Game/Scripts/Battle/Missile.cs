@@ -9,27 +9,33 @@ namespace Battle
 	public class Missile : MonoBehaviour
 	{
 		public SphereCollider _Collider;
-		public AttackHit _AttackHit;
 
-		public float _MoveSpeed;
-		public float _Duration;
+		[BoxGroup("설정")] public float _Duration;
+		[BoxGroup("설정")] public float _Gravity;
+		[BoxGroup("설정")] public float _MoveSpeed;
+		[BoxGroup("설정")] public AnimationCurve _MoveSpeedCurve;
+		[BoxGroup("설정")] public float _GuideRotationSpeed;
+		[BoxGroup("설정")] public AnimationCurve _GuideRotationSpeedCurve;
 
 		[HideInInspector] public BattleAttack _Attack;
+		[HideInInspector] public AttackHit _AttackHit;
+		[HideInInspector] public Character _Target;
 		[HideInInspector] public Rigidbody _Rigidbody;
-		[HideInInspector] public RaycastHit[] _HitResults;
-		[HideInInspector] public HashSet<GameObject> _AlreadyTargets;
-		[HideInInspector] public bool _DestroyTrigger;
-		[HideInInspector] public Bomb _Bomb;
+		RaycastHit[] _HitResults;
+		HashSet<GameObject> _AlreadyTargets;
+		Bomb _Bomb;
+		float _FireTime;
 
 		BattleController Controller => BattleController.Instance;
 
-		void Awake()
+		public void Init()
 		{
-			_Attack = GetComponent<BattleAttack>();
 			_Rigidbody = GetComponent<Rigidbody>();
 			_Bomb = GetComponent<Bomb>();
 			_HitResults = new RaycastHit[30];
 			_AlreadyTargets = new();
+
+			_FireTime = Time.time;
 
 			if (_Bomb)
 			{
@@ -39,10 +45,20 @@ namespace Battle
 
 		void FixedUpdate()
 		{
-			if (_DestroyTrigger) return;
+			// 이동
+			float elapsed = Time.time - _FireTime;
+			Vector3 velocity = _MoveSpeed * _MoveSpeedCurve.Evaluate(elapsed) * transform.forward;
+			velocity.y += Physics.gravity.y * _Gravity * Time.fixedDeltaTime;
+			_Rigidbody.linearVelocity = velocity;
+			if (_Target)
+			{
+				Quaternion destRotation = Quaternion.LookRotation(_Target.transform.position - transform.position);
+				float delta = _GuideRotationSpeed * _GuideRotationSpeedCurve.Evaluate(elapsed) * Time.fixedDeltaTime;
+				_Rigidbody.rotation = Quaternion.RotateTowards(_Rigidbody.rotation, destRotation, delta);
+			}
 
 			// 히트 판정
-			Vector3 deltaPosition = _MoveSpeed * Time.fixedDeltaTime * transform.forward;
+			Vector3 deltaPosition = _Rigidbody.linearVelocity * Time.fixedDeltaTime;
 			int layerMask = _Attack._Owner.GetOppositeLayerMask();
 			layerMask |= Layer.TerrainLayerMask;
 			int count = Physics.SphereCastNonAlloc(
@@ -67,7 +83,6 @@ namespace Battle
 					else
 					{
 						Controller.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
-						_DestroyTrigger = true;
 					}
 					_AlreadyTargets.Add(hit.collider.gameObject);
 					continue;
@@ -83,14 +98,11 @@ namespace Battle
 					Character target = hit.collider.GetComponentInParent<Character>();
 					target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
 					_AlreadyTargets.Add(target.gameObject);
-					_DestroyTrigger = true;
 				}
 
-				if (_DestroyTrigger) break;
+				_Attack._Owner.DestroyMissile(this);
+				break;
 			}
-
-			// 이동
-			_Rigidbody.MovePosition(transform.position + deltaPosition);
 		}
 
 		void BombExplosion(Vector3 hitPoint)
@@ -113,7 +125,6 @@ namespace Battle
 				_AlreadyTargets.Add(target.gameObject);
 			}
 
-			_DestroyTrigger = true;
 			Controller.PlayEffect123123(_Bomb._ParticlePrefab.gameObject, _Attack._Owner, transform.position, Quaternion.identity);
 		}
 	}

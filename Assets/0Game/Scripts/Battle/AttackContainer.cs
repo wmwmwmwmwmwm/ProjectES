@@ -3,24 +3,21 @@ using UnityEngine;
 using Animancer;
 using System.Linq;
 using System;
+using NaughtyAttributes;
 
 namespace Battle
 {
 	public class AttackContainer : MonoBehaviour
 	{
-		[Serializable]
-		public class Pair
-		{
-			public TransitionAsset _Key;
-			public BattleAttack _Attack;
-		}
-		public List<Pair> _Attacks;
+		public Transform _Actions;
 
+		List<BattleAttack> _Attacks;
 		Dictionary<TransitionAsset, BattleAttack> _AttackDict;
 
 		public void Init()
 		{
-			_AttackDict = _Attacks.ToDictionary(a => a._Key, b => b._Attack);
+			_Attacks = _Actions.GetComponentsInChildren<BattleAttack>().ToList();
+			_AttackDict = _Attacks.ToDictionary(a => a._Transition, b => b);
 		}
 
 		public BattleAttack GetAttack(TransitionAsset transition)

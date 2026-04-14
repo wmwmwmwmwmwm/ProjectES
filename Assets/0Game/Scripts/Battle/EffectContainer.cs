@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
 using Animancer;
-using System;
-using System.Reflection;
 using static Battle.Character;
 using System.Linq;
 
@@ -11,7 +8,7 @@ namespace Battle
 {
 	public class EffectContainer : MonoBehaviour
 	{
-		[ReadOnly] public List<Effect> _Datas;
+		public List<Effect> _Datas;
 
 		Dictionary<TransitionAsset, List<Effect>> _DataDict;
 

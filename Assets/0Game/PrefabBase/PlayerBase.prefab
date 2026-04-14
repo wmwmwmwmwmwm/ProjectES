@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &691474082003942838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1669844660101164794}
+  m_Layer: 9
+  m_Name: Actions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1669844660101164794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691474082003942838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7944196368236216995}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2141389453838918012
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +74,7 @@ Transform:
   - {fileID: 4059626791360016006}
   - {fileID: 7988743532983748824}
   - {fileID: 3430425296603654428}
+  - {fileID: 1669844660101164794}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1895468936233423104
@@ -85,7 +117,7 @@ MonoBehaviour:
   _RotationSpeed: 500
   _MoveSpeed: 8
   _MoveAccel: 10
-  _DashDuration: 0.3
+  _DashDuration: 0.25
   _JumpSpeed: 10
   _ShoulderHeight: 1.5
   _MaxHP: 22222
@@ -451,80 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9bbf0d99e345594797b884856d6d4c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Attacks:
-  - _Key: {fileID: 4799891562835818413, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: b4ad69198dc6bd348a4507ba23ba117e,
-      type: 3}
-  - _Key: {fileID: 8108611365381890314, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 85d9919a98f6de64287360f12b107d3e,
-      type: 3}
-  - _Key: {fileID: 7382285990112058789, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 13cc10d3ea5fb7048b43568aa233e132,
-      type: 3}
-  - _Key: {fileID: 5575586573070899872, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: f16f271e6c1d585409bf996d4354cabc,
-      type: 3}
-  - _Key: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 6147465874464920743, guid: 53fa2136a91e841498fc0ae593c8e924,
-      type: 3}
-  - _Key: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 0d3cd7674b4f8de4bbf54ea797333bde,
-      type: 3}
-  - _Key: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: d05bcbb08f029e94d8aba513a643a03e,
-      type: 3}
-  - _Key: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 83fe2e141de92bc458052643051f6cb7,
-      type: 3}
-  - _Key: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: f1e86bfa5cde5e34ab790a289703905b,
-      type: 3}
-  - _Key: {fileID: 8147410675851831714, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: e539502a436fd5448b9a22d388277c13,
-      type: 3}
-  - _Key: {fileID: 4608948836294961464, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 4656f80bab826204093cf5dcdbee3bae,
-      type: 3}
-  - _Key: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1526727010825513800, guid: 90f52fce9d14aab4893b3f19e0a6bf46,
-      type: 3}
-  _Attacks2:
-  - _Key: {fileID: 4799891562835818413, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: b4ad69198dc6bd348a4507ba23ba117e,
-      type: 3}
-  - _Key: {fileID: 8108611365381890314, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 85d9919a98f6de64287360f12b107d3e,
-      type: 3}
-  - _Key: {fileID: 7382285990112058789, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 13cc10d3ea5fb7048b43568aa233e132,
-      type: 3}
-  - _Key: {fileID: 5575586573070899872, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: f16f271e6c1d585409bf996d4354cabc,
-      type: 3}
-  - _Key: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 6147465874464920743, guid: 53fa2136a91e841498fc0ae593c8e924,
-      type: 3}
-  - _Key: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 0d3cd7674b4f8de4bbf54ea797333bde,
-      type: 3}
-  - _Key: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: d05bcbb08f029e94d8aba513a643a03e,
-      type: 3}
-  - _Key: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 83fe2e141de92bc458052643051f6cb7,
-      type: 3}
-  - _Key: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: f1e86bfa5cde5e34ab790a289703905b,
-      type: 3}
-  - _Key: {fileID: 8147410675851831714, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: e539502a436fd5448b9a22d388277c13,
-      type: 3}
-  - _Key: {fileID: 4608948836294961464, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1089202556315184931, guid: 4656f80bab826204093cf5dcdbee3bae,
-      type: 3}
-  - _Key: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860, type: 2}
-    _Attack: {fileID: 1526727010825513800, guid: 90f52fce9d14aab4893b3f19e0a6bf46,
-      type: 3}
+  _Actions: {fileID: 1669844660101164794}
 --- !u!1 &8881646460655702514
 GameObject:
   m_ObjectHideFlags: 0

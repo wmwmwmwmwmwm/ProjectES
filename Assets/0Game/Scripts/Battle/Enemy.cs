@@ -115,7 +115,7 @@ namespace Battle
 			if (Time.time - _LastAttackTime < 1f) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
-			if (distanceVector.magnitude < 2f)
+			if (distanceVector.magnitude < 2000f)
 			{
 				if (Random.value < 0.5f)
 				{

@@ -205,13 +205,20 @@ public static partial class Util
 			(viewport_position.y - 0.5f) * canvas_rect.sizeDelta.y);
 	}
 
-	public static Vector3 GetRandomPointInsideCollider(this BoxCollider2D boxCollider)
+	public static Vector3 GetRandomPoint(this BoxCollider2D boxCollider)
 	{
 		Vector2 extents = boxCollider.size / 2f;
 		Vector2 point = boxCollider.offset + new Vector2(
 			Random.Range(-extents.x, extents.x),
 			Random.Range(-extents.y, extents.y));
 		return boxCollider.transform.TransformPoint(point);
+	}
+
+	public static Vector3 GetRandomPoint(this Collider col)
+	{
+		Vector3 min = col.bounds.min;
+		Vector3 max = col.bounds.max;
+		return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
 	}
 
 	public static Component TryAddComponent(this GameObject obj, string typeStr) 
