@@ -1,16 +1,10 @@
 ﻿using Animancer;
-using DG.Tweening;
-using KinematicCharacterController;
 using NaughtyAttributes;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Battle.BattleAttack;
-
-//using VRM;
-using static DataManager;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
 using Random = UnityEngine.Random;
@@ -57,6 +51,7 @@ namespace Battle
 		[HideInInspector] public bool _StopYTrigger;
 		[HideInInspector] public EffectContainer _EffectContainer;
 		[HideInInspector] public AttackContainer _AttackContainer;
+		float _InvincibleTimer;
 
 		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center
@@ -179,6 +174,8 @@ namespace Battle
 
 			// 경직
 			_BaseLayer.Speed = IsHitStun() ? 0f : 1f;
+
+			_InvincibleTimer -= Time.deltaTime;
 		}
 
 		public void Dash(Direction4 dir)
@@ -388,19 +385,20 @@ namespace Battle
 
 		public void Attack()
 		{
-			if (!_FSM.CurrentState._Attack)
+			BattleAttack attack = _FSM.CurrentState._Attack;
+			if (!attack)
 			{
 				Debug.LogError($"[{gameObject.name}] [{_FSM.CurrentState}] 공격 설정 없음");
 				return;
 			}
 
-			switch (_FSM.CurrentState._Attack._RangeType)
+			switch (attack._RangeType)
 			{
 				case RangeType.Melee:
 					MeleeAttack();
 					break;
 				case RangeType.Range:
-					FireMissile();
+					RangeAttack();
 					break;
 			}
 		}
@@ -422,6 +420,7 @@ namespace Battle
 				attack._Owner = this;
 				attack._StateInfo = state;
 				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
+				melee.Init();
 
 				foreach (AttackHit attackHit in melee._AttackHits)
 				{
@@ -521,7 +520,7 @@ namespace Battle
 			}
 		}
 
-		void FireMissile()
+		void RangeAttack()
 		{
 			Controller.StartCoroutine(Internal());
 			IEnumerator Internal()
@@ -534,26 +533,45 @@ namespace Battle
 				yield return new WaitForSeconds(effectData._Delay);
 				PlayEffect(effectData);
 
-				BattleAttack_Range range = attack.GetComponent<BattleAttack_Range>();
-				for (int i = 0; i < range._FireCount; i++)
+				Coroutine coroutine;
+				bool isMissile = attack.GetComponent<BattleAttack_Missile>();
+				if (isMissile)
 				{
-					Missile missile = Instantiate(range._MissilePrefab);
-					missile.Init();
-					missile._Attack = attack;
-					missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
-					Vector3 pos = range._SpawnArea.GetRandomPoint();
-					Vector3 euler = _AimDestRotation.eulerAngles;
-					euler.x += range._SpreadDegree * Random.Range(-1f, 1f);
-					euler.y += range._SpreadDegree * Random.Range(-1f, 1f);
-					missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
-					missile._Rigidbody.Move(Center, Quaternion.Euler(euler));
-
-					float delay = range._FireCount > 1 ? range._FireDuration / (range._FireCount - 1) : range._FireDuration;
-					yield return new WaitForSeconds(delay);
+					coroutine = StartCoroutine(FireMissile(attack));
 				}
+				else
+				{
+					coroutine = StartCoroutine(FireLaser(attack));
+				}
+				yield return coroutine;
 
 				Destroy(attack.gameObject);
 			}
+		}
+
+		IEnumerator FireMissile(BattleAttack attack)
+		{
+			BattleAttack_Missile range = attack.GetComponent<BattleAttack_Missile>();
+			for (int i = 0; i < range._FireCount; i++)
+			{
+				Missile missile = Instantiate(range._MissilePrefab);
+				missile.Init();
+				missile._FireTime = Time.time;
+				missile._Attack = attack;
+				missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
+				Vector3 pos = range._SpawnPoints.PickOne().position;
+				Vector3 euler = _AimDestRotation.eulerAngles;
+				Vector2 spread = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+				spread.Normalize();
+				euler.x += Random.value * range._SpreadDegree * spread.x;
+				euler.y += Random.value * range._SpreadDegree * spread.y;
+				missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
+				missile._Rigidbody.Move(pos, Quaternion.Euler(euler));
+
+				float delay = range._FireCount > 1 ? range._FireDuration / (range._FireCount - 1) : range._FireDuration;
+				yield return new WaitForSeconds(delay);
+			}
+
 		}
 
 		public void DestroyMissile(Missile missile)
@@ -561,11 +579,53 @@ namespace Battle
 			Destroy(missile.gameObject);
 		}
 
+		IEnumerator FireLaser(BattleAttack attack)
+		{
+			BattleAttack_Laser laser = attack.GetComponent<BattleAttack_Laser>();
+			laser.Init();
+
+			// 발사 대기 중
+			laser._Wait.SetActive(true);
+			laser._Impact.SetActive(false);
+			float startTime = Time.time;
+			while (Time.time - startTime < laser._Delay)
+			{
+				SetScale(laser._WaitMaterial);
+				yield return null;
+			}
+
+			// 발사 중
+			laser._Wait.SetActive(false);
+			laser._Impact.SetActive(true);
+			float impactTime = Time.time;
+			while (Time.time - impactTime < laser._Duration)
+			{
+				SetScale(laser._ImpactMaterial);
+				yield return null;
+			}
+
+			void SetScale(Material lineMaterial)
+			{
+				laser._DamageArea.radius = laser._Width / 2f;
+				bool collided = Physics.Raycast(
+						origin: laser.transform.position,
+						direction: laser.transform.forward,
+						hitInfo: out RaycastHit hitInfo,
+						maxDistance: laser._Length);
+				float scale = collided ? hitInfo.distance : laser._Length;
+				laser._Parent.localScale = new(1f, 1f, scale);
+				lineMaterial.SetTextureScale("_MainTex", new Vector2(scale, 1f));
+				lineMaterial.SetTextureScale("_Noise", new Vector2(scale, 1f));
+			}
+		}
+
 		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3? hitPoint, Vector3 attackDirection)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
+				if (_InvincibleTimer > 0f) yield break;
+
 				// 이펙트 위치
 				Vector3 effectPosition = hitPoint != null ? hitPoint.Value : Center;
 				Vector3 damageTextPosition = hitPoint != null ? hitPoint.Value : Top;
@@ -615,35 +675,38 @@ namespace Battle
 				}
 				else
 				{
-					// 일반 경직
-					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
+					if (attackHit._DamageDuration > 0f)
 					{
-						_Damage._Duration = attackHit._DamageDuration;
-						_FadeInDeaccelTimer = attackHit._DamageDuration;
-						_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
-						PlayAction(_Damage);
-					}
-					// 밀어내기
-					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
-					{
-						_Impulse = new(0f, 0f, attackHit._ForceForward);
-						_Impulse = attacker.transform.TransformDirection(_Impulse);
-						_FadeOutDeaccelTimer = attackHit._DamageDuration;
-						_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
-						PlayAction(_Damage);
-						FeetSmoke(attackHit._DamageDuration);
-					}
-					// 날리기
-					else 
-					{
-						_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
-						_Impulse = attacker.transform.TransformDirection(_Impulse);
-						_FSM.TrySetState(_GetDown);
-					}
+						// 일반 경직
+						if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
+						{
+							_Damage._Duration = attackHit._DamageDuration;
+							_FadeInDeaccelTimer = attackHit._DamageDuration;
+							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
+							PlayAction(_Damage);
+						}
+						// 밀어내기
+						else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
+						{
+							_Impulse = new(0f, 0f, attackHit._ForceForward);
+							_Impulse = attacker.transform.TransformDirection(_Impulse);
+							_FadeOutDeaccelTimer = attackHit._DamageDuration;
+							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
+							PlayAction(_Damage);
+							FeetSmoke(attackHit._DamageDuration);
+						}
+						// 날리기
+						else
+						{
+							_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
+							_Impulse = attacker.transform.TransformDirection(_Impulse);
+							_FSM.TrySetState(_GetDown);
+						}
 
-					// 이펙트
-					Controller.PlayEffect123123(attackHit._HitEffectPrefab, attacker, effectPosition, Quaternion.LookRotation(attackDirection));
-					Controller.PlayEffect123123(_HitEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
+						// 이펙트
+						Controller.PlayEffect123123(attackHit._HitEffectPrefab, attacker, effectPosition, Quaternion.LookRotation(attackDirection));
+						Controller.PlayEffect123123(_HitEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
+					}
 				}
 
 				// 데미지 표시

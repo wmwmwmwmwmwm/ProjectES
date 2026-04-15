@@ -359,7 +359,11 @@ namespace Battle
 				getUp &= Motor.GroundingStatus.FoundAnyGround;
 				if (getUp)
 				{
-					_FSM.TrySetState(_GetUp);
+					bool success = _FSM.TrySetState(_GetUp);
+					if (success)
+					{
+						_InvincibleTimer = _Anims_Common._GetUpAsset.MaximumLength + 0.6f;
+					}
 				}
 			}
 		}

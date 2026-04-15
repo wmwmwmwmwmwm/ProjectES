@@ -10,7 +10,13 @@ namespace Battle
 	{
 		public SphereCollider _AreaCollider;
 		public ParticleSystem _ParticlePrefab;
-		
+
+		[BoxGroup("설정")] public bool _HasDuration;
+		[BoxGroup("설정"), ShowIf("_HasDuration")] public float _ExplodeDuration;
+		[BoxGroup("설정"), ShowIf("_HasDuration")] public float _DamageInterval;
+
+		[HideInInspector] public bool _Explode;
+		[HideInInspector] public float _ExplodeTime;
 		[HideInInspector] public Collider[] _HitResults;
 
 		public void Init()

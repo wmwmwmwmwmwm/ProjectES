@@ -7,10 +7,10 @@ using static SingletonManager;
 
 namespace Battle
 {
-	public class BattleAttack_Range : MonoBehaviour
+	public class BattleAttack_Missile : MonoBehaviour
 	{
 		public Missile _MissilePrefab;
-		public BoxCollider _SpawnArea;
+		public List<Transform> _SpawnPoints;
 
 		[BoxGroup("설정")] public float _SpreadDegree;
 		[BoxGroup("설정")] public int _FireCount;

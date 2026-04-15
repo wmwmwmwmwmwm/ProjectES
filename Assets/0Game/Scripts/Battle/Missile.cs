@@ -22,9 +22,9 @@ namespace Battle
 		[HideInInspector] public Character _Target;
 		[HideInInspector] public Rigidbody _Rigidbody;
 		RaycastHit[] _HitResults;
-		HashSet<GameObject> _AlreadyTargets;
+		Dictionary<GameObject, float> _HitTargets;
 		Bomb _Bomb;
-		float _FireTime;
+		[HideInInspector] public float _FireTime;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -33,9 +33,7 @@ namespace Battle
 			_Rigidbody = GetComponent<Rigidbody>();
 			_Bomb = GetComponent<Bomb>();
 			_HitResults = new RaycastHit[30];
-			_AlreadyTargets = new();
-
-			_FireTime = Time.time;
+			_HitTargets = new();
 
 			if (_Bomb)
 			{
@@ -56,9 +54,30 @@ namespace Battle
 				float delta = _GuideRotationSpeed * _GuideRotationSpeedCurve.Evaluate(elapsed) * Time.fixedDeltaTime;
 				_Rigidbody.rotation = Quaternion.RotateTowards(_Rigidbody.rotation, destRotation, delta);
 			}
+		}
+
+		void Update()
+		{
+			// 파괴 판정
+			float elapsed = Time.time - _FireTime;
+			bool destroy = false;
+			if (_Bomb && _Bomb._Explode)
+			{
+				float elapsedExplode = Time.time - _Bomb._ExplodeTime;
+				destroy &= elapsedExplode > _Bomb._ExplodeDuration;
+			}
+			else
+			{
+				destroy = elapsed > _Duration;
+			}
+			if (destroy)
+			{
+				_Attack._Owner.DestroyMissile(this);
+				return;
+			}
 
 			// 히트 판정
-			Vector3 deltaPosition = _Rigidbody.linearVelocity * Time.fixedDeltaTime;
+			Vector3 deltaPosition = _Rigidbody.linearVelocity * Time.deltaTime;
 			int layerMask = _Attack._Owner.GetOppositeLayerMask();
 			layerMask |= Layer.TerrainLayerMask;
 			int count = Physics.SphereCastNonAlloc(
@@ -71,7 +90,7 @@ namespace Battle
 			for (int i = 0; i < count; i++)
 			{
 				RaycastHit hit = _HitResults[i];
-				if (_AlreadyTargets.Contains(hit.collider.gameObject)) continue;
+				if (_HitTargets.ContainsKey(hit.collider.gameObject)) continue;
 
 				// 지형에 충돌
 				if (hit.collider.gameObject.layer == Layer.TerrainLayer)
@@ -83,8 +102,9 @@ namespace Battle
 					else
 					{
 						Controller.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
+						_Attack._Owner.DestroyMissile(this);
 					}
-					_AlreadyTargets.Add(hit.collider.gameObject);
+					_HitTargets.Add(hit.collider.gameObject, Time.time);
 					continue;
 				}
 
@@ -97,35 +117,47 @@ namespace Battle
 				{
 					Character target = hit.collider.GetComponentInParent<Character>();
 					target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, hit.point, transform.forward);
-					_AlreadyTargets.Add(target.gameObject);
+					_HitTargets.Add(target.gameObject, Time.time);
+					_Attack._Owner.DestroyMissile(this);
 				}
 
-				_Attack._Owner.DestroyMissile(this);
 				break;
 			}
 		}
 
 		void BombExplosion(Vector3 hitPoint)
 		{
-			// 적에게 데미지
-			int layerMask = _Attack._Owner.GetOppositeLayerMask();
-			int count = Physics.OverlapSphereNonAlloc(
-				position: transform.position,
-				radius: _Bomb._AreaCollider.radius,
-				results: _Bomb._HitResults,
-				layerMask: layerMask);
-			for (int i = 0; i < count; i++)
+			StartCoroutine(Interval());
+			IEnumerator Interval()
 			{
-				Collider col = _Bomb._HitResults[i];
-				if (_AlreadyTargets.Contains(col.gameObject)) continue;
+				Controller.PlayEffect123123(_Bomb._ParticlePrefab.gameObject, _Attack._Owner, transform.position, Quaternion.identity);
 
-				Character target = col.GetComponentInParent<Character>();
-				Vector3 direction = (target.transform.position - hitPoint).normalized;
-				target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, null, direction);
-				_AlreadyTargets.Add(target.gameObject);
+				while (true)
+				{
+					// 적에게 데미지
+					int count = Physics.OverlapSphereNonAlloc(
+						position: transform.position,
+						radius: _Bomb._AreaCollider.radius,
+						results: _Bomb._HitResults,
+						layerMask: _Attack._Owner.GetOppositeLayerMask());
+					for (int i = 0; i < count; i++)
+					{
+						Collider col = _Bomb._HitResults[i];
+						if (_HitTargets.TryGetValue(col.gameObject, out float damagedTime))
+						{
+							if (Time.time - damagedTime < _Bomb._DamageInterval) continue;
+						}
+
+						Character target = col.GetComponentInParent<Character>();
+						Vector3 direction = (target.transform.position - hitPoint).normalized;
+						target.TakeDamage(_Attack._Owner, _Attack, _AttackHit, null, direction);
+						_HitTargets[target.gameObject] = Time.time;
+					}
+					if (!_Bomb._HasDuration) break;
+
+					yield return new WaitForSeconds(0.1f);
+				}
 			}
-
-			Controller.PlayEffect123123(_Bomb._ParticlePrefab.gameObject, _Attack._Owner, transform.position, Quaternion.identity);
 		}
 	}
 }

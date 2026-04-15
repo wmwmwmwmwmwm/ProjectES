@@ -105,7 +105,7 @@ PrefabInstance:
     - target: {fileID: 146658982985273343, guid: 10e581101fc68cc4e97b39499600a9d4,
         type: 3}
       propertyPath: m_Name
-      value: BombBase Variant
+      value: MagicBomb
       objectReference: {fileID: 0}
     - target: {fileID: 438804944403085889, guid: 10e581101fc68cc4e97b39499600a9d4,
         type: 3}
@@ -157,12 +157,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3733807904395900310, guid: 10e581101fc68cc4e97b39499600a9d4,
+        type: 3}
+      propertyPath: _Damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950080998799803799, guid: 10e581101fc68cc4e97b39499600a9d4,
+        type: 3}
+      propertyPath: _HasDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950080998799803799, guid: 10e581101fc68cc4e97b39499600a9d4,
+        type: 3}
+      propertyPath: _DamageInterval
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4950080998799803799, guid: 10e581101fc68cc4e97b39499600a9d4,
         type: 3}
       propertyPath: _ParticlePrefab
       value: 
       objectReference: {fileID: 7339821700487633373, guid: 9f4efa34a1f685040b2fc75eb0f7bada,
         type: 3}
+    - target: {fileID: 4950080998799803799, guid: 10e581101fc68cc4e97b39499600a9d4,
+        type: 3}
+      propertyPath: _ExplodeDuration
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

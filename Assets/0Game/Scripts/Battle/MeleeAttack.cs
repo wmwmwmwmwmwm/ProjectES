@@ -15,7 +15,7 @@ namespace Battle
 		[HideInInspector] public State _StateInfo;
 		[HideInInspector] public Collider[] _HitResults;
 
-		void Awake()
+		public void Init()
 		{
 			_HitResults = new Collider[30];
             GetComponentsInChildren(_AttackHits);
