@@ -60,7 +60,9 @@ namespace Battle
 			{
 				// 체력
 				Character c = player.c;
-				float hp = Mathf.Max(1f, c._HP);
+				float hp = c._HP;
+				if (hp < 0f) hp = 0f;
+				else if (hp < 1f) hp = 1f;
 				float percent = hp / c._MaxHP;
 				player._UI_HP._Slider.value = percent;
 				player._UI_HP._Slider_Inner.value = Mathf.MoveTowards(player._UI_HP._Slider_Inner.value, percent, 0.3f * Time.deltaTime);

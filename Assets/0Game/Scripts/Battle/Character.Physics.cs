@@ -40,7 +40,7 @@ namespace Battle
 			else
 			{
 				Quaternion destRot = Quaternion.Euler(0f, _AimDestRotation.eulerAngles.y, 0f);
-				float delta = _RotationSpeed * deltaTime;
+				float delta = _RotationSpeed * GetSpeedMultiplier() * deltaTime;
 				delta *= _FSM.CurrentState._LimitRotate ? _AttackMovePercent : 1f;
 				currentRotation = Quaternion.RotateTowards(currentRotation, destRot, delta);
 			}
@@ -48,11 +48,10 @@ namespace Battle
 
 		public void UpdateVelocity_Shared1(ref Vector3 currentVelocity, float deltaTime)
 		{
-			_CurrentMoveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed;
-			_CurrentMoveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed;
+			_CurrentMoveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed * GetSpeedMultiplier();
+			_CurrentMoveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed * GetSpeedMultiplier();
 			_CurrentMoveInputVector = _AimDestRotation * _MoveInput;
 			_CurrentMoveInputVector.y = 0f;
-			_CurrentMoveInputVector.Normalize();
 
 			// 경직
 			if (IsHitStun())
@@ -172,7 +171,8 @@ namespace Battle
 			if (IsGrounded())
 			{
 				Vector3 targetVelocity = _CurrentMoveInputVector * _CurrentMoveSpeed;
-				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, _CurrentMoveAccel * deltaTime);
+				float groundAccel = targetVelocity == Vector3.zero ? _CurrentMoveAccel * 3f : _CurrentMoveAccel;
+				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, groundAccel * deltaTime);
 
 				// 애니메이션
 				if (currentVelocity.sqrMagnitude > 1f)

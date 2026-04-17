@@ -131,6 +131,7 @@ MonoBehaviour:
   _AttackHit: {fileID: 2204090715861840270}
   _Target: {fileID: 0}
   _Rigidbody: {fileID: 0}
+  _FireTime: 0
 --- !u!114 &2204090715861840270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
-  _HitDelay: 0
+  _HitDelay: -1
+  _DeaccelDuration: 0
   _DamageDuration: 0.3
   _HitStunDuration: 0
   _ForceForward: 10

@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Transition: {fileID: 0}
   _Cooltime: 0
+  _SpeedMultiplier: 1
   _SkillType: 0
   _RangeType: 1
   _AreaType: 0

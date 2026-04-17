@@ -15,6 +15,7 @@ namespace Battle
 		public TransitionAsset _Transition;
 
 		public float _Cooltime;
+		public float _SpeedMultiplier;
 		public SkillType _SkillType;
 		public RangeType _RangeType;
 		public AreaType _AreaType;

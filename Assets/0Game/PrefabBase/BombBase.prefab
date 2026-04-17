@@ -35,6 +35,8 @@ Transform:
   m_Children:
   - {fileID: 595698724755854391}
   - {fileID: 7464031876476060458}
+  - {fileID: 4461950474123136466}
+  - {fileID: 4616741276021202999}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7962001881997064712
@@ -133,6 +135,7 @@ MonoBehaviour:
   _AttackHit: {fileID: 3733807904395900310}
   _Target: {fileID: 0}
   _Rigidbody: {fileID: 0}
+  _FireTime: 0
 --- !u!114 &3733807904395900310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
-  _HitDelay: 0
+  _HitDelay: -1
+  _DeaccelDuration: 0
   _DamageDuration: 0.3
   _HitStunDuration: 0
   _ForceForward: 10
@@ -167,8 +171,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _AreaCollider: {fileID: 1499903733439316206}
-  _ParticlePrefab: {fileID: 0}
+  _MissileGraphic: {fileID: 4057346505219640687}
+  _BombGraphic: {fileID: 2001154853608538334}
+  _HasDuration: 0
+  _ExplodeDuration: 0
+  _DamageInterval: 0
+  _ExplodeTime: 0
   _HitResults: []
+--- !u!1 &2001154853608538334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4616741276021202999}
+  m_Layer: 0
+  m_Name: BombGraphic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4616741276021202999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001154853608538334}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 438804944403085889}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4057346505219640687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4461950474123136466}
+  m_Layer: 0
+  m_Name: MissileGraphic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4461950474123136466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4057346505219640687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 438804944403085889}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5803323295818537969
 GameObject:
   m_ObjectHideFlags: 0

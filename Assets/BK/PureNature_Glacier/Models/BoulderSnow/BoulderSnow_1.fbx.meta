@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: ed500436f4d54c28859011744eb5a7bd
+AssetOrigin:
+  serializedVersion: 1
+  productId: 318218
+  packageName: 'Pure Nature 2 : Glacier Mountains'
+  packageVersion: 1.0
+  assetPath: Assets/BK/PureNature_Glacier/Models/BoulderSnow/BoulderSnow_1.fbx
+  uploadId: 751927
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -16,8 +23,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -112,10 +117,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 318218
-  packageName: 'Pure Nature 2 : Glacier Mountains'
-  packageVersion: 1.0
-  assetPath: Assets/BK/PureNature_Glacier/Models/BoulderSnow/BoulderSnow_1.fbx
-  uploadId: 751927

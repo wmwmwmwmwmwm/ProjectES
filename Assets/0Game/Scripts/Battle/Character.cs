@@ -416,9 +416,7 @@ namespace Battle
 				// 공격 최소 딜레이
 				yield return new WaitForSeconds(firstEffectData._Delay * 0.3f);
 
-				BattleAttack attack = Instantiate(state._Attack, transform);
-				attack._Owner = this;
-				attack._StateInfo = state;
+				BattleAttack attack = SpawnAttack(state);
 				MeleeAttack melee = attack.GetComponent<MeleeAttack>();
 				melee.Init();
 
@@ -505,8 +503,17 @@ namespace Battle
 									break;
 								}
 							}
-							c.TakeDamage(this, attack, attackHit, hit.point, attackDir);
+							StartCoroutine(DelayTakeDamage());
 							yield return new WaitForSeconds(attackHit._HitStunDuration);
+
+							IEnumerator DelayTakeDamage()
+							{
+								// 공격 판정 딜레이
+								Effect effectData = attack._StateInfo._EffectDatas.First();
+								float delay = attackHit._HitDelay - effectData._Delay;
+								yield return new WaitForSeconds(delay);
+								c.TakeDamage(attack, attackHit, hit.point, attackDir);
+							}
 						}
 					}
 					// 벽에 적중
@@ -526,22 +533,65 @@ namespace Battle
 			IEnumerator Internal()
 			{
 				State state = _FSM.CurrentState;
-				BattleAttack attack = Instantiate(state._Attack, transform);
-				attack._Owner = this;
-				attack._StateInfo = state;
+				BattleAttack attack = SpawnAttack(state);
+
+				// 초기화
+				BattleAttack_Missile missile = attack.GetComponent<BattleAttack_Missile>();
+				BattleAttack_Laser laser = attack.GetComponent<BattleAttack_Laser>();
+				if (missile) { }
+				else
+				{
+					laser.Init();
+				}
+
+				// 대기
 				Effect effectData = state._EffectDatas.First();
 				yield return new WaitForSeconds(effectData._Delay);
 				PlayEffect(effectData);
 
+				// 발사
 				Coroutine coroutine;
-				bool isMissile = attack.GetComponent<BattleAttack_Missile>();
-				if (isMissile)
+				if (missile)
 				{
-					coroutine = StartCoroutine(FireMissile(attack));
+					coroutine = StartCoroutine(FireMissile(missile));
+
+					IEnumerator FireMissile(BattleAttack_Missile attack)
+					{
+						for (int i = 0; i < attack._FireCount; i++)
+						{
+							Missile missile = Instantiate(attack._MissilePrefab);
+							missile.Init();
+							missile._FireTime = Time.time;
+							missile._Attack = attack.GetComponent<BattleAttack>();
+							missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
+							Vector3 pos = attack._SpawnPoints.PickOne().position;
+							Vector3 euler = _AimDestRotation.eulerAngles;
+							Vector2 spread = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+							spread.Normalize();
+							euler.x += Random.value * attack._SpreadDegree * spread.x;
+							euler.y += Random.value * attack._SpreadDegree * spread.y;
+							missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
+							missile._Rigidbody.Move(pos, Quaternion.Euler(euler));
+
+							float delay = attack._FireCount > 1 ? attack._FireDuration / (attack._FireCount - 1) : attack._FireDuration;
+							yield return new WaitForSeconds(delay);
+						}
+					}
 				}
 				else
 				{
-					coroutine = StartCoroutine(FireLaser(attack));
+					coroutine = StartCoroutine(FireLaser(laser));
+
+					IEnumerator FireLaser(BattleAttack_Laser laser)
+					{
+						// 발사 대기 중
+						laser.ImpactOn(false);
+						yield return new WaitForSeconds(laser._Delay);
+
+						// 발사 중
+						laser.ImpactOn(true);
+						yield return new WaitForSeconds(laser._Duration);
+					}
 				}
 				yield return coroutine;
 
@@ -549,77 +599,12 @@ namespace Battle
 			}
 		}
 
-		IEnumerator FireMissile(BattleAttack attack)
-		{
-			BattleAttack_Missile range = attack.GetComponent<BattleAttack_Missile>();
-			for (int i = 0; i < range._FireCount; i++)
-			{
-				Missile missile = Instantiate(range._MissilePrefab);
-				missile.Init();
-				missile._FireTime = Time.time;
-				missile._Attack = attack;
-				missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
-				Vector3 pos = range._SpawnPoints.PickOne().position;
-				Vector3 euler = _AimDestRotation.eulerAngles;
-				Vector2 spread = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-				spread.Normalize();
-				euler.x += Random.value * range._SpreadDegree * spread.x;
-				euler.y += Random.value * range._SpreadDegree * spread.y;
-				missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
-				missile._Rigidbody.Move(pos, Quaternion.Euler(euler));
-
-				float delay = range._FireCount > 1 ? range._FireDuration / (range._FireCount - 1) : range._FireDuration;
-				yield return new WaitForSeconds(delay);
-			}
-
-		}
-
 		public void DestroyMissile(Missile missile)
 		{
 			Destroy(missile.gameObject);
 		}
 
-		IEnumerator FireLaser(BattleAttack attack)
-		{
-			BattleAttack_Laser laser = attack.GetComponent<BattleAttack_Laser>();
-			laser.Init();
-
-			// 발사 대기 중
-			laser._Wait.SetActive(true);
-			laser._Impact.SetActive(false);
-			float startTime = Time.time;
-			while (Time.time - startTime < laser._Delay)
-			{
-				SetScale(laser._WaitMaterial);
-				yield return null;
-			}
-
-			// 발사 중
-			laser._Wait.SetActive(false);
-			laser._Impact.SetActive(true);
-			float impactTime = Time.time;
-			while (Time.time - impactTime < laser._Duration)
-			{
-				SetScale(laser._ImpactMaterial);
-				yield return null;
-			}
-
-			void SetScale(Material lineMaterial)
-			{
-				laser._DamageArea.radius = laser._Width / 2f;
-				bool collided = Physics.Raycast(
-						origin: laser.transform.position,
-						direction: laser.transform.forward,
-						hitInfo: out RaycastHit hitInfo,
-						maxDistance: laser._Length);
-				float scale = collided ? hitInfo.distance : laser._Length;
-				laser._Parent.localScale = new(1f, 1f, scale);
-				lineMaterial.SetTextureScale("_MainTex", new Vector2(scale, 1f));
-				lineMaterial.SetTextureScale("_Noise", new Vector2(scale, 1f));
-			}
-		}
-
-		public void TakeDamage(Character attacker, BattleAttack attack, AttackHit attackHit, Vector3? hitPoint, Vector3 attackDirection)
+		public void TakeDamage(BattleAttack attack, AttackHit attackHit, Vector3? hitPoint, Vector3 attackDirection)
 		{
 			StartCoroutine(Internal());
 			IEnumerator Internal()
@@ -636,12 +621,8 @@ namespace Battle
 					_Enemy.NoticeAround();
 				}
 
-				// 공격 판정 딜레이
-				Effect effectData = attack._StateInfo._EffectDatas.First();
-				float delay = attackHit._HitDelay - effectData._Delay;
-				yield return new WaitForSeconds(delay);
-
 				// 경직
+				Character attacker = attack._Owner;
 				AddHitStunTimer(attackHit._HitStunDuration, _FSM.CurrentState);
 				attacker.AddHitStunTimer(attackHit._HitStunDuration, attacker._FSM.CurrentState);
 				yield return new WaitForSeconds(attackHit._HitStunDuration);
@@ -675,38 +656,43 @@ namespace Battle
 				}
 				else
 				{
-					if (attackHit._DamageDuration > 0f)
+					bool playDamageAnim = attackHit._DamageDuration > 0f;
+
+					// 일반 경직
+					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
 					{
-						// 일반 경직
-						if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
+						_FadeInDeaccelTimer = attackHit._DeaccelDuration;
+						if (playDamageAnim)
 						{
 							_Damage._Duration = attackHit._DamageDuration;
-							_FadeInDeaccelTimer = attackHit._DamageDuration;
 							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
 							PlayAction(_Damage);
 						}
-						// 밀어내기
-						else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
-						{
-							_Impulse = new(0f, 0f, attackHit._ForceForward);
-							_Impulse = attacker.transform.TransformDirection(_Impulse);
-							_FadeOutDeaccelTimer = attackHit._DamageDuration;
-							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
-							PlayAction(_Damage);
-							FeetSmoke(attackHit._DamageDuration);
-						}
-						// 날리기
-						else
-						{
-							_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
-							_Impulse = attacker.transform.TransformDirection(_Impulse);
-							_FSM.TrySetState(_GetDown);
-						}
-
-						// 이펙트
-						Controller.PlayEffect123123(attackHit._HitEffectPrefab, attacker, effectPosition, Quaternion.LookRotation(attackDirection));
-						Controller.PlayEffect123123(_HitEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
 					}
+					// 밀어내기
+					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
+					{
+						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
+						_Impulse = new(0f, 0f, attackHit._ForceForward);
+						_Impulse = attacker.transform.TransformDirection(_Impulse);
+						FeetSmoke(attackHit._DeaccelDuration);
+						if (playDamageAnim)
+						{
+							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
+							PlayAction(_Damage);
+						}
+					}
+					// 날리기
+					else
+					{
+						_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
+						_Impulse = attacker.transform.TransformDirection(_Impulse);
+						_FSM.TrySetState(_GetDown);
+					}
+
+					// 이펙트
+					Controller.PlayEffect123123(attackHit._HitEffectPrefab, attacker, effectPosition, Quaternion.LookRotation(attackDirection));
+					Controller.PlayEffect123123(_HitEffectPrefab, this, effectPosition, Quaternion.LookRotation(attackDirection));
 				}
 
 				// 데미지 표시
@@ -775,10 +761,10 @@ namespace Battle
 			}
 		}
 
-		public LayerMask GetLayerMask()
+		public bool IsOpposite(Character c)
 		{
-			if (gameObject.layer == Layer.PlayerLayer) return Layer.PlayerLayerMask;
-			else return Layer.EnemyLayerMask;
+			if (_Player) return c._Enemy;
+			else return c._Player;
 		}
 
 		public LayerMask GetOppositeLayerMask()
@@ -903,6 +889,22 @@ namespace Battle
 			{
 				_KCC_Rigidbody._Mover.SetPositionAndRotation(pos, rot);
 			}
+		}
+
+		BattleAttack SpawnAttack(State state)
+		{
+			BattleAttack attack = Instantiate(state._Attack, transform);
+			attack.gameObject.SetActive(true);
+			attack._Owner = this;
+			attack._StateInfo = state;
+			return attack;
+		}
+
+		float GetSpeedMultiplier()
+		{
+			BattleAttack attack = _FSM.CurrentState._Attack;
+			if (attack) return attack._SpeedMultiplier;
+			else return 1f;
 		}
 	}
 }

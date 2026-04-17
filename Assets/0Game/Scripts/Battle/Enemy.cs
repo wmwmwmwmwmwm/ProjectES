@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using SimplestarGame;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,9 @@ namespace Battle
 
 		[HideInInspector] public Character c;
 		NavMeshAgent _Agent;
+		NavMeshPath _Path;
 		bool _Noticed;
+		float _FindPathTime;
 		float _LastAttackTime;
 		Collider[] _ColliderHits;
 		[HideInInspector] public UI_EnemyHP _HPUI;
@@ -28,6 +31,7 @@ namespace Battle
 			_ColliderHits = new Collider[30];
 			c = GetComponent<Character>();
 			_Agent = GetComponent<NavMeshAgent>();
+			_Path = new();
 
 			if (IsMovable)
 			{
@@ -35,6 +39,7 @@ namespace Battle
 				_Agent.updateRotation = false;
 				_Agent.updateUpAxis = false;
 			}
+			_FindPathTime = Const.TimeDefault;
 			_LastAttackTime = Const.TimeDefault;
 			_LastSummonTime = Const.TimeDefault;
 
@@ -89,42 +94,42 @@ namespace Battle
 			if (!_Noticed) return;
 			if (!_Agent.isOnNavMesh) return;
 
-			bool move = GetPlayerDistanceVector().magnitude > 2f;
-			Vector3 first = _Agent.path.corners[0];
-			if (first != Vector3.zero)
+			// 경로 재설정
+			if (Time.time - _FindPathTime > 0.1f)
 			{
-				Vector3 dir = first - transform.position;
-				c._AimDestRotation = Quaternion.LookRotation(dir);
-				c._MoveInput = move ? Vector3.forward : Vector3.zero;
-			}
-			else if (_Agent.path.corners.Length > 1)
-			{
-				Vector3 second = _Agent.path.corners[1];
-				Vector3 dir = second - transform.position;
-				c._AimDestRotation = Quaternion.LookRotation(dir);
-				c._MoveInput = move ? Vector3.forward : Vector3.zero;
+				Vector3 playerPos = Controller._ActivePlayer.transform.position;
+				_Agent.CalculatePath(playerPos, _Path);
+				_Agent.SetPath(_Path);
+				_FindPathTime = Time.time;
 			}
 
-			Vector3 playerPos = Controller._ActivePlayer.transform.position;
-			_Agent.SetDestination(playerPos);
+			Vector3[] corners = _Path.corners;
+			if (corners.Length == 0) return;
+
+			Vector3 destination;
+			if (corners.Length > 1)
+			{
+				destination = corners[1];
+			}
+			else 
+			{
+				destination = corners[0];
+			}
+			Vector3 distance = destination - transform.position;
+			bool move = distance.magnitude > 2f;
+			c._AimDestRotation = Quaternion.LookRotation(distance);
+			c._MoveInput = move ? Vector3.forward : Vector3.zero;
 		}
 
 		void Attack()
 		{
 			if (!_Noticed) return;
-			if (Time.time - _LastAttackTime < 1f) return;
+			if (Time.time - _LastAttackTime < 1000f) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2000f)
 			{
-				if (Random.value < 0.5f)
-				{
-					c.Skill1(default);
-				}
-				else
-				{
-					c.Skill2(default);
-				}
+				c.Skill2(default);
 				_LastAttackTime = Time.time;
 			}
 		}

@@ -17,6 +17,7 @@ namespace Battle
 		public void Init()
 		{
 			_Attacks = _Actions.GetComponentsInChildren<BattleAttack>().ToList();
+			_Attacks.ForEach(x => x.gameObject.SetActive(false));
 			_AttackDict = _Attacks.ToDictionary(a => a._Transition, b => b);
 		}
 

@@ -220,7 +220,7 @@ namespace Battle
 				_Dash = new()
 				{
 					c = this,
-					_MoveSpeed = 3f,
+					_MoveSpeed = 2f,
 					_Restart = true,
 					_Duration = _DashDuration,
 					_LimitRotate = true,

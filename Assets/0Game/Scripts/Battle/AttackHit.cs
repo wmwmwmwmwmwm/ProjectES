@@ -9,7 +9,7 @@ namespace Battle
 	{
 		public GameObject _HitEffectPrefab;
 		public float _HitDelay;
-		public float _DamageDuration, _HitStunDuration;
+		public float _DeaccelDuration, _DamageDuration, _HitStunDuration;
 		public float _ForceForward, _ForceUp;
 		public float _Damage;
 		public float _ShakeCameraDuration;
