@@ -2690,8 +2690,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _PlayerPrefabs:
-  - {fileID: 5450576976173568224, guid: bff46722a922ea14aac613df1251db55, type: 3}
+  - {fileID: 7816617387971028284, guid: 80d5e281bc033b14a9c8f437423ba713, type: 3}
   - {fileID: 7915570431988023199, guid: 5b4ed32d10fea0344949a55fe4ed7a63, type: 3}
+  - {fileID: 5450576976173568224, guid: bff46722a922ea14aac613df1251db55, type: 3}
   _StageName: Tutorial
   _StartPosition: {fileID: 1856348487}
   _DataManagerPrefab: {fileID: 9150884734748941803, guid: e8f20c613e0b0f64d92026e2007a3a40,
