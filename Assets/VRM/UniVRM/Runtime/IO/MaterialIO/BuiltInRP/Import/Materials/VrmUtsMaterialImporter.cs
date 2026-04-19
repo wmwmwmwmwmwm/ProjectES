@@ -27,7 +27,7 @@ namespace VRM
 
 		public VrmUtsMaterialImporter()
 		{
-			UTS = Shader.Find("Universal Render Pipeline/Toon");
+			UTS = Shader.Find("Toon/Toon");
 		}
 
 		public bool TryCreateParam(GltfData data, glTF_VRM_extensions vrm, int materialIdx, out MaterialDescriptor matDesc)

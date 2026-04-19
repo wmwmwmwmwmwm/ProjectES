@@ -22,7 +22,7 @@ namespace UniGLTF
 		public BuiltInGltfUnlitMaterialImporter(Shader shader = null)
 		{
 			//Shader = shader != null ? shader : Shader.Find(UniUnlitUtil.ShaderName);
-			Shader = shader != null ? shader : Shader.Find("Universal Render Pipeline/Toon");
+			Shader = shader != null ? shader : Shader.Find("Toon/Toon");
 		}
 
 		public bool TryCreateParam(GltfData data, int i, out MaterialDescriptor matDesc)

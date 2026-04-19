@@ -170,12 +170,9 @@ namespace UniGLTF
 					}
 				}
 
-				const string ShaderDefineIS_CLIPPING_OFF = "_IS_CLIPPING_OFF";
-				const string ShaderDefineIS_CLIPPING_MODE = "_IS_CLIPPING_MODE";
-				const string ShaderDefineIS_CLIPPING_TRANSMODE = "_IS_CLIPPING_TRANSMODE";
-				material.DisableKeyword(ShaderDefineIS_CLIPPING_OFF);
-				material.DisableKeyword(ShaderDefineIS_CLIPPING_MODE);
-				material.EnableKeyword(ShaderDefineIS_CLIPPING_TRANSMODE);
+
+				material.SetInt("_ClippingMode", 2);
+				material.SetColor("_1st_ShadeColor", Color.white);
 			}
 
 			return instance;

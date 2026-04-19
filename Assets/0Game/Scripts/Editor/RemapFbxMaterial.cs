@@ -26,7 +26,7 @@ public class RemapFbxMaterial : AssetPostprocessor
 
 	Material OnAssignMaterialModel(Material material, Renderer renderer)
 	{
-		if (!assetImporter.name.EndsWith("_FBX")) return null;
+		if (!assetImporter.assetPath.EndsWith("_FBX.fbx")) return null;
 
 		DirectoryInfo parentPath = Directory.GetParent(assetImporter.assetPath); 
 		string[] assetPaths = Directory.GetFiles(parentPath.FullName, "*.asset", SearchOption.AllDirectories);
