@@ -9,8 +9,8 @@ ShaderImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 133704
-  packageName: RPG VFX Bundle
-  packageVersion: 
-  assetPath: Assets/ErbGameArt/Sword slash FX/Shaders/DissolveNoise.shader
-  uploadId: 0
+  productId: 126405
+  packageName: Sword slash VFX
+  packageVersion: 2.0
+  assetPath: Assets/VFX/ErbGameArt/Sword slash FX/Shaders/DissolveNoise.shader
+  uploadId: 336103

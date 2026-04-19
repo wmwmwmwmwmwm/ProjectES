@@ -90,3 +90,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 126405
+  packageName: Sword slash VFX
+  packageVersion: 2.0
+  assetPath: Assets/0Game/Character/Grey/SkillEffect/Slash1.fbx
+  uploadId: 336103

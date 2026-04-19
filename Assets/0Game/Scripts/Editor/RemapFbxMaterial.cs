@@ -26,6 +26,8 @@ public class RemapFbxMaterial : AssetPostprocessor
 
 	Material OnAssignMaterialModel(Material material, Renderer renderer)
 	{
+		if (!assetImporter.name.EndsWith("_FBX")) return null;
+
 		DirectoryInfo parentPath = Directory.GetParent(assetImporter.assetPath); 
 		string[] assetPaths = Directory.GetFiles(parentPath.FullName, "*.asset", SearchOption.AllDirectories);
 
@@ -53,7 +55,7 @@ public class RemapFbxMaterial : AssetPostprocessor
 			}
 		}
 
-		Debug.LogError($"Material을 찾을 수 없음: {material}");
-		return material;
+		Debug.LogError($"Material을 찾을 수 없음: {material} / {assetImporter.assetPath}");
+		return null;
 	}
 }

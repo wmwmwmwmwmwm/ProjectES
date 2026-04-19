@@ -346,6 +346,7 @@ namespace Battle
 			{
 				float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 				bool active = degree > 30f && degree < 150f;
+				active &= IsMovable();
 				active &= state._MoveSpeed > 0f || state == _Dash || state == _Land;
 				active &= !state.IsAttack;
 				active &= !IsGuarding();

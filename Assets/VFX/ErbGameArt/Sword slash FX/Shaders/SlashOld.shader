@@ -27,7 +27,7 @@ Shader "ERB/Particles/SlashOld"
 		Cull[_CullMode]
 		ZWrite Off
 		ZTest LEqual
-		//GrabPass{ }
+		GrabPass{ }
 		CGPROGRAM
 		#include "UnityShaderVariables.cginc"
 		#pragma target 3.0
@@ -42,7 +42,7 @@ Shader "ERB/Particles/SlashOld"
 		};
 
 		uniform float _Distortion;
-		//uniform sampler2D _GrabTexture;
+		uniform sampler2D _GrabTexture;
 		uniform float _Distortionpower;
 		uniform sampler2D _Noise;
 		uniform float4 _NoisespeedXY;
@@ -70,8 +70,7 @@ Shader "ERB/Particles/SlashOld"
 			float2 panner81 = ( 1.0 * _Time.y * appendResult79 + uv0_Noise);
 			float temp_output_47_0 = ( _Distortionpower * tex2D( _Noise, panner81 ).r );
 			float2 appendResult49 = (float2(U51 , ( temp_output_47_0 * temp_output_47_0 )));
-			//float4 screenColor41 = tex2D( _GrabTexture, appendResult49 );
-			float4 screenColor41 = float4(1,1,1,1);
+			float4 screenColor41 = tex2D( _GrabTexture, appendResult49 );
 			float3 clampResult42 = clamp( (screenColor41).rgb , float3( 0,0,0 ) , float3( 1,1,1 ) );
 			float temp_output_7_0 = (2.5 + (( _PathSet0ifyouuseinPS + i.uv_tex4coord.z ) - 0.0) * (1.0 - 2.5) / (1.0 - 0.0));
 			float clampResult76 = clamp( i.uv_tex4coord.w , 0.0 , 1.0 );

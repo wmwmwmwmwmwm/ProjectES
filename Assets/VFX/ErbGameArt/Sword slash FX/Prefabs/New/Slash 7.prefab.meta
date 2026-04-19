@@ -1,8 +1,15 @@
 fileFormatVersion: 2
-guid: 4724a1dd91d33d746882ba239a6d0835
+guid: 9e1fb5bb6ae8ce14a84b15c31e7ad935
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 100100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 126405
+  packageName: Sword slash VFX
+  packageVersion: 2.0
+  assetPath: Assets/VFX/ErbGameArt/Sword slash FX/Prefabs/New/Slash 7.prefab
+  uploadId: 336103
