@@ -47,6 +47,7 @@ MonoBehaviour:
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
   _HitDelay: 0.7
+  _DeaccelDuration: 0
   _DamageDuration: 0.48
   _HitStunDuration: 0
   _ForceForward: 30
@@ -100,6 +101,7 @@ MonoBehaviour:
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
   _HitDelay: 1
+  _DeaccelDuration: 0
   _DamageDuration: 0.3
   _HitStunDuration: 0
   _ForceForward: 10
@@ -153,6 +155,7 @@ MonoBehaviour:
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
   _HitDelay: 0.77
+  _DeaccelDuration: 0
   _DamageDuration: 0.3
   _HitStunDuration: 0
   _ForceForward: 0
@@ -206,6 +209,7 @@ MonoBehaviour:
   _HitEffectPrefab: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
     type: 3}
   _HitDelay: 0.55
+  _DeaccelDuration: 0
   _DamageDuration: 0.3
   _HitStunDuration: 0
   _ForceForward: 0
@@ -285,6 +289,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 1913a2d1f3719ff4f8c0cfc6f976018c, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: GuardAttack
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Transition
@@ -395,6 +404,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: f7ada600a890e3342b90fe47b221409d, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: Skill1
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Cooltime
@@ -518,6 +532,11 @@ PrefabInstance:
       objectReference: {fileID: 7400000, guid: bbdd94bf33b17af4fa66f4dc9a483d47, type: 2}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
+      propertyPath: _Name
+      value: JumpSpecialAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
       propertyPath: _SkillType
       value: 1
       objectReference: {fileID: 0}
@@ -634,6 +653,11 @@ PrefabInstance:
       objectReference: {fileID: 7400000, guid: 06c67af9342cd9e4a9e665c4b5943e74, type: 2}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
+      propertyPath: _Name
+      value: NormalAttack2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
       propertyPath: _Transition
       value: 
       objectReference: {fileID: 8108611365381890314, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -733,6 +757,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 818deedd8c224c9469a93b56fc4e8a63, type: 2}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: NormalAttack4
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Transition
@@ -839,6 +868,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 6e6d51950809c484bb7b58c6ed0de31c, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: Skill2
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Cooltime
@@ -955,6 +989,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 01fa12c27ce71ea4382e2c1c8a5a52bd, type: 2}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: NormalAttack1
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Transition
@@ -1232,6 +1271,11 @@ PrefabInstance:
       objectReference: {fileID: 7400000, guid: 43ba4d17478f21540acf2e71a1fe4471, type: 2}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
+      propertyPath: _Name
+      value: SpecialAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
       propertyPath: _SkillType
       value: 1
       objectReference: {fileID: 0}
@@ -1346,6 +1390,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 01555086103e35248849fc085d790f0c, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: Ultimate
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Cooltime
@@ -1481,6 +1530,11 @@ PrefabInstance:
       objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
     - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
+      propertyPath: _Name
+      value: JumpAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
       propertyPath: _Transition
       value: 
       objectReference: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
@@ -1574,6 +1628,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 342a67677bfa6af42818cdd8798c5b1a, type: 3}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: DashAttack
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Transition
@@ -1860,6 +1919,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 5ef54e9e8ccd801459006b721cab404a, type: 2}
+    - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _Name
+      value: NormalAttack3
+      objectReference: {fileID: 0}
     - target: {fileID: 7153295436358093368, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _Transition

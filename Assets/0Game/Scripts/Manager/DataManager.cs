@@ -87,7 +87,7 @@ public class DataManager : Singleton<DataManager>
 		return character;
 	}
 
-	public void SetupEffectPosition(GameObject instance, Battle.Character.Effect info, Transform parent)
+	public void SetupEffectPosition(GameObject instance, Battle.EffectContainer.Effect info, Transform parent)
 	{
 		instance.transform.SetParent(parent);
 		instance.transform.SetLocalPositionAndRotation(info._Pos, Quaternion.Euler(info._Rot));

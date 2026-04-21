@@ -148,7 +148,7 @@ namespace Battle
 
 			IEnumerator Internal()
 			{
-				AnimancerState state = c._UpperBodyLayer.Play(c._Anims_Player._GuardUpAsset);
+				AnimancerState state = c._UpperBodyLayer.Play(c._GuardUpAsset);
 				state.Time = 0f;
 				c.EmitEffect(_JustGuardEffect, true);
 				float start = Time.time;

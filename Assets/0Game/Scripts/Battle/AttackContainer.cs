@@ -12,19 +12,19 @@ namespace Battle
 		public Transform _Actions;
 
 		List<BattleAttack> _Attacks;
-		Dictionary<TransitionAsset, BattleAttack> _AttackDict;
+		Dictionary<string, BattleAttack> _AttackDict;
 
 		public void Init()
 		{
 			_Attacks = _Actions.GetComponentsInChildren<BattleAttack>().ToList();
 			_Attacks.ForEach(x => x.gameObject.SetActive(false));
-			_AttackDict = _Attacks.ToDictionary(a => a._Transition, b => b);
+			_AttackDict = _Attacks.ToDictionary(a => a._Name, b => b);
 		}
 
-		public BattleAttack GetAttack(TransitionAsset transition)
+		public BattleAttack GetAttack(string name)
 		{
-			if (!transition) return null;
-			_AttackDict.TryGetValue(transition, out BattleAttack data);
+			if (string.IsNullOrEmpty(name)) return null;
+			_AttackDict.TryGetValue(name, out BattleAttack data);
 			return data;
 		}
 	}

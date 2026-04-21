@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Battle.BattleAttack;
+using static Battle.EffectContainer;
 using static SingletonManager;
 using static UnityEngine.InputSystem.InputAction;
 using Random = UnityEngine.Random;
@@ -369,7 +370,7 @@ namespace Battle
 					Play_Canceling(_Idle, false);
 				}
 				_UpperBodyLayer.SetWeight(1f);
-				AnimancerState state = _UpperBodyLayer.Play(_Anims_Player._GuardUpAsset);
+				AnimancerState state = _UpperBodyLayer.Play(_GuardUpAsset);
 				state.Time = 0f;
 				_GuardUpTime = Time.time;
 			}
@@ -377,7 +378,7 @@ namespace Battle
 			// 가드 해제
 			if (!Inputs.Guard.IsPressed() && IsGuarding())
 			{
-				AnimancerState state = _UpperBodyLayer.Play(_Anims_Player._GuardDownAsset);
+				AnimancerState state = _UpperBodyLayer.Play(_GuardDownAsset);
 				state.Events(this).OnEnd ??= GuardCancel;
 				_GuardDownTime = Time.time;
 			}
@@ -665,7 +666,7 @@ namespace Battle
 						if (playDamageAnim)
 						{
 							_Damage._Duration = attackHit._DamageDuration;
-							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
+							_Damage.SetAsset(_DamageAssets.PickOne());
 							PlayAction(_Damage);
 						}
 					}
@@ -678,7 +679,7 @@ namespace Battle
 						FeetSmoke(attackHit._DeaccelDuration);
 						if (playDamageAnim)
 						{
-							_Damage.SetAsset(_Anims_Common._DamageAssets.PickOne());
+							_Damage.SetAsset(_DamageAssets.PickOne());
 							PlayAction(_Damage);
 						}
 					}
@@ -815,7 +816,7 @@ namespace Battle
 			if (!_Player) return false;
 
 			bool guard = _UpperBodyLayer.Weight > 0f;
-			AnimancerState guardDownState = _UpperBodyLayer.GetOrCreateState(_Anims_Player._GuardDownAsset.Transition);
+			AnimancerState guardDownState = _UpperBodyLayer.GetOrCreateState(_GuardDownAsset.Transition);
 			guard &= _UpperBodyLayer.CurrentState != guardDownState;
 
 			// 가드 해제 그레이스 타임

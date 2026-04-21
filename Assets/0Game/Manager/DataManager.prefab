@@ -77,6 +77,9 @@ MonoBehaviour:
     _StartPosition: {x: 456.52, y: 0, z: 635.33}
     _StartRotation: {x: -0, y: -0.73787844, z: -0, w: 0.6749337}
     _Spawns:
+    - _CharacterName: Tower
+      _Position: {x: 446.4646, y: 0.0000076293945, z: 631.3876}
+      _Rotation: {x: 0, y: -0.7907323, z: 0, w: 0.61216205}
     - _CharacterName: Snowman_3
       _Position: {x: 440.39, y: 0, z: 624.12}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}

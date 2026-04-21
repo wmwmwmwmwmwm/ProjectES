@@ -5,15 +5,17 @@ using Animancer;
 using Animancer.FSM;
 using DG.Tweening;
 using NaughtyAttributes;
+using Animancer.TransitionLibraries;
+using System.Linq;
 
 namespace Battle
 {
 	public partial class Character
 	{
 		[Header("애니메이션")]
+		public TransitionLibraryAsset _TransitionLibrary;
 		[ShowIf("_ShowAll")] public AvatarMask _UpperBodyMask;
 		[ShowIf("_ShowAll")] public AnimationCurve _AttackMoveCurve;
-		 
 		[ShowIf("_ShowAll")] public StringAsset _MoveX, _MoveY;
 		[ShowIf("_ShowAll")] public StringAsset _NextAttack;
 
@@ -22,30 +24,27 @@ namespace Battle
 		[HideInInspector] public StateMachine<State>.WithDefault _FSM;
 		SmoothedVector2Parameter _MoveParameter;
 
-		//// BaseLayer
-		//[HideInInspector] public TransitionAsset _IdleAsset;
-		//[HideInInspector] public TransitionAsset _MoveAsset;
-		//[HideInInspector] public TransitionAsset _RunAsset;
-		//[HideInInspector] public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
-		//[HideInInspector] public TransitionAsset _JumpAsset, _LandAsset;
-		//[HideInInspector] public List<TransitionAsset> _DamageAssets;
-		//[HideInInspector] public TransitionAsset _GetDownAsset, _GetUpAsset;
-		//[HideInInspector] public TransitionAsset _DieAsset;
-		//[HideInInspector] public List<TransitionAsset> _NormalAttackAssets;
-		//[HideInInspector] public TransitionAsset _JumpAttackAsset;
-		//[HideInInspector] public TransitionAsset _DashAttackAsset;
-		//[HideInInspector] public TransitionAsset _SpecialAttackAsset;
-		//[HideInInspector] public TransitionAsset _JumpSpecialAttackAsset;
-		//[HideInInspector] public TransitionAsset _GuardAttackAsset;
-		//[HideInInspector] public TransitionAsset _Skill1Asset;
-		//[HideInInspector] public TransitionAsset _Skill2Asset;
-		//[HideInInspector] public TransitionAsset _UltimateAsset;
+		// BaseLayer
+		TransitionAsset _IdleAsset;
+		TransitionAsset _MoveAsset;
+		TransitionAsset _RunAsset;
+		[HideInInspector] public TransitionAsset _DashFwdAsset, _DashBwdAsset, _DashLeftAsset, _DashRightAsset;
+		[HideInInspector] public TransitionAsset _JumpAsset, _LandAsset;
+		List<TransitionAsset> _DamageAssets;
+		TransitionAsset _GetDownAsset, _GetUpAsset;
+		TransitionAsset _DieAsset;
+		List<TransitionAsset> _NormalAttackAssets;
+		TransitionAsset _JumpAttackAsset;
+		TransitionAsset _DashAttackAsset;
+		TransitionAsset _SpecialAttackAsset;
+		TransitionAsset _JumpSpecialAttackAsset;
+		TransitionAsset _GuardAttackAsset;
+		TransitionAsset _Skill1Asset;
+		TransitionAsset _Skill2Asset;
+		TransitionAsset _UltimateAsset;
 
-		//// UpperBodyLayer
-		//[HideInInspector] public TransitionAsset _GuardUpAsset, _GuardDownAsset;
-
-		[HideInInspector] public AnimationContainer_Common _Anims_Common;
-		[HideInInspector] public AnimationContainer_Player _Anims_Player;
+		// UpperBodyLayer
+		[HideInInspector] public TransitionAsset _GuardUpAsset, _GuardDownAsset;
 
 		[HideInInspector] public State _Idle;
 		[HideInInspector] public State _Move;
@@ -54,15 +53,15 @@ namespace Battle
 		[HideInInspector] public State _Jump;
 		[HideInInspector] public State _Fall;
 		[HideInInspector] public State _Land;
-		[HideInInspector] public State _Damage;
-		[HideInInspector] public State _GetDown, _GetUp;
-		[HideInInspector] public State _Die;
-		[HideInInspector] public List<State> _NormalAttacks;
-		[HideInInspector] public State _JumpAttack;
+		State _Damage;
+		State _GetDown, _GetUp;
+		State _Die;
+		List<State> _NormalAttacks;
+		State _JumpAttack;
 		[HideInInspector] public State _DashAttack;
-		[HideInInspector] public State _SpecialAttack;
+		State _SpecialAttack;
 		[HideInInspector] public State _JumpSpecialAttack;
-		[HideInInspector] public State _GuardAttack;
+		State _GuardAttack;
 		[HideInInspector] public State _Skill1;
 		[HideInInspector] public State _Skill2;
 		[HideInInspector] public State _Ultimate;
@@ -74,13 +73,60 @@ namespace Battle
 			_UpperBodyLayer.Mask = _UpperBodyMask;
 			_MoveParameter = new(_Animancer, _MoveX, _MoveY, 0.15f);
 
-			_Anims_Common = GetComponent<AnimationContainer_Common>();
-			_Anims_Player = GetComponent<AnimationContainer_Player>();
+			// TransitionAsset 초기화
+			Dictionary<string, TransitionAsset> transitionDict = _TransitionLibrary.Definition.Transitions.ToDictionary(a => a.name, b => b as TransitionAsset);
+			_IdleAsset = transitionDict["Idle"];
+			_MoveAsset = transitionDict["Move"];
+			_JumpAsset = transitionDict["Jump"]; 
+			_LandAsset = transitionDict["Land"];
+			_DamageAssets = new();
+			for (int i = 0; i < 10; i++)
+			{
+				int n = i + 1;
+				if (transitionDict.TryGetValue($"Damage{n}", out TransitionAsset asset))
+				{
+					_DamageAssets.Add(asset);
+				}
+				else break;
+			};
+			_GetDownAsset = transitionDict["GetDown"]; 
+			_GetUpAsset = transitionDict["GetUp"];
+			_DieAsset = transitionDict["Die"];
+			_Skill1Asset = transitionDict["Skill1"];
+			_Skill2Asset = transitionDict["Skill2"];
+			_UltimateAsset = transitionDict["Ultimate"];
 
+			if (_Player)
+			{
+				_RunAsset = transitionDict["Run"];
+				_DashFwdAsset = transitionDict["DashFwd"];
+				_DashBwdAsset = transitionDict["DashBwd"];
+				_DashLeftAsset = transitionDict["DashLeft"];
+				_DashRightAsset = transitionDict["DashRight"];
+				_NormalAttackAssets = new();
+				for (int i = 0; i < 10; i++)
+				{
+					int n = i + 1;
+					if (transitionDict.TryGetValue($"NormalAttack{n}", out TransitionAsset asset))
+					{
+						_NormalAttackAssets.Add(asset);
+					}
+					else break;
+				}
+				_JumpAttackAsset = transitionDict["JumpAttack"];
+				_DashAttackAsset = transitionDict["DashAttack"];
+				_SpecialAttackAsset = transitionDict["SpecialAttack"];
+				_JumpSpecialAttackAsset = transitionDict["JumpSpecialAttack"];
+				_GuardAttackAsset = transitionDict["GuardAttack"];
+				_GuardUpAsset = transitionDict["GuardUp"];
+				_GuardDownAsset = transitionDict["GuardDown"];
+			}
+
+			// State 초기화
 			_Idle = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._IdleAsset,
+				_Asset = _IdleAsset,
 				_Priority = -12,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
@@ -93,7 +139,7 @@ namespace Battle
 			_Move = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._MoveAsset,
+				_Asset = _MoveAsset,
 				_Priority = -12,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
@@ -118,7 +164,7 @@ namespace Battle
 			_Fall = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._JumpAsset,
+				_Asset = _JumpAsset,
 				_Priority = -11,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
@@ -131,8 +177,7 @@ namespace Battle
 			_Land = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._LandAsset,
-				//_Priority = -10,
+				_Asset = _LandAsset,
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -150,7 +195,7 @@ namespace Battle
 			_GetDown = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._GetDownAsset,
+				_Asset = _GetDownAsset,
 				_Priority = 11,
 				_Duration = float.MaxValue,
 			};
@@ -158,14 +203,14 @@ namespace Battle
 			_GetUp = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._GetUpAsset,
+				_Asset = _GetUpAsset,
 				_Priority = 11,
 			};
 			_GetUp.Init();
 			_Die = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._DieAsset,
+				_Asset = _DieAsset,
 				_Priority = 12,
 				_Duration = float.MaxValue,
 			};
@@ -173,7 +218,7 @@ namespace Battle
 			_Skill1 = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._Skill1Asset,
+				_Asset = _Skill1Asset,
 				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_LimitRotate = true,
@@ -184,7 +229,7 @@ namespace Battle
 			_Skill2 = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._Skill2Asset,
+				_Asset = _Skill2Asset,
 				_MoveSpeed = 0.3f,
 				_Restart = true,
 				_LimitRotate = true,
@@ -195,7 +240,7 @@ namespace Battle
 			_Ultimate = new()
 			{
 				c = this,
-				_Asset = _Anims_Common._UltimateAsset,
+				_Asset = _UltimateAsset,
 				_MoveSpeed = 0f,
 				_Restart = true,
 				_LimitRotate = true,
@@ -203,12 +248,12 @@ namespace Battle
 			};
 			_Ultimate.Init();
 
-			if (_Anims_Player)
+			if (_Player)
 			{
 				_Run = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._RunAsset,
+					_Asset = _RunAsset,
 					_Priority = -12,
 					_MoveSpeed = 2f,
 					_Duration = -1f,
@@ -229,10 +274,9 @@ namespace Battle
 				};
 				_Dash.Init();
 				_NormalAttacks = new();
-				for (int i = 0; i < _Anims_Player._NormalAttackAssets.Count; i++)
+				for (int i = 0; i < _NormalAttackAssets.Count; i++)
 				{
-					TransitionAsset asset = _Anims_Player._NormalAttackAssets[i];
-					bool isLast = i == _Anims_Player._NormalAttackAssets.Count - 1;
+					TransitionAsset asset = _NormalAttackAssets[i];
 					State newState = new()
 					{
 						c = this,
@@ -250,7 +294,7 @@ namespace Battle
 				_JumpAttack = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._JumpAttackAsset,
+					_Asset = _JumpAttackAsset,
 					_MoveSpeed = 1f,
 					_Restart = true,
 					_LimitRotate = true,
@@ -262,7 +306,7 @@ namespace Battle
 				_DashAttack = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._DashAttackAsset,
+					_Asset = _DashAttackAsset,
 					_Priority = 1,
 					_MoveSpeed = 1f,
 					_Restart = true,
@@ -274,7 +318,7 @@ namespace Battle
 				_SpecialAttack = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._SpecialAttackAsset,
+					_Asset = _SpecialAttackAsset,
 					_MoveSpeed = 0.3f,
 					_Restart = true,
 					_LimitRotate = true,
@@ -286,7 +330,7 @@ namespace Battle
 				_JumpSpecialAttack = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._JumpSpecialAttackAsset,
+					_Asset = _JumpSpecialAttackAsset,
 					_MoveSpeed = 1f,
 					_Restart = true,
 					_LimitRotate = true,
@@ -297,7 +341,7 @@ namespace Battle
 				_GuardAttack = new()
 				{
 					c = this,
-					_Asset = _Anims_Player._GuardAttackAsset,
+					_Asset = _GuardAttackAsset,
 					_MoveSpeed = 0.3f,
 					_Restart = true,
 					_LimitRotate = true,
@@ -347,7 +391,7 @@ namespace Battle
 				float degree = Util.DirectionToRotationZ(new(_MoveInput.x, _MoveInput.z));
 				bool active = degree > 30f && degree < 150f;
 				active &= IsMovable();
-				active &= state._MoveSpeed > 0f || state == _Dash || state == _Land;
+				active &= _MoveSpeed > 0f || state == _Dash || state == _Land;
 				active &= !state.IsAttack;
 				active &= !IsGuarding();
 				_IsRunning = active;
@@ -363,7 +407,7 @@ namespace Battle
 					bool success = _FSM.TrySetState(_GetUp);
 					if (success)
 					{
-						_InvincibleTimer = _Anims_Common._GetUpAsset.MaximumLength + 0.6f;
+						_InvincibleTimer = _GetUpAsset.MaximumLength + 0.6f;
 					}
 				}
 			}

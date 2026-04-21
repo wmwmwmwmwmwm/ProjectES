@@ -12,7 +12,7 @@ namespace Battle
 		public enum RangeType { Melee, Range };
 		public enum AreaType { Single, Area };
 
-		public TransitionAsset _Transition;
+		public string _Name;
 
 		public float _Cooltime;
 		public float _SpeedMultiplier;

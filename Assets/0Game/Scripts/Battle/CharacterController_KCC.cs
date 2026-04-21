@@ -63,10 +63,10 @@ namespace Battle
 						};
 						TransitionAsset asset = _MoveRequest switch
 						{
-							MoveRequest.DashFwd => c._Anims_Player._DashFwdAsset,
-							MoveRequest.DashBwd => c._Anims_Player._DashBwdAsset,
-							MoveRequest.DashLeft => c._Anims_Player._DashLeftAsset,
-							_ => c._Anims_Player._DashRightAsset
+							MoveRequest.DashFwd => c._DashFwdAsset,
+							MoveRequest.DashBwd => c._DashBwdAsset,
+							MoveRequest.DashLeft => c._DashLeftAsset,
+							_ => c._DashRightAsset
 						};
 						c._Dash.SetAsset(asset);
 						c._FSM.TrySetState(c._Dash);
@@ -123,7 +123,7 @@ namespace Battle
 					{
 						jump = true;
 						dir = _Motor.CharacterUp;
-						asset = c._Anims_Common._JumpAsset;
+						asset = c._JumpAsset;
 					}
 					// 벽
 					else
@@ -175,10 +175,10 @@ namespace Battle
 								dir = Vector3.RotateTowards(jumpDir, _Motor.CharacterUp, 45f * Mathf.Deg2Rad, 0f);
 								asset = dir4 switch
 								{
-									Direction4.Up => c._Anims_Player._DashFwdAsset,
-									Direction4.Down => c._Anims_Player._DashBwdAsset,
-									Direction4.Left => c._Anims_Player._DashLeftAsset,
-									_ => c._Anims_Player._DashRightAsset
+									Direction4.Up => c._DashFwdAsset,
+									Direction4.Down => c._DashBwdAsset,
+									Direction4.Left => c._DashLeftAsset,
+									_ => c._DashRightAsset
 								};
 								Controller.PlayEffect123123(c._GuardEffectPrefab, c, c.Bottom, Quaternion.identity);
 								break;

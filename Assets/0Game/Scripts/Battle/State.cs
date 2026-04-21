@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Battle.EffectContainer;
 using static SingletonManager;
 
 namespace Battle
@@ -26,7 +27,7 @@ namespace Battle
 		public AnimancerState _State;
 		public Action _OnEnd;
 
-		public List<Character.Effect> _EffectDatas;
+		public List<Effect> _EffectDatas;
 		public BattleAttack _Attack;
 
 		public bool IsAttack => _Attack != null;
@@ -40,8 +41,8 @@ namespace Battle
 			if (_Asset == null) return;
 
 			_State = c._BaseLayer.GetOrCreateState(_Asset);
-			_EffectDatas = c._EffectContainer.GetEffectDatas(_Asset);
-			_Attack = c._AttackContainer.GetAttack(_Asset);
+			_EffectDatas = c._EffectContainer.GetEffectDatas(_Asset.name);
+			_Attack = c._AttackContainer.GetAttack(_Asset.name);
 
 			// Duration : 설정되어 있다면 애니메이션이 끝나도 홀드
 			if (_Duration == 0f)

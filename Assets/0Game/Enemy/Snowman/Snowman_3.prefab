@@ -76,6 +76,11 @@ PrefabInstance:
       objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
     - target: {fileID: 3152885022966669924, guid: f0bd9846712dd784294af365bf2d3278,
         type: 3}
+      propertyPath: _Name
+      value: Skill2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3152885022966669924, guid: f0bd9846712dd784294af365bf2d3278,
+        type: 3}
       propertyPath: _Transition
       value: 
       objectReference: {fileID: 4652592177226673511, guid: 37a284cab18a95440b35270a49d0946f,
@@ -610,6 +615,11 @@ PrefabInstance:
       propertyPath: _Clip
       value: 
       objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Name
+      value: Skill1
+      objectReference: {fileID: 0}
     - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
       propertyPath: _Transition
