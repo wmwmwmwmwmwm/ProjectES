@@ -9,6 +9,8 @@ namespace Battle
 {
 	public class CharacterController_Rigidbody : MonoBehaviour, IMoverController
 	{
+		public Transform _Fragment;
+
 		[HideInInspector] public PhysicsMover _Mover;
 		[HideInInspector] public Collider _Collider;
 

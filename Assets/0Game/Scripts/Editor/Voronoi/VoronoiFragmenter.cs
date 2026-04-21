@@ -1,23 +1,28 @@
-﻿using csDelaunay;
+﻿using Battle;
+using csDelaunay;
+using NaughtyAttributes;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace SimplestarGame
 {
 	public class VoronoiFragmenter : MonoBehaviour
 	{
-		[SerializeField] MeshFilter fragmentPrefab;
-		[SerializeField] int numberOfPoints = 50;
-		[SerializeField] float scaleRadius = 0.6f;
-		[SerializeField] float minFragmentSize = 0.1f;
-		[SerializeField] float remainingTime = 5f;
-		[SerializeField] float fadeDuration = 5f;
-		[SerializeField] AnimationCurve fadeCurve;
+		public Transform _TargetMesh;
+		public Transform _FragmentParent;
+		public MeshFilter fragmentPrefab;
 
-		void Start()
+		public int numberOfPoints = 50;
+		public float scaleRadius = 0.6f;
+		public float minFragmentSize = 0.1f;
+
+		[Button("Fragment 생성")]
+		public void Button()
 		{
-			print(11);
+			if (!_TargetMesh || !_FragmentParent) return;
 			Fragment(transform.position);
+			GetComponent<CharacterController_Rigidbody>()._Fragment = _FragmentParent;
 		}
 
 		internal void Fragment(Vector3 hitPoint)
@@ -124,7 +129,7 @@ namespace SimplestarGame
 			// プロット点を使ってボロノイ図をバウンディングボックス矩形に描く
 			var voronoi = new Voronoi(sites, bounds, 2);
 			// ボロノイ図の小領域ごとに破片オブジェクトを作成
-			int createdMeshCount = 0;
+			//int createdMeshCount = 0;
 			var regions = voronoi.Regions();
 			voronoi.Dispose();
 			if (0 == regions.Count)
@@ -484,11 +489,11 @@ namespace SimplestarGame
 
 					var fragment = Instantiate(this.fragmentPrefab);
 					fragment.name = this.name + "_fragment" + zIdx + ((1 == extraIdx) ? "extra" : "");
-					fragment.transform.SetParent(this.transform, false);
+					fragment.transform.SetParent(_TargetMesh.transform);
 					fragment.transform.localPosition = v3Center;
 					fragment.transform.localRotation = Quaternion.identity;
 					fragment.transform.localScale = Vector3.one;
-					fragment.transform.SetParent(null);
+					fragment.transform.SetParent(_FragmentParent);
 					fragment.sharedMesh = mesh;
 
 					if (this.TryGetComponent(out MeshRenderer myMeshRenderer))
@@ -502,7 +507,7 @@ namespace SimplestarGame
 					{
 						meshCollider.sharedMesh = mesh;
 					}
-					fragment.gameObject.AddComponent<MeshCleaner>();
+					//fragment.gameObject.AddComponent<MeshCleaner>();
 					
 					float reFragmentSize = scaleZ * 1.5f;
 					if (reFragmentSize < fragmentW && reFragmentSize < fragmentH)
@@ -512,46 +517,46 @@ namespace SimplestarGame
 						cubeFragment.numberOfPoints = this.numberOfPoints;
 						cubeFragment.scaleRadius = this.scaleRadius;
 						cubeFragment.minFragmentSize = this.minFragmentSize;
-						cubeFragment.fadeCurve = this.fadeCurve;
-						cubeFragment.fadeDuration = this.fadeDuration;
-						cubeFragment.remainingTime = this.remainingTime;
+						//cubeFragment.fadeCurve = this.fadeCurve;
+						//cubeFragment.fadeDuration = this.fadeDuration;
+						//cubeFragment.remainingTime = this.remainingTime;
 					}
-					else
-					{
-						var fadeOuter = fragment.gameObject.AddComponent<FadeOuter>();
-						fadeOuter.FadeOut(Random.Range(this.remainingTime, this.remainingTime * 1.3f), this.fadeDuration, this.fadeCurve);
-					}
-					createdMeshCount++;
+					//else
+					//{
+					//	var fadeOuter = fragment.gameObject.AddComponent<FadeOuter>();
+					//	fadeOuter.FadeOut(Random.Range(this.remainingTime, this.remainingTime * 1.3f), this.fadeDuration, this.fadeCurve);
+					//}
+					//createdMeshCount++;
 				}
 			}
 
 			this.transform.localScale = scale;
-			if (0 < createdMeshCount)
-			{
-				// 自オブジェクトのコライダーとメッシュ非表示
-				if (this.TryGetComponent(out Collider collider))
-				{
-					Destroy(collider);
-				}
-				if (this.TryGetComponent(out Renderer renderer))
-				{
-					renderer.enabled = false;
-				}
-				List<Transform> childs = new List<Transform>();
-				foreach (Transform childTransform in this.transform)
-				{
-					childs.Add(childTransform);
-				}
-				foreach (Transform childTransform in childs)
-				{
-					// 子オブジェクトを開放
-					if (!childTransform.TryGetComponent(out Rigidbody rigidbody))
-					{
-						childTransform.gameObject.AddComponent<Rigidbody>();
-					}
-					childTransform.SetParent(null, true);
-				}
-			}
+			//if (0 < createdMeshCount)
+			//{
+			//	// 自オブジェクトのコライダーとメッシュ非表示
+			//	if (this.TryGetComponent(out Collider collider))
+			//	{
+			//		Destroy(collider);
+			//	}
+			//	if (this.TryGetComponent(out Renderer renderer))
+			//	{
+			//		renderer.enabled = false;
+			//	}
+			//	List<Transform> childs = new List<Transform>();
+			//	foreach (Transform childTransform in this.transform)
+			//	{
+			//		childs.Add(childTransform);
+			//	}
+			//	foreach (Transform childTransform in childs)
+			//	{
+			//		// 子オブジェクトを開放
+			//		if (!childTransform.TryGetComponent(out Rigidbody rigidbody))
+			//		{
+			//			childTransform.gameObject.AddComponent<Rigidbody>();
+			//		}
+			//		childTransform.SetParent(null, true);
+			//	}
+			//}
 		}
 
 		/// <summary>
