@@ -153,11 +153,17 @@ namespace Battle
 			Enemy enemy = Instantiate(c).GetComponent<Enemy>();
 			enemy.Init();
 			enemy.c.SetPositionAndRotation(pos, rot);
-			enemy.GetComponent<NavMeshAgent>().enabled = true;
 			AddEnemyHPUI(enemy);
 			AddMinimapMarker(enemy.c, false);
 			enemy.Init2();
 			_Enemys.Add(enemy);
+		}
+
+		public void AddForceToFragment(Fragment fragment, Vector3 hitPoint, Vector3 hitDirection)
+		{
+			Rigidbody rigidbody = fragment.GetComponent<Rigidbody>();
+			hitDirection = hitDirection.RandomizeDirectionVector(10f);
+			rigidbody.AddForceAtPosition(hitDirection * 10f + Vector3.up * 1f, hitPoint, ForceMode.Impulse);
 		}
 
 		public GameObject _AttackAreaDecalPrefab;

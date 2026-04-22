@@ -468,7 +468,7 @@ namespace Battle
 						halfExtents: melee._Collider.size / 2f,
 						results: melee._HitResults,
 						orientation: attack.transform.rotation,
-						mask: GetOppositeLayerMask());
+						mask: GetOppositeAndTerrainLayerMask());
 
 					// 공격 적중
 					if (overlapCount > 0)
@@ -476,8 +476,8 @@ namespace Battle
 						List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
 						overlaps.Sort((a, b) =>
 						{
-							float aDistance = (a.GetComponentInParent<Character>().Center - Center).sqrMagnitude;
-							float bDistance = (b.GetComponentInParent<Character>().Center - Center).sqrMagnitude;
+							float aDistance = (a.transform.position - transform.position).sqrMagnitude;
+							float bDistance = (b.transform.position - transform.position).sqrMagnitude;
 							float v = (aDistance - bDistance) * 100f;
 							return (int)v;
 						});
@@ -485,35 +485,27 @@ namespace Battle
 						shoulder.y += _ShoulderHeight;
 						foreach (Collider col in overlaps)
 						{
-							Character c = col.GetComponentInParent<Character>();
-							Vector3 attackDir = c.Center - shoulder;
-							attackDir.Normalize();
-							int count = Physics.RaycastNonAlloc(
-								origin: shoulder,
-								direction: attackDir,
-								results: _RaycastResults,
-								maxDistance: 100f,
-								layerMask: GetOppositeLayerMask());
-							RaycastHit hit = default;
-							for (int i = 0; i < count; i++)
+							Character targetCharacter = col.GetComponentInParent<Character>();
+							if (col.TryGetComponent(out Fragment fragment))
 							{
-								RaycastHit iter = _RaycastResults[i];
-								if (col == iter.collider)
-								{
-									hit = iter;
-									break;
-								}
+								Vector3 hitPoint = fragment.GetComponent<MeshCollider>().bounds.ClosestPoint(Center);
+								Controller.AddForceToFragment(fragment, hitPoint, transform.forward);
 							}
-							StartCoroutine(DelayTakeDamage());
-							yield return new WaitForSeconds(attackHit._HitStunDuration);
-
-							IEnumerator DelayTakeDamage()
+							else if (targetCharacter)
 							{
-								// 공격 판정 딜레이
-								Effect effectData = attack._StateInfo._EffectDatas.First();
-								float delay = attackHit._HitDelay - effectData._Delay;
-								yield return new WaitForSeconds(delay);
-								c.TakeDamage(attack, attackHit, hit.point, attackDir);
+								Vector3 attackDir = targetCharacter.Center - shoulder;
+								Bounds bounds = targetCharacter.UseKCC ? targetCharacter._KCC._Motor.Capsule.bounds : targetCharacter._KCC_Rigidbody._Collider.bounds;
+								Vector3 hitPoint = bounds.ClosestPoint(Center);
+								StartCoroutine(DelayTakeDamage());
+								IEnumerator DelayTakeDamage()
+								{
+									// 공격 판정 딜레이
+									Effect effectData = attack._StateInfo._EffectDatas.First();
+									float delay = attackHit._HitDelay - effectData._Delay;
+									yield return new WaitForSeconds(delay);
+									targetCharacter.TakeDamage(attack, attackHit, hitPoint, attackDir);
+								}
+								yield return new WaitForSeconds(attackHit._HitStunDuration);
 							}
 						}
 					}
@@ -566,13 +558,10 @@ namespace Battle
 							missile._Attack = attack.GetComponent<BattleAttack>();
 							missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
 							Vector3 pos = attack._SpawnPoints.PickOne().position;
-							Vector3 euler = _AimDestRotation.eulerAngles;
-							Vector2 spread = new(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-							spread.Normalize();
-							euler.x += Random.value * attack._SpreadDegree * spread.x;
-							euler.y += Random.value * attack._SpreadDegree * spread.y;
-							missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
-							missile._Rigidbody.Move(pos, Quaternion.Euler(euler));
+							Vector3 rot = _AimDestRotation.eulerAngles;
+							rot = rot.RandomizeDirectionVector(attack._SpreadDegree);
+							missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+							missile._Rigidbody.Move(pos, Quaternion.Euler(rot));
 
 							float delay = attack._FireCount > 1 ? attack._FireDuration / (attack._FireCount - 1) : attack._FireDuration;
 							yield return new WaitForSeconds(delay);
@@ -781,6 +770,13 @@ namespace Battle
 			else return Layer.PlayerLayerMask;
 		}
 
+		public LayerMask GetOppositeAndTerrainLayerMask()
+		{
+			LayerMask layerMask = gameObject.layer == Layer.PlayerLayer ? Layer.EnemyLayerMask : Layer.PlayerLayerMask;
+			layerMask |= Layer.TerrainLayerMask;
+			return layerMask;
+		}
+
 		public bool IsMovable()
 		{
 			bool movable = true;
@@ -799,7 +795,7 @@ namespace Battle
 			}
 			else
 			{
-				return false;
+				return true;
 			}
 		}
 

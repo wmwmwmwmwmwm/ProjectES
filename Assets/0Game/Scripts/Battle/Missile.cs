@@ -88,8 +88,7 @@ namespace Battle
 
 			// 히트 판정
 			Vector3 deltaPosition = _Rigidbody.linearVelocity * Time.deltaTime;
-			int layerMask = _Attack._Owner.GetOppositeLayerMask();
-			layerMask |= Layer.TerrainLayerMask;
+			int layerMask = _Attack._Owner.GetOppositeAndTerrainLayerMask();
 			int count = Physics.SphereCastNonAlloc(
 				origin: transform.position,
 				radius: _Collider.radius,
@@ -114,6 +113,10 @@ namespace Battle
 				{
 					Controller.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
 					_HitTargets.Add(hit.collider.gameObject, Time.time);
+					if (hit.collider.TryGetComponent(out Fragment fragment))
+					{
+						Controller.AddForceToFragment(fragment, hit.point, transform.forward);
+					}
 				}
 				// 공격 적중
 				else
@@ -143,7 +146,7 @@ namespace Battle
 						position: transform.position,
 						radius: _Bomb._AreaCollider.radius,
 						results: _Bomb._HitResults,
-						layerMask: _Attack._Owner.GetOppositeLayerMask());
+						layerMask: _Attack._Owner.GetOppositeAndTerrainLayerMask());
 					for (int i = 0; i < count; i++)
 					{
 						Collider col = _Bomb._HitResults[i];
@@ -152,10 +155,17 @@ namespace Battle
 							if (Time.time - damagedTime < _Bomb._DamageInterval) continue;
 						}
 
-						Character target = col.GetComponentInParent<Character>();
-						Vector3 direction = (target.transform.position - hitPoint).normalized;
-						target.TakeDamage(_Attack, _AttackHit, null, direction);
-						_HitTargets[target.gameObject] = Time.time;
+						Vector3 direction = (col.transform.position - hitPoint).normalized;
+						Character character = col.GetComponentInParent<Character>(); 
+						if (col.TryGetComponent(out Fragment fragment))
+						{
+							Controller.AddForceToFragment(fragment, transform.position, direction);
+						}
+						else if (character)
+						{
+							character.TakeDamage(_Attack, _AttackHit, null, direction);
+						}
+						_HitTargets[col.gameObject] = Time.time;
 					}
 					if (!_Bomb._HasDuration) break;
 

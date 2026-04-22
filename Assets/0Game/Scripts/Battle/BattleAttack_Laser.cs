@@ -24,6 +24,8 @@ namespace Battle
 		GameObject _HitEffect;
 		Dictionary<GameObject, float> _HitTargets;
 
+		BattleController Controller => BattleController.Instance;
+
 		public void Init()
 		{
 			_Attack = GetComponent<BattleAttack>();
@@ -68,7 +70,11 @@ namespace Battle
 			// 데미지 주기
 			if (!_GiveDamage || !hitInfo.collider) return;
 			Character targetCharacter = hitInfo.collider.GetComponentInParent<Character>();
-			if (targetCharacter && _Attack._Owner.IsOpposite(targetCharacter))
+			if (hitInfo.collider.TryGetComponent(out Fragment fragment))
+			{
+				Controller.AddForceToFragment(fragment, hitInfo.point, transform.forward);
+			}
+			else if (targetCharacter && _Attack._Owner.IsOpposite(targetCharacter))
 			{
 				if (_HitTargets.TryGetValue(targetCharacter.gameObject, out float damageTime)
 					&& Time.time - damageTime <= _DamageInterval) return;

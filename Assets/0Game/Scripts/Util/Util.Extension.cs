@@ -265,4 +265,13 @@ public static partial class Util
 	}
 
 	public static Vector3 GetCenter(this BoxCollider c) => c.transform.position + c.transform.TransformVector(c.center);
+
+	public static Vector3 RandomizeDirectionVector(this Vector3 v, float degree)
+	{
+		Vector2 spread = new(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
+		spread.Normalize();
+		v.x += Random.value * degree * spread.x;
+		v.y += Random.value * degree * spread.y;
+		return v;
+	}
 }

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.dgreenheck.openfracture": "https://github.com/dgreenheck/OpenFracture.git",
     "com.unity.addressables": "2.7.6",
     "com.unity.ai.inference": "2.3.0",
     "com.unity.ai.navigation": "2.0.10",

@@ -71,8 +71,23 @@ namespace Battle
 		public void ActivateFragment()
 		{
 			if (_Fragment.childCount == 0) return;
+
 			_Fragment.gameObject.SetActive(true);
 			_MeshRenderer.gameObject.SetActive(false);
+
+			foreach (Transform child in _Fragment)
+			{
+				Rigidbody rigidbody = child.GetComponent<Rigidbody>();
+				rigidbody.maxLinearVelocity = 10f / rigidbody.mass;
+				rigidbody.maxAngularVelocity = 5f / rigidbody.mass;
+				float force = 10f;
+				rigidbody.AddExplosionForce(
+					force,
+					transform.position,
+					0f,
+					force / 3f,
+					ForceMode.Impulse);
+			}
 		}
 	}
 }

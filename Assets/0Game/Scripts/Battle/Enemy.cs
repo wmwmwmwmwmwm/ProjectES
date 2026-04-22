@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using SimplestarGame;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +18,7 @@ namespace Battle
 		NavMeshPath _Path;
 		bool _Noticed;
 		float _FindPathTime;
+		Vector3[] _PathCorners;
 		float _LastAttackTime;
 		Collider[] _ColliderHits;
 		[HideInInspector] public UI_EnemyHP _HPUI;
@@ -32,6 +32,7 @@ namespace Battle
 			c = GetComponent<Character>();
 			_Agent = GetComponent<NavMeshAgent>();
 			_Path = new();
+			_PathCorners = new Vector3[2];
 
 			if (IsMovable)
 			{
@@ -100,25 +101,29 @@ namespace Battle
 			if (!_Agent.isOnNavMesh) return;
 
 			// 경로 재설정
+			_Agent.Warp(transform.position);
 			if (Time.time - _FindPathTime > 0.1f)
 			{
 				Vector3 playerPos = Controller._ActivePlayer.transform.position;
-				_Agent.CalculatePath(playerPos, _Path);
-				_Agent.SetPath(_Path);
+				bool valid = _Agent.CalculatePath(playerPos, _Path);
+				if (valid)
+				{
+					_Agent.SetPath(_Path);
+				}
 				_FindPathTime = Time.time;
 			}
 
-			Vector3[] corners = _Path.corners;
-			if (corners.Length == 0) return;
+			if (!_Agent.hasPath) return;
 
+			int count = _Path.GetCornersNonAlloc(_PathCorners);
 			Vector3 destination;
-			if (corners.Length > 1)
+			if (count > 1)
 			{
-				destination = corners[1];
+				destination = _PathCorners[1];
 			}
 			else 
 			{
-				destination = corners[0];
+				destination = _PathCorners[0];
 			}
 			Vector3 distance = destination - transform.position;
 			bool move = distance.magnitude > 2f;
