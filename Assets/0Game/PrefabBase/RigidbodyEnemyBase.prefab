@@ -342,7 +342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4405595d0661414fa42061c6bf64ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Fragment: {fileID: 0}
+  _Fragment: {fileID: 1139622400086509518}
+  _MeshRenderer: {fileID: 0}
   _Mover: {fileID: 0}
   _Collider: {fileID: 0}
 --- !u!114 &5279001292280015666
@@ -532,7 +533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1139622400086509518
 Transform:
   m_ObjectHideFlags: 0

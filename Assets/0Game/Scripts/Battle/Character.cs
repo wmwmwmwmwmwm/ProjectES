@@ -725,6 +725,7 @@ namespace Battle
 					else
 					{
 						_KCC_Rigidbody._Collider.enabled = false;
+						_KCC_Rigidbody.ActivateFragment();
 					}
 					if (_Enemy)
 					{
@@ -766,6 +767,12 @@ namespace Battle
 		{
 			if (_Player) return c._Enemy;
 			else return c._Player;
+		}
+
+		public LayerMask GetOppositeLayer()
+		{
+			if (gameObject.layer == Layer.PlayerLayer) return Layer.EnemyLayer;
+			else return Layer.PlayerLayer;
 		}
 
 		public LayerMask GetOppositeLayerMask()

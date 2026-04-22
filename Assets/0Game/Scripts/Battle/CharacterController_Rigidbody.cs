@@ -10,6 +10,7 @@ namespace Battle
 	public class CharacterController_Rigidbody : MonoBehaviour, IMoverController
 	{
 		public Transform _Fragment;
+		public MeshRenderer _MeshRenderer;
 
 		[HideInInspector] public PhysicsMover _Mover;
 		[HideInInspector] public Collider _Collider;
@@ -22,7 +23,7 @@ namespace Battle
 		public void Init()
 		{
 			c = GetComponent<Character>();
-			_Collider = GetComponentInChildren<MeshRenderer>().GetComponent<Collider>();
+			_Collider = _MeshRenderer.GetComponent<Collider>();
 			_Collider.gameObject.layer = Layer.EnemyLayer;
 			_Mover = GetComponent<PhysicsMover>();
 
@@ -30,6 +31,7 @@ namespace Battle
 			_CurrentRotation = Quaternion.identity;
 			_Mover.MoverController = this;
 			_Mover.Init();
+			_Fragment.gameObject.SetActive(false);
 		}
 
 		public void UpdateMovement(out Vector3 goalPosition, out Quaternion goalRotation, float deltaTime)
@@ -64,6 +66,13 @@ namespace Battle
 			// 루트 모션 초기화
 			c._RootMotionPosDelta = Vector3.zero;
 			c._RootMotionRotDelta = Quaternion.identity;
+		}
+
+		public void ActivateFragment()
+		{
+			if (_Fragment.childCount == 0) return;
+			_Fragment.gameObject.SetActive(true);
+			_MeshRenderer.gameObject.SetActive(false);
 		}
 	}
 }

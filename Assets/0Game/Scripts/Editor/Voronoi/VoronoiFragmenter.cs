@@ -2,8 +2,11 @@
 using csDelaunay;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using static Battle.CharacterController_Rigidbody;
 
 namespace SimplestarGame
 {
@@ -20,18 +23,41 @@ namespace SimplestarGame
 		[Button("Fragment 생성")]
 		public void Button()
 		{
-			if (!_TargetMesh || !_FragmentParent) return;
-			Fragment(transform.position);
+			if (!_TargetMesh) return;
+
+			// 기존 오브젝트 삭제
+			List<Transform> childs = new();
+			foreach (Transform child in _FragmentParent)
+			{
+				childs.Add(child);
+			}
+			childs.ForEach(x => DestroyImmediate(x.gameObject));
+
+			// 기존 애셋 삭제
+			string assetPath = GetAssetPath();
+			AssetDatabase.DeleteAsset(assetPath);
+
+			Fragment(transform.position, out List<Mesh> meshes, out List<Material> materials);
+
+			FragmentAsset mainAsset = GetMainMeshAsset();
+			foreach (Mesh mesh in meshes)
+			{
+				AssetDatabase.AddObjectToAsset(mesh, mainAsset);
+			}
+			foreach (Material material in materials)
+			{
+				AssetDatabase.AddObjectToAsset(material, mainAsset);
+			}
 			GetComponent<CharacterController_Rigidbody>()._Fragment = _FragmentParent;
+			Util.SetDirty(gameObject);
+			AssetDatabase.SaveAssets();
 		}
 
-		internal void Fragment(Vector3 hitPoint)
+		internal void Fragment(Vector3 hitPoint, out List<Mesh> meshes, out List<Material> materials)
 		{
-			if (!this.TryGetComponent(out MeshFilter initMeshFilter))
-			{
-				Debug.LogWarning("破壊するターゲットの MeshFilter がアタッチされていません");
-				return;
-			}
+			meshes = new();
+			materials = new();
+			var initMeshFilter = _TargetMesh.GetComponent<MeshFilter>();
 			var scale = this.transform.localScale;
 			var initVerts = initMeshFilter.sharedMesh.vertices;
 			var initNormals = initMeshFilter.sharedMesh.normals;
@@ -343,7 +369,9 @@ namespace SimplestarGame
 				// スライスされるオブジェクトの数ループ
 				for (int zIdx = 0; zIdx < meshCount; zIdx++)
 				{
+					string name = $"Fragment_{zIdx}{((1 == extraIdx) ? "_Extra" : "")}";
 					var mesh = new Mesh();
+					mesh.name = name;
 					var verts = new Vector3[6 * vCount + 2 * extraIdx];
 					var uvs = new Vector2[verts.Length];
 					
@@ -488,25 +516,24 @@ namespace SimplestarGame
 					mesh.RecalculateTangents();
 
 					var fragment = Instantiate(this.fragmentPrefab);
-					fragment.name = this.name + "_fragment" + zIdx + ((1 == extraIdx) ? "extra" : "");
+					//fragment.name = this.name + "_fragment" + zIdx + ((1 == extraIdx) ? "extra" : "");
+					fragment.name = name;
 					fragment.transform.SetParent(_TargetMesh.transform);
 					fragment.transform.localPosition = v3Center;
 					fragment.transform.localRotation = Quaternion.identity;
 					fragment.transform.localScale = Vector3.one;
 					fragment.transform.SetParent(_FragmentParent);
 					fragment.sharedMesh = mesh;
+					fragment.gameObject.layer = Layer.TerrainLayer;
 
-					if (this.TryGetComponent(out MeshRenderer myMeshRenderer))
-					{
-						if (fragment.TryGetComponent(out MeshRenderer meshRenderer))
-						{
-							meshRenderer.material = new Material(myMeshRenderer.material);
-						}
-					}
-					if (fragment.TryGetComponent(out MeshCollider meshCollider))
-					{
-						meshCollider.sharedMesh = mesh;
-					}
+					MeshRenderer targetMeshRenderer = _TargetMesh.GetComponent<MeshRenderer>();
+					Material newMaterial = new(targetMeshRenderer.sharedMaterial);
+					newMaterial.name = name;
+					MeshRenderer meshRenderer = fragment.GetComponent<MeshRenderer>();
+					meshRenderer.material = newMaterial;
+					materials.Add(newMaterial);
+					MeshCollider meshCollider = fragment.GetComponent<MeshCollider>();
+					meshCollider.sharedMesh = mesh;
 					//fragment.gameObject.AddComponent<MeshCleaner>();
 					
 					float reFragmentSize = scaleZ * 1.5f;
@@ -527,6 +554,7 @@ namespace SimplestarGame
 					//	fadeOuter.FadeOut(Random.Range(this.remainingTime, this.remainingTime * 1.3f), this.fadeDuration, this.fadeCurve);
 					//}
 					//createdMeshCount++;
+					meshes.Add(mesh);
 				}
 			}
 
@@ -653,6 +681,28 @@ namespace SimplestarGame
 			Bottom,
 			Top,
 			Max
+		}
+
+		FragmentAsset GetMainMeshAsset()
+		{
+			string filePath = GetAssetPath();
+			//bool exist = AssetDatabase.AssetPathExists(filePath);
+			//if (!exist)
+			//{
+			//	FragmentAsset obj = ScriptableObject.CreateInstance<FragmentAsset>();
+			//	AssetDatabase.CreateAsset(obj, filePath);
+			//}
+			FragmentAsset obj = ScriptableObject.CreateInstance<FragmentAsset>();
+			AssetDatabase.CreateAsset(obj, filePath);
+			return AssetDatabase.LoadAssetAtPath<FragmentAsset>(filePath);
+		}
+
+		string GetAssetPath()
+		{
+			PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
+			string directory = Path.GetDirectoryName(stage.assetPath);
+			string fileName = $"{Path.GetFileNameWithoutExtension(stage.assetPath)}_Fragment.asset";
+			return Path.Combine(directory, fileName);
 		}
 	}
 }

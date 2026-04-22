@@ -53,8 +53,6 @@ namespace Battle
 
 		void Update()
 		{
-			if (c.IsDead()) return;
-
 			// AI
 			Idle();
 			Move();
@@ -80,6 +78,7 @@ namespace Battle
 
 		void Idle()
 		{
+			if (c.IsDead()) return;
 			if (_Noticed) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
@@ -91,6 +90,12 @@ namespace Battle
 
 		void Move()
 		{
+			if (c.IsDead())
+			{
+				c._MoveInput = Vector3.zero;
+				return;
+			}
+
 			if (!_Noticed) return;
 			if (!_Agent.isOnNavMesh) return;
 
@@ -123,6 +128,7 @@ namespace Battle
 
 		void Attack()
 		{
+			if (c.IsDead()) return;
 			if (!_Noticed) return;
 			if (Time.time - _LastAttackTime < 1000f) return;
 
@@ -140,6 +146,7 @@ namespace Battle
 		public SphereCollider _SummonArea;
 		void SummonOnAir()
 		{
+			if (c.IsDead()) return;
 			if (string.IsNullOrEmpty(_SummonEnemyName)) return;
 			if (!_Noticed) return;
 			if (Time.time - _LastSummonTime < 1f) return;
@@ -149,33 +156,6 @@ namespace Battle
 			Controller.SpawnEnemy(_SummonEnemyName, pos, transform.rotation);
 			_LastSummonTime = Time.time;
 		}
-
-		//Vector3 GetRandomSummonPosition()
-		//{
-		//	Vector3 center = _SummonArea.transform.position;
-		//	float radius = _SummonArea.radius * _SummonArea.transform.localScale.x;
-			
-		//	Vector3 randomPos;
-		//	int maxAttempts = 10;
-		//	int attempts = 0;
-			
-		//	do
-		//	{
-		//		// 반구 위의 무작위 지점 생성 (위쪽만)
-		//		float phi = Random.Range(0f, Mathf.PI * 0.5f);
-		//		float theta = Random.Range(0f, Mathf.PI * 2f);
-				
-		//		float x = radius * Mathf.Sin(phi) * Mathf.Cos(theta);
-		//		float y = radius * Mathf.Cos(phi);
-		//		float z = radius * Mathf.Sin(phi) * Mathf.Sin(theta);
-				
-		//		randomPos = center + new Vector3(x, y, z);
-		//		attempts++;
-				
-		//	} while (Physics.OverlapSphere(randomPos, 0.5f).Length > 0 && attempts < maxAttempts);
-			
-		//	return randomPos;
-		//}
 
 		Vector3 GetPlayerDistanceVector()
 		{

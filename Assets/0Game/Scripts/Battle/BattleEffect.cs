@@ -1,7 +1,6 @@
 ﻿using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Battle
@@ -10,20 +9,13 @@ namespace Battle
 	{
 		[ReadOnly] public Character _Owner;
 		[ReadOnly] public ParticleSystem _Particle;
-		[ReadOnly] public CinemachineImpulseSource _ImpulseSource;
 
 		float _Speed;
 
 		public void Init()
 		{
 			_Particle = GetComponent<ParticleSystem>();
-			_ImpulseSource = GetComponent<CinemachineImpulseSource>();
 			_Speed = _Particle.main.simulationSpeed;
-
-			if (_ImpulseSource)
-			{
-				_ImpulseSource.GenerateImpulse();
-			}
 		}
 
 		void Update()

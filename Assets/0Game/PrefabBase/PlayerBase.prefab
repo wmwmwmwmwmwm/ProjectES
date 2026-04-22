@@ -239,7 +239,7 @@ MonoBehaviour:
   CapsuleHeight: 2
   CapsuleYOffset: 1
   CapsulePhysicsMaterial: {fileID: 0}
-  GroundDetectionExtraDistance: 0
+  GroundDetectionExtraDistance: 0.5
   MaxStableSlopeAngle: 50
   StableGroundLayers:
     serializedVersion: 2
@@ -249,21 +249,21 @@ MonoBehaviour:
   MaxStepHeight: 0.5
   AllowSteppingWithoutStableGrounding: 0
   MinRequiredStepDepth: 0.1
-  LedgeAndDenivelationHandling: 1
+  LedgeAndDenivelationHandling: 0
   MaxStableDistanceFromLedge: 0.5
   MaxVelocityForLedgeSnap: 10
   MaxStableDenivelationAngle: 90
   InteractiveRigidbodyHandling: 1
-  RigidbodyInteractionType: 0
-  SimulatedCharacterMass: 1
+  RigidbodyInteractionType: 2
+  SimulatedCharacterMass: 10
   PreserveAttachedRigidbodyMomentum: 1
   HasPlanarConstraint: 0
   PlanarConstraintAxis: {x: 0, y: 0, z: 1}
-  MaxMovementIterations: 1
+  MaxMovementIterations: 5
   MaxDecollisionIterations: 1
   CheckMovementInitialOverlaps: 1
-  KillVelocityWhenExceedMaxMovementIterations: 0
-  KillRemainingMovementWhenExceedMaxMovementIterations: 0
+  KillVelocityWhenExceedMaxMovementIterations: 1
+  KillRemainingMovementWhenExceedMaxMovementIterations: 1
 --- !u!114 &6855409595717541380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,9 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Datas:
-  - _Transition: {fileID: 4799891562835818413, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: NormalAttack1
+  - _Name: NormalAttack1
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.0002637636, y: 1.484, z: 0.58586586}
@@ -300,9 +298,7 @@ MonoBehaviour:
     _Scale: 1.22
     _Delay: 0.13171977
     _IsLocal: 1
-  - _Transition: {fileID: 8108611365381890314, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: NormalAttack2
+  - _Name: NormalAttack2
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.034883864, y: 1.16, z: 0.38108122}
@@ -310,9 +306,7 @@ MonoBehaviour:
     _Scale: 1.38
     _Delay: 0.115753785
     _IsLocal: 1
-  - _Transition: {fileID: 7382285990112058789, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: NormalAttack3
+  - _Name: NormalAttack3
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: 0.019847218, y: 1.363, z: 1.02}
@@ -320,9 +314,7 @@ MonoBehaviour:
     _Scale: 1.78
     _Delay: 0.19558428
     _IsLocal: 1
-  - _Transition: {fileID: 5575586573070899872, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: NormalAttack4
+  - _Name: NormalAttack4
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.058550954, y: 1.198, z: 0.844}
@@ -330,9 +322,7 @@ MonoBehaviour:
     _Scale: 1.81
     _Delay: 0.24348232
     _IsLocal: 1
-  - _Transition: {fileID: 7029878853625567233, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: JumpAttack
+  - _Name: JumpAttack
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.049, y: 0.857, z: 0.566}
@@ -340,9 +330,7 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
-  - _Transition: {fileID: 4434167056054037265, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: DashAttack
+  - _Name: DashAttack
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: 0, y: 1.64, z: 0.779}
@@ -350,9 +338,7 @@ MonoBehaviour:
     _Scale: 1.2
     _Delay: 0.19816811
     _IsLocal: 1
-  - _Transition: {fileID: -8535901853629699081, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: SpecialAttack
+  - _Name: SpecialAttack
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: 0, y: 1, z: 0.78}
@@ -360,9 +346,7 @@ MonoBehaviour:
     _Scale: 1.2
     _Delay: 0.44
     _IsLocal: 1
-  - _Transition: {fileID: -801447163386857772, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: JumpSpecialAttack
+  - _Name: JumpSpecialAttack
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.049, y: 0.857, z: 0.566}
@@ -370,9 +354,7 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
-  - _Transition: {fileID: -8344083487149880939, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: Skill1
+  - _Name: Skill1
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.049, y: 0.857, z: 0.566}
@@ -380,9 +362,7 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
-  - _Transition: {fileID: 4652592177226673511, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: Skill2
+  - _Name: Skill2
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.049, y: 0.857, z: 0.566}
@@ -390,9 +370,7 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
-  - _Transition: {fileID: 8147410675851831714, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: Ultimate
+  - _Name: Ultimate
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: -0.049, y: 0.857, z: 0.566}
@@ -400,9 +378,7 @@ MonoBehaviour:
     _Scale: 1
     _Delay: 0.20207343
     _IsLocal: 1
-  - _Transition: {fileID: 4608948836294961464, guid: 13db70fcbf3cffe44bde67632d540860,
-      type: 2}
-    _Name: GuardAttack
+  - _Name: GuardAttack
     _EffectPrefab: {fileID: 964872830951245912, guid: 9e607c79563e50844babfb4547cbe91d,
       type: 3}
     _Pos: {x: 0, y: 1, z: 0.78}

@@ -115,9 +115,9 @@ namespace Battle
 					Controller.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
 					_HitTargets.Add(hit.collider.gameObject, Time.time);
 				}
+				// 공격 적중
 				else
 				{
-					// 공격 적중
 					Character target = hit.collider.GetComponentInParent<Character>();
 					target.TakeDamage(_Attack, _AttackHit, hit.point, transform.forward);
 					_HitTargets.Add(target.gameObject, Time.time);
