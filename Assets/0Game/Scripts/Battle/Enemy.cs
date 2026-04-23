@@ -14,12 +14,13 @@ namespace Battle
 		public Transform _HPSliderPosition;
 
 		[HideInInspector] public Character c;
-		NavMeshAgent _Agent;
+		[HideInInspector] public NavMeshAgent _Agent;
 		NavMeshPath _Path;
 		bool _Noticed;
 		float _FindPathTime;
 		Vector3[] _PathCorners;
 		float _LastAttackTime;
+		[HideInInspector] public float _LastDamagedTime;
 		Collider[] _ColliderHits;
 		[HideInInspector] public UI_EnemyHP _HPUI;
 
@@ -42,6 +43,7 @@ namespace Battle
 			}
 			_FindPathTime = Const.TimeDefault;
 			_LastAttackTime = Const.TimeDefault;
+			_LastDamagedTime = Const.TimeDefault;
 			_LastSummonTime = Const.TimeDefault;
 
 			c.Init();
@@ -136,6 +138,7 @@ namespace Battle
 			if (c.IsDead()) return;
 			if (!_Noticed) return;
 			if (Time.time - _LastAttackTime < 1000f) return;
+			if (Time.time - _LastDamagedTime < 1.6f) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2000f)

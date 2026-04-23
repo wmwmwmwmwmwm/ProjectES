@@ -56,11 +56,14 @@ namespace Battle
 			// 경직
 			if (IsHitStun())
 			{
-				currentVelocity = Vector3.zero;
 				_HitStunTimer -= deltaTime;
 				if (_HitStunTimer <= 0f)
 				{
 					currentVelocity = _HitStunPrevVelocity;
+				}
+				else
+				{
+					currentVelocity = Vector3.zero;
 				}
 				return;
 			}

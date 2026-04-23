@@ -260,7 +260,7 @@ namespace Battle
 			else
 			{
 				if (_FSM.CurrentState.IsAttack) return;
-
+				
 				PlayAction(_JumpSpecialAttack);
 				Attack();
 			}
@@ -470,49 +470,48 @@ namespace Battle
 						orientation: attack.transform.rotation,
 						mask: GetOppositeAndTerrainLayerMask());
 
-					// 공격 적중
-					if (overlapCount > 0)
+					List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
+					overlaps.Sort((a, b) =>
 					{
-						List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
-						overlaps.Sort((a, b) =>
+						float aDistance = (a.transform.position - transform.position).sqrMagnitude;
+						float bDistance = (b.transform.position - transform.position).sqrMagnitude;
+						float v = (aDistance - bDistance) * 100f;
+						return (int)v;
+					});
+					Vector3 shoulder = Bottom;
+					shoulder.y += _ShoulderHeight;
+					foreach (Collider col in overlaps)
+					{
+						// 지형 적중
+						if (col.gameObject.layer == Layer.TerrainLayer)
 						{
-							float aDistance = (a.transform.position - transform.position).sqrMagnitude;
-							float bDistance = (b.transform.position - transform.position).sqrMagnitude;
-							float v = (aDistance - bDistance) * 100f;
-							return (int)v;
-						});
-						Vector3 shoulder = Bottom;
-						shoulder.y += _ShoulderHeight;
-						foreach (Collider col in overlaps)
-						{
-							Character targetCharacter = col.GetComponentInParent<Character>();
 							if (col.TryGetComponent(out Fragment fragment))
 							{
 								Vector3 hitPoint = fragment.GetComponent<MeshCollider>().bounds.ClosestPoint(Center);
-								Controller.AddForceToFragment(fragment, hitPoint, transform.forward);
+								Controller.AddForceToFragment(fragment, 50f, transform.forward);
 							}
-							else if (targetCharacter)
-							{
-								Vector3 attackDir = targetCharacter.Center - shoulder;
-								Bounds bounds = targetCharacter.UseKCC ? targetCharacter._KCC._Motor.Capsule.bounds : targetCharacter._KCC_Rigidbody._Collider.bounds;
-								Vector3 hitPoint = bounds.ClosestPoint(Center);
-								StartCoroutine(DelayTakeDamage());
-								IEnumerator DelayTakeDamage()
-								{
-									// 공격 판정 딜레이
-									Effect effectData = attack._StateInfo._EffectDatas.First();
-									float delay = attackHit._HitDelay - effectData._Delay;
-									yield return new WaitForSeconds(delay);
-									targetCharacter.TakeDamage(attack, attackHit, hitPoint, attackDir);
-								}
-								yield return new WaitForSeconds(attackHit._HitStunDuration);
-							}
+							Controller.PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
+							continue;
 						}
-					}
-					// 벽에 적중
-					else if (raycastCount > 0)
-					{
-						Controller.PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
+
+						// 상대 적중
+						Character targetCharacter = col.GetComponentInParent<Character>();
+						if (targetCharacter)
+						{
+							Vector3 attackDir = targetCharacter.Center - shoulder;
+							Bounds bounds = targetCharacter.UseKCC ? targetCharacter._KCC._Motor.Capsule.bounds : targetCharacter._KCC_Rigidbody._Collider.bounds;
+							Vector3 hitPoint = bounds.ClosestPoint(Center);
+							StartCoroutine(DelayTakeDamage());
+							IEnumerator DelayTakeDamage()
+							{
+								// 공격 판정 딜레이
+								Effect effectData = attack._StateInfo._EffectDatas.First();
+								float delay = attackHit._HitDelay - effectData._Delay;
+								yield return new WaitForSeconds(delay);
+								targetCharacter.TakeDamage(attack, attackHit, hitPoint, attackDir);
+							}
+							yield return new WaitForSeconds(attackHit._HitStunDuration);
+						}
 					}
 				}
 
@@ -559,7 +558,7 @@ namespace Battle
 							missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
 							Vector3 pos = attack._SpawnPoints.PickOne().position;
 							Vector3 rot = _AimDestRotation.eulerAngles;
-							rot = rot.RandomizeDirectionVector(attack._SpreadDegree);
+							rot = rot.RandomizeVector(attack._SpreadDegree, attack._SpreadDegree, 0f);
 							missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
 							missile._Rigidbody.Move(pos, Quaternion.Euler(rot));
 
@@ -605,16 +604,17 @@ namespace Battle
 				Vector3 effectPosition = hitPoint != null ? hitPoint.Value : Center;
 				Vector3 damageTextPosition = hitPoint != null ? hitPoint.Value : Top;
 
-				// 주변 적 활성화
+				// 주변 적 활성화, 데미지 타임 갱신
 				if (_Enemy)
 				{
 					_Enemy.NoticeAround();
+					_Enemy._LastDamagedTime = Time.time;
 				}
 
 				// 경직
 				Character attacker = attack._Owner;
-				AddHitStunTimer(attackHit._HitStunDuration, _FSM.CurrentState);
-				attacker.AddHitStunTimer(attackHit._HitStunDuration, attacker._FSM.CurrentState);
+				SetHitStunTimer(attackHit._HitStunDuration, _FSM.CurrentState);
+				attacker.SetHitStunTimer(attackHit._HitStunDuration, attacker._FSM.CurrentState);
 				yield return new WaitForSeconds(attackHit._HitStunDuration);
 
 				// 가드 판정
@@ -662,6 +662,10 @@ namespace Battle
 					// 밀어내기
 					else if (attackHit._ForceForward != 0f && attackHit._ForceUp == 0f)
 					{
+						if (attackHit._DeaccelDuration == 0f)
+						{
+							Debug.LogWarning($"{attack._Name} 공격 : 밀치기 공격에 DeaccelDuration 설정 필요");
+						}
 						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
 						_Impulse = new(0f, 0f, attackHit._ForceForward);
 						_Impulse = attacker.transform.TransformDirection(_Impulse);
@@ -728,6 +732,11 @@ namespace Battle
 				wallJump &= !attacker._AlreadyWallJump;
 				if (wallJump)
 				{
+					if (attackHit._HitStunDuration > 0f)
+					{
+						Debug.LogWarning($"{attack._Name} 공격 : 공중 특수 공격에서 HitStunDuration 0으로 설정 필요");
+					}
+
 					attacker._AlreadyWallJump = true;
 					Vector3 jumpDir = attacker.Center - Center;
 					jumpDir.y = 0f;
@@ -833,14 +842,16 @@ namespace Battle
 			return _HitStunTimer > 0f && _HitStunPrevState == _FSM.CurrentState;
 		}
 
-		public void AddHitStunTimer(float t, State prevState)
+		public void SetHitStunTimer(float t, State prevState)
 		{
+			if (t == 0f) return;
+
 			if (_HitStunTimer <= 0f)
 			{
 				_HitStunPrevState = prevState;
 				_HitStunPrevVelocity = UseKCC ? Motor.Velocity : Vector3.zero;
 			}
-			_HitStunTimer += t;
+			_HitStunTimer = t;
 		}
 
 		void FeetSmoke(float time)
@@ -892,6 +903,11 @@ namespace Battle
 			else
 			{
 				_KCC_Rigidbody._Mover.SetPositionAndRotation(pos, rot);
+			}
+
+			if (_Enemy)
+			{
+				_Enemy._Agent.Warp(pos);
 			}
 		}
 

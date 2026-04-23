@@ -72,7 +72,7 @@ namespace Battle
 			Character targetCharacter = hitInfo.collider.GetComponentInParent<Character>();
 			if (hitInfo.collider.TryGetComponent(out Fragment fragment))
 			{
-				Controller.AddForceToFragment(fragment, hitInfo.point, transform.forward);
+				Controller.AddForceToFragment(fragment, 10f, transform.forward);
 			}
 			else if (targetCharacter && _Attack._Owner.IsOpposite(targetCharacter))
 			{

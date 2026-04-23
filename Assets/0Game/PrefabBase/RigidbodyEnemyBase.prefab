@@ -162,6 +162,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _HPSliderPosition: {fileID: 4255991526585487192}
   c: {fileID: 0}
+  _Agent: {fileID: 0}
+  _LastDamagedTime: 0
   _HPUI: {fileID: 0}
   _SummonParticlePrefab: {fileID: 0}
   _SummonEnemyName: 
@@ -274,7 +276,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4014474705152691691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

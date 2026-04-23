@@ -115,7 +115,7 @@ namespace Battle
 					_HitTargets.Add(hit.collider.gameObject, Time.time);
 					if (hit.collider.TryGetComponent(out Fragment fragment))
 					{
-						Controller.AddForceToFragment(fragment, hit.point, transform.forward);
+						Controller.AddForceToFragment(fragment, 20f, transform.forward);
 					}
 				}
 				// 공격 적중
@@ -159,7 +159,7 @@ namespace Battle
 						Character character = col.GetComponentInParent<Character>(); 
 						if (col.TryGetComponent(out Fragment fragment))
 						{
-							Controller.AddForceToFragment(fragment, transform.position, direction);
+							Controller.AddForceToFragment(fragment, 50f, direction);
 						}
 						else if (character)
 						{
