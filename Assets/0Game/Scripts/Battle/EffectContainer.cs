@@ -38,7 +38,7 @@ namespace Battle
 
 			if (_Datas == null)
 			{
-				Debug.LogError($"{gameObject.name} {name} 이펙트 설정 없음");
+				Debug.LogWarning($"{gameObject.name} {name} 이펙트 설정 없음");
 			}
 
 			return datas;

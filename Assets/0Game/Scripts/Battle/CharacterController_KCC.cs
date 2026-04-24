@@ -12,6 +12,9 @@ namespace Battle
 	{
 		public enum MoveRequest { None, Jump, DashFwd, DashBwd, DashLeft, DashRight }
 
+		[BoxGroup("설정")] public float _DashDuration;
+		[BoxGroup("설정")] public float _JumpSpeed;
+
 		Character c;
 		[HideInInspector] public KinematicCharacterMotor _Motor;
 		MoveRequest _MoveRequest;
@@ -198,7 +201,7 @@ namespace Battle
 			}
 
 			// 점프 수행
-			Vector3 jumpVelocity = dir * c._JumpSpeed;
+			Vector3 jumpVelocity = dir * _JumpSpeed;
 			if (jump)
 			{
 				_Motor.ForceUnground();
@@ -212,7 +215,7 @@ namespace Battle
 					currentVelocity.x = v.x;
 					currentVelocity.z = v.z;
 					currentVelocity.y = Mathf.Max(v.y, currentVelocity.y);
-					currentVelocity.y += c._JumpSpeed * 0.5f;
+					currentVelocity.y += _JumpSpeed * 0.5f;
 				}
 				if (asset)
 				{
@@ -321,12 +324,12 @@ namespace Battle
 
 		public bool IsDashing()
 		{
-			return Time.time - _LastDashTime < c._DashDuration;
+			return Time.time - _LastDashTime < _DashDuration;
 		}
 
 		public void DashAttack()
 		{
-			c._FadeOutDeaccelTimer = c._DashDuration;
+			c._FadeOutDeaccelTimer = _DashDuration;
 			DashCancel();
 			c.PlayAction(c._DashAttack);
 			c.Attack();

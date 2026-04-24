@@ -55,7 +55,7 @@ public class RemapFbxMaterial : AssetPostprocessor
 			}
 		}
 
-		Debug.LogError($"Material을 찾을 수 없음: {material} / {assetImporter.assetPath}");
+		Debug.LogWarning($"Material을 찾을 수 없음: {material} / {assetImporter.assetPath}");
 		return null;
 	}
 }

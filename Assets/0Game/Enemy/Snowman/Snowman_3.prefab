@@ -258,6 +258,102 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2331264142601916372}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2680879286028392064
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4654957550707644909}
+    m_Modifications:
+    - target: {fileID: 146658982985273343, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_Name
+      value: Missile
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 7bd3243197a43e34eb46d8c6b8723745, type: 3}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Name
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3152885022966669924, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _Transition
+      value: 
+      objectReference: {fileID: -8344083487149880939, guid: 37a284cab18a95440b35270a49d0946f,
+        type: 2}
+    - target: {fileID: 3707560298532720469, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: _MissilePrefab
+      value: 
+      objectReference: {fileID: 3282977498134611352, guid: 35f4dea5c6ebd7440bc7a90828f610f4,
+        type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 48fd12d9544516949a37d926d0ac8213, type: 3}
+--- !u!4 &2531752259347836097 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
+    type: 3}
+  m_PrefabInstance: {fileID: 2680879286028392064}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3610852313180810320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -465,6 +561,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8252257213032805821, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 2531752259347836097}
+    - targetCorrespondingSourceObject: {fileID: 8252257213032805821, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 6690325747168495834}
     - targetCorrespondingSourceObject: {fileID: 8252257213032805821, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}
@@ -559,6 +659,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Snowman_Bomb
+      objectReference: {fileID: 0}
+    - target: {fileID: 146658982985273343, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}

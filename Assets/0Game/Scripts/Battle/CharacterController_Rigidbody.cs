@@ -36,6 +36,13 @@ namespace Battle
 
 		public void UpdateMovement(out Vector3 goalPosition, out Quaternion goalRotation, float deltaTime)
 		{
+			if (c._MoveSpeed == 0f)
+			{
+				goalPosition = transform.position;
+				goalRotation = transform.rotation;
+				return;
+			}
+
 			// 캐릭터 이동 처리
 			c.UpdateRotation_Shared(ref _CurrentRotation, deltaTime);
 			c.UpdateVelocity_Shared1(ref _CurrentVelocity, deltaTime);

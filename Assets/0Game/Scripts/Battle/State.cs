@@ -104,7 +104,7 @@ namespace Battle
 			}
 		}
 
-		public override string ToString() => _Asset.ToString();
+		public override string ToString() => _Asset.name;
 
 		public void SetAsset(TransitionAsset asset)
 		{

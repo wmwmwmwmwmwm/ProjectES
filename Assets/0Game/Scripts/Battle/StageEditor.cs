@@ -44,7 +44,7 @@ namespace Battle
 				Controller._Enemys = new();
 				foreach (DataManager.Stage.Spawn spawn in Controller._CurrentStage._Spawns)
 				{
-					Controller.SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
+					Controller.SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation, spawn._Scale);
 				}
 				Controller.Init2();
 			}
@@ -70,6 +70,7 @@ namespace Battle
 					_CharacterName = enemy.GetComponent<Character>()._Name,
 					_Position = enemy.transform.position,
 					_Rotation = enemy.transform.rotation,
+					_Scale = enemy.transform.localScale.x,
 				};
 				stage._Spawns.Add(spawn);
 			}

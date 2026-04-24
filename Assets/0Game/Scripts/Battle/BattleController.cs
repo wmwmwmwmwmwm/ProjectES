@@ -53,7 +53,7 @@ namespace Battle
 			}
 			foreach (DataManager.Stage.Spawn spawn in _CurrentStage._Spawns)
 			{
-				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation);
+				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation, spawn._Scale);
 			}
 		}
 
@@ -147,12 +147,13 @@ namespace Battle
 			_Players.Add(player);
 		}
 
-		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot)
+		public void SpawnEnemy(string name, Vector3 pos, Quaternion rot, float scale = 1f)
 		{
 			Character c = Data.GetBattleCharacter(name);
 			Enemy enemy = Instantiate(c).GetComponent<Enemy>();
 			enemy.Init();
 			enemy.c.SetPositionAndRotation(pos, rot);
+			enemy.transform.localScale = Vector3.one * scale;
 			enemy._Agent.enabled = true;
 			AddEnemyHPUI(enemy);
 			AddMinimapMarker(enemy.c, false);

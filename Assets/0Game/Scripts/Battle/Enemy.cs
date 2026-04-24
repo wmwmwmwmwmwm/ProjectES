@@ -117,6 +117,7 @@ namespace Battle
 
 			if (!_Agent.hasPath) return;
 
+			// 이동
 			int count = _Path.GetCornersNonAlloc(_PathCorners);
 			Vector3 destination;
 			if (count > 1)
@@ -129,21 +130,24 @@ namespace Battle
 			}
 			Vector3 distance = destination - transform.position;
 			bool move = distance.magnitude > 2f;
-			c._AimDestRotation = Quaternion.LookRotation(distance);
 			c._MoveInput = move ? Vector3.forward : Vector3.zero;
+
+			// 회전
+			Vector3 playerCenter = Controller._ActivePlayer.c.Center;
+			c._AimDestRotation = Quaternion.LookRotation(playerCenter - c.Center);
 		}
 
 		void Attack()
 		{
 			if (c.IsDead()) return;
 			if (!_Noticed) return;
-			if (Time.time - _LastAttackTime < 1000f) return;
+			if (Time.time - _LastAttackTime < 1f) return;
 			if (Time.time - _LastDamagedTime < 1.6f) return;
 
 			Vector3 distanceVector = GetPlayerDistanceVector();
 			if (distanceVector.magnitude < 2000f)
 			{
-				c.Skill2(default);
+				c.Skill1(default);
 				_LastAttackTime = Time.time;
 			}
 		}

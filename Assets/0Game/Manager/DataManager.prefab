@@ -52,67 +52,95 @@ MonoBehaviour:
     - _CharacterName: Snowman_3
       _Position: {x: -221.7, y: 124.70929, z: 296.5}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -220.3, y: 124.70929, z: 299.8}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -224.8, y: 124.70929, z: 296.4}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -226.4, y: 124.70929, z: 298.5}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -223.1, y: 124.70929, z: 302.4}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -220.6, y: 124.70929, z: 303.1}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Snowman_3
       _Position: {x: -223.30327, y: 124.70929, z: 299.3543}
       _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 0
     - _CharacterName: Tower
       _Position: {x: -209.78278, y: 125.65822, z: 306.53583}
       _Rotation: {x: 0, y: -0.7907323, z: 0, w: 0.61216205}
+      _Scale: 0
   - _Name: Tutorial
     _StartPosition: {x: 456.52, y: 0, z: 635.33}
     _StartRotation: {x: -0, y: -0.73787844, z: -0, w: 0.6749337}
     _Spawns:
-    - _CharacterName: Golem
-      _Position: {x: 461.2, y: -0.000005722046, z: 574.7}
-      _Rotation: {x: -0, y: -0.6909882, z: -0, w: 0.7228661}
-    - _CharacterName: Golem
-      _Position: {x: 418.02, y: -0.000005722046, z: 623.22}
-      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
-    - _CharacterName: Golem
-      _Position: {x: 468.8, y: -0.000005722046, z: 567.3}
-      _Rotation: {x: -0, y: -0.54558, z: -0, w: 0.83805877}
-    - _CharacterName: Golem
-      _Position: {x: 425.66, y: -0.000005722046, z: 633.89}
-      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
-    - _CharacterName: Golem
-      _Position: {x: 425.42, y: -0.000005722046, z: 575.22}
-      _Rotation: {x: -0, y: -0.6909882, z: -0, w: 0.7228661}
-    - _CharacterName: Snowman_3
-      _Position: {x: 440.39, y: 0, z: 624.12}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-    - _CharacterName: Golem
-      _Position: {x: 399.33, y: -0.000005722046, z: 621.14}
-      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
-    - _CharacterName: Golem
-      _Position: {x: 466.4, y: -0.000005722046, z: 572.4}
-      _Rotation: {x: -0, y: -0.704498, z: -0, w: 0.70970607}
+    - _CharacterName: Tower
+      _Position: {x: 397.17, y: 2.5, z: 602.77}
+      _Rotation: {x: -0, y: -0.15289682, z: -0, w: 0.9882422}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: 410.88, y: 2.5, z: 621.81}
+      _Rotation: {x: -0, y: 0.41410747, z: -0, w: 0.910228}
+      _Scale: 1
     - _CharacterName: Golem
       _Position: {x: 399.77, y: -0.000005722046, z: 591.94}
       _Rotation: {x: -0, y: -0.12588368, z: -0, w: 0.99204504}
-    - _CharacterName: Tower
-      _Position: {x: 446.4646, y: 4.19, z: 631.3876}
-      _Rotation: {x: 0, y: -0.7907323, z: 0, w: 0.61216205}
+      _Scale: 1
     - _CharacterName: Golem
-      _Position: {x: 441.96417, y: -0.000005722046, z: 626.1866}
-      _Rotation: {x: -0, y: 0.22881192, z: -0, w: 0.9734707}
+      _Position: {x: 425.42, y: -0.000005722046, z: 575.22}
+      _Rotation: {x: -0, y: -0.6909882, z: -0, w: 0.7228661}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 468.8, y: -0.000005722046, z: 567.3}
+      _Rotation: {x: -0, y: -0.54558, z: -0, w: 0.83805877}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 399.33, y: -0.000005722046, z: 621.14}
+      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 418.02, y: -0.000005722046, z: 623.22}
+      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: 430.81, y: 2.5, z: 634.38}
+      _Rotation: {x: -0, y: 0.9255139, z: -0, w: 0.37871367}
+      _Scale: 1
     - _CharacterName: Golem
       _Position: {x: 471.9, y: -0.000005722046, z: 572.4}
       _Rotation: {x: -0, y: -0.8206432, z: -0, w: 0.57144105}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 461.2, y: -0.000005722046, z: 574.7}
+      _Rotation: {x: -0, y: -0.6909882, z: -0, w: 0.7228661}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: 440.39, y: 0, z: 624.12}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 441.96417, y: -0.000005722046, z: 626.1866}
+      _Rotation: {x: -0, y: 0.22881192, z: -0, w: 0.9734707}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 466.4, y: -0.000005722046, z: 572.4}
+      _Rotation: {x: -0, y: -0.704498, z: -0, w: 0.70970607}
+      _Scale: 1
+    - _CharacterName: Golem
+      _Position: {x: 425.66, y: -0.000005722046, z: 633.89}
+      _Rotation: {x: -0, y: 0.71884966, z: -0, w: 0.69516563}
+      _Scale: 1
   _Characters:
   - _Name: Astar
     _Facials:

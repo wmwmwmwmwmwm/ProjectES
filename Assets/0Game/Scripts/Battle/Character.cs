@@ -20,8 +20,6 @@ namespace Battle
 		[BoxGroup("설정")] public float _RotationSpeed;
 		[BoxGroup("설정")] public float _MoveSpeed;
 		[BoxGroup("설정")] public float _MoveAccel;
-		[BoxGroup("설정")] public float _DashDuration;
-		[BoxGroup("설정")] public float _JumpSpeed;
 		[BoxGroup("설정")] public float _ShoulderHeight;
 		[BoxGroup("설정")] public float _MaxHP;
 
@@ -389,7 +387,7 @@ namespace Battle
 			BattleAttack attack = _FSM.CurrentState._Attack;
 			if (!attack)
 			{
-				Debug.LogError($"[{gameObject.name}] [{_FSM.CurrentState}] 공격 설정 없음");
+				Debug.LogWarning($"[{gameObject.name}] [{_FSM.CurrentState}] 공격 설정 없음");
 				return;
 			}
 
@@ -598,8 +596,6 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
-				if (_InvincibleTimer > 0f) yield break;
-
 				// 이펙트 위치
 				Vector3 effectPosition = hitPoint != null ? hitPoint.Value : Center;
 				Vector3 damageTextPosition = hitPoint != null ? hitPoint.Value : Top;
@@ -618,7 +614,7 @@ namespace Battle
 				yield return new WaitForSeconds(attackHit._HitStunDuration);
 
 				// 가드 판정
-				float damage = attackHit._Damage;
+				float damage = !IsInvincible() ? attackHit._Damage : 0f;
 				bool guard = IsGuardingEffective();
 				float angle = Vector3.Angle(transform.forward, new(-attackDirection.x, 0f, -attackDirection.z));
 				guard &= angle < 90f;
@@ -631,6 +627,7 @@ namespace Battle
 					justGuard &= _Player;
 					if (justGuard)
 					{
+						GuardCancel();
 						_Player.JustGuard();
 						damage = 0f;
 					}
@@ -646,7 +643,7 @@ namespace Battle
 				}
 				else
 				{
-					bool playDamageAnim = attackHit._DamageDuration > 0f;
+					bool playDamageAnim = attackHit._DamageDuration > 0f && damage > 0f;
 
 					// 일반 경직
 					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
@@ -668,7 +665,7 @@ namespace Battle
 						}
 						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
 						_Impulse = new(0f, 0f, attackHit._ForceForward);
-						_Impulse = attacker.transform.TransformDirection(_Impulse);
+						_Impulse = Quaternion.LookRotation(attackDirection) * _Impulse;
 						FeetSmoke(attackHit._DeaccelDuration);
 						if (playDamageAnim)
 						{
@@ -679,9 +676,12 @@ namespace Battle
 					// 날리기
 					else
 					{
-						_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
-						_Impulse = attacker.transform.TransformDirection(_Impulse);
-						_FSM.TrySetState(_GetDown);
+						if (playDamageAnim)
+						{
+							_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
+							_Impulse = Quaternion.LookRotation(attackDirection) * _Impulse;
+							_FSM.TrySetState(_GetDown);
+						}
 					}
 
 					// 이펙트
@@ -821,6 +821,11 @@ namespace Battle
 		void GuardCancel()
 		{
 			_UpperBodyLayer.SetWeight(0f);
+		}
+
+		bool IsInvincible()
+		{
+			return _InvincibleTimer > 0f;
 		}
 
 		bool IsGuardingEffective()

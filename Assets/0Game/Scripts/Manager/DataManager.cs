@@ -21,6 +21,7 @@ public class DataManager : Singleton<DataManager>
 			public string _CharacterName;
 			public Vector3 _Position;
 			public Quaternion _Rotation;
+			public float _Scale;
 		}
 		public List<Spawn> _Spawns;
 	}

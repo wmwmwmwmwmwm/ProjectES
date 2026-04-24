@@ -115,8 +115,6 @@ MonoBehaviour:
   _RotationSpeed: 500
   _MoveSpeed: 8
   _MoveAccel: 30
-  _DashDuration: 0.25
-  _JumpSpeed: 10
   _ShoulderHeight: 1.5
   _MaxHP: 22222
   _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
@@ -276,6 +274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0729655593bf1914a807ff0f73f8c50c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _DashDuration: 0.25
+  _JumpSpeed: 10
   _Motor: {fileID: 0}
 --- !u!114 &8096002430448696999
 MonoBehaviour:

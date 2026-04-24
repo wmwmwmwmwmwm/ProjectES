@@ -53,7 +53,7 @@ namespace Battle
 			_Rigidbody.linearVelocity = velocity;
 			if (_Target)
 			{
-				Quaternion destRotation = Quaternion.LookRotation(_Target.transform.position - transform.position);
+				Quaternion destRotation = Quaternion.LookRotation(_Target.Center - transform.position);
 				float delta = _GuideRotationSpeed * _GuideRotationSpeedCurve.Evaluate(elapsed) * Time.fixedDeltaTime;
 				_Rigidbody.rotation = Quaternion.RotateTowards(_Rigidbody.rotation, destRotation, delta);
 			}

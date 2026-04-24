@@ -32,8 +32,8 @@ namespace Battle
 			_AttackHit = GetComponent<AttackHit>();
 			_WaitLine = _Wait.GetComponentInChildren<LineRenderer>();
 			_ImpactLine = _Impact.GetComponentInChildren<LineRenderer>();
-			_WaitMaterial = _WaitLine.material;
-			_ImpactMaterial = _ImpactLine.material;
+			_WaitLine.material = _WaitMaterial = new(_WaitLine.material);
+			_ImpactLine.material = _ImpactMaterial = new(_ImpactLine.material);
 			_HitEffect = _ImpactLine.transform.Find("Hit").gameObject;
 			_HitTargets = new();
 		}
@@ -60,11 +60,15 @@ namespace Battle
 			line.SetPosition(1, new(0f, 0f, scale));
 			lineMaterial.SetTextureScale("_MainTex", new Vector2(scale, 1f));
 			lineMaterial.SetTextureScale("_Noise", new Vector2(scale, 1f));
-			_HitEffect.SetActive(collided);
 			if (collided)
 			{
 				_HitEffect.transform.position = hitInfo.point;
 				_HitEffect.transform.LookAt(hitInfo.point + hitInfo.normal);
+			}
+			else
+			{
+				_HitEffect.transform.position = transform.position + transform.forward * _Length;
+				_HitEffect.transform.LookAt(transform.forward);
 			}
 
 			// 데미지 주기

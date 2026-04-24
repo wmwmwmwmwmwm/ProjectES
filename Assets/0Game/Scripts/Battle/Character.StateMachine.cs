@@ -267,7 +267,7 @@ namespace Battle
 					c = this,
 					_MoveSpeed = 2f,
 					_Restart = true,
-					_Duration = _DashDuration,
+					_Duration = GetComponent<CharacterController_KCC>()._DashDuration,
 					_LimitRotate = true,
 					_CanJump = true,
 					_CanAttack = true,
@@ -407,7 +407,7 @@ namespace Battle
 					bool success = _FSM.TrySetState(_GetUp);
 					if (success)
 					{
-						_InvincibleTimer = _GetUpAsset.MaximumLength + 0.6f;
+						_InvincibleTimer = 2.4f;
 					}
 				}
 			}
