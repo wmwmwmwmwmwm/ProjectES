@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Battle
 	public partial class Enemy : MonoBehaviour
 	{
 		public Transform _HPSliderPosition;
+
+		[BoxGroup("설정")] public bool _CanClimb;
 
 		[HideInInspector] public Character c;
 		[HideInInspector] public NavMeshAgent _Agent;

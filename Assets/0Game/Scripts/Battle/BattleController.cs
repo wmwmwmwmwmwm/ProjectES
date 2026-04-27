@@ -164,8 +164,7 @@ namespace Battle
 		public void AddForceToFragment(Fragment fragment, float strength, Vector3 hitDirection)
 		{
 			Rigidbody rigidbody = fragment.GetComponent<Rigidbody>();
-			//hitDirection = hitDirection.RandomizeVector(10f, 0f, 10f);
-			rigidbody.AddForce(hitDirection * strength /*+ Vector3.up * 1f*/, ForceMode.Impulse);
+			rigidbody.AddForce(hitDirection * strength, ForceMode.Impulse);
 		}
 
 		public GameObject _AttackAreaDecalPrefab;

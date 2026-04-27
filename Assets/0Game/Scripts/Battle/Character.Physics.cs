@@ -174,7 +174,7 @@ namespace Battle
 			if (IsGrounded())
 			{
 				float groundAccel = isDeaccel ? _CurrentMoveAccel * 3f : _CurrentMoveAccel;
-				currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, groundAccel * deltaTime);
+				currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, groundAccel * deltaTime);
 
 				// 애니메이션
 				if (currentVelocity.sqrMagnitude > 1f)
@@ -193,7 +193,7 @@ namespace Battle
 			// 공중 이동
 			else
 			{
-				float airAccel = _CurrentMoveAccel * 0.5f;
+				float airAccel = _CurrentMoveAccel * 0.2f;
 				airAccel *= isDeaccel ? 3f : 1f;
 				Vector3 addedVelocity = airAccel * deltaTime * _CurrentMoveInputVector;
 				addedVelocity = Vector3.ProjectOnPlane(addedVelocity, Vector3.up);
@@ -246,7 +246,7 @@ namespace Battle
 			// 날려짐
 			if (_Impulse != Vector3.zero)
 			{
-				if (UseKCC && _Impulse.y != 0f)
+				if (UseKCC && _Impulse.y > 0.1f)
 				{
 					Motor.ForceUnground();
 				}

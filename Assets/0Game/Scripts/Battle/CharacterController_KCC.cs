@@ -167,6 +167,10 @@ namespace Battle
 								closestHit: out RaycastHit hit,
 								hits: c._RaycastResults);
 							if (count == 0) continue;
+							if (hit.collider.gameObject.layer == c.GetOppositeLayer())
+							{
+								if (!hit.collider.GetComponent<Enemy>()._CanClimb) continue;
+							}
 
 							// 각도 판정
 							Vector3 jumpDir = -direction;

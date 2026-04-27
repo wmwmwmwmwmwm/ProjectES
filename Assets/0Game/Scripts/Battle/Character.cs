@@ -30,6 +30,7 @@ namespace Battle
 		[ShowIf("_ShowAll")] public Material _WhiteMaterial;
 
 		GameObject _Model;
+		List<Material> _ModelMaterials;
 		[HideInInspector] public Player _Player;
 		[HideInInspector] public Enemy _Enemy;
 		[HideInInspector] public RaycastHit[] _RaycastResults;
@@ -51,6 +52,7 @@ namespace Battle
 		[HideInInspector] public EffectContainer _EffectContainer;
 		[HideInInspector] public AttackContainer _AttackContainer;
 		float _InvincibleTimer;
+		Coroutine _HitEmissionCoroutine;
 
 		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center
@@ -133,6 +135,13 @@ namespace Battle
 			RedirectRootMotionToCharacter redirect = _Model.AddComponent<RedirectRootMotionToCharacter>();
 			redirect._Animator = _Animancer.Animator;
 			redirect._Character = this;
+			_ModelMaterials = new();
+			Renderer[] modelRenderers = _Model.GetComponentsInChildren<Renderer>();
+			foreach (Renderer renderer in modelRenderers)
+			{
+				renderer.material = new(renderer.material);
+				_ModelMaterials.Add(renderer.material);
+			}
 
 			// 컴포넌트 초기화
 			if (UseKCC)
@@ -429,7 +438,6 @@ namespace Battle
 					// 공중 공격으로 점프
 					int raycastCount = 0;
 					List<RaycastHit> hits;
-					RaycastHit nearest = default;
 					if (UseKCC)
 					{
 						raycastCount = Physics.RaycastNonAlloc(
@@ -439,7 +447,7 @@ namespace Battle
 								maxDistance: melee._Collider.size.z,
 								layerMask: Layer.TerrainLayerMask);
 						hits = _RaycastResults.ArrayToList(raycastCount);
-						nearest = hits.MinBy(x => x.distance);
+						RaycastHit nearest = hits.MinBy(x => x.distance);
 						if (raycastCount > 0 && attackData._SkillType == SkillType.Normal)
 						{
 							float angle = Vector3.Angle(Motor.CharacterForward, -nearest.normal);
@@ -483,12 +491,12 @@ namespace Battle
 						// 지형 적중
 						if (col.gameObject.layer == Layer.TerrainLayer)
 						{
+							Vector3 hitPoint = col.bounds.ClosestPoint(Center);
+							Controller.PlayEffect123123(_GuardEffectPrefab, this, hitPoint, Quaternion.identity);
 							if (col.TryGetComponent(out Fragment fragment))
 							{
-								Vector3 hitPoint = fragment.GetComponent<MeshCollider>().bounds.ClosestPoint(Center);
 								Controller.AddForceToFragment(fragment, 50f, transform.forward);
 							}
-							Controller.PlayEffect123123(_GuardEffectPrefab, this, nearest.point, Quaternion.identity);
 							continue;
 						}
 
@@ -554,8 +562,9 @@ namespace Battle
 							missile._FireTime = Time.time;
 							missile._Attack = attack.GetComponent<BattleAttack>();
 							missile._Target = _Enemy ? Controller._ActivePlayer.c : null;
-							Vector3 pos = attack._SpawnPoints.PickOne().position;
-							Vector3 rot = _AimDestRotation.eulerAngles;
+							Transform spawnPoint = attack._SpawnPoints.PickOne();
+							Vector3 pos = spawnPoint.position;
+							Vector3 rot = _AimDestRotation.eulerAngles + spawnPoint.localEulerAngles;
 							rot = rot.RandomizeVector(attack._SpreadDegree, attack._SpreadDegree, 0f);
 							missile.transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
 							missile._Rigidbody.Move(pos, Quaternion.Euler(rot));
@@ -665,7 +674,7 @@ namespace Battle
 						}
 						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
 						_Impulse = new(0f, 0f, attackHit._ForceForward);
-						_Impulse = Quaternion.LookRotation(attackDirection) * _Impulse;
+						_Impulse = Quaternion.LookRotation(attackDirection.WithY(0f)) * _Impulse;
 						FeetSmoke(attackHit._DeaccelDuration);
 						if (playDamageAnim)
 						{
@@ -697,6 +706,7 @@ namespace Battle
 					{
 						Controller.ShowDamageText(damage, damageTextPosition);
 						Controller.ShakeCamera(attackHit._ShakeCameraDuration);
+						HitEmission();
 					}
 					else
 					{
@@ -930,6 +940,36 @@ namespace Battle
 			BattleAttack attack = _FSM.CurrentState._Attack;
 			if (attack) return attack._SpeedMultiplier;
 			else return 1f;
+		}
+
+		void HitEmission()
+		{
+			if (_HitEmissionCoroutine != null)
+			{
+				StopCoroutine(_HitEmissionCoroutine);
+			}
+			Color white = Color.white * 0.5f;
+			_HitEmissionCoroutine = StartCoroutine(Internal());
+
+			IEnumerator Internal()
+			{
+				SetColor(white);
+				yield return new WaitForSeconds(0.01f);
+				SetColor(Color.clear);
+				yield return new WaitForSeconds(0.01f);
+				SetColor(white);
+				yield return new WaitForSeconds(0.01f);
+				SetColor(Color.clear);
+				_HitEmissionCoroutine = null;
+
+				void SetColor(Color color)
+				{
+					foreach (Material material in _ModelMaterials)
+					{
+						material.SetColor("_Emissive_Color", color);
+					}
+				}
+			}
 		}
 	}
 }

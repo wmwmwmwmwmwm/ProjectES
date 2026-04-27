@@ -405,7 +405,9 @@ namespace Battle
 				if (getUp)
 				{
 					bool success = _FSM.TrySetState(_GetUp);
-					if (success)
+
+					// 기상 무적
+					if (success && _Player)
 					{
 						_InvincibleTimer = 2.4f;
 					}

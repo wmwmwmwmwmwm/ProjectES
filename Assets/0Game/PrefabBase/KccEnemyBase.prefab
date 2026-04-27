@@ -273,7 +273,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4014474705152691691}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2144969dc51961b46895b0056e869235, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -305,7 +305,8 @@ MonoBehaviour:
   CapsuleRadius: 0.83
   CapsuleHeight: 3.96
   CapsuleYOffset: 1.88
-  CapsulePhysicsMaterial: {fileID: 0}
+  CapsulePhysicsMaterial: {fileID: 13400000, guid: 2144969dc51961b46895b0056e869235,
+    type: 2}
   GroundDetectionExtraDistance: 0.5
   MaxStableSlopeAngle: 50
   StableGroundLayers:

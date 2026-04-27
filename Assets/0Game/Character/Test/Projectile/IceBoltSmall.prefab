@@ -16,17 +16,17 @@ PrefabInstance:
     - target: {fileID: 4840880294674937312, guid: 1481da09699153c4498ce6719d071969,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4840880294674937312, guid: 1481da09699153c4498ce6719d071969,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4840880294674937312, guid: 1481da09699153c4498ce6719d071969,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4840880294674937312, guid: 1481da09699153c4498ce6719d071969,
         type: 3}
@@ -105,7 +105,7 @@ PrefabInstance:
     - target: {fileID: 146658982985273343, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
         type: 3}
       propertyPath: m_Name
-      value: IceBolt
+      value: IceBoltSmall
       objectReference: {fileID: 0}
     - target: {fileID: 438804944403085889, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
         type: 3}
@@ -156,6 +156,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204090715861840270, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: _ForceUp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204090715861840270, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: _ForceForward
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204090715861840270, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: _DamageDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2204090715861840270, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: _DeaccelDuration
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2230065087802561693, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7952066989866752520, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
+        type: 3}
+      propertyPath: _Duration
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7952066989866752520, guid: 7fe8fddc2f81d2543918485e2e4b6d1c,
         type: 3}
