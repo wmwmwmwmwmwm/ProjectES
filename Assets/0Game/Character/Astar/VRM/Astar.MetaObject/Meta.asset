@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b589176a34b344b9ccbee2b7e7114a, type: 3}
   m_Name: Meta
   m_EditorClassIdentifier: 
-  ExporterVersion: VRoid Studio-2.11.0
+  ExporterVersion: VRoid Studio-2.12.0
   Title: Astar
   Version: 
   Author: lyb
