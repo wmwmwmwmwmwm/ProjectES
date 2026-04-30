@@ -160,7 +160,7 @@ Packages/packages-lock.json linguist-generated
 *.skel.bytes            lfs
 
 # Exceptions for .asset files such as lightning pre-baking
-LightingData.asset     binary
+*LightingData.asset     binary
 
-OcclusionCullingData.asset     lfs
-Terrain.asset     lfs
+*OcclusionCullingData.asset     lfs
+*Terrain.asset     lfs
