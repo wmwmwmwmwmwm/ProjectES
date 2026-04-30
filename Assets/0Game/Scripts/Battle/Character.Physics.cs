@@ -82,7 +82,7 @@ namespace Battle
 			// 페이드 인 감속
 			if (_FadeInDeaccelTimer > 0f)
 			{
-				float t = _FadeInDeaccelTimer;
+				float t = Mathf.Clamp01(_FadeInDeaccelTimer);
 				_CurrentMoveAccel *= t;
 				if (IsGrounded())
 				{
@@ -97,10 +97,14 @@ namespace Battle
 			// 페이드 아웃 감속
 			if (_FadeOutDeaccelTimer > 0f)
 			{
-				float t = _FadeOutDeaccelTimer;
+				float t = 1f - Mathf.Clamp01(_FadeOutDeaccelTimer);
 				_CurrentMoveAccel *= t;
 				if (IsGrounded())
 				{
+					//Vector2 xz = new(currentVelocity.x, currentVelocity.z);
+					//xz = Vector2.ClampMagnitude(xz, _CurrentMoveSpeed * t);
+					//currentVelocity.x = xz.x;
+					//currentVelocity.z = xz.y;
 					Vector2 xz = new(currentVelocity.x, currentVelocity.z);
 					xz = Vector2.MoveTowards(xz, Vector2.zero, xz.magnitude / _FadeOutDeaccelTimer * deltaTime);
 					currentVelocity.x = xz.x;

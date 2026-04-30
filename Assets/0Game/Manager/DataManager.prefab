@@ -45,42 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Stages:
-  - _Name: Test
-    _StartPosition: {x: -205.94858, y: 126.34961, z: 294.19278}
-    _StartRotation: {x: -0, y: -0.6565693, z: -0, w: 0.7542658}
-    _Spawns:
-    - _CharacterName: Snowman_3
-      _Position: {x: -221.7, y: 124.70929, z: 296.5}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -220.3, y: 124.70929, z: 299.8}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -224.8, y: 124.70929, z: 296.4}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -226.4, y: 124.70929, z: 298.5}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -223.1, y: 124.70929, z: 302.4}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -220.6, y: 124.70929, z: 303.1}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Snowman_3
-      _Position: {x: -223.30327, y: 124.70929, z: 299.3543}
-      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
-      _Scale: 0
-    - _CharacterName: Tower
-      _Position: {x: -209.78278, y: 125.65822, z: 306.53583}
-      _Rotation: {x: 0, y: -0.7907323, z: 0, w: 0.61216205}
-      _Scale: 0
   - _Name: Tutorial
     _StartPosition: {x: 456.52, y: 0, z: 635.33}
     _StartRotation: {x: -0, y: -0.73787844, z: -0, w: 0.6749337}
@@ -224,6 +188,190 @@ MonoBehaviour:
     - _CharacterName: Golem
       _Position: {x: 471.9, y: -0.000005722046, z: 572.4}
       _Rotation: {x: -0, y: -0.8206432, z: -0, w: 0.57144105}
+      _Scale: 1
+  - _Name: Test
+    _StartPosition: {x: -279.48688, y: 124.21326, z: -351.51324}
+    _StartRotation: {x: -0, y: 0.46454018, z: -0, w: 0.8855521}
+    _Spawns:
+    - _CharacterName: Snowman_3
+      _Position: {x: -23.251173, y: 143.8, z: -94.15577}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -176.17963, y: 97.20915, z: -284.4341}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -26.059696, y: 143.8, z: -99.723724}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -20.995895, y: 143.8, z: -97.240204}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -86.052345, y: 128.2, z: -86.70277}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -183.22595, y: 189.7, z: -179.2019}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -20.663729, y: 143.8, z: -93.94327}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -179.27635, y: 97.20915, z: -285.28842}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -244.07936, y: 89.38158, z: -235.16426}
+      _Rotation: {x: -0, y: -0.9515454, z: -0, w: 0.30750826}
+      _Scale: 2.5733
+    - _CharacterName: Tower
+      _Position: {x: -31.676483, y: 117.01576, z: -166.39256}
+      _Rotation: {x: -0, y: -0.4052252, z: -0, w: 0.91421694}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -180.61287, y: 189.7, z: -178.82536}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -179.19241, y: 189.7, z: -176.06813}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -86.93163, y: 128.2, z: -89.145485}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -169.33913, y: 90.4, z: -259.64398}
+      _Rotation: {x: -0, y: -0.83598495, z: -0, w: 0.5487524}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -24.029144, y: 143.8, z: -97.10742}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -85.66766, y: 128.2, z: -94.09546}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -128.92752, y: 103.06183, z: -172.32199}
+      _Rotation: {x: -0, y: -0.99886894, z: -0, w: 0.047548573}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -114.34983, y: 189.8, z: -221.41539}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -177.67636, y: 97.20915, z: -287.38843}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -173.47636, y: 97.20915, z: -280.68842}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -181.39478, y: 189.7, z: -173.2398}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: 172.6646, y: 25.46054, z: 91.11127}
+      _Rotation: {x: -0, y: -0.96145576, z: -0, w: 0.2749599}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -84.568085, y: 128.2, z: -91.0771}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -83.028984, y: 128.2, z: -94.00957}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -27.231756, y: 143.8, z: -97.358086}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -184.42404, y: 189.7, z: -171.8968}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -113.99239, y: 189.8, z: -224.70967}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -81.31295, y: 128.2, z: -91.42592}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -94.16913, y: 102.97365, z: -260.7732}
+      _Rotation: {x: -0, y: -0.5681055, z: -0, w: 0.8229558}
+      _Scale: 2.5733
+    - _CharacterName: Tower
+      _Position: {x: 194.03851, y: 33.35077, z: -3.1198883}
+      _Rotation: {x: -0, y: -0.4052252, z: -0, w: 0.91421694}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -182.46616, y: 189.7, z: -176.08064}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -12.724991, y: 141.1, z: -83.02258}
+      _Rotation: {x: -0, y: -0.6316822, z: -0, w: 0.7752275}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -116.83726, y: 189.8, z: -222.15883}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -118.432495, y: 189.8, z: -228.18753}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -174.57635, y: 97.20915, z: -287.28842}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -120.06882, y: 189.8, z: -226.1157}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -22.997114, y: 143.8, z: -100.214264}
+      _Rotation: {x: -0, y: 0.974485, z: -0, w: -0.22445291}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -173.17636, y: 97.20915, z: -283.98843}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -185.02841, y: 189.7, z: -174.42163}
+      _Rotation: {x: -0, y: 0.9208387, z: -0, w: 0.3899439}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -115.3347, y: 189.8, z: -228.03355}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -102.04799, y: 109.92452, z: -79.37366}
+      _Rotation: {x: -0, y: -0.99886894, z: -0, w: 0.047548573}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -175.97636, y: 97.20915, z: -281.38843}
+      _Rotation: {x: -0, y: 0.9914519, z: -0, w: -0.13047288}
+      _Scale: 1
+    - _CharacterName: Tower
+      _Position: {x: -223.66614, y: 107.51561, z: -360.30493}
+      _Rotation: {x: -0, y: -0.31053883, z: -0, w: 0.9505607}
+      _Scale: 2.5733
+    - _CharacterName: Snowman_3
+      _Position: {x: -83.18977, y: 128.2, z: -88.37183}
+      _Rotation: {x: -0, y: 0.94097906, z: -0, w: 0.33846492}
+      _Scale: 1
+    - _CharacterName: Snowman_3
+      _Position: {x: -116.98744, y: 189.8, z: -225.2076}
+      _Rotation: {x: -0, y: 0.9925506, z: -0, w: -0.121833585}
       _Scale: 1
   _Characters:
   - _Name: Astar

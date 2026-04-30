@@ -53,6 +53,7 @@ namespace Battle
 		[HideInInspector] public AttackContainer _AttackContainer;
 		float _InvincibleTimer;
 		Coroutine _HitEmissionCoroutine;
+		[HideInInspector] public List<BattleEffect> _Effects;
 
 		public BattleController Controller => BattleController.Instance;
 		public Vector3 Center
@@ -118,6 +119,7 @@ namespace Battle
 			_RaycastResults = new RaycastHit[10];
 			_RootMotionPosDelta = Vector3.zero;
 			_RootMotionRotDelta = Quaternion.identity;
+			_Effects = new();
 
 			// 시간 초기화
 			_GuardUpTime = Const.TimeDefault;
@@ -557,6 +559,8 @@ namespace Battle
 					{
 						for (int i = 0; i < attack._FireCount; i++)
 						{
+							if (_FSM.CurrentState != state) break;
+
 							Missile missile = Instantiate(attack._MissilePrefab);
 							missile.Init();
 							missile._FireTime = Time.time;
@@ -582,11 +586,13 @@ namespace Battle
 					{
 						// 발사 대기 중
 						laser.ImpactOn(false);
-						yield return new WaitForSeconds(laser._Delay);
+						float startTime = Time.time;
+						yield return new WaitUntil(() => Time.time - startTime > laser._Delay || _FSM.CurrentState != state);
 
 						// 발사 중
 						laser.ImpactOn(true);
-						yield return new WaitForSeconds(laser._Duration);
+						startTime = Time.time;
+						yield return new WaitUntil(() => Time.time - startTime > laser._Duration || _FSM.CurrentState != state);
 					}
 				}
 				yield return coroutine;
@@ -643,7 +649,7 @@ namespace Battle
 					// 일반 가드
 					else
 					{
-						_FadeInDeaccelTimer = 0.6f;
+						_FadeOutDeaccelTimer = 0.6f;
 						damage *= attack._AreaType == AreaType.Single ? 0f : 0.5f;
 					}
 
@@ -657,7 +663,7 @@ namespace Battle
 					// 일반 경직
 					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
 					{
-						_FadeInDeaccelTimer = attackHit._DeaccelDuration;
+						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
 						if (playDamageAnim)
 						{
 							_Damage._Duration = attackHit._DamageDuration;
@@ -701,12 +707,12 @@ namespace Battle
 				// 데미지 표시
 				if (!IsDead())
 				{
+					HitEmission();
 					SetHP(_HP - damage);
 					if (_Enemy)
 					{
 						Controller.ShowDamageText(damage, damageTextPosition);
 						Controller.ShakeCamera(attackHit._ShakeCameraDuration);
-						HitEmission();
 					}
 					else
 					{
@@ -765,9 +771,10 @@ namespace Battle
 				e._Owner = this;
 				e.Init();
 				Data.SetupEffectPosition(effect, info, transform);
+				_Effects.Add(e);
 				ParticleSystem.MainModule main = effect.GetComponent<ParticleSystem>().main;
 				yield return new WaitForSeconds(main.duration);
-				Destroy(effect);
+				_Effects.DestroyElement(e);
 			}
 		}
 
@@ -835,7 +842,10 @@ namespace Battle
 
 		bool IsInvincible()
 		{
-			return _InvincibleTimer > 0f;
+			bool invincible = _InvincibleTimer > 0f;
+			invincible |= _FSM.CurrentState == _GuardAttack;
+			invincible |= _FSM.CurrentState == _Ultimate;
+			return invincible;
 		}
 
 		bool IsGuardingEffective()
@@ -948,7 +958,8 @@ namespace Battle
 			{
 				StopCoroutine(_HitEmissionCoroutine);
 			}
-			Color white = Color.white * 0.5f;
+			Color white = Color.white;
+			white.a = 0.5f;
 			_HitEmissionCoroutine = StartCoroutine(Internal());
 
 			IEnumerator Internal()

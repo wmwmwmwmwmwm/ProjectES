@@ -105,6 +105,9 @@ namespace Battle
 				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
 				nextPlayer._CameraOffsetY = nextPlayer.GetShoulderHeight();
 				nextPlayer.c._FSM.ForceSetDefaultState();
+
+				// 이펙트 삭제
+				_ActivePlayer.c._Effects.DestroyElements();
 			}
 
 			foreach (Player player in _Players)
@@ -198,6 +201,7 @@ namespace Battle
 		{
 			bool test = Game._StartScene == SceneName.Glacier;
 			test |= Game._StartScene == "Glacier_Demo";
+			test |= Game._StartScene == "Glacier_1";
 			return test;
 		}
 	}

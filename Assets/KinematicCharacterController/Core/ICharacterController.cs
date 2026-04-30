@@ -46,5 +46,9 @@ namespace KinematicCharacterController
         /// This is called when the character detects discrete collisions (collisions that don't result from the motor's capsuleCasts when moving)
         /// </summary>
         void OnDiscreteCollisionDetected(Collider hitCollider);
-    }
+		/// <summary>
+		/// Ground인지 판정 조건 추가
+		/// </summary>
+		bool IsColliderValidForGround(Collider hitCollider);
+	}
 }

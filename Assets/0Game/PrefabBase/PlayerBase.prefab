@@ -142,6 +142,7 @@ MonoBehaviour:
   _StopYTrigger: 0
   _EffectContainer: {fileID: 0}
   _AttackContainer: {fileID: 0}
+  _Effects: []
   _FadeInDeaccelTimer: 0
   _FadeOutDeaccelTimer: 0
   _RootMotionPosDelta: {x: 0, y: 0, z: 0}
@@ -242,7 +243,7 @@ MonoBehaviour:
   MaxStableSlopeAngle: 50
   StableGroundLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 320
   DiscreteCollisionEvents: 0
   StepHandling: 1
   MaxStepHeight: 0.5
@@ -253,7 +254,7 @@ MonoBehaviour:
   MaxVelocityForLedgeSnap: 10
   MaxStableDenivelationAngle: 90
   InteractiveRigidbodyHandling: 1
-  RigidbodyInteractionType: 2
+  RigidbodyInteractionType: 1
   SimulatedCharacterMass: 10
   PreserveAttachedRigidbodyMomentum: 1
   HasPlanarConstraint: 0

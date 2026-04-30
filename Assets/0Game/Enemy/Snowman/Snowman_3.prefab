@@ -82,7 +82,7 @@ PrefabInstance:
     - target: {fileID: 3152885022966669924, guid: f0bd9846712dd784294af365bf2d3278,
         type: 3}
       propertyPath: _Name
-      value: Skill2
+      value: Skill1
       objectReference: {fileID: 0}
     - target: {fileID: 3152885022966669924, guid: f0bd9846712dd784294af365bf2d3278,
         type: 3}
@@ -276,6 +276,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Missile
       objectReference: {fileID: 0}
+    - target: {fileID: 146658982985273343, guid: 48fd12d9544516949a37d926d0ac8213,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 438804944403085889, guid: 48fd12d9544516949a37d926d0ac8213,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -426,6 +431,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _Name
       value: Snowman_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
+        type: 3}
+      propertyPath: _MaxHP
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1632507095128983233, guid: 9110d79557fe54e44927aa5f623d34c2,
         type: 3}

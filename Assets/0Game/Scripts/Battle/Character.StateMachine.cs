@@ -165,7 +165,7 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _JumpAsset,
-				_Priority = -11,
+				_Priority = -12,
 				_MoveSpeed = 1f,
 				_Duration = -1f,
 				_CanDash = true,
@@ -178,6 +178,8 @@ namespace Battle
 			{
 				c = this,
 				_Asset = _LandAsset,
+				_Priority = -11,
+				// _MoveSpeed = 별도 처리
 				_CanDash = true,
 				_CanJump = true,
 				_CanAttack = true,
@@ -223,6 +225,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
+				_CanGuard = true,
 				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_Skill1.Init();
@@ -234,6 +237,7 @@ namespace Battle
 				_Restart = true,
 				_LimitRotate = true,
 				_CanAttack = true,
+				_CanGuard = true,
 				_RootMotionMode = State.RootMotionMode.GroundOnly,
 			};
 			_Skill2.Init();
@@ -284,8 +288,8 @@ namespace Battle
 						_MoveSpeed = 0.3f,
 						_Restart = true,
 						_LimitRotate = true,
-						_CanGuard = true,
 						_CanAttack = true,
+						_CanGuard = true,
 						_RootMotionMode = State.RootMotionMode.GroundOnly,
 					};
 					newState.Init();
@@ -322,8 +326,8 @@ namespace Battle
 					_MoveSpeed = 0.3f,
 					_Restart = true,
 					_LimitRotate = true,
-					_CanGuard = true,
 					_CanAttack = true,
+					_CanGuard = true,
 					_RootMotionMode = State.RootMotionMode.GroundOnly,
 				};
 				_SpecialAttack.Init();

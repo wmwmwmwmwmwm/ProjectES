@@ -14,8 +14,6 @@ namespace Battle
 	{
 		public Transform _HPSliderPosition;
 
-		[BoxGroup("설정")] public bool _CanClimb;
-
 		[HideInInspector] public Character c;
 		[HideInInspector] public NavMeshAgent _Agent;
 		NavMeshPath _Path;

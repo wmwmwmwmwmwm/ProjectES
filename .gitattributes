@@ -164,3 +164,4 @@ Packages/packages-lock.json linguist-generated
 
 *OcclusionCullingData.asset     lfs
 *Terrain.asset     lfs
+*Navmesh.asset     lfs

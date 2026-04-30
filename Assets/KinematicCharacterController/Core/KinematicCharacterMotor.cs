@@ -2013,12 +2013,12 @@ namespace KinematicCharacterController
             }
 
             return true;
-        }
+		}
 
-        /// <summary>
-        /// Determines if the motor is considered stable on a given hit
-        /// </summary>
-        public void EvaluateHitStability(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, Vector3 withCharacterVelocity, ref HitStabilityReport stabilityReport)
+		/// <summary>
+		/// Determines if the motor is considered stable on a given hit
+		/// </summary>
+		public void EvaluateHitStability(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, Vector3 withCharacterVelocity, ref HitStabilityReport stabilityReport)
         {
             if (!_solveGrounding)
             {
@@ -2615,7 +2615,8 @@ namespace KinematicCharacterController
                 float hitDistance = hit.distance;
 
                 // Find the closest valid hit
-                if (hitDistance > 0f && CheckIfColliderValidForCollisions(hit.collider))
+                if (hitDistance > 0f && CheckIfColliderValidForCollisions(hit.collider) 
+					&& CharacterController.IsColliderValidForGround(hit.collider))
                 {
                     if (hitDistance < closestDistance)
                     {

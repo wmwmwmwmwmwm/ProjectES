@@ -30350,6 +30350,11 @@ PrefabInstance:
       propertyPath: _Options.textureScale.y
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 6311729804866244189, guid: b431a7ee36f3f734cb3fb5fdafbc5a83,
+        type: 3}
+      propertyPath: _CanClimb
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7163197306044384035, guid: b431a7ee36f3f734cb3fb5fdafbc5a83,
         type: 3}
       propertyPath: m_Mass

@@ -34,14 +34,17 @@ public static class Layer
 	public const string Terrain = "Terrain";
 	public const string Player = "Player";
 	public const string Enemy = "Enemy";
+	public const string InvisibleWall = "InvisibleWall";
 
 	public static LayerMask TerrainLayer => LayerMask.NameToLayer(Terrain);
 	public static LayerMask PlayerLayer => LayerMask.NameToLayer(Player);
 	public static LayerMask EnemyLayer => LayerMask.NameToLayer(Enemy);
+	public static LayerMask InvisibleWallLayer => LayerMask.NameToLayer(InvisibleWall);
 
 	public static LayerMask TerrainLayerMask => 1 << LayerMask.NameToLayer(Terrain);
 	public static LayerMask PlayerLayerMask => 1 << LayerMask.NameToLayer(Player);
 	public static LayerMask EnemyLayerMask => 1 << LayerMask.NameToLayer(Enemy);
+	public static LayerMask InvisibleWallLayerMask => 1 << LayerMask.NameToLayer(InvisibleWall);
 }
 
 //public static class SortingLayer

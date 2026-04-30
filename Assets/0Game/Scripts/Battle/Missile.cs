@@ -79,16 +79,20 @@ namespace Battle
 				return;
 			}
 
-			CheckMissileCollision();
+			// 히트 판정
+			if (elapsed > 0.9f)
+			{
+				CheckMissileCollision();
+			}
 		}
 
 		void CheckMissileCollision()
 		{
 			if (_Bomb && _Bomb.Exploded) return;
 
-			// 히트 판정
 			Vector3 deltaPosition = _Rigidbody.linearVelocity * Time.deltaTime;
-			int layerMask = _Attack._Owner.GetOppositeAndTerrainLayerMask();
+			int layerMask = -1;
+			layerMask &= ~Layer.InvisibleWallLayerMask;
 			int count = Physics.SphereCastNonAlloc(
 				origin: transform.position,
 				radius: _Collider.radius,
@@ -108,8 +112,15 @@ namespace Battle
 					break;
 				}
 
+				// 공격 적중
+				Character target = hit.collider.GetComponentInParent<Character>();
+				if (target && target.IsOpposite(_Attack._Owner))
+				{
+					target.TakeDamage(_Attack, _AttackHit, hit.point, transform.forward);
+					_HitTargets.Add(target.gameObject, Time.time);
+				}
 				// 지형에 충돌
-				if (hit.collider.gameObject.layer == Layer.TerrainLayer)
+				else 
 				{
 					Controller.PlayEffect123123(_AttackHit._HitEffectPrefab, _Attack._Owner, hit.point, Quaternion.LookRotation(transform.forward));
 					_HitTargets.Add(hit.collider.gameObject, Time.time);
@@ -117,13 +128,6 @@ namespace Battle
 					{
 						Controller.AddForceToFragment(fragment, 20f, transform.forward);
 					}
-				}
-				// 공격 적중
-				else
-				{
-					Character target = hit.collider.GetComponentInParent<Character>();
-					target.TakeDamage(_Attack, _AttackHit, hit.point, transform.forward);
-					_HitTargets.Add(target.gameObject, Time.time);
 				}
 				_Attack._Owner.DestroyMissile(this);
 			}

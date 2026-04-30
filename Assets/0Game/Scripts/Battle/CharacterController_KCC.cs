@@ -54,7 +54,10 @@ namespace Battle
 				case MoveRequest.DashBwd:
 				case MoveRequest.DashLeft:
 				case MoveRequest.DashRight:
-					if (c._FSM.CurrentState._CanDash && !c.IsGuarding())
+					bool canDash = c._FSM.CurrentState._CanDash;
+					canDash &= !c.IsGuarding();
+					canDash &= Time.time - _LastDashTime > _DashDuration * 2f;
+					if (canDash)
 					{
 						_LastDashTime = Time.time;
 						_DashDir = _MoveRequest switch
@@ -119,8 +122,7 @@ namespace Battle
 					if (!c._FSM.CurrentState._CanJump) break;
 
 					// 지상
-					bool groundJump = _Motor.GroundingStatus.IsStableOnGround;
-					groundJump |= Time.time - _LastCanJumpTime <= MoveGraceDuration;
+					bool groundJump = _Motor.GroundingStatus.IsStableOnGround || Time.time - _LastCanJumpTime <= MoveGraceDuration;
 					groundJump &= Vector3.Angle(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal) < _Motor.MaxStableSlopeAngle;
 					if (groundJump)
 					{
@@ -167,10 +169,10 @@ namespace Battle
 								closestHit: out RaycastHit hit,
 								hits: c._RaycastResults);
 							if (count == 0) continue;
-							if (hit.collider.gameObject.layer == c.GetOppositeLayer())
-							{
-								if (!hit.collider.GetComponent<Enemy>()._CanClimb) continue;
-							}
+
+							// 벽 점프 가능한 적
+							Enemy enemy = hit.collider.GetComponent<Enemy>();
+							if (enemy && !c.UseKCC) continue;
 
 							// 각도 판정
 							Vector3 jumpDir = -direction;
@@ -276,6 +278,13 @@ namespace Battle
 		public void OnDiscreteCollisionDetected(Collider hitCollider)
 		{
 			// This is called by the motor when it is detecting a collision that did not result from a "movement hit".
+		}
+
+		public bool IsColliderValidForGround(Collider hitCollider)
+		{
+			Character character = hitCollider.GetComponentInParent<Character>();
+			if (character && character._Enemy) return !character.UseKCC;
+			else return true;
 		}
 
 		public void Dash(Direction4 dir)

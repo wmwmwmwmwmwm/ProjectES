@@ -85,9 +85,9 @@ namespace Battle
 			foreach (Transform child in _Fragment)
 			{
 				Rigidbody rigidbody = child.GetComponent<Rigidbody>();
-				rigidbody.maxLinearVelocity = 50f / rigidbody.mass;
-				rigidbody.maxAngularVelocity = 10f / rigidbody.mass;
-				float force = 10f;
+				rigidbody.maxLinearVelocity = 100f / rigidbody.mass;
+				rigidbody.maxAngularVelocity = 20f / rigidbody.mass;
+				float force = 5f;
 				rigidbody.AddExplosionForce(
 					force,
 					transform.position,
