@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Stages:
-  - _Name: Test
+  - _Name: Glacier
     _StartPosition: {x: -205.94858, y: 126.34961, z: 294.19278}
     _StartRotation: {x: -0, y: -0.6565693, z: -0, w: 0.7542658}
     _Spawns:

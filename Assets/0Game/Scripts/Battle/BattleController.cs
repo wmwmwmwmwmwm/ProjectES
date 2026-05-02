@@ -26,6 +26,34 @@ namespace Battle
 		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
 
+		IEnumerator Start()
+		{
+			if (Game.IsTestMode()) yield break;
+
+			yield return new WaitUntil(() => Game.GetCurrentScene().isLoaded);
+			print(123);
+
+			Init();
+
+			// 배치
+			foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+			{
+				Destroy(enemy.gameObject);
+			}
+			_CurrentStage = Data.GetStageData(Game._CurrentScene);
+			List<string> playerNames = new() { "Astar", "Inasi" }; // todo 전투 캐릭터 리스트
+			foreach (string playerName in playerNames)
+			{
+				SpawnPlayer(playerName, _CurrentStage._StartPosition, _CurrentStage._StartRotation);
+			}
+			foreach (DataManager.Stage.Spawn spawn in _CurrentStage._Spawns)
+			{
+				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation, spawn._Scale);
+			}
+
+			Init2();
+		}
+
 		public void Init()
 		{
 			_Players = new();
@@ -38,23 +66,6 @@ namespace Battle
 			GameObject.Find("EditorCamera").SetActive(false);
 			InitMinimap();
 			InitUI();
-
-			// 배치
-			if (IsTestMode()) return;
-			foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
-			{
-				Destroy(enemy.gameObject);
-			}
-			_CurrentStage = Data.GetStageData(Game._CurrentScene);
-			List<string> playerNames = new() { "Nolan", "Inasi" }; // todo 전투 캐릭터 리스트
-			foreach (string playerName in playerNames)
-			{
-				SpawnPlayer(playerName, _CurrentStage._StartPosition, _CurrentStage._StartRotation);
-			}
-			foreach (DataManager.Stage.Spawn spawn in _CurrentStage._Spawns)
-			{
-				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation, spawn._Scale);
-			}
 		}
 
 		public void Init2()
@@ -193,13 +204,6 @@ namespace Battle
 				yield return new WaitForSeconds(3f);
 				Destroy(hitEffect);
 			}
-		}
-
-		public bool IsTestMode()
-		{
-			bool test = Game._StartScene == SceneName.Glacier;
-			test |= Game._StartScene == "Glacier_Demo";
-			return test;
 		}
 	}
 }

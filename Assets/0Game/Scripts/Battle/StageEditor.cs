@@ -23,16 +23,15 @@ namespace Battle
 			StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
+				if (!Game.IsTestMode()) yield break;
+
 				foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
 				{
 					Destroy(enemy.gameObject);
 				}
 				SceneManager.LoadScene(SceneName.Battle, LoadSceneMode.Additive);
 				Scene battleScene = SceneManager.GetSceneByName(SceneName.Battle);
-				yield return new WaitUntil(() => battleScene.isLoaded);
-
-				yield return new WaitUntil(() => Controller);
-				if (!Controller.IsTestMode()) yield break;
+				yield return new WaitUntil(() => battleScene.isLoaded && Controller);
 
 				Controller.Init();
 				Controller._CurrentStage = Data.GetStageData(_StageName);

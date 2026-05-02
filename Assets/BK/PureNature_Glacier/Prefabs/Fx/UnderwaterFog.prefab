@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8437232868690874124}
   - component: {fileID: 7940556151462593607}
-  - component: {fileID: 8914518832130355824}
   m_Layer: 0
   m_Name: UnderwaterFog
   m_TagString: Untagged
@@ -54,18 +53,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8914518832130355824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5241048606095904432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a83207141aa74e44989eb4fae1381992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fogColor: {r: 0.32573864, g: 0.78067124, b: 0.8490566, a: 1}
-  fogDensity: 0.01
-  envManager: {fileID: 0}
