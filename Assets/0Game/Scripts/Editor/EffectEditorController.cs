@@ -36,16 +36,16 @@ public class EffectEditorController : MonoBehaviour
 	[Header("오브젝트")]
 	public GameObject _Character;
 
-	SoloAnimation _SoloAnimation;
-	AnimationClip _AnimationClip;
-	GameObject _EffectPrefab;
-	ParticleSystem _Effect;
-	GameObject _HitEffectPrefab;
-	ParticleSystem _HitEffect;
-	float _LastPlayTime;
-	bool _PlayEffectFlag, _PlayHitEffectFlag;
+	//SoloAnimation _SoloAnimation;
+	//AnimationClip _AnimationClip;
+	//GameObject _EffectPrefab;
+	//ParticleSystem _Effect;
+	//GameObject _HitEffectPrefab;
+	//ParticleSystem _HitEffect;
+	//float _LastPlayTime;
+	//bool _PlayEffectFlag, _PlayHitEffectFlag;
 
-	bool Active => _AnimationClip && _Effect;
+	//bool Active => _AnimationClip && _Effect;
 
 	//void Start()
 	//{

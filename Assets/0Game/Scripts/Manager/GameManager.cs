@@ -108,4 +108,11 @@ public class GameManager : Singleton<GameManager>
 			Destroy(box);
 		}
 	}
+
+	public bool IsTestMode()
+	{
+		return _StartScene != SceneName.First;
+	}
+
+	public Scene GetCurrentScene() => SceneManager.GetSceneByName(_CurrentScene);
 }
