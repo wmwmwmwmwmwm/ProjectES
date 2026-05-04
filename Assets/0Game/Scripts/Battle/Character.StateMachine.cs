@@ -259,7 +259,7 @@ namespace Battle
 					c = this,
 					_Asset = _RunAsset,
 					_Priority = -12,
-					_MoveSpeed = 2f,
+					_MoveSpeed = 1.4f,
 					_Duration = -1f,
 					_CanJump = true,
 					_CanAttack = true,
@@ -269,7 +269,7 @@ namespace Battle
 				_Dash = new()
 				{
 					c = this,
-					_MoveSpeed = 2f,
+					_MoveSpeed = 1.5f,
 					_Restart = true,
 					_Duration = GetComponent<CharacterController_KCC>()._DashDuration,
 					_LimitRotate = true,

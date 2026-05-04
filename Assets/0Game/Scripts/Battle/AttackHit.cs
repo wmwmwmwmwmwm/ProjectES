@@ -12,6 +12,6 @@ namespace Battle
 		public float _DeaccelDuration, _DamageDuration, _HitStunDuration;
 		public float _ForceForward, _ForceUp;
 		public float _Damage;
-		public float _ShakeCameraDuration;
+		public float _ShakeCameraStrength;
 	}
 }

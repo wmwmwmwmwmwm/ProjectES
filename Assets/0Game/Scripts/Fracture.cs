@@ -2,13 +2,16 @@
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
-using static Battle.CharacterController_Rigidbody;
+#endif
 
 public class Fracture : MonoBehaviour
 {
+#if UNITY_EDITOR
 	public GameObject _TargetMesh;
 	public Transform _FragmentParent;
 	public GameObject _FragmentPrefab;
@@ -92,4 +95,5 @@ public class Fracture : MonoBehaviour
 		string fileName = $"{Path.GetFileNameWithoutExtension(stage.assetPath)}_Fragment.asset";
 		return Path.Combine(directory, fileName);
 	}
+#endif
 }

@@ -48,8 +48,14 @@ namespace Battle
 
 		public void UpdateVelocity_Shared1(ref Vector3 currentVelocity, float deltaTime)
 		{
-			_CurrentMoveSpeed = _MoveSpeed * _FSM.CurrentState._MoveSpeed * GetSpeedMultiplier();
-			_CurrentMoveAccel = _MoveAccel * _FSM.CurrentState._MoveSpeed * GetSpeedMultiplier();
+			State state = _FSM.CurrentState;
+			float stateMoveSpeed = state._MoveSpeed;
+			if (state == _Land)
+			{
+				stateMoveSpeed = _IsRunning ? _Run._MoveSpeed : _Move._MoveSpeed;
+			}
+			_CurrentMoveSpeed = _MoveSpeed * stateMoveSpeed * GetSpeedMultiplier();
+			_CurrentMoveAccel = _MoveAccel * stateMoveSpeed * GetSpeedMultiplier();
 			_CurrentMoveInputVector = _AimDestRotation * _MoveInput;
 			_CurrentMoveInputVector.y = 0f;
 
@@ -70,13 +76,6 @@ namespace Battle
 			else
 			{
 				_HitStunTimer = 0f;
-			}
-
-			// 착지 시 속도 별도 처리
-			State state = _FSM.CurrentState;
-			if (state == _Land)
-			{
-				_CurrentMoveSpeed = _IsRunning ? _MoveSpeed * _Run._MoveSpeed : _MoveSpeed * _Move._MoveSpeed;
 			}
 
 			// 페이드 인 감속

@@ -664,6 +664,8 @@ namespace Battle
 					if (attackHit._ForceForward == 0f && attackHit._ForceUp == 0f)
 					{
 						_FadeOutDeaccelTimer = attackHit._DeaccelDuration;
+						_Impulse = new(0f, 0f, 10f);
+						_Impulse = Quaternion.LookRotation(attackDirection.WithY(0f)) * _Impulse;
 						if (playDamageAnim)
 						{
 							_Damage._Duration = attackHit._DamageDuration;
@@ -694,7 +696,7 @@ namespace Battle
 						if (playDamageAnim)
 						{
 							_Impulse = new(0f, attackHit._ForceUp, attackHit._ForceForward);
-							_Impulse = Quaternion.LookRotation(attackDirection) * _Impulse;
+							_Impulse = Quaternion.LookRotation(attackDirection.WithY(0f)) * _Impulse;
 							_FSM.TrySetState(_GetDown);
 						}
 					}
@@ -712,7 +714,7 @@ namespace Battle
 					if (_Enemy)
 					{
 						Controller.ShowDamageText(damage, damageTextPosition);
-						Controller.ShakeCamera(attackHit._ShakeCameraDuration);
+						Controller.ShakeCamera(attackHit._HitStunDuration, attackHit._ShakeCameraStrength);
 					}
 					else
 					{
@@ -763,7 +765,7 @@ namespace Battle
 
 		void PlayEffect(Effect info)
 		{
-			StartCoroutine(Internal());
+			Controller.StartCoroutine(Internal());
 			IEnumerator Internal()
 			{
 				GameObject effect = Instantiate(info._EffectPrefab);

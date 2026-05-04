@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6de893300c5484985df5a519d7c447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Transition: {fileID: 0}
+  _Name: 
   _Cooltime: 0
   _SpeedMultiplier: 1
   _SkillType: 0
@@ -144,4 +144,4 @@ MonoBehaviour:
   _ForceForward: 0
   _ForceUp: 0
   _Damage: 150
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0.1

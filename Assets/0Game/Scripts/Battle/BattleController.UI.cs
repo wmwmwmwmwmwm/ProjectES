@@ -56,9 +56,9 @@ namespace Battle
 
 		void UpdateUI()
 		{
+			// 플레이어 체력
 			foreach (Player player in _Players)
 			{
-				// 체력
 				Character c = player.c;
 				float hp = c._HP;
 				if (hp < 0f) hp = 0f;
@@ -67,26 +67,27 @@ namespace Battle
 				player._UI_HP._Slider.value = percent;
 				player._UI_HP._Slider_Inner.value = Mathf.MoveTowards(player._UI_HP._Slider_Inner.value, percent, 0.3f * Time.deltaTime);
 				player._UI_HP._HPText.text = $"{hp:0} / {c._MaxHP:0}";
+			}
 
-				// 스킬
-				RefreshSkillIcon(_Skill1SkillIcon, c._Skill1._Attack._Cooltime, c._LastSkill1Time);
-				RefreshSkillIcon(_Skill2SkillIcon, c._Skill2._Attack._Cooltime, c._LastSkill2Time);
-				RefreshSkillIcon(_UltimateSkillIcon, c._Ultimate._Attack._Cooltime, c._LastUltimateTime);
+			// 플레이어 스킬
+			Character c2 = _ActivePlayer.c;
+			RefreshSkillIcon(_Skill1SkillIcon, c2._Skill1._Attack._Cooltime, c2._LastSkill1Time);
+			RefreshSkillIcon(_Skill2SkillIcon, c2._Skill2._Attack._Cooltime, c2._LastSkill2Time);
+			RefreshSkillIcon(_UltimateSkillIcon, c2._Ultimate._Attack._Cooltime, c2._LastUltimateTime);
 
-				void RefreshSkillIcon(UI_SkillIcon icon, float cooltime, float lastTime)
+			void RefreshSkillIcon(UI_SkillIcon icon, float cooltime, float lastTime)
+			{
+				float elapsed = Time.time - lastTime;
+				if (elapsed < cooltime)
 				{
-					float elapsed = Time.time - lastTime;
-					if (elapsed < cooltime)
-					{
-						icon._Slider.value = elapsed / cooltime;
-						float remained = cooltime - elapsed;
-						icon._Text.text = remained.ToString(remained < 1f ? "0.0" : "0");
-					}
-					else
-					{
-						icon._Slider.value = 0f;
-						icon._Text.text = "";
-					}
+					icon._Slider.value = elapsed / cooltime;
+					float remained = cooltime - elapsed;
+					icon._Text.text = remained.ToString(remained < 1f ? "0.0" : "0");
+				}
+				else
+				{
+					icon._Slider.value = 0f;
+					icon._Text.text = "";
 				}
 			}
 

@@ -80,7 +80,7 @@ namespace Battle
 			}
 
 			// 히트 판정
-			if (elapsed > 0.9f)
+			if (_Attack._Owner._Player || elapsed > 0.9f)
 			{
 				CheckMissileCollision();
 			}
@@ -103,6 +103,7 @@ namespace Battle
 			for (int i = 0; i < count; i++)
 			{
 				RaycastHit hit = _HitResults[i];
+				if (hit.collider.gameObject == _Attack._Owner.gameObject) continue;
 				if (_HitTargets.ContainsKey(hit.collider.gameObject)) continue;
 
 				// 폭탄 터짐

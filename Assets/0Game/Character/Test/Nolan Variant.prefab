@@ -53,7 +53,7 @@ MonoBehaviour:
   _ForceForward: 30
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &5273880733584185995
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   _ForceForward: 0
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &7458080213289209516
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   _ForceForward: 0
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &9072791041002493041
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   _ForceForward: 10
   _ForceUp: 10
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1001 &404347565824132921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -297,11 +297,6 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
-      propertyPath: _ForceForward
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
-        type: 3}
       propertyPath: _DeaccelDuration
       value: 0.15
       objectReference: {fileID: 0}
@@ -314,6 +309,11 @@ PrefabInstance:
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _ShakeCameraDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ShakeCameraStrength
       value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1351,11 +1351,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
-      propertyPath: _ForceForward
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
-        type: 3}
       propertyPath: _HitEffectPrefab
       value: 
       objectReference: {fileID: 4061450664323217206, guid: 273e3aa075e30f946b1a130bc0e78bb5,
@@ -1363,7 +1358,12 @@ PrefabInstance:
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _ShakeCameraDuration
-      value: 1
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ShakeCameraStrength
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1835,11 +1835,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
-      propertyPath: _ForceForward
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
-        type: 3}
       propertyPath: _DamageDuration
       value: 0.15
       objectReference: {fileID: 0}
@@ -1857,6 +1852,11 @@ PrefabInstance:
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _ShakeCameraDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ShakeCameraStrength
       value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1956,11 +1956,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
-      propertyPath: _ForceForward
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
-        type: 3}
       propertyPath: _DeaccelDuration
       value: 0.15
       objectReference: {fileID: 0}
@@ -1973,6 +1968,11 @@ PrefabInstance:
     - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
         type: 3}
       propertyPath: _ShakeCameraDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7876020948378023349, guid: e83cc9cc25e07f14785e36874825f8b5,
+        type: 3}
+      propertyPath: _ShakeCameraStrength
       value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

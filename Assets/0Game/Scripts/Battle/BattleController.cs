@@ -26,21 +26,15 @@ namespace Battle
 		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
 
-		public void Init()
+		IEnumerator Start()
 		{
-			_Players = new();
-			_Enemys = new();
-			_EnemyHPUIs = new();
-			_BgGround = GameObject.Find("Bg/Ground").transform;
-			_BgNear = GameObject.Find("Bg/Near").transform;
-			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
-			GameObject.Find("StartPosition").SetActive(false);
-			GameObject.Find("EditorCamera").SetActive(false);
-			InitMinimap();
-			InitUI();
+			if (Game.IsTestMode()) yield break;
+
+			yield return new WaitUntil(() => Game.GetCurrentScene().isLoaded);
+
+			Init();
 
 			// 배치
-			if (IsTestMode()) return;
 			foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
 			{
 				Destroy(enemy.gameObject);
@@ -55,6 +49,22 @@ namespace Battle
 			{
 				SpawnEnemy(spawn._CharacterName, spawn._Position, spawn._Rotation, spawn._Scale);
 			}
+
+			Init2();
+		}
+
+		public void Init()
+		{
+			_Players = new();
+			_Enemys = new();
+			_EnemyHPUIs = new();
+			_BgGround = GameObject.Find("Bg/Ground").transform;
+			_BgNear = GameObject.Find("Bg/Near").transform;
+			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
+			GameObject.Find("StartPosition").SetActive(false);
+			GameObject.Find("EditorCamera").SetActive(false);
+			InitMinimap();
+			InitUI();
 		}
 
 		public void Init2()
@@ -105,9 +115,6 @@ namespace Battle
 				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
 				nextPlayer._CameraOffsetY = nextPlayer.GetShoulderHeight();
 				nextPlayer.c._FSM.ForceSetDefaultState();
-
-				// 이펙트 삭제
-				_ActivePlayer.c._Effects.DestroyElements();
 			}
 
 			foreach (Player player in _Players)
@@ -122,12 +129,12 @@ namespace Battle
 			return true;
 		}
 
-		public void ShakeCamera(float duration)
+		public void ShakeCamera(float duration, float strength)
 		{
 			if (duration == 0f) return;
 
-			float t = Mathf.InverseLerp(0.1f, 1f, duration);
-			float strength = Mathf.Lerp(0.05f, 0.1f, t);
+			//float t = Mathf.InverseLerp(0.1f, 1f, duration);
+			//float strength = Mathf.Lerp(0.05f, 0.1f, t);
 			if (strength < _CurrentShakeCameraStrength) return;
 
 			_CurrentShakeCameraStrength = strength;
@@ -167,7 +174,8 @@ namespace Battle
 		public void AddForceToFragment(Fragment fragment, float strength, Vector3 hitDirection)
 		{
 			Rigidbody rigidbody = fragment.GetComponent<Rigidbody>();
-			rigidbody.AddForce(hitDirection * strength, ForceMode.Impulse);
+			//hitDirection = hitDirection.RandomizeVector(10f, 0f, 10f);
+			rigidbody.AddForce(hitDirection * strength /*+ Vector3.up * 1f*/, ForceMode.Impulse);
 		}
 
 		public GameObject _AttackAreaDecalPrefab;
@@ -195,14 +203,6 @@ namespace Battle
 				yield return new WaitForSeconds(3f);
 				Destroy(hitEffect);
 			}
-		}
-
-		public bool IsTestMode()
-		{
-			bool test = Game._StartScene == SceneName.Glacier;
-			test |= Game._StartScene == "Glacier_Demo";
-			test |= Game._StartScene == "Glacier_1";
-			return test;
 		}
 	}
 }
