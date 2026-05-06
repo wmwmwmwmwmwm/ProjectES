@@ -1,5 +1,6 @@
 ﻿using Animancer;
 using DG.Tweening;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
@@ -11,6 +12,9 @@ namespace Battle
 {
 	public partial class Player : MonoBehaviour
 	{
+		[BoxGroup("설정")] public float _ShoulderHeight;
+		[BoxGroup("설정")] public float _CameraDistance;
+
 		public Transform _CooltimeJitter;
 		public ParticleSystem _JustGuardEffect;
 		public GameObject _ChangeCharacterEffectPrefab;
@@ -22,7 +26,7 @@ namespace Battle
 		[HideInInspector] public UI_PlayerHP _UI_HP;
 		[HideInInspector] public Coroutine _JustGuardCoroutine;
 		[HideInInspector] public bool _JustGuardCancelTrigger;
-		[HideInInspector] public float _CameraOffsetY;
+		[HideInInspector] public Vector3 _CameraOffset;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -75,7 +79,7 @@ namespace Battle
 		void Update()
 		{
 			// 카메라 위치
-			_CameraOffsetY = Mathf.MoveTowards(_CameraOffsetY, GetShoulderHeight(), 5f * Time.deltaTime);
+			_CameraOffset = Vector3.MoveTowards(_CameraOffset, GetCameraOffset(), 5f * Time.deltaTime);
 
 			// 카메라 회전
 			_LookRotation.x += _LookInput.y * _CameraRotationSpeed * -1f * 0.01f;
@@ -165,9 +169,11 @@ namespace Battle
 			return _JustGuardCoroutine != null;
 		}
 
-		public float GetShoulderHeight()
+		public Vector3 GetCameraOffset()
 		{
-			return c.Motor.GroundingStatus.FoundAnyGround ? c._ShoulderHeight : c._ShoulderHeight - 0.5f;
+			_CameraOffset.y = c.Motor.GroundingStatus.FoundAnyGround ? _ShoulderHeight : _ShoulderHeight - 0.5f;
+			_CameraOffset.z = -_CameraDistance;
+			return _CameraOffset;
 		}
 	}
 }

@@ -87,6 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b07a255ae3e2940be32623d751ea26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ShoulderHeight: 1.5
+  _CameraDistance: 1.5
   _CooltimeJitter: {fileID: 8193356346752807162}
   _JustGuardEffect: {fileID: 6311738229728916137}
   _ChangeCharacterEffectPrefab: {fileID: 1549672409025840, guid: dfd74ddc665c2e649897faee417aa440,
@@ -97,7 +99,7 @@ MonoBehaviour:
   _LookRotation: {x: 0, y: 0}
   _UI_HP: {fileID: 0}
   _JustGuardCancelTrigger: 0
-  _CameraOffsetY: 0
+  _CameraOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &7455138135084191989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +117,6 @@ MonoBehaviour:
   _RotationSpeed: 500
   _MoveSpeed: 8
   _MoveAccel: 100
-  _ShoulderHeight: 1.5
   _MaxHP: 22222
   _HitEffectPrefab: {fileID: 944750204202798419, guid: 2c38b54e2b721274c9f6bebecab2271f,
     type: 3}

@@ -121,7 +121,7 @@ namespace Battle
 				case MoveRequest.Jump:
 					if (!c._FSM.CurrentState._CanJump) break;
 
-					// 지상
+					// 지상 점프
 					bool groundJump = _Motor.GroundingStatus.IsStableOnGround || Time.time - _LastCanJumpTime <= MoveGraceDuration;
 					groundJump &= Vector3.Angle(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal) < _Motor.MaxStableSlopeAngle;
 					if (groundJump)
@@ -130,7 +130,7 @@ namespace Battle
 						dir = _Motor.CharacterUp;
 						asset = c._JumpAsset;
 					}
-					// 벽
+					// 벽 점프
 					else
 					{
 						List<Vector3> directions = new()
@@ -167,7 +167,8 @@ namespace Battle
 								direction: direction,
 								distance: 1f,
 								closestHit: out RaycastHit hit,
-								hits: c._RaycastResults);
+								hits: c._RaycastResults,
+								acceptOnlyStableGroundLayer: true);
 							if (count == 0) continue;
 
 							// 벽 점프 가능한 적

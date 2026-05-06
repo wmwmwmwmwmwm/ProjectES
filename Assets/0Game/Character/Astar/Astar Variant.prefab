@@ -53,7 +53,7 @@ MonoBehaviour:
   _ForceForward: 30
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &4891973786370596759
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   _ForceForward: 0
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &6452148828757919050
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   _ForceForward: 10
   _ForceUp: 10
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1 &7877696080007302064
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   _ForceForward: 0
   _ForceUp: 0
   _Damage: 0
-  _ShakeCameraDuration: 0
+  _ShakeCameraStrength: 0
 --- !u!1001 &404251601075595820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1457,6 +1457,16 @@ PrefabInstance:
       propertyPath: c
       value: 
       objectReference: {fileID: 1216595358569299562}
+    - target: {fileID: 1895468936233423104, guid: f2d32f8e99ac3b443bbc43858b6ae758,
+        type: 3}
+      propertyPath: _CameraDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1895468936233423104, guid: f2d32f8e99ac3b443bbc43858b6ae758,
+        type: 3}
+      propertyPath: _ShoulderHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2141389453838918012, guid: f2d32f8e99ac3b443bbc43858b6ae758,
         type: 3}
       propertyPath: m_Name

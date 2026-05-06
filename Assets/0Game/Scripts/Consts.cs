@@ -2,6 +2,7 @@
 
 public static class Const
 {
+	public const float MaxFloat = 10000f;
 	public const float TimeDefault = -10000f;
 }
 

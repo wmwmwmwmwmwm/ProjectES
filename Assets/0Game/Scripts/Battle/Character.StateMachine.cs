@@ -199,7 +199,7 @@ namespace Battle
 				c = this,
 				_Asset = _GetDownAsset,
 				_Priority = 11,
-				_Duration = float.MaxValue,
+				_Duration = Const.MaxFloat,
 			};
 			_GetDown.Init();
 			_GetUp = new()
@@ -214,7 +214,7 @@ namespace Battle
 				c = this,
 				_Asset = _DieAsset,
 				_Priority = 12,
-				_Duration = float.MaxValue,
+				_Duration = Const.MaxFloat,
 			};
 			_Die.Init();
 			_Skill1 = new()

@@ -1797,7 +1797,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 75
+  field of view: 60
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -1891,7 +1891,7 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 2
+  UpdateMethod: 3
   BlendUpdateMethod: 1
   LensModeOverride:
     Enabled: 0
@@ -2054,7 +2054,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 1
   Lens:
-    FieldOfView: 75
+    FieldOfView: 60
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -4871,6 +4871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _MainCamera: {fileID: 330585546}
   _CameraTarget: {fileID: 1421278363}
+  _CameraTargetArm: {fileID: 1526055064}
   _CameraThirdPerson: {fileID: 400184582}
   _ShakeCameraTransform: {fileID: 28700545}
   _BgGround: {fileID: 0}

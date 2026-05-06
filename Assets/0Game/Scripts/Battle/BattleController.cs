@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,11 +13,12 @@ namespace Battle
 	public partial class BattleController : SingleInstance<BattleController>
 	{
 		public Transform _MainCamera;
-		public Transform _CameraTarget;
+		public Transform _CameraTarget, _CameraTargetArm;
 		public CinemachineThirdPersonFollow _CameraThirdPerson;
 		public Transform _ShakeCameraTransform;
 
 		bool _Init;
+		CinemachineBrain _CameraBrain;
 		[HideInInspector] public Transform _BgGround;
 		[HideInInspector] public Transform _BgNear;
 		[HideInInspector] public RectTransform _WorldBound;
@@ -25,6 +27,8 @@ namespace Battle
 		[HideInInspector] public Player _ActivePlayer;
 		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
+		RaycastHit[] _InvisibleWallOverlaps;
+		float _FogDensity;
 
 		IEnumerator Start()
 		{
@@ -55,14 +59,18 @@ namespace Battle
 
 		public void Init()
 		{
+			_InvisibleWallOverlaps = new RaycastHit[10];
 			_Players = new();
 			_Enemys = new();
 			_EnemyHPUIs = new();
+
 			_BgGround = GameObject.Find("Bg/Ground").transform;
 			_BgNear = GameObject.Find("Bg/Near").transform;
 			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
 			GameObject.Find("StartPosition").SetActive(false);
 			GameObject.Find("EditorCamera").SetActive(false);
+			_CameraBrain = _MainCamera.GetComponent<CinemachineBrain>();
+
 			InitMinimap();
 			InitUI();
 		}
@@ -85,12 +93,37 @@ namespace Battle
 			_BgGround.eulerAngles = _BgGround.eulerAngles.WithX(_MainCamera.eulerAngles.x);
 
 			// 카메라 위치
-			Vector3 cameraOffset = _ShakeCameraTransform.position;
-			cameraOffset.y += _ActivePlayer._CameraOffsetY;
-			_CameraThirdPerson.ShoulderOffset = cameraOffset;
+			Vector3 cameraOffset = _ActivePlayer._CameraOffset;
+			cameraOffset += _ShakeCameraTransform.position;
+			_CameraThirdPerson.ShoulderOffset.y = cameraOffset.y;
+			_CameraTargetArm.localPosition = new(0f, 0f, cameraOffset.z);
+			_CameraBrain.ManualUpdate();
 
 			// 카메라 회전
 			_CameraTarget.SetPositionAndRotation(_ActivePlayer.transform.position, Quaternion.Euler(_ActivePlayer._LookRotation));
+
+			//// 안개
+			//float fog = 0.001f;
+			//float maxDistance = 30f;
+			//int count = Physics.RaycastNonAlloc(
+			//		origin: _CameraTarget.transform.position,
+			//		direction: _CameraTarget.transform.forward,
+			//		maxDistance: maxDistance,
+			//		results: _InvisibleWallOverlaps,
+			//		layerMask: Layer.InvisibleWallLayerMask);
+			//if (count > 0)
+			//{
+			//	_InvisibleWallOverlaps.ClearArray(count);
+			//	RaycastHit min = _InvisibleWallOverlaps.MinBy(x =>
+			//	{
+			//		return x.collider ? x.distance : Const.MaxFloat;
+			//	});
+			//	float t = Mathf.InverseLerp(maxDistance, 0f, min.distance);
+			//	fog = Mathf.Lerp(0.001f, 0.05f, t);
+			//}
+			//_FogDensity = fog;
+			//float speed = _FogDensity > RenderSettings.fogDensity ? 0.02f : 0.5f;
+			//RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, _FogDensity, speed * Time.deltaTime);
 
 			UpdateMinimap();
 			UpdateUI();
@@ -113,7 +146,7 @@ namespace Battle
 				_CameraTarget.SetPositionAndRotation(pos, rot);
 				nextPlayer.c.Motor.BaseVelocity = _ActivePlayer.c.Motor.BaseVelocity;
 				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
-				nextPlayer._CameraOffsetY = nextPlayer.GetShoulderHeight();
+				nextPlayer._CameraOffset = nextPlayer.GetCameraOffset();
 				nextPlayer.c._FSM.ForceSetDefaultState();
 			}
 

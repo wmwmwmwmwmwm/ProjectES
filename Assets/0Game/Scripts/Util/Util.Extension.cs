@@ -109,6 +109,7 @@ public static partial class Util
 		}
 		return min;
 	}
+
 	public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
 	{
 		return source.MaxBy(selector, null);
@@ -254,14 +255,12 @@ public static partial class Util
 		}
 	}
 
-	public static List<T> ArrayToList<T>(this T[] array, int count)
+	public static void ClearArray<T>(this T[] array, int count)
 	{
-		List<T> list = new(count);
-		for (int i = 0; i < count; i++)
+		for (int i = count; i < array.Length; i++)
 		{
-			list.Add(array[i]);
+			array[i] = default;
 		}
-		return list;
 	}
 
 	public static Vector3 GetCenter(this BoxCollider c) => c.transform.position + c.transform.TransformVector(c.center);

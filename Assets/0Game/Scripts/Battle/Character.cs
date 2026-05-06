@@ -1,5 +1,6 @@
 ﻿using Animancer;
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace Battle
 		[BoxGroup("설정")] public float _RotationSpeed;
 		[BoxGroup("설정")] public float _MoveSpeed;
 		[BoxGroup("설정")] public float _MoveAccel;
-		[BoxGroup("설정")] public float _ShoulderHeight;
 		[BoxGroup("설정")] public float _MaxHP;
 
 		//public VRMBlendShapeProxy _BlendShapeProxy;
@@ -372,7 +372,7 @@ namespace Battle
 			if (!_FSM.CurrentState._CanGuard) return;
 
 			// 가드 시작
-			if (Inputs.Guard.WasPressedThisFrame() && !IsGuarding())
+			if (Inputs.Guard.WasPressedThisFrame())
 			{
 				if (_FSM.CurrentState.IsAttack)
 				{
@@ -388,6 +388,7 @@ namespace Battle
 			if (!Inputs.Guard.IsPressed() && IsGuarding())
 			{
 				AnimancerState state = _UpperBodyLayer.Play(_GuardDownAsset);
+				state.Time = 0f;
 				state.Events(this).OnEnd ??= GuardCancel;
 				_GuardDownTime = Time.time;
 			}
@@ -438,18 +439,20 @@ namespace Battle
 					Effect effectData = hasNext ? effectEnum.Current : firstEffectData;
 
 					// 공중 공격으로 점프
-					int raycastCount = 0;
-					List<RaycastHit> hits;
 					if (UseKCC)
 					{
-						raycastCount = Physics.RaycastNonAlloc(
+						int raycastCount = Physics.RaycastNonAlloc(
 								origin: Center,
 								direction: Motor.CharacterForward,
 								results: _RaycastResults,
 								maxDistance: melee._Collider.size.z,
 								layerMask: Layer.TerrainLayerMask);
-						hits = _RaycastResults.ArrayToList(raycastCount);
-						RaycastHit nearest = hits.MinBy(x => x.distance);
+						_RaycastResults.ClearArray(raycastCount);
+						RaycastHit nearest = _RaycastResults.MinBy(x =>
+						{
+							if (x.collider) return x.distance;
+							else return x.distance;
+						});
 						if (raycastCount > 0 && attackData._SkillType == SkillType.Normal)
 						{
 							float angle = Vector3.Angle(Motor.CharacterForward, -nearest.normal);
@@ -477,19 +480,26 @@ namespace Battle
 						results: melee._HitResults,
 						orientation: attack.transform.rotation,
 						mask: GetOppositeAndTerrainLayerMask());
-
-					List<Collider> overlaps = melee._HitResults.ArrayToList(overlapCount);
-					overlaps.Sort((a, b) =>
+					melee._HitResults.ClearArray(overlapCount);
+					Array.Sort(melee._HitResults, (a, b) =>
 					{
-						float aDistance = (a.transform.position - transform.position).sqrMagnitude;
-						float bDistance = (b.transform.position - transform.position).sqrMagnitude;
+						float aDistance = Const.MaxFloat;
+						if (a)
+						{
+							aDistance = (a.transform.position - transform.position).magnitude;
+						}
+						float bDistance = Const.MaxFloat;
+						if (b)
+						{
+							bDistance = (b.transform.position - transform.position).magnitude;
+						}
 						float v = (aDistance - bDistance) * 100f;
 						return (int)v;
 					});
-					Vector3 shoulder = Bottom;
-					shoulder.y += _ShoulderHeight;
-					foreach (Collider col in overlaps)
+					foreach (Collider col in melee._HitResults)
 					{
+						if (!col) break;
+
 						// 지형 적중
 						if (col.gameObject.layer == Layer.TerrainLayer)
 						{
@@ -506,7 +516,7 @@ namespace Battle
 						Character targetCharacter = col.GetComponentInParent<Character>();
 						if (targetCharacter)
 						{
-							Vector3 attackDir = targetCharacter.Center - shoulder;
+							Vector3 attackDir = targetCharacter.Center - Center;
 							Bounds bounds = targetCharacter.UseKCC ? targetCharacter._KCC._Motor.Capsule.bounds : targetCharacter._KCC_Rigidbody._Collider.bounds;
 							Vector3 hitPoint = bounds.ClosestPoint(Center);
 							StartCoroutine(DelayTakeDamage());
