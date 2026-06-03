@@ -21,8 +21,6 @@ namespace Battle
 		public bool _CanDash, _CanJump, _CanAttack, _CanGuard;
 		public enum RootMotionMode { None, GroundOnly, All }
 		public RootMotionMode _RootMotionMode;
-		public string _EffectName;
-		public string _AttackName;
 
 		public AnimancerState _State;
 		public Action _OnEnd;

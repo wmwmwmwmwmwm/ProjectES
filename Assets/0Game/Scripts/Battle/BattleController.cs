@@ -27,8 +27,8 @@ namespace Battle
 		[HideInInspector] public Player _ActivePlayer;
 		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
-		RaycastHit[] _InvisibleWallOverlaps;
-		float _FogDensity;
+		//RaycastHit[] _InvisibleWallOverlaps;
+		//float _FogDensity;
 
 		IEnumerator Start()
 		{
@@ -59,7 +59,7 @@ namespace Battle
 
 		public void Init()
 		{
-			_InvisibleWallOverlaps = new RaycastHit[10];
+			//_InvisibleWallOverlaps = new RaycastHit[10];
 			_Players = new();
 			_Enemys = new();
 			_EnemyHPUIs = new();
@@ -174,7 +174,7 @@ namespace Battle
 			_ShakeCameraTransform.DOShakePosition(
 				duration: duration,
 				strength: strength,
-				vibrato: 1000);
+				vibrato: 1000).OnKill(() => _CurrentShakeCameraStrength = 0f);
 		}
 
 		public void SpawnPlayer(string name, Vector3 pos, Quaternion rot)
