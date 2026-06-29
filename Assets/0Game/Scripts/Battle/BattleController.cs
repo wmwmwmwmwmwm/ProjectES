@@ -13,12 +13,13 @@ namespace Battle
 	public partial class BattleController : SingleInstance<BattleController>
 	{
 		public Transform _MainCamera;
+		public CinemachineCamera _CinemachineCamera;
 		public Transform _CameraTarget, _CameraTargetArm;
-		public CinemachineThirdPersonFollow _CameraThirdPerson;
 		public Transform _ShakeCameraTransform;
 
 		bool _Init;
-		CinemachineBrain _CameraBrain;
+		CinemachineBrain _CinemachineBrain;
+		CinemachineThirdPersonFollow _CameraThirdPerson;
 		[HideInInspector] public Transform _BgGround;
 		[HideInInspector] public Transform _BgNear;
 		[HideInInspector] public RectTransform _WorldBound;
@@ -27,8 +28,9 @@ namespace Battle
 		[HideInInspector] public Player _ActivePlayer;
 		[HideInInspector] public DataManager.Stage _CurrentStage;
 		float _CurrentShakeCameraStrength;
-		//RaycastHit[] _InvisibleWallOverlaps;
-		//float _FogDensity;
+
+		// 유저 정보
+		int _GreyItem, _BlueItem, _RedItem;
 
 		IEnumerator Start()
 		{
@@ -69,7 +71,8 @@ namespace Battle
 			_WorldBound = GameObject.Find("WorldBound").GetComponent<RectTransform>();
 			GameObject.Find("StartPosition").SetActive(false);
 			GameObject.Find("EditorCamera").SetActive(false);
-			_CameraBrain = _MainCamera.GetComponent<CinemachineBrain>();
+			_CinemachineBrain = _MainCamera.GetComponent<CinemachineBrain>();
+			_CameraThirdPerson = _CinemachineCamera.GetComponent<CinemachineThirdPersonFollow>();
 
 			InitMinimap();
 			InitUI();
@@ -97,33 +100,12 @@ namespace Battle
 			cameraOffset += _ShakeCameraTransform.position;
 			_CameraThirdPerson.ShoulderOffset.y = cameraOffset.y;
 			_CameraTargetArm.localPosition = new(0f, 0f, cameraOffset.z);
-			_CameraBrain.ManualUpdate();
 
 			// 카메라 회전
 			_CameraTarget.SetPositionAndRotation(_ActivePlayer.transform.position, Quaternion.Euler(_ActivePlayer._LookRotation));
 
-			//// 안개
-			//float fog = 0.001f;
-			//float maxDistance = 30f;
-			//int count = Physics.RaycastNonAlloc(
-			//		origin: _CameraTarget.transform.position,
-			//		direction: _CameraTarget.transform.forward,
-			//		maxDistance: maxDistance,
-			//		results: _InvisibleWallOverlaps,
-			//		layerMask: Layer.InvisibleWallLayerMask);
-			//if (count > 0)
-			//{
-			//	_InvisibleWallOverlaps.ClearArray(count);
-			//	RaycastHit min = _InvisibleWallOverlaps.MinBy(x =>
-			//	{
-			//		return x.collider ? x.distance : Const.MaxFloat;
-			//	});
-			//	float t = Mathf.InverseLerp(maxDistance, 0f, min.distance);
-			//	fog = Mathf.Lerp(0.001f, 0.05f, t);
-			//}
-			//_FogDensity = fog;
-			//float speed = _FogDensity > RenderSettings.fogDensity ? 0.02f : 0.5f;
-			//RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, _FogDensity, speed * Time.deltaTime);
+			// 카메라 업데이트
+			_CinemachineBrain.ManualUpdate();
 
 			UpdateMinimap();
 			UpdateUI();
@@ -144,9 +126,9 @@ namespace Battle
 				_ActivePlayer.transform.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
 				nextPlayer.c.SetPositionAndRotation(pos, rot);
 				_CameraTarget.SetPositionAndRotation(pos, rot);
+				nextPlayer._CameraOffset = nextPlayer.GetCameraOffset();
 				nextPlayer.c.Motor.BaseVelocity = _ActivePlayer.c.Motor.BaseVelocity;
 				nextPlayer.c.Motor.GroundingStatus = _ActivePlayer.c.Motor.GroundingStatus;
-				nextPlayer._CameraOffset = nextPlayer.GetCameraOffset();
 				nextPlayer.c._FSM.ForceSetDefaultState();
 			}
 
@@ -209,6 +191,25 @@ namespace Battle
 			Rigidbody rigidbody = fragment.GetComponent<Rigidbody>();
 			//hitDirection = hitDirection.RandomizeVector(10f, 0f, 10f);
 			rigidbody.AddForce(hitDirection * strength /*+ Vector3.up * 1f*/, ForceMode.Impulse);
+		}
+
+		public void ObtainItem(DropItem item)
+		{
+			switch (item)
+			{
+				case Item_Grey:
+					_GreyItem++;
+					RefreshItemCount();
+					break;
+				case Item_Blue:
+					_BlueItem++;
+					RefreshItemCount();
+					break;
+				case Item_Red:
+					_RedItem++;
+					RefreshItemCount();
+					break;
+			}
 		}
 
 		public GameObject _AttackAreaDecalPrefab;

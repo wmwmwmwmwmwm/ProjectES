@@ -23,12 +23,18 @@ namespace Battle
 		public Transform _EnemyHPParent;
 		public UI_PlayerHP _PlayerHPPrefab;
 		public Transform _PlayerHPParent;
+		public GameObject _UseItemOverlay, _RequireItemOverlay;
+		public GameObject _GreyItemUI, _BlueItemUI, _RedItemUI;
+		public TMP_Text _GreyItemCount, _BlueItemCount, _RedItemCount;
 
 		List<UI_EnemyHP> _EnemyHPUIs;
 
 		void InitUI()
 		{
 			_PlayerHPPrefab.gameObject.SetActive(false);
+			_UseItemOverlay.SetActive(false);
+			_RequireItemOverlay.SetActive(false);
+			RefreshItemCount();
 		}
 
 		void AddPlayerHPUI(Player player)
@@ -132,6 +138,16 @@ namespace Battle
 			canvasGroup.alpha = 0.5f;
 			canvasGroup.DOKill();
 			canvasGroup.DOFade(0f, 0.3f);
+		}
+
+		void RefreshItemCount()
+		{
+			_GreyItemUI.SetActive(_GreyItem > 0);
+			_BlueItemUI.SetActive(_BlueItem > 0);
+			_RedItemUI.SetActive(_RedItem > 0);
+			_GreyItemCount.text = $"{_GreyItem}";
+			_BlueItemCount.text = $"{_BlueItem}";
+			_RedItemCount.text = $"{_RedItem}";
 		}
 	}
 }
