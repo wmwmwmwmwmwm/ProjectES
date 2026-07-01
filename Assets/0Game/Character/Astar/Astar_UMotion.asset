@@ -66,7 +66,7 @@ MonoBehaviour:
       DisableAnimationCompression:
         valueInternal: 1
       FkToIkConversion:
-        valueInternal: 0
+        valueInternal: 1
       HumanoidFootIKEnable:
         valueInternal: 0
       HumanoidHandIKEnable:
@@ -32449,15 +32449,15 @@ MonoBehaviour:
       valueInternal: 0
     IkFkBlendChannel:
       CurrentValue:
-        valueInternal: 0
+        valueInternal: 1
       ReferencePoseValue:
         valueInternal: 0
       PoseValueList: []
       ChannelPerClipList:
       - LayerList:
         - CurrentOriginalValue:
-            valueInternal: 0
-          newKeyListSerialized: 00000000
+            valueInternal: 1
+          newKeyListSerialized: 010000000000000000000000803f0000000000000000abaaaa3eabaaaa3e00000000
     IkPoleRotationSelected:
       valueInternal: 0
     IkPoleRotationChannel:
