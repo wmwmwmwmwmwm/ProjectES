@@ -225,6 +225,15 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""1ca5ab34-de2f-484e-84b1-6c2e5c883b74"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -434,6 +443,17 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
                     ""action"": ""Character2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b0e9432-7713-4e80-b3d7-a80b6a157afb"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1014,6 +1034,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         m_Battle_Ultimate = m_Battle.FindAction("Ultimate", throwIfNotFound: true);
         m_Battle_Character1 = m_Battle.FindAction("Character1", throwIfNotFound: true);
         m_Battle_Character2 = m_Battle.FindAction("Character2", throwIfNotFound: true);
+        m_Battle_Interact = m_Battle.FindAction("Interact", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1122,6 +1143,7 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
     private readonly InputAction m_Battle_Ultimate;
     private readonly InputAction m_Battle_Character1;
     private readonly InputAction m_Battle_Character2;
+    private readonly InputAction m_Battle_Interact;
     /// <summary>
     /// Provides access to input actions defined in input action map "Battle".
     /// </summary>
@@ -1194,6 +1216,10 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Character2 => m_Wrapper.m_Battle_Character2;
         /// <summary>
+        /// Provides access to the underlying input action "Battle/Interact".
+        /// </summary>
+        public InputAction @Interact => m_Wrapper.m_Battle_Interact;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Battle; }
@@ -1264,6 +1290,9 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Character2.started += instance.OnCharacter2;
             @Character2.performed += instance.OnCharacter2;
             @Character2.canceled += instance.OnCharacter2;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         /// <summary>
@@ -1320,6 +1349,9 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
             @Character2.started -= instance.OnCharacter2;
             @Character2.performed -= instance.OnCharacter2;
             @Character2.canceled -= instance.OnCharacter2;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         /// <summary>
@@ -1699,6 +1731,13 @@ public partial class @InputActionsAsset: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCharacter2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInteract(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

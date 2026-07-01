@@ -27,6 +27,7 @@ namespace Battle
 		[HideInInspector] public List<Enemy> _Enemys;
 		[HideInInspector] public Player _ActivePlayer;
 		[HideInInspector] public DataManager.Stage _CurrentStage;
+		[HideInInspector] public Interactable _CurrentInteractable;
 		float _CurrentShakeCameraStrength;
 
 		// 유저 정보
@@ -210,6 +211,48 @@ namespace Battle
 					RefreshItemCount();
 					break;
 			}
+		}
+
+		public void Interact()
+		{
+			switch (_CurrentInteractable)
+			{
+				case Door door:
+					InteractDoor(door);
+					break;
+			}
+		}
+
+		void InteractDoor(Door door)
+		{
+			switch (door._Type)
+			{
+				case Door.DoorType.Grey:
+					OpenDoor(ref _GreyItem);
+					break;
+				case Door.DoorType.Blue:
+					OpenDoor(ref _BlueItem);
+					break;
+				case Door.DoorType.Red:
+					OpenDoor(ref _RedItem);
+					break;
+			}
+
+			void OpenDoor(ref int itemCount)
+			{
+				if (itemCount == 0) return;
+
+				door.gameObject.SetActive(false);
+				itemCount--;
+				RefreshItemCount();
+			}
+		}
+
+		public void SetCurrentInteractable(Interactable interactable)
+		{
+			_CurrentInteractable = interactable;
+			_UseItemOverlay.SetActive(true);
+			_RequireItemOverlay.SetActive(true);
 		}
 
 		public GameObject _AttackAreaDecalPrefab;

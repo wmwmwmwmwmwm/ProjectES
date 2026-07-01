@@ -1,8 +1,10 @@
 ﻿using Animancer;
 using DG.Tweening;
+using KinematicCharacterController;
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using static SingletonManager;
@@ -27,6 +29,7 @@ namespace Battle
 		[HideInInspector] public Coroutine _JustGuardCoroutine;
 		[HideInInspector] public bool _JustGuardCancelTrigger;
 		[HideInInspector] public Vector3 _CameraOffset;
+		Collider[] _InteractionResults;
 
 		BattleController Controller => BattleController.Instance;
 
@@ -35,6 +38,7 @@ namespace Battle
 			c = GetComponent<Character>();
 			c.Init();
 			c.EmitEffect(_JustGuardEffect, false);
+			_InteractionResults = new Collider[1];
 		}
 
 		public void Init2()
@@ -58,6 +62,7 @@ namespace Battle
 				Inputs.Ultimate.performed += c.Ultimate;
 				Inputs.Character1.performed += Character1;
 				Inputs.Character2.performed += Character2;
+				Inputs.Interact.performed += Interact;
 			}
 			else
 			{
@@ -73,9 +78,11 @@ namespace Battle
 				Inputs.Ultimate.performed -= c.Ultimate;
 				Inputs.Character1.performed -= Character1;
 				Inputs.Character2.performed -= Character2;
+				Inputs.Interact.performed -= Interact;
 			}
 		}
 
+		public BoxCollider _InteractionCollider;
 		void Update()
 		{
 			// 카메라 위치
@@ -95,6 +102,32 @@ namespace Battle
 			}
 			_LookRotation.y = Mathf.Clamp(_LookRotation.y, transform.eulerAngles.y - 60f, transform.eulerAngles.y + 60f);
 			c._AimDestRotation = Quaternion.Euler(_LookRotation);
+
+			// 인터랙션 판정 : 아이템 획득
+			foreach (OverlapResult overlapResult in c.Motor.Overlaps)
+			{
+				if (!overlapResult.Collider) continue;
+				if (!overlapResult.Collider.TryGetComponent(out DropItem item)) continue;
+
+				Controller.ObtainItem(item);
+			}
+
+			// 인터랙션 판정 : 문 열기
+			int overlapCount = Physics.OverlapBoxNonAlloc(
+				center: _InteractionCollider.GetCenter(),
+				halfExtents: _InteractionCollider.size / 2f,
+				results: _InteractionResults,
+				orientation: transform.rotation,
+				mask: Layer.InteractionLayerMask);
+			bool overlap = overlapCount > 0;
+			if (overlap && _InteractionResults.First().TryGetComponent(out Door door))
+			{
+				Controller.SetCurrentInteractable(door);
+			}
+			else
+			{
+				Controller.SetCurrentInteractable(null);
+			}
 		}
 
 		void Move(CallbackContext obj)
@@ -139,6 +172,11 @@ namespace Battle
 			{
 				Controller.PlayEffect123123(_ChangeCharacterEffectPrefab, c, transform.position, transform.rotation);
 			}
+		}
+
+		void Interact(CallbackContext obj)
+		{
+			Controller.Interact();
 		}
 
 		public void JustGuard()
