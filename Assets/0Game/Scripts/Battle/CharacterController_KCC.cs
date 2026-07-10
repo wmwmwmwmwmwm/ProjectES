@@ -122,7 +122,7 @@ namespace Battle
 					if (!c._FSM.CurrentState._CanJump) break;
 
 					// 지상 점프
-					bool groundJump = _Motor.GroundingStatus.IsStableOnGround || Time.time - _LastCanJumpTime <= MoveGraceDuration;
+					bool groundJump = c.IsGrounded() || Time.time - _LastCanJumpTime <= MoveGraceDuration;
 					groundJump &= Vector3.Angle(_Motor.CharacterUp, _Motor.GroundingStatus.GroundNormal) < _Motor.MaxStableSlopeAngle;
 					if (groundJump)
 					{

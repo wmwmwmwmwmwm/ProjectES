@@ -104,25 +104,37 @@ namespace Battle
 			c._AimDestRotation = Quaternion.Euler(_LookRotation);
 
 			// 인터랙션 판정 : 아이템 획득
-			foreach (OverlapResult overlapResult in c.Motor.Overlaps)
+			int overlapCapsuleCount = Physics.OverlapCapsuleNonAlloc(
+				point0: c.Bottom,
+				point1: c.Top,
+				radius: c.Motor.Capsule.radius,
+				results: _InteractionResults,
+				layerMask: Layer.InteractionLayerMask);
+			for (int i = 0; i < overlapCapsuleCount; i++)
 			{
-				if (!overlapResult.Collider) continue;
-				if (!overlapResult.Collider.TryGetComponent(out DropItem item)) continue;
+				Collider result = _InteractionResults[i];
+				if (!result) continue;
+				DropItem item = result.GetComponentInParent<DropItem>();
+				if (!item) continue;
 
 				Controller.ObtainItem(item);
 			}
 
 			// 인터랙션 판정 : 문 열기
-			int overlapCount = Physics.OverlapBoxNonAlloc(
+			int overlapBoxCount = Physics.OverlapBoxNonAlloc(
 				center: _InteractionCollider.GetCenter(),
 				halfExtents: _InteractionCollider.size / 2f,
 				results: _InteractionResults,
 				orientation: transform.rotation,
 				mask: Layer.InteractionLayerMask);
-			bool overlap = overlapCount > 0;
-			if (overlap && _InteractionResults.First().TryGetComponent(out Door door))
+			bool overlap = overlapBoxCount > 0;
+			if (overlap)
 			{
-				Controller.SetCurrentInteractable(door);
+				Interactable interactable = _InteractionResults.First().GetComponentInParent<Interactable>();
+				if (interactable)
+				{
+					Controller.SetCurrentInteractable(interactable);
+				}
 			}
 			else
 			{

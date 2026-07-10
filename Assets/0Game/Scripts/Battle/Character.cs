@@ -458,7 +458,7 @@ namespace Battle
 							float angle = Vector3.Angle(Motor.CharacterForward, -nearest.normal);
 							bool jump = UseKCC;
 							jump &= angle < WallJumpAngleThreshold;
-							jump &= !Motor.GroundingStatus.IsStableOnGround;
+							jump &= !IsGrounded();
 							if (jump)
 							{
 								_KCC._AttackJumpDirection = -Motor.CharacterForward;

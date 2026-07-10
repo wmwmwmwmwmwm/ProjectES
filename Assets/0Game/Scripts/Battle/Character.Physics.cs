@@ -174,6 +174,7 @@ namespace Battle
 			// 지상 이동
 			Vector3 targetVelocity = _CurrentMoveInputVector * _CurrentMoveSpeed;
 			bool isDeaccel = targetVelocity.sqrMagnitude < currentVelocity.sqrMagnitude;
+
 			if (IsGrounded())
 			{
 				float groundAccel = isDeaccel ? _CurrentMoveAccel * 3f : _CurrentMoveAccel;

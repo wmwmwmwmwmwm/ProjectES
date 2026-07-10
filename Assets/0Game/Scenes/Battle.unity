@@ -2218,7 +2218,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 887
+    m_Bits: 4983
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5939,6 +5939,7 @@ MonoBehaviour:
     _StartPosition: {x: 0, y: 0, z: 0}
     _StartRotation: {x: 0, y: 0, z: 0, w: 0}
     _Spawns: []
+  _CurrentInteractable: {fileID: 0}
   _AttackAreaDecalPrefab: {fileID: 0}
   _MinimapCameraHandle: {fileID: 828885687}
   _MinimapCamera: {fileID: 131262234}

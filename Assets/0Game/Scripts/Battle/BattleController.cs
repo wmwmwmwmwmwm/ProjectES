@@ -211,6 +211,7 @@ namespace Battle
 					RefreshItemCount();
 					break;
 			}
+			Destroy(item.gameObject);
 		}
 
 		public void Interact()
@@ -250,9 +251,42 @@ namespace Battle
 
 		public void SetCurrentInteractable(Interactable interactable)
 		{
+			if (interactable == _CurrentInteractable) return;
+
 			_CurrentInteractable = interactable;
-			_UseItemOverlay.SetActive(true);
-			_RequireItemOverlay.SetActive(true);
+			if (!_CurrentInteractable)
+			{
+				_UseItemOverlay.SetActive(false);
+				_RequireItemOverlay.SetActive(false);
+				return;
+			}
+
+			switch (_CurrentInteractable)
+			{
+				case Door door:
+					bool canOpen = CanOpenDoor(door);
+					_UseItemOverlay.SetActive(canOpen);
+					_RequireItemOverlay.SetActive(!canOpen);
+					break;
+			}
+		}
+
+		bool CanOpenDoor(Door door)
+		{
+			bool canOpen = false;
+			switch (door._Type)
+			{
+				case Door.DoorType.Grey:
+					canOpen = _GreyItem > 0;
+					break;
+				case Door.DoorType.Blue:
+					canOpen = _BlueItem > 0;
+					break;
+				case Door.DoorType.Red:
+					canOpen = _RedItem > 0;
+					break;
+			}
+			return canOpen;
 		}
 
 		public GameObject _AttackAreaDecalPrefab;
