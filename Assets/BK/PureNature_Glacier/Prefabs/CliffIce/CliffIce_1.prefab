@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1969796537727698502}
   - component: {fileID: 1433276189509041989}
   - component: {fileID: 5393021168165616393}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,6 +59,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -116,7 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3121112454203715419}
   - component: {fileID: 7857220683117533226}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +193,7 @@ GameObject:
   - component: {fileID: 7526335583518633621}
   - component: {fileID: 4998210099170779357}
   - component: {fileID: 705217544217494870}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1_LOD4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,6 +240,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -296,7 +302,7 @@ GameObject:
   - component: {fileID: 3114996781452549811}
   - component: {fileID: 1531782419585582822}
   - component: {fileID: 6229045661797666903}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,6 +349,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -402,7 +411,7 @@ GameObject:
   - component: {fileID: 9209923470702813179}
   - component: {fileID: 1163171294550502184}
   - component: {fileID: 2726190693808748398}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,6 +458,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -508,7 +520,7 @@ GameObject:
   - component: {fileID: 2852878638708131548}
   - component: {fileID: 7641230023750435951}
   - component: {fileID: 9130067133667917332}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CliffIce_1_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,6 +567,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

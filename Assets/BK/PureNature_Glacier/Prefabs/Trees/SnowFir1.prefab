@@ -88,6 +88,16 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[2]'
       value: 
       objectReference: {fileID: 2100000, guid: f52345102fe84728a55e8fd166559aef, type: 2}
+    - target: {fileID: -2608490184978773909, guid: 147fe66821b049a3a29e955d56d0de12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -2004903782155092464, guid: 147fe66821b049a3a29e955d56d0de12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -2004903782155092464, guid: 147fe66821b049a3a29e955d56d0de12,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -102,6 +112,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SnowFir1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 147fe66821b049a3a29e955d56d0de12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570845475916975852, guid: 147fe66821b049a3a29e955d56d0de12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4216831857448492955, guid: 147fe66821b049a3a29e955d56d0de12,
         type: 3}
@@ -142,6 +162,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LODs.Array.data[3].fadeTransitionWidth
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5147126554323228192, guid: 147fe66821b049a3a29e955d56d0de12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

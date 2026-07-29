@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8437232868690874124}
   - component: {fileID: 7940556151462593607}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UnderwaterFog
   m_TagString: Untagged
   m_Icon: {fileID: 0}

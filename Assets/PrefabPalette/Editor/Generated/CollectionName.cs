@@ -5,5 +5,6 @@ namespace PrefabPalette {
         None,
         Glacier_PrefabCollection,
         Glacier,
+        Glacier1,
     }
 }

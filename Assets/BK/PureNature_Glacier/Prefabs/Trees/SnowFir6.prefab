@@ -73,10 +73,35 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: a3e600bd30af489c8850582e75540678, type: 2}
+    - target: {fileID: -3852705305341625985, guid: eb662f2b4c904d7183fe2283de499e07,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eb662f2b4c904d7183fe2283de499e07,
         type: 3}
       propertyPath: m_Name
       value: SnowFir6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eb662f2b4c904d7183fe2283de499e07,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1198981683624426665, guid: eb662f2b4c904d7183fe2283de499e07,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3481996530590354259, guid: eb662f2b4c904d7183fe2283de499e07,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6611720348852587009, guid: eb662f2b4c904d7183fe2283de499e07,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7241441789441661359, guid: eb662f2b4c904d7183fe2283de499e07,
         type: 3}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7c22e20934e4a4e9ac2b497b0ea414, type: 3}
   m_Name: ToolSettings
   m_EditorClassIdentifier: 
-  palette_thumbnailScale: 1.4292035
+  palette_thumbnailScale: 1.4690266
   palette_overlayScale: {x: 400, y: 300}
   placer_color: {r: 1, g: 1, b: 1, a: 1}
   placer_radius: 0.2

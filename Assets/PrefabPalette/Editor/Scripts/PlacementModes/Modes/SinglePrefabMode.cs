@@ -50,8 +50,12 @@ namespace PrefabPalette
             {
                 Vector3 axis = GetRotationAxis(context);
                 RotationAngleSnapHelper.RotateWithSnap(currentPlacedObject.transform, e.delta.x, modeSettings.freeMode_rotationSpeed, axis);
+				Vector3 scale = currentPlacedObject.transform.localScale;
+				scale += -e.delta.y * modeSettings.freeMode_scale * 0.01f * Vector3.one;
+				scale = Vector3.Max(Vector3.one * 0.01f, scale);
+				currentPlacedObject.transform.localScale = scale;
 
-                e.Use();
+				e.Use();
             }
 
             // Stop rotating on mouse release
@@ -88,7 +92,8 @@ namespace PrefabPalette
 
             modeSettings.freeMode_rotationSpeed = EditorGUILayout.Slider("Rotation Speed", modeSettings.freeMode_rotationSpeed, 0.1f, 5);
             modeSettings.freeMode_placementOffset = EditorGUILayout.Vector3Field("Placement Offset", modeSettings.freeMode_placementOffset);
-        }
+			modeSettings.freeMode_scale = EditorGUILayout.Slider("Scale", modeSettings.freeMode_scale, 0f, 10f);
+		}
 
         public string[] ControlsHelpBox => new string[]
         {

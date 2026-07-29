@@ -7,5 +7,6 @@ namespace PrefabPalette
         public Vector3 freeMode_placementOffset = Vector3.zero;
         public float freeMode_rotationSpeed = 2f;
         public int selectedRotationAxis = 0;
-    }
+        public float freeMode_scale = 0f;
+	}
 }

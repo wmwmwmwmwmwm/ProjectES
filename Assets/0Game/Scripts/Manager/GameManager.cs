@@ -41,7 +41,10 @@ public class GameManager : Singleton<GameManager>
 	public void LockCursor(bool _lock)
 	{
 		Cursor.lockState = _lock ? CursorLockMode.Locked : CursorLockMode.None;
-		Cursor.visible = !_lock;
+		if (!Application.isEditor)
+		{
+			Cursor.visible = !_lock;
+		}
 	}
 
 	public void LoadTitleScene()

@@ -24,7 +24,7 @@ MonoBehaviour:
   lineMode_lineSpacing: 1
   lineMode_useAltObjs: 0
   lineMode_useCollection: 0
-  lineMode_altCollectionName: 0
+  lineMode_altCollectionName: 1
   lineMode_altObj: {fileID: 0}
   lineMode_randomAltObjs: 1
   lineMode_altObjProbability: 0.5

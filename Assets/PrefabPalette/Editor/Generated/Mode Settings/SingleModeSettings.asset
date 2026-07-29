@@ -15,3 +15,4 @@ MonoBehaviour:
   freeMode_placementOffset: {x: 0, y: 0, z: 0}
   freeMode_rotationSpeed: 2
   selectedRotationAxis: 1
+  freeMode_scale: 4.16
