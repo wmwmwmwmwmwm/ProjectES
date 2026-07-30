@@ -65,7 +65,13 @@ namespace PrefabPalette
                 currentPlacedObject = null;
                 e.Use();
             }
-        }
+
+			// Esc to deselect prefab
+			if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+			{
+				ToolContext.Instance.SelectedPrefab = null;
+			}
+		}
         
         public void OnEnter(ToolContext context)
         {

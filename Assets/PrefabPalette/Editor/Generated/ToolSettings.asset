@@ -26,7 +26,7 @@ MonoBehaviour:
   placer_3dFallbackHeight: 0
   overlay_size: {x: 420, y: 0}
   overlay_autoSize: 0
-  overlay_showControlsHelpBox: 0
+  overlay_showControlsHelpBox: 1
   globalMinWindowScale: {x: 100, y: 100}
   globalMaxWindowScale: {x: 1000, y: 1000}
   paletteWindowScale:
