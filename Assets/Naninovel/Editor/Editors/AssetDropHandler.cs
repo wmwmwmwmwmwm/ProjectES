@@ -32,7 +32,7 @@ namespace Naninovel
         {
             return obj && (TypeConstraint is null ||
                            obj.GetType() == TypeConstraint ||
-                           ProjectWindowUtil.IsFolder(obj.GetInstanceID()));
+                           ProjectWindowUtil.IsFolder(obj.GetEntityId()));
         }
 
         public void DrawDropArea (Rect rect)
@@ -61,7 +61,7 @@ namespace Naninovel
         private void ProcessDroppedObject (UnityEngine.Object obj, string relativePath = null)
         {
             if (!CanHandle(obj)) return;
-            if (ProjectWindowUtil.IsFolder(obj.GetInstanceID())) ProcessDroppedFolder(obj);
+            if (ProjectWindowUtil.IsFolder(obj.GetEntityId())) ProcessDroppedFolder(obj);
             else
             {
                 AssetDatabase.TryGetGUIDAndLocalFileIdentifier(obj, out var guid, out long _);

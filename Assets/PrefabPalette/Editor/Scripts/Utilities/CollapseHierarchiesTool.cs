@@ -78,7 +78,7 @@ namespace PrefabPalette
             // so one call per root is sufficient — no manual recursion needed.
             setExpandedRecursive.Invoke(
                 hierarchyWindow,
-                new object[] { root.gameObject.GetInstanceID(), expand });
+                new object[] { root.gameObject.GetEntityId(), expand });
         }
 
         private static void ApplyToObjects(IEnumerable<GameObject> roots, bool expand)
@@ -88,7 +88,7 @@ namespace PrefabPalette
             foreach (var root in roots)
                 setExpandedRecursive.Invoke(
                     hierarchyWindow,
-                    new object[] { root.GetInstanceID(), expand });
+                    new object[] { root.GetEntityId(), expand });
 
             // Single repaint after all changes
             hierarchyWindow.Repaint();

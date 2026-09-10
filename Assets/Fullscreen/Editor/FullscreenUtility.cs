@@ -100,7 +100,7 @@ namespace FullscreenEditor {
                 }
             };
 
-            EditorApplication.hierarchyWindowItemOnGUI += (rect, id) => RecalculateMousePosition();
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += (rect, id) => RecalculateMousePosition();
             EditorApplication.projectWindowItemOnGUI += (rect, id) => RecalculateMousePosition();
 
 #if UNITY_2019_1_OR_NEWER

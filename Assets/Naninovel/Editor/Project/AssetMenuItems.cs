@@ -7,9 +7,9 @@ namespace Naninovel
 {
     public static class AssetMenuItems
     {
-        private class DoCopyAsset : EndNameEditAction
+        private class DoCopyAsset : AssetCreationEndAction
         {
-            public override void Action (int instanceId, string targetPath, string sourcePath)
+            public override void Action (EntityId instanceId, string targetPath, string sourcePath)
             {
                 AssetDatabase.CopyAsset(sourcePath, targetPath);
                 var newAsset = AssetDatabase.LoadAssetAtPath<GameObject>(targetPath);
@@ -36,14 +36,14 @@ namespace Naninovel
         {
             var targetPath = $"{copyName}.prefab";
             var endAction = ScriptableObject.CreateInstance<DoCopyAsset>();
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, endAction, targetPath, null, assetPath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(EntityId.None, endAction, targetPath, null, assetPath);
         }
 
         [MenuItem("Assets/Create/Naninovel/Naninovel Script", priority = -4)]
-        private static void CreateScript () => ProjectWindowUtil.CreateAssetWithContent("NewScript.nani", DefaultScriptContent);
+        private static void CreateScript () => ProjectWindowUtil.CreateAssetWithTextContent("NewScript.nani", DefaultScriptContent);
 
         [MenuItem("Assets/Create/Naninovel/Managed Text", priority = -3)]
-        private static void CreateManagedText () => ProjectWindowUtil.CreateAssetWithContent("NewManagedText.txt", DefaultManagedTextContent);
+        private static void CreateManagedText () => ProjectWindowUtil.CreateAssetWithTextContent("NewManagedText.txt", DefaultManagedTextContent);
 
         [MenuItem("Assets/Create/Naninovel/Custom UI", priority = -2)]
         private static void CreateCustomUI () => CreatePrefabCopy("Templates/CustomUI", "NewCustomUI");
